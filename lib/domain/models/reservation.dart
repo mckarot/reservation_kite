@@ -1,29 +1,23 @@
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'reservation.freezed.dart';
 part 'reservation.g.dart';
 
-@HiveType(typeId: 0)
-class Reservation extends HiveObject {
-  @HiveField(0)
-  final int id;
+enum TimeSlot { morning, afternoon }
 
-  @HiveField(1)
-  final String clientName;
+@freezed
+class Reservation with _$Reservation {
+  const factory Reservation({
+    required String id,
+    required String clientName,
+    required DateTime date,
+    required TimeSlot slot,
+    String? staffId,
+    @Default(false) bool confirmed,
+    @Default('') String notes,
+    required DateTime createdAt,
+  }) = _Reservation;
 
-  @HiveField(2)
-  final DateTime reservationDate;
-
-  @HiveField(3)
-  final String kiteType;
-
-  @HiveField(4)
-  final bool confirmed;
-
-  Reservation({
-    required this.id,
-    required this.clientName,
-    required this.reservationDate,
-    required this.kiteType,
-    this.confirmed = false,
-  });
+  factory Reservation.fromJson(Map<String, dynamic> json) =>
+      _$ReservationFromJson(json);
 }

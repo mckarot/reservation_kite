@@ -17,30 +17,24 @@ class ReservationService extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addReservation(Reservation reservation) async {
-    await _repository.addReservation(reservation);
+  Future<void> saveReservation(Reservation reservation) async {
+    await _repository.saveReservation(reservation);
     await _loadReservations();
   }
 
-  Future<void> updateReservation(int index, Reservation reservation) async {
-    await _repository.updateReservation(index, reservation);
+  Future<void> deleteReservation(String id) async {
+    await _repository.deleteReservation(id);
     await _loadReservations();
   }
 
-  Future<void> deleteReservation(int index) async {
-    await _repository.deleteReservation(index);
-    await _loadReservations();
-  }
-
-  Future<void> toggleConfirmation(int index) async {
-    final reservation = _reservations[index];
-    final updatedReservation = Reservation(
-      id: reservation.id,
-      clientName: reservation.clientName,
-      reservationDate: reservation.reservationDate,
-      kiteType: reservation.kiteType,
-      confirmed: !reservation.confirmed,
-    );
-    await updateReservation(index, updatedReservation);
+  Future<void> toggleConfirmation(String id) async {
+    final index = _reservations.indexWhere((r) => r.id == id);
+    if (index != -1) {
+      final reservation = _reservations[index];
+      final updatedReservation = reservation.copyWith(
+        confirmed: !reservation.confirmed,
+      );
+      await saveReservation(updatedReservation);
+    }
   }
 }

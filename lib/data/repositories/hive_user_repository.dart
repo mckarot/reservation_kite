@@ -1,11 +1,25 @@
 import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:reservation_kite/domain/repositories/user_repository.dart';
-import 'package:reservation_kite/domain/models/user.dart';
+import '../../domain/repositories/user_repository.dart';
+import '../../domain/models/user.dart';
 import '../../database/hive_config.dart';
 
 class HiveUserRepository implements UserRepository {
   Box<String> get _box => Hive.box<String>(HiveConfig.usersBox);
+
+  @override
+  Future<List<User>> getAllUsers() async {
+    return _box.values
+        .map((json) => User.fromJson(jsonDecode(json) as Map<String, dynamic>))
+        .toList();
+  }
+
+  @override
+  Future<User?> getUser(String id) async {
+    final json = _box.get(id);
+    if (json == null) return null;
+    return User.fromJson(jsonDecode(json) as Map<String, dynamic>);
+  }
 
   @override
   Future<void> saveUser(User user) async {
@@ -16,20 +30,6 @@ class HiveUserRepository implements UserRepository {
       // Log minimaliste conforme aux règles
       rethrow;
     }
-  }
-
-  @override
-  Future<User?> getUserById(String id) async {
-    final json = _box.get(id);
-    if (json == null) return null;
-    return User.fromJson(jsonDecode(json) as Map<String, dynamic>);
-  }
-
-  @override
-  Future<List<User>> getAllUsers() async {
-    return _box.values
-        .map((json) => User.fromJson(jsonDecode(json) as Map<String, dynamic>))
-        .toList();
   }
 
   @override

@@ -1,5 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import '../domain/models/reservation.dart';
+// import '../domain/models/reservation.dart'; // Supprimé car inutilisé directement ici
 
 class HiveConfig {
   static const String reservationsBox = 'reservations_box';
@@ -10,14 +10,9 @@ class HiveConfig {
   static Future<void> init() async {
     await Hive.initFlutter();
 
-    // Enregistrement des TypeAdapters générés
-    if (!Hive.isAdapterRegistered(0)) {
-      Hive.registerAdapter(ReservationAdapter());
-    }
-
     // Ouverture des boxes au démarrage
     await Future.wait([
-      Hive.openBox<Reservation>(reservationsBox),
+      Hive.openBox<String>(reservationsBox),
       Hive.openBox<String>(usersBox),
       Hive.openBox<String>(settingsBox),
       Hive.openBox<String>(staffBox),

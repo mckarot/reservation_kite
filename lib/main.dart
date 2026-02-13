@@ -5,6 +5,8 @@ import 'database/hive_config.dart';
 import 'services/reservation_service.dart';
 import 'presentation/screens/admin_settings_screen.dart';
 import 'presentation/screens/staff_admin_screen.dart';
+import 'presentation/screens/booking_screen.dart';
+import 'presentation/screens/user_directory_screen.dart';
 import 'data/providers/repository_providers.dart';
 
 // Provider pour le service de réservation
@@ -77,6 +79,27 @@ class InitializationCheckScreen extends ConsumerWidget {
               ),
               icon: const Icon(Icons.people),
               label: const Text('Gérer le Staff'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const UserDirectoryScreen()),
+              ),
+              icon: const Icon(Icons.person_search),
+              label: const Text('Répertoire Élèves'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const BookingScreen()),
+              ),
+              icon: const Icon(Icons.calendar_month),
+              label: const Text('Calendrier / Réservations'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue.shade50,
+              ),
             ),
           ],
         ),
