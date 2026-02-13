@@ -4,6 +4,7 @@ import '../providers/user_notifier.dart';
 import '../../domain/models/user.dart';
 import '../widgets/user_progress_tab.dart';
 import '../widgets/user_notes_tab.dart';
+import '../providers/credit_pack_notifier.dart';
 
 class UserDetailScreen extends ConsumerWidget {
   final String userId;
@@ -95,10 +96,9 @@ class _ProfileTab extends ConsumerWidget {
                   backgroundColor: Colors.blue.shade700,
                   foregroundColor: Colors.white,
                 ),
-                onPressed: () =>
-                    _showTopUpDialog(context, ref, user.walletBalance),
-                icon: const Icon(Icons.add_card),
-                label: const Text('Créditer'),
+                onPressed: () => _showTopUpOptions(context, ref),
+                icon: const Icon(Icons.add_shopping_cart),
+                label: const Text('Vendre un Pack'),
               ),
             ],
           ),
@@ -107,20 +107,77 @@ class _ProfileTab extends ConsumerWidget {
     );
   }
 
-  void _showTopUpDialog(
-    BuildContext context,
-    WidgetRef ref,
-    int currentBalance,
-  ) {
-    final amountController = TextEditingController();
+  void _showTopUpOptions(BuildContext context, WidgetRef ref) {
+    final packsAsync = ref.watch(creditPackNotifierProvider);
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Ajouter des crédits'),
+        title: const Text('Créditer le compte'),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: packsAsync.when(
+            data: (packs) {
+              if (packs.isEmpty) {
+                return const Text(
+                  'Aucun pack défini. Allez dans Réglages > Catalogue.',
+                );
+              }
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: packs.length,
+                itemBuilder: (context, index) {
+                  final pack = packs[index];
+                  return ListTile(
+                    title: Text(pack.name),
+                    subtitle: Text('${pack.credits} séances - ${pack.price}€'),
+                    onTap: () {
+                      final currentBalance = user.walletBalance;
+                      ref
+                          .read(userNotifierProvider.notifier)
+                          .updateBalance(userId, currentBalance + pack.credits);
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Pack ${pack.name} ajouté !')),
+                      );
+                    },
+                  );
+                },
+              );
+            },
+            loading: () => const LinearProgressIndicator(),
+            error: (e, _) => Text('Erreur: $e'),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () => _showManualDialog(context, ref),
+            child: const Text(
+              'Saisie libre',
+              style: TextStyle(color: Colors.grey),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showManualDialog(BuildContext context, WidgetRef ref) {
+    final controller = TextEditingController(
+      text: user.walletBalance.toString(),
+    );
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Modifier solde (Manuel)'),
         content: TextField(
-          controller: amountController,
-          decoration: const InputDecoration(labelText: 'Nombre de sessions'),
+          controller: controller,
           keyboardType: TextInputType.number,
+          decoration: const InputDecoration(labelText: 'Nombre de séances'),
         ),
         actions: [
           TextButton(
@@ -129,15 +186,13 @@ class _ProfileTab extends ConsumerWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              final amount = int.tryParse(amountController.text) ?? 0;
-              if (amount > 0) {
-                ref
-                    .read(userNotifierProvider.notifier)
-                    .updateBalance(userId, currentBalance + amount);
-              }
-              Navigator.pop(context);
+              ref
+                  .read(userNotifierProvider.notifier)
+                  .updateBalance(userId, int.parse(controller.text));
+              Navigator.pop(context); // Close manual
+              Navigator.pop(context); // Close options
             },
-            child: const Text('Confirmer le paiement'),
+            child: const Text('Valider'),
           ),
         ],
       ),

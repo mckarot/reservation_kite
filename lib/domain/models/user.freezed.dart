@@ -27,6 +27,8 @@ mixin _$User {
   String get role => throw _privateConstructorUsedError;
   int? get weight => throw _privateConstructorUsedError;
   int get walletBalance => throw _privateConstructorUsedError;
+  int get totalCreditsPurchased =>
+      throw _privateConstructorUsedError; // Nouvelle stat financière
   UserProgress? get progress => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get lastSeen => throw _privateConstructorUsedError;
@@ -49,6 +51,7 @@ abstract class $UserCopyWith<$Res> {
       String role,
       int? weight,
       int walletBalance,
+      int totalCreditsPurchased,
       UserProgress? progress,
       DateTime createdAt,
       DateTime lastSeen});
@@ -76,6 +79,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? role = null,
     Object? weight = freezed,
     Object? walletBalance = null,
+    Object? totalCreditsPurchased = null,
     Object? progress = freezed,
     Object? createdAt = null,
     Object? lastSeen = null,
@@ -108,6 +112,10 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
       walletBalance: null == walletBalance
           ? _value.walletBalance
           : walletBalance // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalCreditsPurchased: null == totalCreditsPurchased
+          ? _value.totalCreditsPurchased
+          : totalCreditsPurchased // ignore: cast_nullable_to_non_nullable
               as int,
       progress: freezed == progress
           ? _value.progress
@@ -152,6 +160,7 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
       String role,
       int? weight,
       int walletBalance,
+      int totalCreditsPurchased,
       UserProgress? progress,
       DateTime createdAt,
       DateTime lastSeen});
@@ -177,6 +186,7 @@ class __$$UserImplCopyWithImpl<$Res>
     Object? role = null,
     Object? weight = freezed,
     Object? walletBalance = null,
+    Object? totalCreditsPurchased = null,
     Object? progress = freezed,
     Object? createdAt = null,
     Object? lastSeen = null,
@@ -210,6 +220,10 @@ class __$$UserImplCopyWithImpl<$Res>
           ? _value.walletBalance
           : walletBalance // ignore: cast_nullable_to_non_nullable
               as int,
+      totalCreditsPurchased: null == totalCreditsPurchased
+          ? _value.totalCreditsPurchased
+          : totalCreditsPurchased // ignore: cast_nullable_to_non_nullable
+              as int,
       progress: freezed == progress
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
@@ -237,6 +251,7 @@ class _$UserImpl implements _User {
       this.role = 'student',
       this.weight,
       this.walletBalance = 0,
+      this.totalCreditsPurchased = 0,
       this.progress,
       required this.createdAt,
       required this.lastSeen});
@@ -261,6 +276,10 @@ class _$UserImpl implements _User {
   @JsonKey()
   final int walletBalance;
   @override
+  @JsonKey()
+  final int totalCreditsPurchased;
+// Nouvelle stat financière
+  @override
   final UserProgress? progress;
   @override
   final DateTime createdAt;
@@ -269,7 +288,7 @@ class _$UserImpl implements _User {
 
   @override
   String toString() {
-    return 'User(id: $id, displayName: $displayName, email: $email, photoUrl: $photoUrl, role: $role, weight: $weight, walletBalance: $walletBalance, progress: $progress, createdAt: $createdAt, lastSeen: $lastSeen)';
+    return 'User(id: $id, displayName: $displayName, email: $email, photoUrl: $photoUrl, role: $role, weight: $weight, walletBalance: $walletBalance, totalCreditsPurchased: $totalCreditsPurchased, progress: $progress, createdAt: $createdAt, lastSeen: $lastSeen)';
   }
 
   @override
@@ -287,6 +306,8 @@ class _$UserImpl implements _User {
             (identical(other.weight, weight) || other.weight == weight) &&
             (identical(other.walletBalance, walletBalance) ||
                 other.walletBalance == walletBalance) &&
+            (identical(other.totalCreditsPurchased, totalCreditsPurchased) ||
+                other.totalCreditsPurchased == totalCreditsPurchased) &&
             (identical(other.progress, progress) ||
                 other.progress == progress) &&
             (identical(other.createdAt, createdAt) ||
@@ -297,8 +318,19 @@ class _$UserImpl implements _User {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, displayName, email, photoUrl,
-      role, weight, walletBalance, progress, createdAt, lastSeen);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      displayName,
+      email,
+      photoUrl,
+      role,
+      weight,
+      walletBalance,
+      totalCreditsPurchased,
+      progress,
+      createdAt,
+      lastSeen);
 
   @JsonKey(ignore: true)
   @override
@@ -323,6 +355,7 @@ abstract class _User implements User {
       final String role,
       final int? weight,
       final int walletBalance,
+      final int totalCreditsPurchased,
       final UserProgress? progress,
       required final DateTime createdAt,
       required final DateTime lastSeen}) = _$UserImpl;
@@ -344,6 +377,8 @@ abstract class _User implements User {
   @override
   int get walletBalance;
   @override
+  int get totalCreditsPurchased;
+  @override // Nouvelle stat financière
   UserProgress? get progress;
   @override
   DateTime get createdAt;

@@ -3,10 +3,14 @@ import '../../domain/repositories/user_repository.dart';
 import '../../domain/repositories/settings_repository.dart';
 import '../../domain/repositories/reservation_repository.dart';
 import '../../domain/repositories/staff_repository.dart';
+import '../../domain/repositories/equipment_repository.dart';
 import '../repositories/hive_user_repository.dart';
 import '../repositories/hive_settings_repository.dart';
 import '../repositories/hive_reservation_repository.dart';
+import '../repositories/hive_equipment_repository.dart';
 import '../repositories/hive_staff_repository.dart';
+import '../repositories/hive_credit_pack_repository.dart';
+import '../../domain/repositories/credit_pack_repository.dart';
 
 part 'repository_providers.g.dart';
 
@@ -26,6 +30,16 @@ ReservationRepository reservationRepository(ReservationRepositoryRef ref) {
 }
 
 @riverpod
+EquipmentRepository equipmentRepository(EquipmentRepositoryRef ref) {
+  return HiveEquipmentRepository();
+}
+
+@riverpod
 StaffRepository staffRepository(StaffRepositoryRef ref) {
   return HiveStaffRepository();
+}
+
+@riverpod
+CreditPackRepository creditPackRepository(CreditPackRepositoryRef ref) {
+  return HiveCreditPackRepository();
 }

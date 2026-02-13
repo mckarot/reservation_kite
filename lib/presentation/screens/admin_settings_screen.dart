@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/settings.dart';
 import '../providers/settings_notifier.dart';
+import 'staff_admin_screen.dart';
+import 'credit_pack_admin_screen.dart';
 
 class AdminSettingsScreen extends ConsumerStatefulWidget {
   const AdminSettingsScreen({super.key});
@@ -57,7 +59,6 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
             return const Center(child: Text('Erreur : Paramètres non trouvés'));
           }
 
-          // On n'initialise qu'une fois si les champs sont vides
           if (_morningStartController.text.isEmpty) {
             _initFields(settings);
           }
@@ -112,7 +113,7 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                 ),
                 const SizedBox(height: 24),
                 DropdownButtonFormField<int>(
-                  initialValue: _maxStudents,
+                  value: _maxStudents,
                   decoration: const InputDecoration(
                     labelText: 'Max élèves par moniteur',
                   ),
@@ -147,13 +148,26 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                           .read(settingsNotifierProvider.notifier)
                           .updateSettings(newSettings);
 
-                      if (!context.mounted) return;
+                      if (!mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Réglages enregistrés !')),
                       );
                     }
                   },
                   child: const Text('Enregistrer'),
+                ),
+                const Divider(height: 48),
+                ListTile(
+                  leading: const Icon(Icons.sell, color: Colors.purple),
+                  title: const Text('Catalogue des Forfaits'),
+                  subtitle: const Text('Définir les prix et sessions par pack'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const CreditPackAdminScreen(),
+                    ),
+                  ),
                 ),
               ],
             ),

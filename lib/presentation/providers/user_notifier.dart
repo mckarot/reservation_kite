@@ -29,8 +29,12 @@ class UserNotifier extends _$UserNotifier {
       final repo = ref.read(userRepositoryProvider);
       final user = await repo.getUser(userId);
       if (user != null) {
+        final amountAdded = newBalance - user.walletBalance;
         final updatedUser = user.copyWith(
           walletBalance: newBalance,
+          totalCreditsPurchased: amountAdded > 0
+              ? user.totalCreditsPurchased + amountAdded
+              : user.totalCreditsPurchased,
           lastSeen: DateTime.now(),
         );
         await repo.saveUser(updatedUser);

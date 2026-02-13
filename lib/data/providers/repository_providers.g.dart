@@ -56,6 +56,23 @@ final reservationRepositoryProvider =
 
 typedef ReservationRepositoryRef
     = AutoDisposeProviderRef<ReservationRepository>;
+String _$equipmentRepositoryHash() =>
+    r'64614026b72d64dc50a892203a3eeed94e4e020d';
+
+/// See also [equipmentRepository].
+@ProviderFor(equipmentRepository)
+final equipmentRepositoryProvider =
+    AutoDisposeProvider<EquipmentRepository>.internal(
+  equipmentRepository,
+  name: r'equipmentRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$equipmentRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef EquipmentRepositoryRef = AutoDisposeProviderRef<EquipmentRepository>;
 String _$staffRepositoryHash() => r'3b62393b875d889138574e759b1a6b87447b72b9';
 
 /// See also [staffRepository].
@@ -71,5 +88,22 @@ final staffRepositoryProvider = AutoDisposeProvider<StaffRepository>.internal(
 );
 
 typedef StaffRepositoryRef = AutoDisposeProviderRef<StaffRepository>;
+String _$creditPackRepositoryHash() =>
+    r'80301eb2afd44f6fa99b9918c3051630ff8ec808';
+
+/// See also [creditPackRepository].
+@ProviderFor(creditPackRepository)
+final creditPackRepositoryProvider =
+    AutoDisposeProvider<CreditPackRepository>.internal(
+  creditPackRepository,
+  name: r'creditPackRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$creditPackRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef CreditPackRepositoryRef = AutoDisposeProviderRef<CreditPackRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

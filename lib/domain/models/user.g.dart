@@ -14,6 +14,8 @@ _$UserImpl _$$UserImplFromJson(Map<String, dynamic> json) => _$UserImpl(
       role: json['role'] as String? ?? 'student',
       weight: (json['weight'] as num?)?.toInt(),
       walletBalance: (json['walletBalance'] as num?)?.toInt() ?? 0,
+      totalCreditsPurchased:
+          (json['totalCreditsPurchased'] as num?)?.toInt() ?? 0,
       progress: json['progress'] == null
           ? null
           : UserProgress.fromJson(json['progress'] as Map<String, dynamic>),
@@ -30,6 +32,7 @@ Map<String, dynamic> _$$UserImplToJson(_$UserImpl instance) =>
       'role': instance.role,
       'weight': instance.weight,
       'walletBalance': instance.walletBalance,
+      'totalCreditsPurchased': instance.totalCreditsPurchased,
       'progress': instance.progress,
       'createdAt': instance.createdAt.toIso8601String(),
       'lastSeen': instance.lastSeen.toIso8601String(),

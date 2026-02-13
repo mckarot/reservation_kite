@@ -22,6 +22,8 @@ Reservation _$ReservationFromJson(Map<String, dynamic> json) {
 mixin _$Reservation {
   String get id => throw _privateConstructorUsedError;
   String get clientName => throw _privateConstructorUsedError;
+  String? get pupilId =>
+      throw _privateConstructorUsedError; // Link to User model
   DateTime get date => throw _privateConstructorUsedError;
   TimeSlot get slot => throw _privateConstructorUsedError;
   String? get staffId => throw _privateConstructorUsedError;
@@ -44,6 +46,7 @@ abstract class $ReservationCopyWith<$Res> {
   $Res call(
       {String id,
       String clientName,
+      String? pupilId,
       DateTime date,
       TimeSlot slot,
       String? staffId,
@@ -67,6 +70,7 @@ class _$ReservationCopyWithImpl<$Res, $Val extends Reservation>
   $Res call({
     Object? id = null,
     Object? clientName = null,
+    Object? pupilId = freezed,
     Object? date = null,
     Object? slot = null,
     Object? staffId = freezed,
@@ -83,6 +87,10 @@ class _$ReservationCopyWithImpl<$Res, $Val extends Reservation>
           ? _value.clientName
           : clientName // ignore: cast_nullable_to_non_nullable
               as String,
+      pupilId: freezed == pupilId
+          ? _value.pupilId
+          : pupilId // ignore: cast_nullable_to_non_nullable
+              as String?,
       date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
@@ -122,6 +130,7 @@ abstract class _$$ReservationImplCopyWith<$Res>
   $Res call(
       {String id,
       String clientName,
+      String? pupilId,
       DateTime date,
       TimeSlot slot,
       String? staffId,
@@ -143,6 +152,7 @@ class __$$ReservationImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? clientName = null,
+    Object? pupilId = freezed,
     Object? date = null,
     Object? slot = null,
     Object? staffId = freezed,
@@ -159,6 +169,10 @@ class __$$ReservationImplCopyWithImpl<$Res>
           ? _value.clientName
           : clientName // ignore: cast_nullable_to_non_nullable
               as String,
+      pupilId: freezed == pupilId
+          ? _value.pupilId
+          : pupilId // ignore: cast_nullable_to_non_nullable
+              as String?,
       date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
@@ -193,6 +207,7 @@ class _$ReservationImpl implements _Reservation {
   const _$ReservationImpl(
       {required this.id,
       required this.clientName,
+      this.pupilId,
       required this.date,
       required this.slot,
       this.staffId,
@@ -207,6 +222,9 @@ class _$ReservationImpl implements _Reservation {
   final String id;
   @override
   final String clientName;
+  @override
+  final String? pupilId;
+// Link to User model
   @override
   final DateTime date;
   @override
@@ -224,7 +242,7 @@ class _$ReservationImpl implements _Reservation {
 
   @override
   String toString() {
-    return 'Reservation(id: $id, clientName: $clientName, date: $date, slot: $slot, staffId: $staffId, confirmed: $confirmed, notes: $notes, createdAt: $createdAt)';
+    return 'Reservation(id: $id, clientName: $clientName, pupilId: $pupilId, date: $date, slot: $slot, staffId: $staffId, confirmed: $confirmed, notes: $notes, createdAt: $createdAt)';
   }
 
   @override
@@ -235,6 +253,7 @@ class _$ReservationImpl implements _Reservation {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.clientName, clientName) ||
                 other.clientName == clientName) &&
+            (identical(other.pupilId, pupilId) || other.pupilId == pupilId) &&
             (identical(other.date, date) || other.date == date) &&
             (identical(other.slot, slot) || other.slot == slot) &&
             (identical(other.staffId, staffId) || other.staffId == staffId) &&
@@ -247,8 +266,8 @@ class _$ReservationImpl implements _Reservation {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, clientName, date, slot,
-      staffId, confirmed, notes, createdAt);
+  int get hashCode => Object.hash(runtimeType, id, clientName, pupilId, date,
+      slot, staffId, confirmed, notes, createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -268,6 +287,7 @@ abstract class _Reservation implements Reservation {
   const factory _Reservation(
       {required final String id,
       required final String clientName,
+      final String? pupilId,
       required final DateTime date,
       required final TimeSlot slot,
       final String? staffId,
@@ -283,6 +303,8 @@ abstract class _Reservation implements Reservation {
   @override
   String get clientName;
   @override
+  String? get pupilId;
+  @override // Link to User model
   DateTime get date;
   @override
   TimeSlot get slot;

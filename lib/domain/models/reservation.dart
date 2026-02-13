@@ -10,6 +10,7 @@ class Reservation with _$Reservation {
   const factory Reservation({
     required String id,
     required String clientName,
+    String? pupilId, // Link to User model
     required DateTime date,
     required TimeSlot slot,
     String? staffId,

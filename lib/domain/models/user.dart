@@ -13,6 +13,7 @@ class User with _$User {
     @Default('student') String role,
     int? weight,
     @Default(0) int walletBalance,
+    @Default(0) int totalCreditsPurchased, // Nouvelle stat financière
     UserProgress? progress,
     required DateTime createdAt,
     required DateTime lastSeen,
