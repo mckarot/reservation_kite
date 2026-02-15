@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/booking_notifier.dart';
+import '../../domain/models/reservation.dart';
 
 class PupilHistoryTab extends ConsumerWidget {
   final String userId;
@@ -44,13 +45,7 @@ class PupilHistoryTab extends ConsumerWidget {
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text('Créneau: ${b.slot.name.toUpperCase()}'),
-                trailing: Text(
-                  isFuture ? 'À VENIR' : 'TERMINÉ',
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: isFuture ? Colors.blue : Colors.grey,
-                  ),
-                ),
+                trailing: _StatusBadge(status: b.status, isFuture: isFuture),
               ),
             );
           },
@@ -58,6 +53,51 @@ class PupilHistoryTab extends ConsumerWidget {
       },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, _) => Center(child: Text('Erreur: $err')),
+    );
+  }
+}
+
+class _StatusBadge extends StatelessWidget {
+  final ReservationStatus status;
+  final bool isFuture;
+
+  const _StatusBadge({required this.status, required this.isFuture});
+
+  @override
+  Widget build(BuildContext context) {
+    Color color;
+    String label;
+
+    switch (status) {
+      case ReservationStatus.pending:
+        color = Colors.orange;
+        label = 'EN ATTENTE';
+        break;
+      case ReservationStatus.confirmed:
+        color = isFuture ? Colors.blue : Colors.green;
+        label = isFuture ? 'À VENIR' : 'TERMINÉ';
+        break;
+      case ReservationStatus.cancelled:
+        color = Colors.red;
+        label = 'ANNULÉ';
+        break;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withOpacity(0.2)),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+          color: color,
+        ),
+      ),
     );
   }
 }

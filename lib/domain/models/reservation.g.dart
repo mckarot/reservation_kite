@@ -14,7 +14,8 @@ _$ReservationImpl _$$ReservationImplFromJson(Map<String, dynamic> json) =>
       date: DateTime.parse(json['date'] as String),
       slot: $enumDecode(_$TimeSlotEnumMap, json['slot']),
       staffId: json['staffId'] as String?,
-      confirmed: json['confirmed'] as bool? ?? false,
+      status: $enumDecodeNullable(_$ReservationStatusEnumMap, json['status']) ??
+          ReservationStatus.confirmed,
       notes: json['notes'] as String? ?? '',
       createdAt: DateTime.parse(json['createdAt'] as String),
     );
@@ -27,7 +28,7 @@ Map<String, dynamic> _$$ReservationImplToJson(_$ReservationImpl instance) =>
       'date': instance.date.toIso8601String(),
       'slot': _$TimeSlotEnumMap[instance.slot]!,
       'staffId': instance.staffId,
-      'confirmed': instance.confirmed,
+      'status': _$ReservationStatusEnumMap[instance.status]!,
       'notes': instance.notes,
       'createdAt': instance.createdAt.toIso8601String(),
     };
@@ -35,4 +36,10 @@ Map<String, dynamic> _$$ReservationImplToJson(_$ReservationImpl instance) =>
 const _$TimeSlotEnumMap = {
   TimeSlot.morning: 'morning',
   TimeSlot.afternoon: 'afternoon',
+};
+
+const _$ReservationStatusEnumMap = {
+  ReservationStatus.pending: 'pending',
+  ReservationStatus.confirmed: 'confirmed',
+  ReservationStatus.cancelled: 'cancelled',
 };

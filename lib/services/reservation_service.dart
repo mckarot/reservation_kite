@@ -32,7 +32,9 @@ class ReservationService extends ChangeNotifier {
     if (index != -1) {
       final reservation = _reservations[index];
       final updatedReservation = reservation.copyWith(
-        confirmed: !reservation.confirmed,
+        status: reservation.status == ReservationStatus.confirmed
+            ? ReservationStatus.pending
+            : ReservationStatus.confirmed,
       );
       await saveReservation(updatedReservation);
     }

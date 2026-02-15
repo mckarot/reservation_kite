@@ -33,9 +33,7 @@ class StaffAdminScreen extends ConsumerWidget {
                     : null,
                 child: staff.photoUrl.isEmpty ? const Icon(Icons.person) : null,
               ),
-              title: Text(
-                staff.id,
-              ), // En attendant un champ 'name' ou 'displayName'
+              title: Text(staff.name),
               subtitle: Text(staff.specialties.join(', ')),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -64,6 +62,7 @@ class StaffAdminScreen extends ConsumerWidget {
 
   void _showStaffDialog(BuildContext context, WidgetRef ref, {Staff? staff}) {
     final isEditing = staff != null;
+    final nameController = TextEditingController(text: staff?.name);
     final bioController = TextEditingController(text: staff?.bio);
     final specialtiesController = TextEditingController(
       text: staff?.specialties.join(', '),
@@ -78,6 +77,10 @@ class StaffAdminScreen extends ConsumerWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(labelText: 'Nom Complet'),
+              ),
               TextField(
                 controller: bioController,
                 decoration: const InputDecoration(labelText: 'Bio'),
@@ -105,6 +108,7 @@ class StaffAdminScreen extends ConsumerWidget {
             onPressed: () {
               final newStaff = Staff(
                 id: staff?.id ?? const Uuid().v4(),
+                name: nameController.text,
                 bio: bioController.text,
                 photoUrl: photoController.text,
                 specialties: specialtiesController.text

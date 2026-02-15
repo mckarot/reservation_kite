@@ -113,7 +113,7 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                 ),
                 const SizedBox(height: 24),
                 DropdownButtonFormField<int>(
-                  value: _maxStudents,
+                  initialValue: _maxStudents,
                   decoration: const InputDecoration(
                     labelText: 'Max élèves par moniteur',
                   ),

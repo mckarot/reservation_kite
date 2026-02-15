@@ -22,12 +22,12 @@ Reservation _$ReservationFromJson(Map<String, dynamic> json) {
 mixin _$Reservation {
   String get id => throw _privateConstructorUsedError;
   String get clientName => throw _privateConstructorUsedError;
-  String? get pupilId =>
-      throw _privateConstructorUsedError; // Link to User model
+  String? get pupilId => throw _privateConstructorUsedError;
   DateTime get date => throw _privateConstructorUsedError;
   TimeSlot get slot => throw _privateConstructorUsedError;
   String? get staffId => throw _privateConstructorUsedError;
-  bool get confirmed => throw _privateConstructorUsedError;
+  ReservationStatus get status =>
+      throw _privateConstructorUsedError; // Default to confirmed for backward compatibility with manual entries
   String get notes => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
 
@@ -50,7 +50,7 @@ abstract class $ReservationCopyWith<$Res> {
       DateTime date,
       TimeSlot slot,
       String? staffId,
-      bool confirmed,
+      ReservationStatus status,
       String notes,
       DateTime createdAt});
 }
@@ -74,7 +74,7 @@ class _$ReservationCopyWithImpl<$Res, $Val extends Reservation>
     Object? date = null,
     Object? slot = null,
     Object? staffId = freezed,
-    Object? confirmed = null,
+    Object? status = null,
     Object? notes = null,
     Object? createdAt = null,
   }) {
@@ -103,10 +103,10 @@ class _$ReservationCopyWithImpl<$Res, $Val extends Reservation>
           ? _value.staffId
           : staffId // ignore: cast_nullable_to_non_nullable
               as String?,
-      confirmed: null == confirmed
-          ? _value.confirmed
-          : confirmed // ignore: cast_nullable_to_non_nullable
-              as bool,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as ReservationStatus,
       notes: null == notes
           ? _value.notes
           : notes // ignore: cast_nullable_to_non_nullable
@@ -134,7 +134,7 @@ abstract class _$$ReservationImplCopyWith<$Res>
       DateTime date,
       TimeSlot slot,
       String? staffId,
-      bool confirmed,
+      ReservationStatus status,
       String notes,
       DateTime createdAt});
 }
@@ -156,7 +156,7 @@ class __$$ReservationImplCopyWithImpl<$Res>
     Object? date = null,
     Object? slot = null,
     Object? staffId = freezed,
-    Object? confirmed = null,
+    Object? status = null,
     Object? notes = null,
     Object? createdAt = null,
   }) {
@@ -185,10 +185,10 @@ class __$$ReservationImplCopyWithImpl<$Res>
           ? _value.staffId
           : staffId // ignore: cast_nullable_to_non_nullable
               as String?,
-      confirmed: null == confirmed
-          ? _value.confirmed
-          : confirmed // ignore: cast_nullable_to_non_nullable
-              as bool,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as ReservationStatus,
       notes: null == notes
           ? _value.notes
           : notes // ignore: cast_nullable_to_non_nullable
@@ -211,7 +211,7 @@ class _$ReservationImpl implements _Reservation {
       required this.date,
       required this.slot,
       this.staffId,
-      this.confirmed = false,
+      this.status = ReservationStatus.confirmed,
       this.notes = '',
       required this.createdAt});
 
@@ -224,7 +224,6 @@ class _$ReservationImpl implements _Reservation {
   final String clientName;
   @override
   final String? pupilId;
-// Link to User model
   @override
   final DateTime date;
   @override
@@ -233,7 +232,8 @@ class _$ReservationImpl implements _Reservation {
   final String? staffId;
   @override
   @JsonKey()
-  final bool confirmed;
+  final ReservationStatus status;
+// Default to confirmed for backward compatibility with manual entries
   @override
   @JsonKey()
   final String notes;
@@ -242,7 +242,7 @@ class _$ReservationImpl implements _Reservation {
 
   @override
   String toString() {
-    return 'Reservation(id: $id, clientName: $clientName, pupilId: $pupilId, date: $date, slot: $slot, staffId: $staffId, confirmed: $confirmed, notes: $notes, createdAt: $createdAt)';
+    return 'Reservation(id: $id, clientName: $clientName, pupilId: $pupilId, date: $date, slot: $slot, staffId: $staffId, status: $status, notes: $notes, createdAt: $createdAt)';
   }
 
   @override
@@ -257,8 +257,7 @@ class _$ReservationImpl implements _Reservation {
             (identical(other.date, date) || other.date == date) &&
             (identical(other.slot, slot) || other.slot == slot) &&
             (identical(other.staffId, staffId) || other.staffId == staffId) &&
-            (identical(other.confirmed, confirmed) ||
-                other.confirmed == confirmed) &&
+            (identical(other.status, status) || other.status == status) &&
             (identical(other.notes, notes) || other.notes == notes) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt));
@@ -267,7 +266,7 @@ class _$ReservationImpl implements _Reservation {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, clientName, pupilId, date,
-      slot, staffId, confirmed, notes, createdAt);
+      slot, staffId, status, notes, createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -291,7 +290,7 @@ abstract class _Reservation implements Reservation {
       required final DateTime date,
       required final TimeSlot slot,
       final String? staffId,
-      final bool confirmed,
+      final ReservationStatus status,
       final String notes,
       required final DateTime createdAt}) = _$ReservationImpl;
 
@@ -304,15 +303,15 @@ abstract class _Reservation implements Reservation {
   String get clientName;
   @override
   String? get pupilId;
-  @override // Link to User model
+  @override
   DateTime get date;
   @override
   TimeSlot get slot;
   @override
   String? get staffId;
   @override
-  bool get confirmed;
-  @override
+  ReservationStatus get status;
+  @override // Default to confirmed for backward compatibility with manual entries
   String get notes;
   @override
   DateTime get createdAt;

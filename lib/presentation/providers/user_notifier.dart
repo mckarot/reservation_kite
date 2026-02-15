@@ -43,6 +43,22 @@ class UserNotifier extends _$UserNotifier {
     });
   }
 
+  /// Ajuste le solde de crédit (positif pour ajout, négatif pour débit).
+  /// Utilisé en interne par le flux de réservation.
+  Future<void> adjustCredits(String userId, int delta) async {
+    final repo = ref.read(userRepositoryProvider);
+    final user = await repo.getUser(userId);
+    if (user != null) {
+      final updatedUser = user.copyWith(
+        walletBalance: user.walletBalance + delta,
+        lastSeen: DateTime.now(),
+      );
+      await repo.saveUser(updatedUser);
+      // On rafraîchit l'état global
+      state = AsyncData(await _fetchUsers());
+    }
+  }
+
   Future<void> updateProgress(String userId, UserProgress progress) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
@@ -51,6 +67,24 @@ class UserNotifier extends _$UserNotifier {
       if (user != null) {
         final updatedUser = user.copyWith(
           progress: progress,
+          lastSeen: DateTime.now(),
+        );
+        await repo.saveUser(updatedUser);
+      }
+      return _fetchUsers();
+    });
+  }
+
+  Future<void> updateChecklist(String userId, List<String> checklist) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final repo = ref.read(userRepositoryProvider);
+      final user = await repo.getUser(userId);
+      if (user != null) {
+        final currentProgress = user.progress ?? const UserProgress();
+        final updatedProgress = currentProgress.copyWith(checklist: checklist);
+        final updatedUser = user.copyWith(
+          progress: updatedProgress,
           lastSeen: DateTime.now(),
         );
         await repo.saveUser(updatedUser);

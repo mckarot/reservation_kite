@@ -20,7 +20,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   @override
   Widget build(BuildContext context) {
     final bookingsAsync = ref.watch(bookingNotifierProvider);
-    final staffAsync = ref.watch(staffNotifierProvider);
+    // staffAsync unused here, but used in dialog Consumer
 
     return Scaffold(
       appBar: AppBar(title: const Text('Réservations')),
@@ -127,14 +127,14 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                   decoration: const InputDecoration(
                     labelText: 'Moniteur (Optionnel)',
                   ),
-                  value: _selectedStaffId,
+                  initialValue: _selectedStaffId,
                   items: [
                     const DropdownMenuItem(
                       value: null,
                       child: Text('Au hasard / Équipe'),
                     ),
                     ...staff.map(
-                      (s) => DropdownMenuItem(value: s.id, child: Text(s.id)),
+                      (s) => DropdownMenuItem(value: s.id, child: Text(s.name)),
                     ),
                   ],
                   onChanged: (val) => setState(() => _selectedStaffId = val),

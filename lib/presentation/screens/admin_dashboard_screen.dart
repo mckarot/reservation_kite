@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'lesson_validation_screen.dart';
 import '../providers/financial_notifier.dart';
 import '../../domain/models/reservation.dart';
 import '../../domain/models/user.dart';
+import '../providers/booking_notifier.dart';
+import '../providers/staff_notifier.dart';
+import '../providers/user_notifier.dart'; // Added for user data
 
 class AdminDashboardScreen extends ConsumerWidget {
   const AdminDashboardScreen({super.key});
@@ -44,6 +48,7 @@ class AdminDashboardScreen extends ConsumerWidget {
                 ),
               ],
             ),
+            const _PendingRequestsSection(),
             const SizedBox(height: 32),
             const Text(
               'PLANNING À VENIR',
@@ -118,12 +123,125 @@ class _KpiCard extends StatelessWidget {
   }
 }
 
-class _UpcomingSessionsCard extends StatelessWidget {
+class _PendingRequestsSection extends ConsumerWidget {
+  const _PendingRequestsSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bookingsAsync = ref.watch(bookingNotifierProvider);
+    final staffAsync = ref.watch(staffNotifierProvider);
+
+    return bookingsAsync.when(
+      data: (bookings) {
+        final pending = bookings
+            .where((b) => b.status == ReservationStatus.pending)
+            .toList();
+        if (pending.isEmpty) return const SizedBox();
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 32),
+            const Text(
+              'DEMANDES EN ATTENTE',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.1,
+                color: Colors.orange,
+              ),
+            ),
+            const SizedBox(height: 16),
+            ...pending.map(
+              (res) => Card(
+                color: Colors.orange.shade50,
+                child: ListTile(
+                  title: Text(
+                    res.clientName,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    '${res.date.day}/${res.date.month} - ${res.slot == TimeSlot.morning ? "Matin" : "Après-midi"}',
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.check_circle,
+                          color: Colors.green,
+                        ),
+                        onPressed: () =>
+                            _confirm(context, ref, res, staffAsync.value),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.cancel, color: Colors.red),
+                        onPressed: () => ref
+                            .read(bookingNotifierProvider.notifier)
+                            .updateBookingStatus(
+                              res.id,
+                              ReservationStatus.cancelled,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+      loading: () => const LinearProgressIndicator(),
+      error: (e, _) => const SizedBox(),
+    );
+  }
+
+  void _confirm(
+    BuildContext context,
+    WidgetRef ref,
+    Reservation res,
+    List? staff,
+  ) {
+    if (staff == null) return;
+    final activeStaff = staff.where((s) => s.isActive).toList();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirmer & Assigner'),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: activeStaff.length,
+            itemBuilder: (context, index) {
+              final s = activeStaff[index];
+              return ListTile(
+                title: Text(s.name),
+                onTap: () {
+                  ref
+                      .read(bookingNotifierProvider.notifier)
+                      .updateBookingStatus(
+                        res.id,
+                        ReservationStatus.confirmed,
+                        staffId: s.id,
+                      );
+                  Navigator.pop(context);
+                },
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _UpcomingSessionsCard extends ConsumerWidget {
   final List<Reservation> sessions;
   const _UpcomingSessionsCard({required this.sessions});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     if (sessions.isEmpty) {
       return const Center(
         child: Padding(
@@ -133,27 +251,42 @@ class _UpcomingSessionsCard extends StatelessWidget {
       );
     }
 
+    final users = ref.watch(userNotifierProvider).value ?? [];
+
     return Column(
-      children: sessions
-          .map(
-            (s) => Card(
-              margin: const EdgeInsets.only(bottom: 8),
-              child: ListTile(
-                dense: true,
-                leading: const Icon(
-                  Icons.event,
-                  size: 20,
-                  color: Colors.blueGrey,
-                ),
-                title: Text(s.clientName),
-                subtitle: Text(
-                  '${s.date.day}/${s.date.month} - ${s.slot.name.toUpperCase()}',
-                ),
-                trailing: const Icon(Icons.chevron_right, size: 16),
-              ),
+      children: sessions.map((s) {
+        final pupil = users.any((u) => u.id == s.pupilId)
+            ? users.firstWhere((u) => u.id == s.pupilId)
+            : null;
+
+        return Card(
+          margin: const EdgeInsets.only(bottom: 8),
+          child: ListTile(
+            dense: true,
+            leading: const Icon(Icons.event, size: 20, color: Colors.blueGrey),
+            title: Text(s.clientName),
+            subtitle: Text(
+              '${s.date.day}/${s.date.month} - ${s.slot.name.toUpperCase()}',
             ),
-          )
-          .toList(),
+            trailing: pupil != null
+                ? TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => LessonValidationScreen(
+                            reservation: s,
+                            pupil: pupil,
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Text('Valider'),
+                  )
+                : const Icon(Icons.chevron_right, size: 16),
+          ),
+        );
+      }).toList(),
     );
   }
 }

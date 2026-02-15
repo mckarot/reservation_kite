@@ -5,6 +5,7 @@ import '../providers/user_notifier.dart';
 import '../widgets/pupil_dashboard_tab.dart';
 import '../widgets/pupil_history_tab.dart';
 import '../widgets/pupil_progress_tab.dart';
+import 'pupil_booking_screen.dart';
 
 class PupilMainScreen extends ConsumerStatefulWidget {
   const PupilMainScreen({super.key});
@@ -34,8 +35,8 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
 
         final List<Widget> tabs = [
           PupilDashboardTab(user: user),
-          PupilHistoryTab(userId: user.id),
           PupilProgressTab(user: user),
+          PupilHistoryTab(userId: user.id),
         ];
 
         return Scaffold(
@@ -46,23 +47,25 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.dashboard),
-                label: 'Aujourd\'hui',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.calendar_month),
-                label: 'Mes Cours',
+                label: 'Accueil',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.trending_up),
-                label: 'Ma Progression',
+                label: 'Progrès',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.history),
+                label: 'Historique',
               ),
             ],
           ),
-          floatingActionButton: FloatingActionButton(
-            mini: true,
-            onPressed: () =>
-                ref.read(sessionNotifierProvider.notifier).logout(),
-            child: const Icon(Icons.logout),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const PupilBookingScreen()),
+            ),
+            label: const Text('Réserver'),
+            icon: const Icon(Icons.add),
           ),
         );
       },

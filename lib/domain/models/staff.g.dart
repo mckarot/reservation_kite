@@ -8,6 +8,7 @@ part of 'staff.dart';
 
 _$StaffImpl _$$StaffImplFromJson(Map<String, dynamic> json) => _$StaffImpl(
       id: json['id'] as String,
+      name: json['name'] as String,
       bio: json['bio'] as String,
       photoUrl: json['photoUrl'] as String,
       specialties: (json['specialties'] as List<dynamic>?)
@@ -25,6 +26,7 @@ _$StaffImpl _$$StaffImplFromJson(Map<String, dynamic> json) => _$StaffImpl(
 Map<String, dynamic> _$$StaffImplToJson(_$StaffImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'name': instance.name,
       'bio': instance.bio,
       'photoUrl': instance.photoUrl,
       'specialties': instance.specialties,

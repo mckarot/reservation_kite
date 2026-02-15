@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'database/hive_config.dart';
 import 'services/reservation_service.dart';
@@ -28,6 +30,9 @@ void main() async {
   // Initialiser Hive
   await HiveConfig.init();
 
+  // Initialiser les locales pour intl
+  await initializeDateFormatting('fr_FR', null);
+
   runApp(const ProviderScope(child: MainApp()));
 }
 
@@ -45,6 +50,13 @@ class MainApp extends ConsumerWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
         useMaterial3: true,
       ),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('fr', 'FR')],
+      locale: const Locale('fr', 'FR'),
       home: activeSession != null
           ? const PupilMainScreen()
           : const InitializationCheckScreen(),

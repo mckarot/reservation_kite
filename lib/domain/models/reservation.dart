@@ -5,16 +5,20 @@ part 'reservation.g.dart';
 
 enum TimeSlot { morning, afternoon }
 
+enum ReservationStatus { pending, confirmed, cancelled }
+
 @freezed
 class Reservation with _$Reservation {
   const factory Reservation({
     required String id,
     required String clientName,
-    String? pupilId, // Link to User model
+    String? pupilId,
     required DateTime date,
     required TimeSlot slot,
     String? staffId,
-    @Default(false) bool confirmed,
+    @Default(ReservationStatus.confirmed)
+    ReservationStatus
+    status, // Default to confirmed for backward compatibility with manual entries
     @Default('') String notes,
     required DateTime createdAt,
   }) = _Reservation;

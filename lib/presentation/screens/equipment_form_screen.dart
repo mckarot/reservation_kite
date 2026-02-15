@@ -53,7 +53,7 @@ class _EquipmentFormScreenState extends ConsumerState<EquipmentFormScreen> {
           padding: const EdgeInsets.all(16),
           children: [
             DropdownButtonFormField<EquipmentCategory>(
-              value: _category,
+              initialValue: _category,
               decoration: const InputDecoration(labelText: 'Catégorie'),
               items: EquipmentCategory.values
                   .map(
@@ -90,7 +90,7 @@ class _EquipmentFormScreenState extends ConsumerState<EquipmentFormScreen> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<EquipmentStatus>(
-              value: _status,
+              initialValue: _status,
               decoration: const InputDecoration(labelText: 'État'),
               items: EquipmentStatus.values
                   .map(

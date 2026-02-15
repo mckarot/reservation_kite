@@ -7,6 +7,7 @@ part 'staff.g.dart';
 class Staff with _$Staff {
   const factory Staff({
     required String id,
+    required String name,
     required String bio,
     required String photoUrl,
     @Default([]) List<String> specialties,

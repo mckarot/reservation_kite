@@ -21,6 +21,7 @@ Staff _$StaffFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Staff {
   String get id => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
   String get bio => throw _privateConstructorUsedError;
   String get photoUrl => throw _privateConstructorUsedError;
   List<String> get specialties => throw _privateConstructorUsedError;
@@ -40,6 +41,7 @@ abstract class $StaffCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
+      String name,
       String bio,
       String photoUrl,
       List<String> specialties,
@@ -62,6 +64,7 @@ class _$StaffCopyWithImpl<$Res, $Val extends Staff>
   @override
   $Res call({
     Object? id = null,
+    Object? name = null,
     Object? bio = null,
     Object? photoUrl = null,
     Object? specialties = null,
@@ -73,6 +76,10 @@ class _$StaffCopyWithImpl<$Res, $Val extends Staff>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
               as String,
       bio: null == bio
           ? _value.bio
@@ -111,6 +118,7 @@ abstract class _$$StaffImplCopyWith<$Res> implements $StaffCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
+      String name,
       String bio,
       String photoUrl,
       List<String> specialties,
@@ -131,6 +139,7 @@ class __$$StaffImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? name = null,
     Object? bio = null,
     Object? photoUrl = null,
     Object? specialties = null,
@@ -142,6 +151,10 @@ class __$$StaffImplCopyWithImpl<$Res>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
               as String,
       bio: null == bio
           ? _value.bio
@@ -176,6 +189,7 @@ class __$$StaffImplCopyWithImpl<$Res>
 class _$StaffImpl implements _Staff {
   const _$StaffImpl(
       {required this.id,
+      required this.name,
       required this.bio,
       required this.photoUrl,
       final List<String> specialties = const [],
@@ -190,6 +204,8 @@ class _$StaffImpl implements _Staff {
 
   @override
   final String id;
+  @override
+  final String name;
   @override
   final String bio;
   @override
@@ -220,7 +236,7 @@ class _$StaffImpl implements _Staff {
 
   @override
   String toString() {
-    return 'Staff(id: $id, bio: $bio, photoUrl: $photoUrl, specialties: $specialties, certificates: $certificates, isActive: $isActive, updatedAt: $updatedAt)';
+    return 'Staff(id: $id, name: $name, bio: $bio, photoUrl: $photoUrl, specialties: $specialties, certificates: $certificates, isActive: $isActive, updatedAt: $updatedAt)';
   }
 
   @override
@@ -229,6 +245,7 @@ class _$StaffImpl implements _Staff {
         (other.runtimeType == runtimeType &&
             other is _$StaffImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name) &&
             (identical(other.bio, bio) || other.bio == bio) &&
             (identical(other.photoUrl, photoUrl) ||
                 other.photoUrl == photoUrl) &&
@@ -247,6 +264,7 @@ class _$StaffImpl implements _Staff {
   int get hashCode => Object.hash(
       runtimeType,
       id,
+      name,
       bio,
       photoUrl,
       const DeepCollectionEquality().hash(_specialties),
@@ -271,6 +289,7 @@ class _$StaffImpl implements _Staff {
 abstract class _Staff implements Staff {
   const factory _Staff(
       {required final String id,
+      required final String name,
       required final String bio,
       required final String photoUrl,
       final List<String> specialties,
@@ -282,6 +301,8 @@ abstract class _Staff implements Staff {
 
   @override
   String get id;
+  @override
+  String get name;
   @override
   String get bio;
   @override
