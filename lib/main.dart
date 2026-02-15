@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:uuid/uuid.dart';
 
 import 'database/hive_config.dart';
+import 'domain/models/user.dart';
 import 'services/reservation_service.dart';
 import 'presentation/screens/admin_settings_screen.dart';
 import 'presentation/screens/staff_admin_screen.dart';
@@ -167,33 +169,83 @@ class InitializationCheckScreen extends ConsumerWidget {
   }
 
   void _showPupilSelector(BuildContext context, WidgetRef ref) {
-    final usersAsync = ref.watch(userNotifierProvider);
-
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Choisir un élève pour la démo'),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: usersAsync.when(
-            data: (users) => ListView.builder(
-              shrinkWrap: true,
-              itemCount: users.length,
-              itemBuilder: (context, index) {
-                final u = users[index];
-                return ListTile(
-                  title: Text(u.displayName),
-                  onTap: () {
-                    ref.read(sessionNotifierProvider.notifier).login(u.id);
-                    Navigator.pop(context);
-                  },
-                );
-              },
+      builder: (context) => Consumer(
+        builder: (context, ref, _) {
+          final usersAsync = ref.watch(userNotifierProvider);
+
+          return AlertDialog(
+            title: const Text('Choisir un élève pour la démo'),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: usersAsync.when(
+                data: (users) {
+                  if (users.isEmpty) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 24.0),
+                          child: Text(
+                            'Aucun élève trouvé dans la base Hive.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            final testUser = User(
+                              id: const Uuid().v4(),
+                              displayName: 'Élève Test',
+                              email: 'test@kite-school.com',
+                              createdAt: DateTime.now(),
+                              lastSeen: DateTime.now(),
+                            );
+                            ref
+                                .read(userNotifierProvider.notifier)
+                                .addUser(testUser);
+                          },
+                          icon: const Icon(Icons.person_add),
+                          label: const Text('Créer un élève de test'),
+                        ),
+                      ],
+                    );
+                  }
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: users.length,
+                    itemBuilder: (context, index) {
+                      final u = users[index];
+                      return ListTile(
+                        leading: const Icon(Icons.person),
+                        title: Text(u.displayName),
+                        subtitle: Text(u.email),
+                        onTap: () {
+                          ref
+                              .read(sessionNotifierProvider.notifier)
+                              .login(u.id);
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                  );
+                },
+                loading: () => const SizedBox(
+                  height: 100,
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+                error: (e, _) => Text('Erreur: $e'),
+              ),
             ),
-            loading: () => const LinearProgressIndicator(),
-            error: (e, _) => Text('Erreur: $e'),
-          ),
-        ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Fermer'),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
