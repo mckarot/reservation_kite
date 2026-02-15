@@ -4,6 +4,8 @@ import '../../domain/models/reservation.dart';
 import '../../domain/models/user.dart';
 import '../providers/user_notifier.dart';
 import '../providers/session_notifier.dart';
+import '../providers/equipment_notifier.dart';
+import '../../domain/models/equipment.dart';
 
 class LessonValidationScreen extends ConsumerStatefulWidget {
   final Reservation reservation;
@@ -107,6 +109,13 @@ class _LessonValidationScreenState
               ),
               maxLines: 4,
             ),
+            const SizedBox(height: 32),
+            const Text(
+              'Incident Matériel ?',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            _EquipmentIncidentSection(),
             const SizedBox(height: 40),
             SizedBox(
               width: double.infinity,
@@ -161,5 +170,93 @@ class _LessonValidationScreenState
       );
       Navigator.pop(context);
     }
+  }
+}
+
+class _EquipmentIncidentSection extends ConsumerStatefulWidget {
+  @override
+  ConsumerState<_EquipmentIncidentSection> createState() =>
+      __EquipmentIncidentSectionState();
+}
+
+class __EquipmentIncidentSectionState
+    extends ConsumerState<_EquipmentIncidentSection> {
+  String? _selectedEquipId;
+
+  @override
+  Widget build(BuildContext context) {
+    final equipAsync = ref.watch(equipmentNotifierProvider);
+
+    return equipAsync.when(
+      data: (items) {
+        final available = items
+            .where((e) => e.status == EquipmentStatus.available)
+            .toList();
+
+        return Column(
+          children: [
+            DropdownButtonFormField<String>(
+              value: _selectedEquipId,
+              isExpanded: true,
+              decoration: const InputDecoration(
+                hintText: 'Sélectionner le matériel avec un souci',
+                border: OutlineInputBorder(),
+              ),
+              items: available
+                  .map(
+                    (e) => DropdownMenuItem(
+                      value: e.id,
+                      child: Text('${e.brand} ${e.model} (${e.size})'),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (val) => setState(() => _selectedEquipId = val),
+            ),
+            if (_selectedEquipId != null) ...[
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () =>
+                          _updateStatus(EquipmentStatus.maintenance),
+                      icon: const Icon(Icons.build, size: 16),
+                      label: const Text('Maintenance'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.orange,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () => _updateStatus(EquipmentStatus.damaged),
+                      icon: const Icon(Icons.report_problem, size: 16),
+                      label: const Text('HS'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.red,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ],
+        );
+      },
+      loading: () => const CircularProgressIndicator(),
+      error: (_, __) => const Text('Erreur chargement matériel'),
+    );
+  }
+
+  void _updateStatus(EquipmentStatus status) {
+    if (_selectedEquipId == null) return;
+    ref
+        .read(equipmentNotifierProvider.notifier)
+        .updateStatus(_selectedEquipId!, status);
+    setState(() => _selectedEquipId = null);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Statut matériel mis à jour !')),
+    );
   }
 }

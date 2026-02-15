@@ -1,30 +1,38 @@
 import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../../domain/repositories/equipment_repository.dart';
 import '../../domain/models/equipment.dart';
-import '../../database/hive_config.dart';
+import '../../domain/repositories/equipment_repository.dart';
 
 class HiveEquipmentRepository implements EquipmentRepository {
-  Box<String> get _box => Hive.box<String>(HiveConfig.equipmentBox);
+  static const String _boxName = 'equipment';
+
+  Future<Box<String>> _getBox() async {
+    return await Hive.openBox<String>(_boxName);
+  }
 
   @override
   Future<List<Equipment>> getAllEquipment() async {
-    return _box.values
-        .map(
-          (json) =>
-              Equipment.fromJson(jsonDecode(json) as Map<String, dynamic>),
-        )
-        .toList();
+    final box = await _getBox();
+    return box.values.map((e) => Equipment.fromJson(jsonDecode(e))).toList();
+  }
+
+  @override
+  Future<Equipment?> getEquipment(String id) async {
+    final box = await _getBox();
+    final data = box.get(id);
+    if (data == null) return null;
+    return Equipment.fromJson(jsonDecode(data));
   }
 
   @override
   Future<void> saveEquipment(Equipment equipment) async {
-    final json = jsonEncode(equipment.toJson());
-    await _box.put(equipment.id, json);
+    final box = await _getBox();
+    await box.put(equipment.id, jsonEncode(equipment.toJson()));
   }
 
   @override
   Future<void> deleteEquipment(String id) async {
-    await _box.delete(id);
+    final box = await _getBox();
+    await box.delete(id);
   }
 }

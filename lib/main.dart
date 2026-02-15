@@ -9,7 +9,7 @@ import 'presentation/screens/admin_settings_screen.dart';
 import 'presentation/screens/staff_admin_screen.dart';
 import 'presentation/screens/booking_screen.dart';
 import 'presentation/screens/user_directory_screen.dart';
-import 'presentation/screens/equipment_list_screen.dart';
+import 'presentation/screens/equipment_admin_screen.dart';
 import 'presentation/screens/pupil_main_screen.dart';
 import 'presentation/screens/admin_dashboard_screen.dart';
 import 'presentation/providers/session_notifier.dart';
@@ -131,7 +131,7 @@ class InitializationCheckScreen extends ConsumerWidget {
             ElevatedButton.icon(
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const EquipmentListScreen()),
+                MaterialPageRoute(builder: (_) => const EquipmentAdminScreen()),
               ),
               icon: const Icon(Icons.inventory_2),
               label: const Text('Gestion du Matériel'),

@@ -3,22 +3,37 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'equipment.freezed.dart';
 part 'equipment.g.dart';
 
-enum EquipmentCategory { kite, board, bar, harness, other }
+enum EquipmentType {
+  @JsonValue('kite')
+  kite,
+  @JsonValue('board')
+  board,
+  @JsonValue('harness')
+  harness,
+  @JsonValue('other')
+  other,
+}
 
-enum EquipmentStatus { available, maintenance, retired }
+enum EquipmentStatus {
+  @JsonValue('available')
+  available,
+  @JsonValue('maintenance')
+  maintenance,
+  @JsonValue('damaged')
+  damaged,
+}
 
 @freezed
 class Equipment with _$Equipment {
   const factory Equipment({
     required String id,
+    required EquipmentType type,
     required String brand,
     required String model,
-    required String size, // ex: "12m", "138cm"
-    required EquipmentCategory category,
-    required EquipmentStatus status,
-    String? notes,
-    required DateTime createdAt,
-    DateTime? lastMaintenance,
+    required String size,
+    @Default(EquipmentStatus.available) EquipmentStatus status,
+    @Default('') String notes,
+    required DateTime updatedAt,
   }) = _Equipment;
 
   factory Equipment.fromJson(Map<String, dynamic> json) =>

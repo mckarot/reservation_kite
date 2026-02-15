@@ -21,14 +21,13 @@ Equipment _$EquipmentFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Equipment {
   String get id => throw _privateConstructorUsedError;
+  EquipmentType get type => throw _privateConstructorUsedError;
   String get brand => throw _privateConstructorUsedError;
   String get model => throw _privateConstructorUsedError;
-  String get size => throw _privateConstructorUsedError; // ex: "12m", "138cm"
-  EquipmentCategory get category => throw _privateConstructorUsedError;
+  String get size => throw _privateConstructorUsedError;
   EquipmentStatus get status => throw _privateConstructorUsedError;
-  String? get notes => throw _privateConstructorUsedError;
-  DateTime get createdAt => throw _privateConstructorUsedError;
-  DateTime? get lastMaintenance => throw _privateConstructorUsedError;
+  String get notes => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,14 +42,13 @@ abstract class $EquipmentCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
+      EquipmentType type,
       String brand,
       String model,
       String size,
-      EquipmentCategory category,
       EquipmentStatus status,
-      String? notes,
-      DateTime createdAt,
-      DateTime? lastMaintenance});
+      String notes,
+      DateTime updatedAt});
 }
 
 /// @nodoc
@@ -67,20 +65,23 @@ class _$EquipmentCopyWithImpl<$Res, $Val extends Equipment>
   @override
   $Res call({
     Object? id = null,
+    Object? type = null,
     Object? brand = null,
     Object? model = null,
     Object? size = null,
-    Object? category = null,
     Object? status = null,
-    Object? notes = freezed,
-    Object? createdAt = null,
-    Object? lastMaintenance = freezed,
+    Object? notes = null,
+    Object? updatedAt = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as EquipmentType,
       brand: null == brand
           ? _value.brand
           : brand // ignore: cast_nullable_to_non_nullable
@@ -93,26 +94,18 @@ class _$EquipmentCopyWithImpl<$Res, $Val extends Equipment>
           ? _value.size
           : size // ignore: cast_nullable_to_non_nullable
               as String,
-      category: null == category
-          ? _value.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as EquipmentCategory,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as EquipmentStatus,
-      notes: freezed == notes
+      notes: null == notes
           ? _value.notes
           : notes // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      lastMaintenance: freezed == lastMaintenance
-          ? _value.lastMaintenance
-          : lastMaintenance // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
     ) as $Val);
   }
 }
@@ -127,14 +120,13 @@ abstract class _$$EquipmentImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
+      EquipmentType type,
       String brand,
       String model,
       String size,
-      EquipmentCategory category,
       EquipmentStatus status,
-      String? notes,
-      DateTime createdAt,
-      DateTime? lastMaintenance});
+      String notes,
+      DateTime updatedAt});
 }
 
 /// @nodoc
@@ -149,20 +141,23 @@ class __$$EquipmentImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? type = null,
     Object? brand = null,
     Object? model = null,
     Object? size = null,
-    Object? category = null,
     Object? status = null,
-    Object? notes = freezed,
-    Object? createdAt = null,
-    Object? lastMaintenance = freezed,
+    Object? notes = null,
+    Object? updatedAt = null,
   }) {
     return _then(_$EquipmentImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as EquipmentType,
       brand: null == brand
           ? _value.brand
           : brand // ignore: cast_nullable_to_non_nullable
@@ -175,26 +170,18 @@ class __$$EquipmentImplCopyWithImpl<$Res>
           ? _value.size
           : size // ignore: cast_nullable_to_non_nullable
               as String,
-      category: null == category
-          ? _value.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as EquipmentCategory,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as EquipmentStatus,
-      notes: freezed == notes
+      notes: null == notes
           ? _value.notes
           : notes // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      lastMaintenance: freezed == lastMaintenance
-          ? _value.lastMaintenance
-          : lastMaintenance // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
     ));
   }
 }
@@ -204,14 +191,13 @@ class __$$EquipmentImplCopyWithImpl<$Res>
 class _$EquipmentImpl implements _Equipment {
   const _$EquipmentImpl(
       {required this.id,
+      required this.type,
       required this.brand,
       required this.model,
       required this.size,
-      required this.category,
-      required this.status,
-      this.notes,
-      required this.createdAt,
-      this.lastMaintenance});
+      this.status = EquipmentStatus.available,
+      this.notes = '',
+      required this.updatedAt});
 
   factory _$EquipmentImpl.fromJson(Map<String, dynamic> json) =>
       _$$EquipmentImplFromJson(json);
@@ -219,26 +205,25 @@ class _$EquipmentImpl implements _Equipment {
   @override
   final String id;
   @override
+  final EquipmentType type;
+  @override
   final String brand;
   @override
   final String model;
   @override
   final String size;
-// ex: "12m", "138cm"
   @override
-  final EquipmentCategory category;
-  @override
+  @JsonKey()
   final EquipmentStatus status;
   @override
-  final String? notes;
+  @JsonKey()
+  final String notes;
   @override
-  final DateTime createdAt;
-  @override
-  final DateTime? lastMaintenance;
+  final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'Equipment(id: $id, brand: $brand, model: $model, size: $size, category: $category, status: $status, notes: $notes, createdAt: $createdAt, lastMaintenance: $lastMaintenance)';
+    return 'Equipment(id: $id, type: $type, brand: $brand, model: $model, size: $size, status: $status, notes: $notes, updatedAt: $updatedAt)';
   }
 
   @override
@@ -247,23 +232,20 @@ class _$EquipmentImpl implements _Equipment {
         (other.runtimeType == runtimeType &&
             other is _$EquipmentImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.type, type) || other.type == type) &&
             (identical(other.brand, brand) || other.brand == brand) &&
             (identical(other.model, model) || other.model == model) &&
             (identical(other.size, size) || other.size == size) &&
-            (identical(other.category, category) ||
-                other.category == category) &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.notes, notes) || other.notes == notes) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.lastMaintenance, lastMaintenance) ||
-                other.lastMaintenance == lastMaintenance));
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, brand, model, size, category,
-      status, notes, createdAt, lastMaintenance);
+  int get hashCode => Object.hash(
+      runtimeType, id, type, brand, model, size, status, notes, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -282,14 +264,13 @@ class _$EquipmentImpl implements _Equipment {
 abstract class _Equipment implements Equipment {
   const factory _Equipment(
       {required final String id,
+      required final EquipmentType type,
       required final String brand,
       required final String model,
       required final String size,
-      required final EquipmentCategory category,
-      required final EquipmentStatus status,
-      final String? notes,
-      required final DateTime createdAt,
-      final DateTime? lastMaintenance}) = _$EquipmentImpl;
+      final EquipmentStatus status,
+      final String notes,
+      required final DateTime updatedAt}) = _$EquipmentImpl;
 
   factory _Equipment.fromJson(Map<String, dynamic> json) =
       _$EquipmentImpl.fromJson;
@@ -297,21 +278,19 @@ abstract class _Equipment implements Equipment {
   @override
   String get id;
   @override
+  EquipmentType get type;
+  @override
   String get brand;
   @override
   String get model;
   @override
   String get size;
-  @override // ex: "12m", "138cm"
-  EquipmentCategory get category;
   @override
   EquipmentStatus get status;
   @override
-  String? get notes;
+  String get notes;
   @override
-  DateTime get createdAt;
-  @override
-  DateTime? get lastMaintenance;
+  DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
   _$$EquipmentImplCopyWith<_$EquipmentImpl> get copyWith =>

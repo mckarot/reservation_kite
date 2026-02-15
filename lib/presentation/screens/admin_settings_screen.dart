@@ -4,6 +4,7 @@ import '../../domain/models/settings.dart';
 import '../providers/settings_notifier.dart';
 import 'staff_admin_screen.dart';
 import 'credit_pack_admin_screen.dart';
+import 'equipment_admin_screen.dart';
 
 class AdminSettingsScreen extends ConsumerStatefulWidget {
   const AdminSettingsScreen({super.key});
@@ -166,6 +167,30 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (_) => const CreditPackAdminScreen(),
+                    ),
+                  ),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.people, color: Colors.blue),
+                  title: const Text('Gestion du Staff'),
+                  subtitle: const Text('Ajouter ou modifier des moniteurs'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const StaffAdminScreen()),
+                  ),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.inventory, color: Colors.orange),
+                  title: const Text('Gestion du Matériel'),
+                  subtitle: const Text(
+                    'Inventaire des ailes, boards et harnais',
+                  ),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const EquipmentAdminScreen(),
                     ),
                   ),
                 ),
