@@ -159,8 +159,24 @@ class _PendingRequestsSection extends ConsumerWidget {
                     res.clientName,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  subtitle: Text(
-                    '${res.date.day}/${res.date.month} - ${res.slot == TimeSlot.morning ? "Matin" : "Après-midi"}',
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${res.date.day}/${res.date.month} - ${res.slot == TimeSlot.morning ? "Matin" : "Après-midi"}',
+                      ),
+                      if (res.notes.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: Text(
+                            'Note: ${res.notes}',
+                            style: const TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: Colors.orangeAccent,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -210,25 +226,60 @@ class _PendingRequestsSection extends ConsumerWidget {
         title: const Text('Confirmer & Assigner'),
         content: SizedBox(
           width: double.maxFinite,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: activeStaff.length,
-            itemBuilder: (context, index) {
-              final s = activeStaff[index];
-              return ListTile(
-                title: Text(s.name),
-                onTap: () {
-                  ref
-                      .read(bookingNotifierProvider.notifier)
-                      .updateBookingStatus(
-                        res.id,
-                        ReservationStatus.confirmed,
-                        staffId: s.id,
-                      );
-                  Navigator.pop(context);
-                },
-              );
-            },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (res.notes.isNotEmpty) ...[
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade50,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.note, size: 16, color: Colors.blue),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          res.notes,
+                          style: const TextStyle(fontSize: 13),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
+              const Text(
+                'Choisir un moniteur :',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Flexible(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: activeStaff.length,
+                  itemBuilder: (context, index) {
+                    final s = activeStaff[index];
+                    return ListTile(
+                      title: Text(s.name),
+                      onTap: () {
+                        ref
+                            .read(bookingNotifierProvider.notifier)
+                            .updateBookingStatus(
+                              res.id,
+                              ReservationStatus.confirmed,
+                              staffId: s.id,
+                            );
+                        Navigator.pop(context);
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),

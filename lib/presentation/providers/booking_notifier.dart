@@ -6,6 +6,8 @@ import '../../data/providers/repository_providers.dart';
 import '../providers/staff_notifier.dart';
 import '../providers/user_notifier.dart';
 import '../providers/settings_notifier.dart';
+import '../providers/notification_notifier.dart';
+import '../../domain/models/app_notification.dart';
 
 part 'booking_notifier.g.dart';
 
@@ -23,6 +25,7 @@ class BookingNotifier extends _$BookingNotifier {
     String? staffId,
     String? pupilId,
     ReservationStatus status = ReservationStatus.confirmed,
+    String notes = '',
   }) async {
     final repository = ref.read(reservationRepositoryProvider);
     final settings = ref.read(settingsNotifierProvider).value;
@@ -54,6 +57,7 @@ class BookingNotifier extends _$BookingNotifier {
       slot: slot,
       staffId: staffId,
       status: status,
+      notes: notes,
       createdAt: DateTime.now(),
     );
 
@@ -97,6 +101,28 @@ class BookingNotifier extends _$BookingNotifier {
           await ref
               .read(userNotifierProvider.notifier)
               .adjustCredits(oldRes.pupilId!, 1);
+        }
+
+        // Notification de l'élève
+        if (oldRes.pupilId != null) {
+          final notifNotifier = ref.read(notificationNotifierProvider.notifier);
+          if (status == ReservationStatus.confirmed) {
+            await notifNotifier.sendNotification(
+              userId: oldRes.pupilId!,
+              title: 'Cours Validé ! 🤙',
+              message:
+                  'Votre séance du ${oldRes.date.day}/${oldRes.date.month} a été confirmée.',
+              type: NotificationType.success,
+            );
+          } else if (status == ReservationStatus.cancelled) {
+            await notifNotifier.sendNotification(
+              userId: oldRes.pupilId!,
+              title: 'Séance Annulée 🔄',
+              message:
+                  'Votre séance a été annulée et votre crédit a été restitué.',
+              type: NotificationType.alert,
+            );
+          }
         }
       }
       return repository.getAllReservations();

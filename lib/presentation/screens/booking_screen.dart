@@ -16,6 +16,14 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   TimeSlot _selectedSlot = TimeSlot.morning;
   String? _selectedStaffId;
   final _clientNameController = TextEditingController();
+  final _manualNotesController = TextEditingController();
+
+  @override
+  void dispose() {
+    _clientNameController.dispose();
+    _manualNotesController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +91,21 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                     final b = filtered[index];
                     return ListTile(
                       title: Text(b.clientName),
-                      subtitle: Text(b.staffId ?? 'Moniteur non assigné'),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(b.staffId ?? 'Moniteur non assigné'),
+                          if (b.notes.isNotEmpty)
+                            Text(
+                              'Note: ${b.notes}',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontStyle: FontStyle.italic,
+                                color: Colors.blueGrey,
+                              ),
+                            ),
+                        ],
+                      ),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () => ref
@@ -139,6 +161,14 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                   ],
                   onChanged: (val) => setState(() => _selectedStaffId = val),
                 ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _manualNotesController,
+                  decoration: const InputDecoration(
+                    labelText: 'Notes / Commentaires',
+                    hintText: 'Ex: Préférence moniteur...',
+                  ),
+                ),
               ],
             ),
             actions: [
@@ -155,6 +185,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                         date: _selectedDate,
                         slot: _selectedSlot,
                         staffId: _selectedStaffId,
+                        notes: _manualNotesController.text,
                       );
 
                   if (context.mounted) {
@@ -164,6 +195,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                       ).showSnackBar(SnackBar(content: Text(error)));
                     } else {
                       _clientNameController.clear();
+                      _manualNotesController.clear();
                       Navigator.pop(context);
                     }
                   }

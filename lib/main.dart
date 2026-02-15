@@ -14,6 +14,9 @@ import 'presentation/screens/user_directory_screen.dart';
 import 'presentation/screens/equipment_admin_screen.dart';
 import 'presentation/screens/pupil_main_screen.dart';
 import 'presentation/screens/admin_dashboard_screen.dart';
+import 'presentation/screens/monitor_main_screen.dart';
+import 'presentation/providers/staff_notifier.dart';
+import 'presentation/providers/staff_session_notifier.dart';
 import 'presentation/providers/session_notifier.dart';
 import 'presentation/providers/user_notifier.dart';
 import 'data/providers/repository_providers.dart';
@@ -44,6 +47,16 @@ class MainApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final activeSession = ref.watch(sessionNotifierProvider);
+    final activeStaffSession = ref.watch(staffSessionNotifierProvider);
+
+    Widget home;
+    if (activeSession != null) {
+      home = const PupilMainScreen();
+    } else if (activeStaffSession != null) {
+      home = const MonitorMainScreen();
+    } else {
+      home = const InitializationCheckScreen();
+    }
 
     return MaterialApp(
       title: 'Kite Reserve',
@@ -59,9 +72,7 @@ class MainApp extends ConsumerWidget {
       ],
       supportedLocales: const [Locale('fr', 'FR')],
       locale: const Locale('fr', 'FR'),
-      home: activeSession != null
-          ? const PupilMainScreen()
-          : const InitializationCheckScreen(),
+      home: home,
     );
   }
 }
@@ -162,6 +173,16 @@ class InitializationCheckScreen extends ConsumerWidget {
                 backgroundColor: Colors.indigo.shade50,
               ),
             ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () => _showStaffSelector(context, ref),
+              icon: const Icon(Icons.group),
+              label: const Text('Simulation Mode Moniteur'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange.shade50,
+                foregroundColor: Colors.orange.shade900,
+              ),
+            ),
           ],
         ),
       ),
@@ -225,6 +246,77 @@ class InitializationCheckScreen extends ConsumerWidget {
                           ref
                               .read(sessionNotifierProvider.notifier)
                               .login(u.id);
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                  );
+                },
+                loading: () => const SizedBox(
+                  height: 100,
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+                error: (e, _) => Text('Erreur: $e'),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Fermer'),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  void _showStaffSelector(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (context) => Consumer(
+        builder: (context, ref, _) {
+          final staffAsync = ref.watch(staffNotifierProvider);
+
+          return AlertDialog(
+            title: const Text('Choisir un moniteur (Simulation)'),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: staffAsync.when(
+                data: (staffList) {
+                  final activeStaff = staffList
+                      .where((s) => s.isActive)
+                      .toList();
+                  if (activeStaff.isEmpty) {
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 24.0),
+                      child: Text(
+                        'Aucun moniteur actif trouvé.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    );
+                  }
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: activeStaff.length,
+                    itemBuilder: (context, index) {
+                      final s = activeStaff[index];
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: s.photoUrl.isNotEmpty
+                              ? NetworkImage(s.photoUrl)
+                              : null,
+                          child: s.photoUrl.isEmpty
+                              ? Text(s.name.substring(0, 1).toUpperCase())
+                              : null,
+                        ),
+                        title: Text(s.name),
+                        subtitle: Text(s.specialties.join(', ')),
+                        onTap: () {
+                          ref
+                              .read(staffSessionNotifierProvider.notifier)
+                              .login(s.id);
                           Navigator.pop(context);
                         },
                       );

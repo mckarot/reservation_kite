@@ -19,6 +19,13 @@ class PupilBookingScreen extends ConsumerStatefulWidget {
 class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
   DateTime _selectedDate = DateTime.now().add(const Duration(days: 1));
   TimeSlot _selectedSlot = TimeSlot.morning;
+  final _notesController = TextEditingController();
+
+  @override
+  void dispose() {
+    _notesController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +103,24 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                       setState(() => _selectedSlot = TimeSlot.afternoon),
                 ),
               ],
+            ),
+            const SizedBox(height: 32),
+            const Text(
+              'Notes ou préférences (optionnel)',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _notesController,
+              decoration: InputDecoration(
+                hintText: 'Ex: Préférence pour un moniteur, niveau actuel...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                filled: true,
+                fillColor: Colors.grey.shade50,
+              ),
+              maxLines: 3,
             ),
             const SizedBox(height: 40),
             // Disponibilité en temps réel
@@ -219,6 +244,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
           slot: _selectedSlot,
           pupilId: pupilId,
           status: ReservationStatus.pending,
+          notes: _notesController.text,
         );
 
     if (context.mounted) {

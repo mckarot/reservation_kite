@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'booking_notifier.dart';
+part of 'staff_session_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$bookingNotifierHash() => r'15d8d791f2dcd7a991c046050ef5d9f0184e7fd8';
+String _$staffSessionNotifierHash() =>
+    r'28beb076e80caae65cf5e095494a048432a8d243';
 
-/// See also [BookingNotifier].
-@ProviderFor(BookingNotifier)
-final bookingNotifierProvider = AutoDisposeAsyncNotifierProvider<
-    BookingNotifier, List<Reservation>>.internal(
-  BookingNotifier.new,
-  name: r'bookingNotifierProvider',
+/// See also [StaffSessionNotifier].
+@ProviderFor(StaffSessionNotifier)
+final staffSessionNotifierProvider =
+    AutoDisposeNotifierProvider<StaffSessionNotifier, String?>.internal(
+  StaffSessionNotifier.new,
+  name: r'staffSessionNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$bookingNotifierHash,
+      : _$staffSessionNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$BookingNotifier = AutoDisposeAsyncNotifier<List<Reservation>>;
+typedef _$StaffSessionNotifier = AutoDisposeNotifier<String?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

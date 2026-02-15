@@ -6,6 +6,8 @@ import '../widgets/pupil_dashboard_tab.dart';
 import '../widgets/pupil_history_tab.dart';
 import '../widgets/pupil_progress_tab.dart';
 import 'pupil_booking_screen.dart';
+import 'notification_center_screen.dart';
+import '../providers/notification_notifier.dart';
 
 class PupilMainScreen extends ConsumerStatefulWidget {
   const PupilMainScreen({super.key});
@@ -36,6 +38,7 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
         final List<Widget> tabs = [
           PupilDashboardTab(user: user),
           PupilProgressTab(user: user),
+          const NotificationCenterScreen(),
           PupilHistoryTab(userId: user.id),
         ];
 
@@ -44,16 +47,31 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: _currentIndex,
             onTap: (index) => setState(() => _currentIndex = index),
-            items: const [
-              BottomNavigationBarItem(
+            items: [
+              const BottomNavigationBarItem(
                 icon: Icon(Icons.dashboard),
                 label: 'Accueil',
               ),
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 icon: Icon(Icons.trending_up),
                 label: 'Progrès',
               ),
               BottomNavigationBarItem(
+                icon: Consumer(
+                  builder: (context, ref, _) {
+                    final notifs =
+                        ref.watch(notificationNotifierProvider).value ?? [];
+                    final unreadCount = notifs.where((n) => !n.isRead).length;
+                    return Badge(
+                      label: Text(unreadCount.toString()),
+                      isLabelVisible: unreadCount > 0,
+                      child: const Icon(Icons.notifications),
+                    );
+                  },
+                ),
+                label: 'Alertes',
+              ),
+              const BottomNavigationBarItem(
                 icon: Icon(Icons.history),
                 label: 'Historique',
               ),
