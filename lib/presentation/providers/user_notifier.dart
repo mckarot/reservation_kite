@@ -113,6 +113,33 @@ class UserNotifier extends _$UserNotifier {
     });
   }
 
+  Future<void> saveLessonProgress({
+    required String userId,
+    required UserProgress progress,
+    UserNote? newNote,
+  }) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final repo = ref.read(userRepositoryProvider);
+      final user = await repo.getUser(userId);
+      if (user != null) {
+        // Combiner la nouvelle note si elle existe avec la progression
+        final updatedNotes = newNote != null
+            ? [...progress.notes, newNote]
+            : progress.notes;
+
+        final finalProgress = progress.copyWith(notes: updatedNotes);
+
+        final updatedUser = user.copyWith(
+          progress: finalProgress,
+          lastSeen: DateTime.now(),
+        );
+        await repo.saveUser(updatedUser);
+      }
+      return _fetchUsers();
+    });
+  }
+
   Future<void> deleteUser(String id) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {

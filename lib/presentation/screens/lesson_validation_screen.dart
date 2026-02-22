@@ -138,30 +138,23 @@ class _LessonValidationScreenState
   Future<void> _save() async {
     final instructorId = ref.read(sessionNotifierProvider) ?? 'unknown';
 
-    // 1. Ajouter la note
-    if (_noteController.text.isNotEmpty) {
-      await ref
-          .read(userNotifierProvider.notifier)
-          .addNote(
-            widget.pupil.id,
-            UserNote(
-              date: DateTime.now(),
-              content: _noteController.text,
-              instructorId: instructorId,
-            ),
-          );
-    }
-
-    // 2. Mettre à jour la checklist et le niveau
+    // Sauvegarder tout en bloc pour éviter les race conditions
     await ref
         .read(userNotifierProvider.notifier)
-        .updateProgress(
-          widget.pupil.id,
-          UserProgress(
+        .saveLessonProgress(
+          userId: widget.pupil.id,
+          progress: UserProgress(
             ikoLevel: _selectedLevel,
             checklist: _selectedItems,
             notes: widget.pupil.progress?.notes ?? [],
           ),
+          newNote: _noteController.text.isNotEmpty
+              ? UserNote(
+                  date: DateTime.now(),
+                  content: _noteController.text,
+                  instructorId: instructorId,
+                )
+              : null,
         );
 
     if (mounted) {
