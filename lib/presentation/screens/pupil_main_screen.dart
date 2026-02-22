@@ -45,6 +45,7 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
         return Scaffold(
           body: tabs[_currentIndex],
           bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
             currentIndex: _currentIndex,
             onTap: (index) => setState(() => _currentIndex = index),
             items: [
