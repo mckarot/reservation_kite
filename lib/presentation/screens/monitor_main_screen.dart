@@ -7,6 +7,8 @@ import '../providers/user_notifier.dart';
 import 'lesson_validation_screen.dart';
 import '../../domain/models/reservation.dart';
 import '../../domain/models/staff.dart';
+import '../../domain/models/staff_unavailability.dart';
+import '../providers/unavailability_notifier.dart';
 
 class MonitorMainScreen extends ConsumerStatefulWidget {
   const MonitorMainScreen({super.key});
@@ -28,6 +30,11 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
       appBar: AppBar(
         title: const Text('Espace Moniteur'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.event_busy),
+            tooltip: 'Mes Absences',
+            onPressed: () => _showAbsenceDialog(context, ref, staffId!),
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () =>
@@ -94,6 +101,209 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Erreur: $e')),
+      ),
+    );
+  }
+
+  void _showAbsenceDialog(BuildContext context, WidgetRef ref, String staffId) {
+    showDialog(
+      context: context,
+      builder: (context) => _AbsenceManagementDialog(staffId: staffId),
+    );
+  }
+}
+
+class _AbsenceManagementDialog extends ConsumerWidget {
+  final String staffId;
+  const _AbsenceManagementDialog({required this.staffId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final unavailabilitiesAsync = ref.watch(unavailabilityNotifierProvider);
+
+    return AlertDialog(
+      title: const Text('Mes Absences'),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ElevatedButton.icon(
+              onPressed: () => _requestAbsence(context, ref),
+              icon: const Icon(Icons.add),
+              label: const Text('Déclarer une absence'),
+            ),
+            const Divider(),
+            Flexible(
+              child: unavailabilitiesAsync.when(
+                data: (list) {
+                  final myAbsences = list
+                      .where((u) => u.staffId == staffId)
+                      .toList();
+                  if (myAbsences.isEmpty) {
+                    return const Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                        'Aucune absence déclarée.',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    );
+                  }
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: myAbsences.length,
+                    itemBuilder: (context, index) {
+                      final u = myAbsences[index];
+                      return ListTile(
+                        dense: true,
+                        title: Text(
+                          '${u.date.day}/${u.date.month} - ${u.slot == TimeSlot.fullDay ? 'Journée entière' : (u.slot == TimeSlot.morning ? 'Matin' : 'Aprem')}',
+                        ),
+                        subtitle: Text(u.reason),
+                        trailing: _StatusBadge(status: u.status),
+                        onLongPress: u.status == UnavailabilityStatus.pending
+                            ? () => ref
+                                  .read(unavailabilityNotifierProvider.notifier)
+                                  .deleteRequest(u.id)
+                            : null,
+                      );
+                    },
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (e, _) => Text('Erreur: $e'),
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Fermer'),
+        ),
+      ],
+    );
+  }
+
+  void _requestAbsence(BuildContext context, WidgetRef ref) async {
+    DateTime selectedDate = DateTime.now().add(const Duration(days: 1));
+    TimeSlot selectedSlot = TimeSlot.morning;
+    final reasonController = TextEditingController();
+
+    await showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: const Text('Demande d\'absence'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: Text(
+                  '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
+                ),
+                trailing: const Icon(Icons.calendar_today),
+                onTap: () async {
+                  final date = await showDatePicker(
+                    context: context,
+                    initialDate: selectedDate,
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime.now().add(const Duration(days: 60)),
+                  );
+                  if (date != null) setState(() => selectedDate = date);
+                },
+              ),
+              const SizedBox(height: 8),
+              DropdownButtonFormField<TimeSlot>(
+                initialValue: selectedSlot,
+                decoration: const InputDecoration(labelText: 'Créneau'),
+                items: const [
+                  DropdownMenuItem(
+                    value: TimeSlot.morning,
+                    child: Text('Matin'),
+                  ),
+                  DropdownMenuItem(
+                    value: TimeSlot.afternoon,
+                    child: Text('Après-midi'),
+                  ),
+                  DropdownMenuItem(
+                    value: TimeSlot.fullDay,
+                    child: Text('Journée entière'),
+                  ),
+                ],
+                onChanged: (val) => setState(() => selectedSlot = val!),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: reasonController,
+                decoration: const InputDecoration(
+                  labelText: 'Motif (ex: Perso, Maladie)',
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Annuler'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                ref
+                    .read(unavailabilityNotifierProvider.notifier)
+                    .requestUnavailability(
+                      staffId: staffId,
+                      date: selectedDate,
+                      slot: selectedSlot,
+                      reason: reasonController.text,
+                    );
+                Navigator.pop(context);
+              },
+              child: const Text('Envoyer'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _StatusBadge extends StatelessWidget {
+  final UnavailabilityStatus status;
+  const _StatusBadge({required this.status});
+
+  @override
+  Widget build(BuildContext context) {
+    Color color;
+    String label;
+    switch (status) {
+      case UnavailabilityStatus.pending:
+        color = Colors.orange;
+        label = 'Attente';
+        break;
+      case UnavailabilityStatus.approved:
+        color = Colors.green;
+        label = 'Validé';
+        break;
+      case UnavailabilityStatus.rejected:
+        color = Colors.red;
+        label = 'Refusé';
+        break;
+    }
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: color,
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

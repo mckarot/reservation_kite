@@ -101,7 +101,7 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 DropdownButtonFormField<EquipmentType>(
-                  value: dialogType,
+                  initialValue: dialogType,
                   decoration: const InputDecoration(labelText: 'Type'),
                   items: EquipmentType.values
                       .map(

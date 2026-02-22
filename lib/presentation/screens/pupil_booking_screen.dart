@@ -6,6 +6,7 @@ import '../providers/session_notifier.dart';
 import '../providers/user_notifier.dart';
 import '../providers/settings_notifier.dart';
 import '../providers/staff_notifier.dart';
+import '../providers/unavailability_notifier.dart';
 import '../../domain/models/reservation.dart';
 import '../../domain/logic/booking_validator.dart';
 
@@ -33,6 +34,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
     final settingsAsync = ref.watch(settingsNotifierProvider);
     final staffAsync = ref.watch(staffNotifierProvider);
     final pupilId = ref.watch(sessionNotifierProvider);
+    final unavailabilitiesAsync = ref.watch(unavailabilityNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Solliciter un cours')),
@@ -133,9 +135,14 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
 
                 if (settings == null || staff == null) return const SizedBox();
 
+                final unavailabilities = unavailabilitiesAsync.value ?? [];
+
                 final maxCap = BookingValidator.calculateMaxCapacity(
-                  staff,
-                  settings,
+                  activeStaff: staff,
+                  unavailabilities: unavailabilities,
+                  settings: settings,
+                  date: _selectedDate,
+                  slot: _selectedSlot,
                 );
                 final currentCount = bookings
                     .where(

@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'reservation.freezed.dart';
 part 'reservation.g.dart';
 
-enum TimeSlot { morning, afternoon }
+enum TimeSlot { morning, afternoon, fullDay }
 
 enum ReservationStatus { pending, confirmed, cancelled }
 

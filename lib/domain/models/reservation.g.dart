@@ -36,6 +36,7 @@ Map<String, dynamic> _$$ReservationImplToJson(_$ReservationImpl instance) =>
 const _$TimeSlotEnumMap = {
   TimeSlot.morning: 'morning',
   TimeSlot.afternoon: 'afternoon',
+  TimeSlot.fullDay: 'fullDay',
 };
 
 const _$ReservationStatusEnumMap = {

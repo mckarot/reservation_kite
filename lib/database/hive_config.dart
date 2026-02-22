@@ -8,6 +8,7 @@ class HiveConfig {
   static const String staffBox = 'staff_box';
   static const String equipmentBox = 'equipment_box';
   static const String creditPacksBox = 'credit_packs_box';
+  static const String unavailabilitiesBox = 'unavailabilities_box';
 
   static Future<void> init() async {
     await Hive.initFlutter();
@@ -20,6 +21,7 @@ class HiveConfig {
       Hive.openBox<String>(staffBox),
       Hive.openBox<String>(equipmentBox),
       Hive.openBox<String>(creditPacksBox),
+      Hive.openBox<String>(unavailabilitiesBox),
     ]);
   }
 

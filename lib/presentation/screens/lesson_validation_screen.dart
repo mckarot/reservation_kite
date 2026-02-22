@@ -196,7 +196,7 @@ class __EquipmentIncidentSectionState
         return Column(
           children: [
             DropdownButtonFormField<String>(
-              value: _selectedEquipId,
+              initialValue: _selectedEquipId,
               isExpanded: true,
               decoration: const InputDecoration(
                 hintText: 'Sélectionner le matériel avec un souci',

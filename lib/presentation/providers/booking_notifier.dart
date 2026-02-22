@@ -7,6 +7,7 @@ import '../providers/staff_notifier.dart';
 import '../providers/user_notifier.dart';
 import '../providers/settings_notifier.dart';
 import '../providers/notification_notifier.dart';
+import '../providers/unavailability_notifier.dart';
 import '../../domain/models/app_notification.dart';
 
 part 'booking_notifier.g.dart';
@@ -36,6 +37,9 @@ class BookingNotifier extends _$BookingNotifier {
     final activeStaff = staff.where((s) => s.isActive).toList();
     final existingReservations = state.value ?? [];
 
+    final unavailabilities =
+        ref.read(unavailabilityNotifierProvider).value ?? [];
+
     // Validation de capacité (on compte les confirmés ET les pending pour éviter le surbooking)
     final canBook = BookingValidator.canBook(
       date: date,
@@ -44,6 +48,7 @@ class BookingNotifier extends _$BookingNotifier {
           .where((r) => r.status != ReservationStatus.cancelled)
           .toList(),
       activeStaff: activeStaff,
+      unavailabilities: unavailabilities,
       settings: settings,
     );
 
