@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/user.dart';
+import '../providers/staff_notifier.dart';
 
 class PupilProgressTab extends ConsumerWidget {
   final User user;
@@ -9,9 +10,11 @@ class PupilProgressTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final progress = user.progress ?? const UserProgress();
+    final staffAsync = ref.watch(staffNotifierProvider);
+    final staffList = staffAsync.value ?? [];
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 70),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -40,7 +43,15 @@ class PupilProgressTab extends ConsumerWidget {
               ),
             )
           else
-            ...progress.notes.reversed.map((n) => _NoteCard(note: n)),
+            ...progress.notes.reversed.map((n) {
+              final instructor = staffList
+                  .where((s) => s.id == n.instructorId)
+                  .firstOrNull;
+              return _NoteCard(
+                note: n,
+                instructorName: instructor?.name ?? n.instructorId,
+              );
+            }),
         ],
       ),
     );
@@ -64,7 +75,7 @@ class _LevelCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.indigo.withOpacity(0.3),
+            color: Colors.indigo.withValues(alpha: 0.3),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -161,7 +172,8 @@ class _ChecklistSection extends StatelessWidget {
 
 class _NoteCard extends StatelessWidget {
   final UserNote note;
-  const _NoteCard({required this.note});
+  final String instructorName;
+  const _NoteCard({required this.note, required this.instructorName});
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +196,7 @@ class _NoteCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Par ${note.instructorId}', // TODO: Mapper ID -> Nom
+                  'Par $instructorName',
                   style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ],

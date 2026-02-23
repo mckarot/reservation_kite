@@ -43,6 +43,25 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
         ];
 
         return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              _currentIndex == 0
+                  ? 'Espace Élève'
+                  : _currentIndex == 1
+                  ? 'Ma Progression'
+                  : _currentIndex == 2
+                  ? 'Notifications'
+                  : 'Historique',
+            ),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.logout),
+                tooltip: 'Quitter la simulation',
+                onPressed: () =>
+                    ref.read(sessionNotifierProvider.notifier).logout(),
+              ),
+            ],
+          ),
           body: tabs[_currentIndex],
           bottomNavigationBar: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
