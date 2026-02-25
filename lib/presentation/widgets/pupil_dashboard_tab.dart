@@ -35,7 +35,7 @@ class PupilDashboardTab extends StatelessWidget {
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.blue.withOpacity(0.3),
+                  color: Colors.blue.withValues(alpha: 0.3),
                   blurRadius: 15,
                   offset: const Offset(0, 8),
                 ),
@@ -92,7 +92,8 @@ class PupilDashboardTab extends StatelessWidget {
               const SizedBox(width: 16),
               _StatItem(
                 label: 'Progression',
-                value: '${user.progress?.checklist.length ?? 0}/8',
+                value:
+                    '${user.progress?.checklist.length ?? 0}/${UserProgress.allIkoSkills.length}',
                 icon: Icons.flag,
                 color: Colors.green,
               ),

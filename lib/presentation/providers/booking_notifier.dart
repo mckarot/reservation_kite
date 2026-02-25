@@ -80,6 +80,10 @@ class BookingNotifier extends _$BookingNotifier {
       return repository.getAllReservations();
     });
 
+    if (state.hasError) {
+      return state.error.toString();
+    }
+
     return null; // Success
   }
 

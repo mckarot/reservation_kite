@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/user_notifier.dart';
 import '../../domain/models/user.dart';
+import '../../domain/models/staff.dart';
 import '../providers/staff_notifier.dart';
 
 class UserNotesTab extends ConsumerWidget {
@@ -25,6 +26,21 @@ class UserNotesTab extends ConsumerWidget {
                         notes[notes.length -
                             1 -
                             index]; // Inverser pour voir les plus récentes
+
+                    final staff = ref.watch(staffNotifierProvider).value ?? [];
+                    final instructorName = staff
+                        .firstWhere(
+                          (s) => s.id == note.instructorId,
+                          orElse: () => Staff(
+                            id: note.instructorId,
+                            name: 'Moniteur Inconnu',
+                            bio: '',
+                            photoUrl: '',
+                            updatedAt: DateTime.now(),
+                          ),
+                        )
+                        .name;
+
                     return Card(
                       margin: const EdgeInsets.only(bottom: 12),
                       child: ListTile(
@@ -34,7 +50,7 @@ class UserNotesTab extends ConsumerWidget {
                         ),
                         subtitle: Text(note.content),
                         trailing: Text(
-                          'Moniteur: ${note.instructorId}',
+                          'Moniteur: $instructorName',
                           style: const TextStyle(
                             fontSize: 10,
                             color: Colors.grey,
@@ -75,7 +91,8 @@ class UserNotesTab extends ConsumerWidget {
                   decoration: const InputDecoration(labelText: 'Moniteur'),
                   items: staff
                       .map(
-                        (s) => DropdownMenuItem(value: s.id, child: Text(s.id)),
+                        (s) =>
+                            DropdownMenuItem(value: s.id, child: Text(s.name)),
                       )
                       .toList(),
                   onChanged: (val) => selectedStaffId = val,

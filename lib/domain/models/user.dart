@@ -31,6 +31,23 @@ class UserProgress with _$UserProgress {
     @Default([]) List<UserNote> notes,
   }) = _UserProgress;
 
+  static const Map<String, List<String>> ikoSkillsByLevel = {
+    'Niveau 1 - Découverte': [
+      'Préparation & Sécurité',
+      'Pilotage zone neutre',
+      'Décollage / Atterrissage',
+    ],
+    'Niveau 2 - Intermédiaire': [
+      'Nage tractée (Body Drag)',
+      'Waterstart',
+      'Navigation de base',
+    ],
+    'Niveau 3 - Indépendant': ['Remontée au vent', 'Transitions & Sauts'],
+  };
+
+  static List<String> get allIkoSkills =>
+      ikoSkillsByLevel.values.expand((e) => e).toList();
+
   factory UserProgress.fromJson(Map<String, dynamic> json) =>
       _$UserProgressFromJson(json);
 }

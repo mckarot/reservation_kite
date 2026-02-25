@@ -18,7 +18,10 @@ class PupilProgressTab extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _LevelCard(ikoLevel: progress.ikoLevel ?? 'Niveau 1'),
+          _LevelCard(
+            ikoLevel: progress.ikoLevel ?? 'Niveau 1',
+            checkedItemsCount: progress.checklist.length,
+          ),
           const SizedBox(height: 24),
           const Text(
             'MES ACQUISITIONS',
@@ -60,7 +63,8 @@ class PupilProgressTab extends ConsumerWidget {
 
 class _LevelCard extends StatelessWidget {
   final String ikoLevel;
-  const _LevelCard({required this.ikoLevel});
+  final int checkedItemsCount;
+  const _LevelCard({required this.ikoLevel, required this.checkedItemsCount});
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +105,9 @@ class _LevelCard extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
-              value: 0.4, // TODO: Dynamiser selon la checklist
+              value: UserProgress.allIkoSkills.isEmpty
+                  ? 0
+                  : checkedItemsCount / UserProgress.allIkoSkills.length,
               backgroundColor: Colors.white24,
               valueColor: const AlwaysStoppedAnimation<Color>(
                 Colors.cyanAccent,
@@ -121,49 +127,69 @@ class _ChecklistSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Liste simplifiée IKO
-    final allItems = [
-      'Préparer son aile',
-      'Systèmes de sécurité',
-      'Pilotage zone neutre',
-      'Décollage / Atterrissage',
-      'Body drag',
-      'Water start',
-      'Remonter au vent',
-    ];
-
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: allItems.map((item) {
-        final isDone = checkedItems.contains(item);
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            color: isDone ? Colors.green.shade50 : Colors.grey.shade100,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: isDone ? Colors.green.shade200 : Colors.grey.shade300,
-            ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                isDone ? Icons.check_circle : Icons.circle_outlined,
-                size: 16,
-                color: isDone ? Colors.green : Colors.grey,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                item,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: isDone ? Colors.green.shade900 : Colors.grey.shade700,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: UserProgress.ikoSkillsByLevel.entries.map((entry) {
+        final levelName = entry.key;
+        final skills = entry.value;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 16, bottom: 8),
+              child: Text(
+                levelName.toUpperCase(),
+                style: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                  letterSpacing: 1.1,
                 ),
               ),
-            ],
-          ),
+            ),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: skills.map((item) {
+                final isDone = checkedItems.contains(item);
+                return Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isDone ? Colors.green.shade50 : Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: isDone
+                          ? Colors.green.shade200
+                          : Colors.grey.shade300,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        isDone ? Icons.check_circle : Icons.circle_outlined,
+                        size: 16,
+                        color: isDone ? Colors.green : Colors.grey,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        item,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: isDone
+                              ? Colors.green.shade900
+                              : Colors.grey.shade700,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
         );
       }).toList(),
     );

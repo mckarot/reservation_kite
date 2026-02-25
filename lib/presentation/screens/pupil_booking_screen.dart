@@ -12,6 +12,7 @@ import '../../domain/models/staff.dart';
 import '../../domain/models/settings.dart' hide TimeSlot;
 import '../../domain/models/staff_unavailability.dart';
 import '../../domain/logic/booking_validator.dart';
+import '../providers/auth_state_provider.dart';
 
 class PupilBookingScreen extends ConsumerStatefulWidget {
   const PupilBookingScreen({super.key});
@@ -37,7 +38,11 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
     final settingsAsync = ref.watch(settingsNotifierProvider);
     final staffAsync = ref.watch(staffNotifierProvider);
     final pupilId = ref.watch(sessionNotifierProvider);
+    final currentUserAsync = ref.watch(currentUserProvider);
     final unavailabilitiesAsync = ref.watch(unavailabilityNotifierProvider);
+
+    // Résolution de l'ID élève efficace (Simulation ou Auth Réelle)
+    final effectivePupilId = pupilId ?? currentUserAsync.value?.id;
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
@@ -168,7 +173,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
         settingsAsync,
         staffAsync,
         unavailabilitiesAsync,
-        pupilId,
+        effectivePupilId,
       ),
     );
   }

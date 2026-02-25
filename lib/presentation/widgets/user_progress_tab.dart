@@ -7,17 +7,6 @@ class UserProgressTab extends ConsumerWidget {
   final User user;
   const UserProgressTab({super.key, required this.user});
 
-  static const List<String> ikoSkills = [
-    'Découverte (Niveau 1)',
-    'Pilotage de base',
-    'Décollage / Atterrissage',
-    'Nage tractée (Niveau 2)',
-    'Waterstart',
-    'Navigation (Niveau 3)',
-    'Remontée au vent',
-    'Transitions / Sauts',
-  ];
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final progress = user.progress ?? const UserProgress();
@@ -37,25 +26,46 @@ class UserProgressTab extends ConsumerWidget {
             style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 8),
-          ...ikoSkills.map((skill) {
-            final isChecked = progress.checklist.contains(skill);
-            return CheckboxListTile(
-              title: Text(skill),
-              value: isChecked,
-              onChanged: (val) {
-                final newChecklist = List<String>.from(progress.checklist);
-                if (val == true) {
-                  newChecklist.add(skill);
-                } else {
-                  newChecklist.remove(skill);
-                }
-                ref
-                    .read(userNotifierProvider.notifier)
-                    .updateProgress(
-                      user.id,
-                      progress.copyWith(checklist: newChecklist),
-                    );
-              },
+          ...UserProgress.ikoSkillsByLevel.entries.map((entry) {
+            final levelName = entry.key;
+            final skills = entry.value;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Text(
+                    levelName,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+                ...skills.map((skill) {
+                  final isChecked = progress.checklist.contains(skill);
+                  return CheckboxListTile(
+                    title: Text(skill),
+                    value: isChecked,
+                    onChanged: (val) {
+                      final newChecklist = List<String>.from(
+                        progress.checklist,
+                      );
+                      if (val == true) {
+                        newChecklist.add(skill);
+                      } else {
+                        newChecklist.remove(skill);
+                      }
+                      ref
+                          .read(userNotifierProvider.notifier)
+                          .updateProgress(
+                            user.id,
+                            progress.copyWith(checklist: newChecklist),
+                          );
+                    },
+                  );
+                }),
+              ],
             );
           }),
         ],
