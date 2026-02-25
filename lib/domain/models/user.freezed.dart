@@ -27,10 +27,11 @@ mixin _$User {
   String get role => throw _privateConstructorUsedError;
   int? get weight => throw _privateConstructorUsedError;
   int get walletBalance => throw _privateConstructorUsedError;
-  int get totalCreditsPurchased =>
-      throw _privateConstructorUsedError; // Nouvelle stat financière
+  int get totalCreditsPurchased => throw _privateConstructorUsedError;
   UserProgress? get progress => throw _privateConstructorUsedError;
+  @TimestampConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
+  @TimestampConverter()
   DateTime get lastSeen => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -53,8 +54,8 @@ abstract class $UserCopyWith<$Res> {
       int walletBalance,
       int totalCreditsPurchased,
       UserProgress? progress,
-      DateTime createdAt,
-      DateTime lastSeen});
+      @TimestampConverter() DateTime createdAt,
+      @TimestampConverter() DateTime lastSeen});
 
   $UserProgressCopyWith<$Res>? get progress;
 }
@@ -162,8 +163,8 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
       int walletBalance,
       int totalCreditsPurchased,
       UserProgress? progress,
-      DateTime createdAt,
-      DateTime lastSeen});
+      @TimestampConverter() DateTime createdAt,
+      @TimestampConverter() DateTime lastSeen});
 
   @override
   $UserProgressCopyWith<$Res>? get progress;
@@ -253,8 +254,8 @@ class _$UserImpl implements _User {
       this.walletBalance = 0,
       this.totalCreditsPurchased = 0,
       this.progress,
-      required this.createdAt,
-      required this.lastSeen});
+      @TimestampConverter() required this.createdAt,
+      @TimestampConverter() required this.lastSeen});
 
   factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserImplFromJson(json);
@@ -278,12 +279,13 @@ class _$UserImpl implements _User {
   @override
   @JsonKey()
   final int totalCreditsPurchased;
-// Nouvelle stat financière
   @override
   final UserProgress? progress;
   @override
+  @TimestampConverter()
   final DateTime createdAt;
   @override
+  @TimestampConverter()
   final DateTime lastSeen;
 
   @override
@@ -357,8 +359,8 @@ abstract class _User implements User {
       final int walletBalance,
       final int totalCreditsPurchased,
       final UserProgress? progress,
-      required final DateTime createdAt,
-      required final DateTime lastSeen}) = _$UserImpl;
+      @TimestampConverter() required final DateTime createdAt,
+      @TimestampConverter() required final DateTime lastSeen}) = _$UserImpl;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
 
@@ -378,11 +380,13 @@ abstract class _User implements User {
   int get walletBalance;
   @override
   int get totalCreditsPurchased;
-  @override // Nouvelle stat financière
+  @override
   UserProgress? get progress;
   @override
+  @TimestampConverter()
   DateTime get createdAt;
   @override
+  @TimestampConverter()
   DateTime get lastSeen;
   @override
   @JsonKey(ignore: true)
@@ -591,6 +595,7 @@ UserNote _$UserNoteFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserNote {
+  @TimestampConverter()
   DateTime get date => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
   String get instructorId => throw _privateConstructorUsedError;
@@ -606,7 +611,10 @@ abstract class $UserNoteCopyWith<$Res> {
   factory $UserNoteCopyWith(UserNote value, $Res Function(UserNote) then) =
       _$UserNoteCopyWithImpl<$Res, UserNote>;
   @useResult
-  $Res call({DateTime date, String content, String instructorId});
+  $Res call(
+      {@TimestampConverter() DateTime date,
+      String content,
+      String instructorId});
 }
 
 /// @nodoc
@@ -651,7 +659,10 @@ abstract class _$$UserNoteImplCopyWith<$Res>
       __$$UserNoteImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({DateTime date, String content, String instructorId});
+  $Res call(
+      {@TimestampConverter() DateTime date,
+      String content,
+      String instructorId});
 }
 
 /// @nodoc
@@ -690,12 +701,15 @@ class __$$UserNoteImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserNoteImpl implements _UserNote {
   const _$UserNoteImpl(
-      {required this.date, required this.content, required this.instructorId});
+      {@TimestampConverter() required this.date,
+      required this.content,
+      required this.instructorId});
 
   factory _$UserNoteImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserNoteImplFromJson(json);
 
   @override
+  @TimestampConverter()
   final DateTime date;
   @override
   final String content;
@@ -738,7 +752,7 @@ class _$UserNoteImpl implements _UserNote {
 
 abstract class _UserNote implements UserNote {
   const factory _UserNote(
-      {required final DateTime date,
+      {@TimestampConverter() required final DateTime date,
       required final String content,
       required final String instructorId}) = _$UserNoteImpl;
 
@@ -746,6 +760,7 @@ abstract class _UserNote implements UserNote {
       _$UserNoteImpl.fromJson;
 
   @override
+  @TimestampConverter()
   DateTime get date;
   @override
   String get content;

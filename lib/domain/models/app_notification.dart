@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../data/utils/timestamp_converter.dart';
 
 part 'app_notification.freezed.dart';
 part 'app_notification.g.dart';
@@ -20,7 +21,7 @@ class AppNotification with _$AppNotification {
     required String title,
     required String message,
     required NotificationType type,
-    required DateTime timestamp,
+    @TimestampConverter() required DateTime timestamp,
     @Default(false) bool isRead,
   }) = _AppNotification;
 

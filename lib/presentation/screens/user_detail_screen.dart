@@ -108,46 +108,126 @@ class _ProfileTab extends ConsumerWidget {
   }
 
   void _showTopUpOptions(BuildContext context, WidgetRef ref) {
-    final packsAsync = ref.watch(creditPackNotifierProvider);
-
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Créditer le compte'),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: packsAsync.when(
-            data: (packs) {
-              if (packs.isEmpty) {
-                return const Text(
-                  'Aucun pack défini. Allez dans Réglages > Catalogue.',
-                );
-              }
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: packs.length,
-                itemBuilder: (context, index) {
-                  final pack = packs[index];
-                  return ListTile(
-                    title: Text(pack.name),
-                    subtitle: Text('${pack.credits} séances - ${pack.price}€'),
-                    onTap: () {
-                      final currentBalance = user.walletBalance;
-                      ref
-                          .read(userNotifierProvider.notifier)
-                          .updateBalance(userId, currentBalance + pack.credits);
-                      Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Pack ${pack.name} ajouté !')),
+        content: Consumer(
+          builder: (context, ref, child) {
+            final packsAsync = ref.watch(creditPackNotifierProvider);
+            final customController = TextEditingController();
+
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  packsAsync.when(
+                    data: (packs) {
+                      if (packs.isEmpty) {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          child: Text(
+                            'Aucun pack standard trouvé.\nUtilisez la saisie sur mesure ci-dessous.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.grey, fontSize: 13),
+                          ),
+                        );
+                      }
+                      return Column(
+                        children: packs.map((pack) {
+                          return Card(
+                            elevation: 0,
+                            margin: const EdgeInsets.only(bottom: 8),
+                            color: Colors.blue.shade50,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              side: BorderSide(color: Colors.blue.shade100),
+                            ),
+                            child: ListTile(
+                              leading: const Icon(
+                                Icons.inventory_2,
+                                color: Colors.blue,
+                              ),
+                              title: Text(
+                                pack.name,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text(
+                                '${pack.credits} séances • ${pack.price}€',
+                              ),
+                              onTap: () {
+                                ref
+                                    .read(userNotifierProvider.notifier)
+                                    .updateBalance(
+                                      userId,
+                                      user.walletBalance + pack.credits,
+                                    );
+                                Navigator.pop(context);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Pack ${pack.name} ajouté !'),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        }).toList(),
                       );
                     },
-                  );
-                },
-              );
-            },
-            loading: () => const LinearProgressIndicator(),
-            error: (e, _) => Text('Erreur: $e'),
-          ),
+                    loading: () => const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 32),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                    error: (e, _) => Text('Erreur: $e'),
+                  ),
+                  const Divider(height: 32),
+                  const Text(
+                    'Saisie sur mesure',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: customController,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                            labelText: 'Nombre de séances',
+                            border: OutlineInputBorder(),
+                            isDense: true,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: () {
+                          final count = int.tryParse(customController.text);
+                          if (count != null && count > 0) {
+                            ref
+                                .read(userNotifierProvider.notifier)
+                                .updateBalance(
+                                  userId,
+                                  user.walletBalance + count,
+                                );
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('$count séances ajoutées !'),
+                              ),
+                            );
+                          }
+                        },
+                        child: const Icon(Icons.add),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
         ),
         actions: [
           TextButton(
@@ -157,8 +237,8 @@ class _ProfileTab extends ConsumerWidget {
           TextButton(
             onPressed: () => _showManualDialog(context, ref),
             child: const Text(
-              'Saisie libre',
-              style: TextStyle(color: Colors.grey),
+              'Ajuster le total (Admin)',
+              style: TextStyle(color: Colors.grey, fontSize: 12),
             ),
           ),
         ],
@@ -186,9 +266,18 @@ class _ProfileTab extends ConsumerWidget {
           ),
           ElevatedButton(
             onPressed: () {
+              final newBalance = int.tryParse(controller.text);
+              if (newBalance == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Veuillez saisir un nombre valide'),
+                  ),
+                );
+                return;
+              }
               ref
                   .read(userNotifierProvider.notifier)
-                  .updateBalance(userId, int.parse(controller.text));
+                  .updateBalance(userId, newBalance);
               Navigator.pop(context); // Close manual
               Navigator.pop(context); // Close options
             },

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "246547675738",
+    "project_id": "reservation-kite",
+    "storage_bucket": "reservation-kite.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246547675738:android:a708f0f4811b5bf1bc7663",
+        "android_client_info": {
+          "package_name": "com.example.reservation_kite"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYBNpFjyyihSVB9X5IgKDyarVGrhOIBHo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

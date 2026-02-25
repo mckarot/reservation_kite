@@ -8,7 +8,9 @@ part 'financial_notifier.g.dart';
 class FinancialStats extends _$FinancialStats {
   @override
   Map<String, dynamic> build() {
-    final users = ref.watch(userNotifierProvider).value ?? [];
+    final allUsers = ref.watch(userNotifierProvider).value ?? [];
+    // Filtrer pour ne garder que les élèves (ceux qui achètent des crédits)
+    final users = allUsers.where((u) => u.role == 'student').toList();
     final bookings = ref.watch(bookingNotifierProvider).value ?? [];
 
     // KPI: Total des crédits vendus historiquement

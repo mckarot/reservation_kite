@@ -23,12 +23,14 @@ mixin _$Reservation {
   String get id => throw _privateConstructorUsedError;
   String get clientName => throw _privateConstructorUsedError;
   String? get pupilId => throw _privateConstructorUsedError;
+  @TimestampConverter()
   DateTime get date => throw _privateConstructorUsedError;
   TimeSlot get slot => throw _privateConstructorUsedError;
   String? get staffId => throw _privateConstructorUsedError;
   ReservationStatus get status =>
       throw _privateConstructorUsedError; // Default to confirmed for backward compatibility with manual entries
   String get notes => throw _privateConstructorUsedError;
+  @TimestampConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,12 +49,12 @@ abstract class $ReservationCopyWith<$Res> {
       {String id,
       String clientName,
       String? pupilId,
-      DateTime date,
+      @TimestampConverter() DateTime date,
       TimeSlot slot,
       String? staffId,
       ReservationStatus status,
       String notes,
-      DateTime createdAt});
+      @TimestampConverter() DateTime createdAt});
 }
 
 /// @nodoc
@@ -131,12 +133,12 @@ abstract class _$$ReservationImplCopyWith<$Res>
       {String id,
       String clientName,
       String? pupilId,
-      DateTime date,
+      @TimestampConverter() DateTime date,
       TimeSlot slot,
       String? staffId,
       ReservationStatus status,
       String notes,
-      DateTime createdAt});
+      @TimestampConverter() DateTime createdAt});
 }
 
 /// @nodoc
@@ -208,12 +210,12 @@ class _$ReservationImpl implements _Reservation {
       {required this.id,
       required this.clientName,
       this.pupilId,
-      required this.date,
+      @TimestampConverter() required this.date,
       required this.slot,
       this.staffId,
       this.status = ReservationStatus.confirmed,
       this.notes = '',
-      required this.createdAt});
+      @TimestampConverter() required this.createdAt});
 
   factory _$ReservationImpl.fromJson(Map<String, dynamic> json) =>
       _$$ReservationImplFromJson(json);
@@ -225,6 +227,7 @@ class _$ReservationImpl implements _Reservation {
   @override
   final String? pupilId;
   @override
+  @TimestampConverter()
   final DateTime date;
   @override
   final TimeSlot slot;
@@ -238,6 +241,7 @@ class _$ReservationImpl implements _Reservation {
   @JsonKey()
   final String notes;
   @override
+  @TimestampConverter()
   final DateTime createdAt;
 
   @override
@@ -284,15 +288,16 @@ class _$ReservationImpl implements _Reservation {
 
 abstract class _Reservation implements Reservation {
   const factory _Reservation(
-      {required final String id,
-      required final String clientName,
-      final String? pupilId,
-      required final DateTime date,
-      required final TimeSlot slot,
-      final String? staffId,
-      final ReservationStatus status,
-      final String notes,
-      required final DateTime createdAt}) = _$ReservationImpl;
+          {required final String id,
+          required final String clientName,
+          final String? pupilId,
+          @TimestampConverter() required final DateTime date,
+          required final TimeSlot slot,
+          final String? staffId,
+          final ReservationStatus status,
+          final String notes,
+          @TimestampConverter() required final DateTime createdAt}) =
+      _$ReservationImpl;
 
   factory _Reservation.fromJson(Map<String, dynamic> json) =
       _$ReservationImpl.fromJson;
@@ -304,6 +309,7 @@ abstract class _Reservation implements Reservation {
   @override
   String? get pupilId;
   @override
+  @TimestampConverter()
   DateTime get date;
   @override
   TimeSlot get slot;
@@ -314,6 +320,7 @@ abstract class _Reservation implements Reservation {
   @override // Default to confirmed for backward compatibility with manual entries
   String get notes;
   @override
+  @TimestampConverter()
   DateTime get createdAt;
   @override
   @JsonKey(ignore: true)

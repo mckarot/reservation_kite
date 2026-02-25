@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../data/utils/timestamp_converter.dart';
 import 'package:hive/hive.dart';
 import 'reservation.dart'; // Pour TimeSlot
 
@@ -21,7 +22,7 @@ class StaffUnavailability with _$StaffUnavailability {
   const factory StaffUnavailability({
     @HiveField(0) required String id,
     @HiveField(1) required String staffId,
-    @HiveField(2) required DateTime date,
+    @HiveField(2) @TimestampConverter() required DateTime date,
     @HiveField(3) required TimeSlot slot, // morning, afternoon, or full_day?
     // On va considérer que TimeSlot couvre morning/afternoon.
     // Pour une journée entière, on créera deux entrées ou on ajoutera une option.
@@ -30,7 +31,7 @@ class StaffUnavailability with _$StaffUnavailability {
     @HiveField(5)
     @Default(UnavailabilityStatus.pending)
     UnavailabilityStatus status,
-    @HiveField(6) required DateTime createdAt,
+    @HiveField(6) @TimestampConverter() required DateTime createdAt,
   }) = _StaffUnavailability;
 
   factory StaffUnavailability.fromJson(Map<String, dynamic> json) =>

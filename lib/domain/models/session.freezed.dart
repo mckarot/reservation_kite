@@ -21,6 +21,7 @@ Session _$SessionFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Session {
   String get id => throw _privateConstructorUsedError;
+  @TimestampConverter()
   DateTime get date => throw _privateConstructorUsedError;
   String get slot =>
       throw _privateConstructorUsedError; // 'morning' or 'afternoon'
@@ -28,6 +29,7 @@ mixin _$Session {
   List<String> get studentIds => throw _privateConstructorUsedError;
   int get maxCapacity => throw _privateConstructorUsedError;
   String get status => throw _privateConstructorUsedError;
+  @TimestampConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,13 +44,13 @@ abstract class $SessionCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      DateTime date,
+      @TimestampConverter() DateTime date,
       String slot,
       String instructorId,
       List<String> studentIds,
       int maxCapacity,
       String status,
-      DateTime createdAt});
+      @TimestampConverter() DateTime createdAt});
 }
 
 /// @nodoc
@@ -119,13 +121,13 @@ abstract class _$$SessionImplCopyWith<$Res> implements $SessionCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      DateTime date,
+      @TimestampConverter() DateTime date,
       String slot,
       String instructorId,
       List<String> studentIds,
       int maxCapacity,
       String status,
-      DateTime createdAt});
+      @TimestampConverter() DateTime createdAt});
 }
 
 /// @nodoc
@@ -190,13 +192,13 @@ class __$$SessionImplCopyWithImpl<$Res>
 class _$SessionImpl implements _Session {
   const _$SessionImpl(
       {required this.id,
-      required this.date,
+      @TimestampConverter() required this.date,
       required this.slot,
       required this.instructorId,
       final List<String> studentIds = const [],
       required this.maxCapacity,
       this.status = 'scheduled',
-      required this.createdAt})
+      @TimestampConverter() required this.createdAt})
       : _studentIds = studentIds;
 
   factory _$SessionImpl.fromJson(Map<String, dynamic> json) =>
@@ -205,6 +207,7 @@ class _$SessionImpl implements _Session {
   @override
   final String id;
   @override
+  @TimestampConverter()
   final DateTime date;
   @override
   final String slot;
@@ -226,6 +229,7 @@ class _$SessionImpl implements _Session {
   @JsonKey()
   final String status;
   @override
+  @TimestampConverter()
   final DateTime createdAt;
 
   @override
@@ -282,19 +286,20 @@ class _$SessionImpl implements _Session {
 abstract class _Session implements Session {
   const factory _Session(
       {required final String id,
-      required final DateTime date,
+      @TimestampConverter() required final DateTime date,
       required final String slot,
       required final String instructorId,
       final List<String> studentIds,
       required final int maxCapacity,
       final String status,
-      required final DateTime createdAt}) = _$SessionImpl;
+      @TimestampConverter() required final DateTime createdAt}) = _$SessionImpl;
 
   factory _Session.fromJson(Map<String, dynamic> json) = _$SessionImpl.fromJson;
 
   @override
   String get id;
   @override
+  @TimestampConverter()
   DateTime get date;
   @override
   String get slot;
@@ -307,6 +312,7 @@ abstract class _Session implements Session {
   @override
   String get status;
   @override
+  @TimestampConverter()
   DateTime get createdAt;
   @override
   @JsonKey(ignore: true)

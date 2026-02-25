@@ -23,7 +23,9 @@ class UserDirectoryScreen extends ConsumerWidget {
         ],
       ),
       body: usersAsync.when(
-        data: (users) {
+        data: (allUsers) {
+          final users = allUsers.where((u) => u.role == 'student').toList();
+
           if (users.isEmpty) {
             return const Center(child: Text('Aucun élève enregistré'));
           }

@@ -10,24 +10,24 @@ _$AppNotificationImpl _$$AppNotificationImplFromJson(
         Map<String, dynamic> json) =>
     _$AppNotificationImpl(
       id: json['id'] as String,
-      userId: json['userId'] as String,
+      userId: json['user_id'] as String,
       title: json['title'] as String,
       message: json['message'] as String,
       type: $enumDecode(_$NotificationTypeEnumMap, json['type']),
-      timestamp: DateTime.parse(json['timestamp'] as String),
-      isRead: json['isRead'] as bool? ?? false,
+      timestamp: const TimestampConverter().fromJson(json['timestamp']),
+      isRead: json['is_read'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$AppNotificationImplToJson(
         _$AppNotificationImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'userId': instance.userId,
+      'user_id': instance.userId,
       'title': instance.title,
       'message': instance.message,
       'type': _$NotificationTypeEnumMap[instance.type]!,
-      'timestamp': instance.timestamp.toIso8601String(),
-      'isRead': instance.isRead,
+      'timestamp': const TimestampConverter().toJson(instance.timestamp),
+      'is_read': instance.isRead,
     };
 
 const _$NotificationTypeEnumMap = {

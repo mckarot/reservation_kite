@@ -8,6 +8,8 @@ import '../widgets/pupil_progress_tab.dart';
 import 'pupil_booking_screen.dart';
 import 'notification_center_screen.dart';
 import '../providers/notification_notifier.dart';
+import '../providers/auth_state_provider.dart';
+import '../../data/providers/repository_providers.dart';
 
 class PupilMainScreen extends ConsumerStatefulWidget {
   const PupilMainScreen({super.key});
@@ -23,15 +25,40 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
   Widget build(BuildContext context) {
     final activeUserId = ref.watch(sessionNotifierProvider);
     final usersAsync = ref.watch(userNotifierProvider);
+    final currentUserAsync = ref.watch(currentUserProvider);
 
-    if (activeUserId == null) {
-      return const Scaffold(body: Center(child: Text('Session expirée')));
+    // Fallback sur l'utilisateur Firebase si la simulation n'est pas active
+    final effectiveUserId = activeUserId ?? currentUserAsync.value?.id;
+
+    if (effectiveUserId == null) {
+      if (currentUserAsync.isLoading || usersAsync.isLoading) {
+        return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      }
+      return const Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Session expirée ou profil introuvable'),
+              SizedBox(height: 16),
+              // On laisse une chance de retour au login si vraiment perdu
+              // mais normalement MainApp gère ça.
+            ],
+          ),
+        ),
+      );
     }
 
     return usersAsync.when(
       data: (users) {
+        if (users.isEmpty) {
+          return const Scaffold(
+            body: Center(child: Text('Aucun utilisateur trouvé dans la base.')),
+          );
+        }
+
         final user = users.firstWhere(
-          (u) => u.id == activeUserId,
+          (u) => u.id == effectiveUserId,
           orElse: () => users.first,
         );
 
@@ -57,8 +84,10 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
               IconButton(
                 icon: const Icon(Icons.logout),
                 tooltip: 'Quitter la simulation',
-                onPressed: () =>
-                    ref.read(sessionNotifierProvider.notifier).logout(),
+                onPressed: () {
+                  ref.read(sessionNotifierProvider.notifier).logout();
+                  ref.read(authRepositoryProvider).signOut();
+                },
               ),
             ],
           ),

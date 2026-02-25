@@ -27,6 +27,7 @@ mixin _$Equipment {
   String get size => throw _privateConstructorUsedError;
   EquipmentStatus get status => throw _privateConstructorUsedError;
   String get notes => throw _privateConstructorUsedError;
+  @TimestampConverter()
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -48,7 +49,7 @@ abstract class $EquipmentCopyWith<$Res> {
       String size,
       EquipmentStatus status,
       String notes,
-      DateTime updatedAt});
+      @TimestampConverter() DateTime updatedAt});
 }
 
 /// @nodoc
@@ -126,7 +127,7 @@ abstract class _$$EquipmentImplCopyWith<$Res>
       String size,
       EquipmentStatus status,
       String notes,
-      DateTime updatedAt});
+      @TimestampConverter() DateTime updatedAt});
 }
 
 /// @nodoc
@@ -197,7 +198,7 @@ class _$EquipmentImpl implements _Equipment {
       required this.size,
       this.status = EquipmentStatus.available,
       this.notes = '',
-      required this.updatedAt});
+      @TimestampConverter() required this.updatedAt});
 
   factory _$EquipmentImpl.fromJson(Map<String, dynamic> json) =>
       _$$EquipmentImplFromJson(json);
@@ -219,6 +220,7 @@ class _$EquipmentImpl implements _Equipment {
   @JsonKey()
   final String notes;
   @override
+  @TimestampConverter()
   final DateTime updatedAt;
 
   @override
@@ -263,14 +265,15 @@ class _$EquipmentImpl implements _Equipment {
 
 abstract class _Equipment implements Equipment {
   const factory _Equipment(
-      {required final String id,
-      required final EquipmentType type,
-      required final String brand,
-      required final String model,
-      required final String size,
-      final EquipmentStatus status,
-      final String notes,
-      required final DateTime updatedAt}) = _$EquipmentImpl;
+          {required final String id,
+          required final EquipmentType type,
+          required final String brand,
+          required final String model,
+          required final String size,
+          final EquipmentStatus status,
+          final String notes,
+          @TimestampConverter() required final DateTime updatedAt}) =
+      _$EquipmentImpl;
 
   factory _Equipment.fromJson(Map<String, dynamic> json) =
       _$EquipmentImpl.fromJson;
@@ -290,6 +293,7 @@ abstract class _Equipment implements Equipment {
   @override
   String get notes;
   @override
+  @TimestampConverter()
   DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)

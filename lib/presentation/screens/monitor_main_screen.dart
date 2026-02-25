@@ -4,6 +4,8 @@ import '../providers/staff_session_notifier.dart';
 import '../providers/staff_notifier.dart';
 import '../providers/booking_notifier.dart';
 import '../providers/user_notifier.dart';
+import '../providers/auth_state_provider.dart';
+import '../../data/providers/repository_providers.dart';
 import 'lesson_validation_screen.dart';
 import '../../domain/models/reservation.dart';
 import '../../domain/models/staff.dart';
@@ -25,6 +27,13 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
     final staffId = ref.watch(staffSessionNotifierProvider);
     final staffAsync = ref.watch(staffNotifierProvider);
     final bookingsAsync = ref.watch(bookingNotifierProvider);
+    final currentUserAsync = ref.watch(currentUserProvider);
+
+    final effectiveStaffId = staffId ?? currentUserAsync.value?.id;
+
+    if (effectiveStaffId == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -33,18 +42,66 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
           IconButton(
             icon: const Icon(Icons.event_busy),
             tooltip: 'Mes Absences',
-            onPressed: () => _showAbsenceDialog(context, ref, staffId!),
+            onPressed: () => _showAbsenceDialog(context, ref, effectiveStaffId),
           ),
           IconButton(
             icon: const Icon(Icons.logout),
-            onPressed: () =>
-                ref.read(staffSessionNotifierProvider.notifier).logout(),
+            onPressed: () {
+              ref.read(staffSessionNotifierProvider.notifier).logout();
+              ref.read(authRepositoryProvider).signOut();
+            },
           ),
         ],
       ),
       body: staffAsync.when(
         data: (staffList) {
-          final me = staffList.firstWhere((s) => s.id == staffId);
+          final meIndex = staffList.indexWhere((s) => s.id == effectiveStaffId);
+
+          if (meIndex == -1) {
+            return Scaffold(
+              body: Center(
+                child: Padding(
+                  padding: EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.person_search,
+                        size: 64,
+                        color: Colors.blueGrey,
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        'Profil Moniteur non activé',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Votre compte a été créé, mais un administrateur doit encore vous ajouter à l\'effectif de l\'école pour activer votre espace.',
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton.icon(
+                        onPressed: () =>
+                            ref.read(authRepositoryProvider).signOut(),
+                        icon: const Icon(Icons.logout),
+                        label: const Text('SE DÉCONNECTER'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueGrey,
+                          foregroundColor: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }
+
+          final me = staffList[meIndex];
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -72,7 +129,7 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
                           b.date.year == _selectedDate.year &&
                           b.date.month == _selectedDate.month &&
                           b.date.day == _selectedDate.day;
-                      return b.staffId == staffId &&
+                      return b.staffId == effectiveStaffId &&
                           isSameDay &&
                           b.status == ReservationStatus.confirmed;
                     }).toList();

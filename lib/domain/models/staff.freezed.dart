@@ -27,6 +27,7 @@ mixin _$Staff {
   List<String> get specialties => throw _privateConstructorUsedError;
   List<String> get certificates => throw _privateConstructorUsedError;
   bool get isActive => throw _privateConstructorUsedError;
+  @TimestampConverter()
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,7 +48,7 @@ abstract class $StaffCopyWith<$Res> {
       List<String> specialties,
       List<String> certificates,
       bool isActive,
-      DateTime updatedAt});
+      @TimestampConverter() DateTime updatedAt});
 }
 
 /// @nodoc
@@ -124,7 +125,7 @@ abstract class _$$StaffImplCopyWith<$Res> implements $StaffCopyWith<$Res> {
       List<String> specialties,
       List<String> certificates,
       bool isActive,
-      DateTime updatedAt});
+      @TimestampConverter() DateTime updatedAt});
 }
 
 /// @nodoc
@@ -195,7 +196,7 @@ class _$StaffImpl implements _Staff {
       final List<String> specialties = const [],
       final List<String> certificates = const [],
       this.isActive = true,
-      required this.updatedAt})
+      @TimestampConverter() required this.updatedAt})
       : _specialties = specialties,
         _certificates = certificates;
 
@@ -232,6 +233,7 @@ class _$StaffImpl implements _Staff {
   @JsonKey()
   final bool isActive;
   @override
+  @TimestampConverter()
   final DateTime updatedAt;
 
   @override
@@ -295,7 +297,7 @@ abstract class _Staff implements Staff {
       final List<String> specialties,
       final List<String> certificates,
       final bool isActive,
-      required final DateTime updatedAt}) = _$StaffImpl;
+      @TimestampConverter() required final DateTime updatedAt}) = _$StaffImpl;
 
   factory _Staff.fromJson(Map<String, dynamic> json) = _$StaffImpl.fromJson;
 
@@ -314,6 +316,7 @@ abstract class _Staff implements Staff {
   @override
   bool get isActive;
   @override
+  @TimestampConverter()
   DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)

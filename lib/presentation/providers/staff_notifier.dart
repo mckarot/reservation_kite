@@ -11,6 +11,43 @@ class StaffNotifier extends _$StaffNotifier {
     return ref.watch(staffRepositoryProvider).getAllStaff();
   }
 
+  Future<void> addStaffWithAccount({
+    required String name,
+    required String email,
+    required String password,
+    required String bio,
+    required String photoUrl,
+    required List<String> specialties,
+  }) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final authRepo = ref.read(authRepositoryProvider);
+
+      // 1. Créer le compte Auth (cela va nous déconnecter temporairement de l'admin sur le SDK Client)
+      final user = await authRepo.signUpWithEmailAndPassword(
+        email,
+        password,
+        role: 'instructor',
+      );
+
+      if (user == null) throw Exception("Échec de la création du compte Auth");
+
+      // 2. Créer le profil Staff associé avec le même ID
+      final staff = Staff(
+        id: user.id,
+        name: name,
+        bio: bio,
+        photoUrl: photoUrl,
+        specialties: specialties,
+        updatedAt: DateTime.now(),
+      );
+
+      await ref.read(staffRepositoryProvider).saveStaff(staff);
+
+      return ref.read(staffRepositoryProvider).getAllStaff();
+    });
+  }
+
   Future<void> addStaff(Staff staff) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {

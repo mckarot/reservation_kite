@@ -12,7 +12,7 @@ _$CreditPackImpl _$$CreditPackImplFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       credits: (json['credits'] as num).toInt(),
       price: (json['price'] as num).toDouble(),
-      isActive: json['isActive'] as bool? ?? true,
+      isActive: json['is_active'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$$CreditPackImplToJson(_$CreditPackImpl instance) =>
@@ -21,5 +21,5 @@ Map<String, dynamic> _$$CreditPackImplToJson(_$CreditPackImpl instance) =>
       'name': instance.name,
       'credits': instance.credits,
       'price': instance.price,
-      'isActive': instance.isActive,
+      'is_active': instance.isActive,
     };

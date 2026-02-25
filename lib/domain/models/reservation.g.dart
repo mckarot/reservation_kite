@@ -9,28 +9,28 @@ part of 'reservation.dart';
 _$ReservationImpl _$$ReservationImplFromJson(Map<String, dynamic> json) =>
     _$ReservationImpl(
       id: json['id'] as String,
-      clientName: json['clientName'] as String,
-      pupilId: json['pupilId'] as String?,
-      date: DateTime.parse(json['date'] as String),
+      clientName: json['client_name'] as String,
+      pupilId: json['pupil_id'] as String?,
+      date: const TimestampConverter().fromJson(json['date']),
       slot: $enumDecode(_$TimeSlotEnumMap, json['slot']),
-      staffId: json['staffId'] as String?,
+      staffId: json['staff_id'] as String?,
       status: $enumDecodeNullable(_$ReservationStatusEnumMap, json['status']) ??
           ReservationStatus.confirmed,
       notes: json['notes'] as String? ?? '',
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      createdAt: const TimestampConverter().fromJson(json['created_at']),
     );
 
 Map<String, dynamic> _$$ReservationImplToJson(_$ReservationImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'clientName': instance.clientName,
-      'pupilId': instance.pupilId,
-      'date': instance.date.toIso8601String(),
+      'client_name': instance.clientName,
+      'pupil_id': instance.pupilId,
+      'date': const TimestampConverter().toJson(instance.date),
       'slot': _$TimeSlotEnumMap[instance.slot]!,
-      'staffId': instance.staffId,
+      'staff_id': instance.staffId,
       'status': _$ReservationStatusEnumMap[instance.status]!,
       'notes': instance.notes,
-      'createdAt': instance.createdAt.toIso8601String(),
+      'created_at': const TimestampConverter().toJson(instance.createdAt),
     };
 
 const _$TimeSlotEnumMap = {

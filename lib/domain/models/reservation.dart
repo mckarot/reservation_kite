@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../data/utils/timestamp_converter.dart';
 
 part 'reservation.freezed.dart';
 part 'reservation.g.dart';
@@ -13,14 +14,14 @@ class Reservation with _$Reservation {
     required String id,
     required String clientName,
     String? pupilId,
-    required DateTime date,
+    @TimestampConverter() required DateTime date,
     required TimeSlot slot,
     String? staffId,
     @Default(ReservationStatus.confirmed)
     ReservationStatus
     status, // Default to confirmed for backward compatibility with manual entries
     @Default('') String notes,
-    required DateTime createdAt,
+    @TimestampConverter() required DateTime createdAt,
   }) = _Reservation;
 
   factory Reservation.fromJson(Map<String, dynamic> json) =>

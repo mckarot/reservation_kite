@@ -1,8 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:uuid/uuid.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
+import 'firebase_options.dart';
 
 import 'database/hive_config.dart';
 import 'domain/models/user.dart';
@@ -15,10 +19,12 @@ import 'presentation/screens/equipment_admin_screen.dart';
 import 'presentation/screens/pupil_main_screen.dart';
 import 'presentation/screens/admin_dashboard_screen.dart';
 import 'presentation/screens/monitor_main_screen.dart';
+import 'presentation/providers/user_notifier.dart';
 import 'presentation/providers/staff_notifier.dart';
 import 'presentation/providers/staff_session_notifier.dart';
 import 'presentation/providers/session_notifier.dart';
-import 'presentation/providers/user_notifier.dart';
+import 'presentation/providers/auth_state_provider.dart';
+import 'presentation/screens/login_screen.dart';
 import 'data/providers/repository_providers.dart';
 
 // Provider pour le service de réservation
@@ -32,7 +38,25 @@ final reservationServiceProvider = ChangeNotifierProvider<ReservationService>((
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialiser Hive
+  // Initialiser Firebase
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Initialiser App Check (Obligatoire selon les règles)
+  try {
+    await FirebaseAppCheck.instance.activate(
+      androidProvider: kDebugMode
+          ? AndroidProvider.debug
+          : AndroidProvider.playIntegrity,
+      appleProvider: kDebugMode
+          ? AppleProvider.debug
+          : AppleProvider.deviceCheck,
+      webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
+    );
+  } catch (e) {
+    debugPrint('Firebase App Check failed to initialize: $e');
+  }
+
+  // Initialiser Hive (temporaire jusqu'à migration complète)
   await HiveConfig.init();
 
   // Initialiser les locales pour intl
@@ -46,17 +70,27 @@ class MainApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final activeSession = ref.watch(sessionNotifierProvider);
-    final activeStaffSession = ref.watch(staffSessionNotifierProvider);
+    final authState = ref.watch(currentUserProvider);
 
-    Widget home;
-    if (activeSession != null) {
-      home = const PupilMainScreen();
-    } else if (activeStaffSession != null) {
-      home = const MonitorMainScreen();
-    } else {
-      home = const InitializationCheckScreen();
-    }
+    Widget home = authState.when(
+      data: (user) {
+        if (user == null) return const LoginScreen();
+
+        switch (user.role) {
+          case 'admin':
+            return const InitializationCheckScreen();
+          case 'instructor':
+            return const MonitorMainScreen();
+          case 'student':
+            return const PupilMainScreen();
+          default:
+            return const LoginScreen();
+        }
+      },
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (e, _) => Scaffold(body: Center(child: Text('Erreur: $e'))),
+    );
 
     return MaterialApp(
       title: 'Kite Reserve',
@@ -83,7 +117,16 @@ class InitializationCheckScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Kite Reserve Status')),
+      appBar: AppBar(
+        title: const Text('Kite Reserve Status'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () => ref.read(authRepositoryProvider).signOut(),
+            tooltip: 'Déconnexion',
+          ),
+        ],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -201,7 +244,10 @@ class InitializationCheckScreen extends ConsumerWidget {
             content: SizedBox(
               width: double.maxFinite,
               child: usersAsync.when(
-                data: (users) {
+                data: (allUsers) {
+                  final users = allUsers
+                      .where((u) => u.role == 'student')
+                      .toList();
                   if (users.isEmpty) {
                     return Column(
                       mainAxisSize: MainAxisSize.min,

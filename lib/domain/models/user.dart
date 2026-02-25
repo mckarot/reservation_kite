@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../data/utils/timestamp_converter.dart';
 
 part 'user.freezed.dart';
 part 'user.g.dart';
@@ -13,10 +14,10 @@ class User with _$User {
     @Default('student') String role,
     int? weight,
     @Default(0) int walletBalance,
-    @Default(0) int totalCreditsPurchased, // Nouvelle stat financière
+    @Default(0) int totalCreditsPurchased,
     UserProgress? progress,
-    required DateTime createdAt,
-    required DateTime lastSeen,
+    @TimestampConverter() required DateTime createdAt,
+    @TimestampConverter() required DateTime lastSeen,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
@@ -37,7 +38,7 @@ class UserProgress with _$UserProgress {
 @freezed
 class UserNote with _$UserNote {
   const factory UserNote({
-    required DateTime date,
+    @TimestampConverter() required DateTime date,
     required String content,
     required String instructorId,
   }) = _UserNote;

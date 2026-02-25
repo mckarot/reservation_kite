@@ -9,22 +9,22 @@ part of 'settings.dart';
 _$SchoolSettingsImpl _$$SchoolSettingsImplFromJson(Map<String, dynamic> json) =>
     _$SchoolSettingsImpl(
       hours: OpeningHours.fromJson(json['hours'] as Map<String, dynamic>),
-      daysOff: (json['daysOff'] as List<dynamic>?)
+      daysOff: (json['days_off'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const [],
       maxStudentsPerInstructor:
-          (json['maxStudentsPerInstructor'] as num?)?.toInt() ?? 4,
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+          (json['max_students_per_instructor'] as num?)?.toInt() ?? 4,
+      updatedAt: const TimestampConverter().fromJson(json['updated_at']),
     );
 
 Map<String, dynamic> _$$SchoolSettingsImplToJson(
         _$SchoolSettingsImpl instance) =>
     <String, dynamic>{
-      'hours': instance.hours,
-      'daysOff': instance.daysOff,
-      'maxStudentsPerInstructor': instance.maxStudentsPerInstructor,
-      'updatedAt': instance.updatedAt.toIso8601String(),
+      'hours': instance.hours.toJson(),
+      'days_off': instance.daysOff,
+      'max_students_per_instructor': instance.maxStudentsPerInstructor,
+      'updated_at': const TimestampConverter().toJson(instance.updatedAt),
     };
 
 _$OpeningHoursImpl _$$OpeningHoursImplFromJson(Map<String, dynamic> json) =>
@@ -35,8 +35,8 @@ _$OpeningHoursImpl _$$OpeningHoursImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$OpeningHoursImplToJson(_$OpeningHoursImpl instance) =>
     <String, dynamic>{
-      'morning': instance.morning,
-      'afternoon': instance.afternoon,
+      'morning': instance.morning.toJson(),
+      'afternoon': instance.afternoon.toJson(),
     };
 
 _$TimeSlotImpl _$$TimeSlotImplFromJson(Map<String, dynamic> json) =>

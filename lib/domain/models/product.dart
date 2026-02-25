@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../data/utils/timestamp_converter.dart';
 
 part 'product.freezed.dart';
 part 'product.g.dart';
@@ -14,7 +15,7 @@ class Product with _$Product {
     required String condition, // 'new', 'used'
     required int stockQuantity,
     @Default([]) List<String> imageUrls,
-    required DateTime createdAt,
+    @TimestampConverter() required DateTime createdAt,
   }) = _Product;
 
   factory Product.fromJson(Map<String, dynamic> json) =>

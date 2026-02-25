@@ -29,6 +29,7 @@ mixin _$Product {
   String get condition => throw _privateConstructorUsedError; // 'new', 'used'
   int get stockQuantity => throw _privateConstructorUsedError;
   List<String> get imageUrls => throw _privateConstructorUsedError;
+  @TimestampConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -50,7 +51,7 @@ abstract class $ProductCopyWith<$Res> {
       String condition,
       int stockQuantity,
       List<String> imageUrls,
-      DateTime createdAt});
+      @TimestampConverter() DateTime createdAt});
 }
 
 /// @nodoc
@@ -133,7 +134,7 @@ abstract class _$$ProductImplCopyWith<$Res> implements $ProductCopyWith<$Res> {
       String condition,
       int stockQuantity,
       List<String> imageUrls,
-      DateTime createdAt});
+      @TimestampConverter() DateTime createdAt});
 }
 
 /// @nodoc
@@ -210,7 +211,7 @@ class _$ProductImpl implements _Product {
       required this.condition,
       required this.stockQuantity,
       final List<String> imageUrls = const [],
-      required this.createdAt})
+      @TimestampConverter() required this.createdAt})
       : _imageUrls = imageUrls;
 
   factory _$ProductImpl.fromJson(Map<String, dynamic> json) =>
@@ -242,6 +243,7 @@ class _$ProductImpl implements _Product {
   }
 
   @override
+  @TimestampConverter()
   final DateTime createdAt;
 
   @override
@@ -309,7 +311,7 @@ abstract class _Product implements Product {
       required final String condition,
       required final int stockQuantity,
       final List<String> imageUrls,
-      required final DateTime createdAt}) = _$ProductImpl;
+      @TimestampConverter() required final DateTime createdAt}) = _$ProductImpl;
 
   factory _Product.fromJson(Map<String, dynamic> json) = _$ProductImpl.fromJson;
 
@@ -330,6 +332,7 @@ abstract class _Product implements Product {
   @override
   List<String> get imageUrls;
   @override
+  @TimestampConverter()
   DateTime get createdAt;
   @override
   @JsonKey(ignore: true)

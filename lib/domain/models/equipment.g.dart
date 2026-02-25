@@ -16,7 +16,7 @@ _$EquipmentImpl _$$EquipmentImplFromJson(Map<String, dynamic> json) =>
       status: $enumDecodeNullable(_$EquipmentStatusEnumMap, json['status']) ??
           EquipmentStatus.available,
       notes: json['notes'] as String? ?? '',
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      updatedAt: const TimestampConverter().fromJson(json['updated_at']),
     );
 
 Map<String, dynamic> _$$EquipmentImplToJson(_$EquipmentImpl instance) =>
@@ -28,7 +28,7 @@ Map<String, dynamic> _$$EquipmentImplToJson(_$EquipmentImpl instance) =>
       'size': instance.size,
       'status': _$EquipmentStatusEnumMap[instance.status]!,
       'notes': instance.notes,
-      'updatedAt': instance.updatedAt.toIso8601String(),
+      'updated_at': const TimestampConverter().toJson(instance.updatedAt),
     };
 
 const _$EquipmentTypeEnumMap = {

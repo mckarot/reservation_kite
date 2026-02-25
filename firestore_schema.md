@@ -9,6 +9,17 @@
     - `max_students_per_instructor`: int (default: 4)
     - `updated_at`: serverTimestamp
 
+    - `updated_at`: serverTimestamp
+
+## COLLECTION: credit_packs
+- **Description**: Catalogue des packs de crédits disponibles à la vente.
+- **Chemin**: `/credit_packs/{packId}`
+- **Champs**:
+    - `name`: string
+    - `credits`: int
+    - `price`: double
+    - `is_active`: boolean (default: true)
+
 ## COLLECTION: users
 - **Description**: Profils utilisateurs et élèves.
 - **Chemin**: `/users/{uid}`
@@ -72,6 +83,18 @@
     - `stock_quantity`: int
     - `images`: list<string>
     - `created_at`: serverTimestamp
+
+## COLLECTION: equipment
+- **Description**: Matériel de l'école (ailes, planches) utilisé pour les cours.
+- **Chemin**: `/equipment/{equipmentId}`
+- **Champs**:
+    - `type`: string ['kite', 'board', 'harness', 'other']
+    - `brand`: string
+    - `model`: string
+    - `size`: string
+    - `status`: string ['available', 'maintenance', 'damaged']
+    - `notes`: string
+    - `updated_at`: serverTimestamp
 
 ## COLLECTION: transactions
 - **Description**: Historique des paiements manuels et achats.

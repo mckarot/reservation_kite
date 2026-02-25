@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:uuid/uuid.dart';
 import '../../domain/models/staff.dart';
 import '../providers/staff_notifier.dart';
 import '../providers/unavailability_notifier.dart';
@@ -212,6 +211,8 @@ class StaffAdminScreen extends ConsumerWidget {
       text: staff?.specialties.join(', '),
     );
     final photoController = TextEditingController(text: staff?.photoUrl);
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
 
     showDialog(
       context: context,
@@ -240,6 +241,25 @@ class StaffAdminScreen extends ConsumerWidget {
                 controller: photoController,
                 decoration: const InputDecoration(labelText: 'Photo URL'),
               ),
+              if (!isEditing) ...[
+                const Divider(height: 32),
+                const Text(
+                  'Identifiants de connexion',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                TextField(
+                  controller: emailController,
+                  decoration: const InputDecoration(labelText: 'Email'),
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                TextField(
+                  controller: passwordController,
+                  decoration: const InputDecoration(
+                    labelText: 'Mot de passe (min 6 car.)',
+                  ),
+                  obscureText: true,
+                ),
+              ],
             ],
           ),
         ),
@@ -249,26 +269,41 @@ class StaffAdminScreen extends ConsumerWidget {
             child: const Text('Annuler'),
           ),
           ElevatedButton(
-            onPressed: () {
-              final newStaff = Staff(
-                id: staff?.id ?? const Uuid().v4(),
-                name: nameController.text,
-                bio: bioController.text,
-                photoUrl: photoController.text,
-                specialties: specialtiesController.text
-                    .split(',')
-                    .map((e) => e.trim())
-                    .where((e) => e.isNotEmpty)
-                    .toList(),
-                updatedAt: DateTime.now(),
-              );
-
-              if (isEditing) {
-                ref.read(staffNotifierProvider.notifier).updateStaff(newStaff);
+            onPressed: () async {
+              if (!isEditing) {
+                // Création complète
+                await ref
+                    .read(staffNotifierProvider.notifier)
+                    .addStaffWithAccount(
+                      name: nameController.text,
+                      email: emailController.text.trim(),
+                      password: passwordController.text,
+                      bio: bioController.text,
+                      photoUrl: photoController.text,
+                      specialties: specialtiesController.text
+                          .split(',')
+                          .map((e) => e.trim())
+                          .where((e) => e.isNotEmpty)
+                          .toList(),
+                    );
               } else {
-                ref.read(staffNotifierProvider.notifier).addStaff(newStaff);
+                // Mise à jour profil uniquement
+                final newStaff = staff.copyWith(
+                  name: nameController.text,
+                  bio: bioController.text,
+                  photoUrl: photoController.text,
+                  specialties: specialtiesController.text
+                      .split(',')
+                      .map((e) => e.trim())
+                      .where((e) => e.isNotEmpty)
+                      .toList(),
+                  updatedAt: DateTime.now(),
+                );
+                await ref
+                    .read(staffNotifierProvider.notifier)
+                    .updateStaff(newStaff);
               }
-              Navigator.pop(context);
+              if (context.mounted) Navigator.pop(context);
             },
             child: Text(isEditing ? 'Enregistrer' : 'Ajouter'),
           ),

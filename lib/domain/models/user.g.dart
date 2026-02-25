@@ -8,39 +8,39 @@ part of 'user.dart';
 
 _$UserImpl _$$UserImplFromJson(Map<String, dynamic> json) => _$UserImpl(
       id: json['id'] as String,
-      displayName: json['displayName'] as String,
+      displayName: json['display_name'] as String,
       email: json['email'] as String,
-      photoUrl: json['photoUrl'] as String?,
+      photoUrl: json['photo_url'] as String?,
       role: json['role'] as String? ?? 'student',
       weight: (json['weight'] as num?)?.toInt(),
-      walletBalance: (json['walletBalance'] as num?)?.toInt() ?? 0,
+      walletBalance: (json['wallet_balance'] as num?)?.toInt() ?? 0,
       totalCreditsPurchased:
-          (json['totalCreditsPurchased'] as num?)?.toInt() ?? 0,
+          (json['total_credits_purchased'] as num?)?.toInt() ?? 0,
       progress: json['progress'] == null
           ? null
           : UserProgress.fromJson(json['progress'] as Map<String, dynamic>),
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      lastSeen: DateTime.parse(json['lastSeen'] as String),
+      createdAt: const TimestampConverter().fromJson(json['created_at']),
+      lastSeen: const TimestampConverter().fromJson(json['last_seen']),
     );
 
 Map<String, dynamic> _$$UserImplToJson(_$UserImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'displayName': instance.displayName,
+      'display_name': instance.displayName,
       'email': instance.email,
-      'photoUrl': instance.photoUrl,
+      'photo_url': instance.photoUrl,
       'role': instance.role,
       'weight': instance.weight,
-      'walletBalance': instance.walletBalance,
-      'totalCreditsPurchased': instance.totalCreditsPurchased,
-      'progress': instance.progress,
-      'createdAt': instance.createdAt.toIso8601String(),
-      'lastSeen': instance.lastSeen.toIso8601String(),
+      'wallet_balance': instance.walletBalance,
+      'total_credits_purchased': instance.totalCreditsPurchased,
+      'progress': instance.progress?.toJson(),
+      'created_at': const TimestampConverter().toJson(instance.createdAt),
+      'last_seen': const TimestampConverter().toJson(instance.lastSeen),
     };
 
 _$UserProgressImpl _$$UserProgressImplFromJson(Map<String, dynamic> json) =>
     _$UserProgressImpl(
-      ikoLevel: json['ikoLevel'] as String?,
+      ikoLevel: json['iko_level'] as String?,
       checklist: (json['checklist'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -53,21 +53,21 @@ _$UserProgressImpl _$$UserProgressImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$UserProgressImplToJson(_$UserProgressImpl instance) =>
     <String, dynamic>{
-      'ikoLevel': instance.ikoLevel,
+      'iko_level': instance.ikoLevel,
       'checklist': instance.checklist,
-      'notes': instance.notes,
+      'notes': instance.notes.map((e) => e.toJson()).toList(),
     };
 
 _$UserNoteImpl _$$UserNoteImplFromJson(Map<String, dynamic> json) =>
     _$UserNoteImpl(
-      date: DateTime.parse(json['date'] as String),
+      date: const TimestampConverter().fromJson(json['date']),
       content: json['content'] as String,
-      instructorId: json['instructorId'] as String,
+      instructorId: json['instructor_id'] as String,
     );
 
 Map<String, dynamic> _$$UserNoteImplToJson(_$UserNoteImpl instance) =>
     <String, dynamic>{
-      'date': instance.date.toIso8601String(),
+      'date': const TimestampConverter().toJson(instance.date),
       'content': instance.content,
-      'instructorId': instance.instructorId,
+      'instructor_id': instance.instructorId,
     };

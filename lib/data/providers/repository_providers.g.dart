@@ -6,7 +6,7 @@ part of 'repository_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userRepositoryHash() => r'f8b44a1b1d5c25d85674acdf32f5f294f107c92d';
+String _$userRepositoryHash() => r'4a2fd85476fb58d433fec56010084ed407ca6afd';
 
 /// See also [userRepository].
 @ProviderFor(userRepository)
@@ -22,7 +22,7 @@ final userRepositoryProvider = AutoDisposeProvider<UserRepository>.internal(
 
 typedef UserRepositoryRef = AutoDisposeProviderRef<UserRepository>;
 String _$settingsRepositoryHash() =>
-    r'33bcb0581b2c4e97fa4ea2661a542ce27216b48c';
+    r'98237940588e385d9b0e38b9d92e6d99c6d78650';
 
 /// See also [settingsRepository].
 @ProviderFor(settingsRepository)
@@ -39,7 +39,7 @@ final settingsRepositoryProvider =
 
 typedef SettingsRepositoryRef = AutoDisposeProviderRef<SettingsRepository>;
 String _$reservationRepositoryHash() =>
-    r'08424e2ef048fa2e5dcc4fd5e4796f777e7e9b8b';
+    r'59aa2d491bd6e6b58b0ac887531c968f04ddf771';
 
 /// See also [reservationRepository].
 @ProviderFor(reservationRepository)
@@ -57,7 +57,7 @@ final reservationRepositoryProvider =
 typedef ReservationRepositoryRef
     = AutoDisposeProviderRef<ReservationRepository>;
 String _$equipmentRepositoryHash() =>
-    r'64614026b72d64dc50a892203a3eeed94e4e020d';
+    r'0c4476c2065fcaafb5bc568216a339d4fc307c39';
 
 /// See also [equipmentRepository].
 @ProviderFor(equipmentRepository)
@@ -73,7 +73,7 @@ final equipmentRepositoryProvider =
 );
 
 typedef EquipmentRepositoryRef = AutoDisposeProviderRef<EquipmentRepository>;
-String _$staffRepositoryHash() => r'3b62393b875d889138574e759b1a6b87447b72b9';
+String _$staffRepositoryHash() => r'b691e058787f3aa711f9df72b764723b7f8d5d4f';
 
 /// See also [staffRepository].
 @ProviderFor(staffRepository)
@@ -123,5 +123,72 @@ final notificationRepositoryProvider =
 
 typedef NotificationRepositoryRef
     = AutoDisposeProviderRef<NotificationRepository>;
+String _$authRepositoryHash() => r'5d4374c0b3b8a741d38629907bd91004adc36827';
+
+/// See also [authRepository].
+@ProviderFor(authRepository)
+final authRepositoryProvider = AutoDisposeProvider<AuthRepository>.internal(
+  authRepository,
+  name: r'authRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$authRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef AuthRepositoryRef = AutoDisposeProviderRef<AuthRepository>;
+String _$sessionRepositoryHash() => r'401a1b915df78662be26d4f4354a55ffceda33ac';
+
+/// See also [sessionRepository].
+@ProviderFor(sessionRepository)
+final sessionRepositoryProvider =
+    AutoDisposeProvider<SessionRepository>.internal(
+  sessionRepository,
+  name: r'sessionRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$sessionRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef SessionRepositoryRef = AutoDisposeProviderRef<SessionRepository>;
+String _$availabilityRepositoryHash() =>
+    r'7318f290ee5cb3d845fd5291f233186571252c46';
+
+/// See also [availabilityRepository].
+@ProviderFor(availabilityRepository)
+final availabilityRepositoryProvider =
+    AutoDisposeProvider<AvailabilityRepository>.internal(
+  availabilityRepository,
+  name: r'availabilityRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$availabilityRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef AvailabilityRepositoryRef
+    = AutoDisposeProviderRef<AvailabilityRepository>;
+String _$transactionRepositoryHash() =>
+    r'7088719215ffe352858e1efa7600ac8289145201';
+
+/// See also [transactionRepository].
+@ProviderFor(transactionRepository)
+final transactionRepositoryProvider =
+    AutoDisposeProvider<TransactionRepository>.internal(
+  transactionRepository,
+  name: r'transactionRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$transactionRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef TransactionRepositoryRef
+    = AutoDisposeProviderRef<TransactionRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

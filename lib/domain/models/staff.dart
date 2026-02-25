@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../data/utils/timestamp_converter.dart';
 
 part 'staff.freezed.dart';
 part 'staff.g.dart';
@@ -13,7 +14,7 @@ class Staff with _$Staff {
     @Default([]) List<String> specialties,
     @Default([]) List<String> certificates,
     @Default(true) bool isActive,
-    required DateTime updatedAt,
+    @TimestampConverter() required DateTime updatedAt,
   }) = _Staff;
 
   factory Staff.fromJson(Map<String, dynamic> json) => _$StaffFromJson(json);

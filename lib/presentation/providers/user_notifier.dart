@@ -24,7 +24,6 @@ class UserNotifier extends _$UserNotifier {
   }
 
   Future<void> updateBalance(String userId, int newBalance) async {
-    state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final repo = ref.read(userRepositoryProvider);
       final user = await repo.getUser(userId);
@@ -60,7 +59,6 @@ class UserNotifier extends _$UserNotifier {
   }
 
   Future<void> updateProgress(String userId, UserProgress progress) async {
-    state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final repo = ref.read(userRepositoryProvider);
       final user = await repo.getUser(userId);
@@ -76,7 +74,6 @@ class UserNotifier extends _$UserNotifier {
   }
 
   Future<void> updateChecklist(String userId, List<String> checklist) async {
-    state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final repo = ref.read(userRepositoryProvider);
       final user = await repo.getUser(userId);
@@ -94,7 +91,6 @@ class UserNotifier extends _$UserNotifier {
   }
 
   Future<void> addNote(String userId, UserNote note) async {
-    state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final repo = ref.read(userRepositoryProvider);
       final user = await repo.getUser(userId);
@@ -118,7 +114,6 @@ class UserNotifier extends _$UserNotifier {
     required UserProgress progress,
     UserNote? newNote,
   }) async {
-    state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final repo = ref.read(userRepositoryProvider);
       final user = await repo.getUser(userId);

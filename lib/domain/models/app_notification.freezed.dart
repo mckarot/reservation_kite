@@ -25,6 +25,7 @@ mixin _$AppNotification {
   String get title => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
   NotificationType get type => throw _privateConstructorUsedError;
+  @TimestampConverter()
   DateTime get timestamp => throw _privateConstructorUsedError;
   bool get isRead => throw _privateConstructorUsedError;
 
@@ -46,7 +47,7 @@ abstract class $AppNotificationCopyWith<$Res> {
       String title,
       String message,
       NotificationType type,
-      DateTime timestamp,
+      @TimestampConverter() DateTime timestamp,
       bool isRead});
 }
 
@@ -118,7 +119,7 @@ abstract class _$$AppNotificationImplCopyWith<$Res>
       String title,
       String message,
       NotificationType type,
-      DateTime timestamp,
+      @TimestampConverter() DateTime timestamp,
       bool isRead});
 }
 
@@ -183,7 +184,7 @@ class _$AppNotificationImpl implements _AppNotification {
       required this.title,
       required this.message,
       required this.type,
-      required this.timestamp,
+      @TimestampConverter() required this.timestamp,
       this.isRead = false});
 
   factory _$AppNotificationImpl.fromJson(Map<String, dynamic> json) =>
@@ -200,6 +201,7 @@ class _$AppNotificationImpl implements _AppNotification {
   @override
   final NotificationType type;
   @override
+  @TimestampConverter()
   final DateTime timestamp;
   @override
   @JsonKey()
@@ -252,7 +254,7 @@ abstract class _AppNotification implements AppNotification {
       required final String title,
       required final String message,
       required final NotificationType type,
-      required final DateTime timestamp,
+      @TimestampConverter() required final DateTime timestamp,
       final bool isRead}) = _$AppNotificationImpl;
 
   factory _AppNotification.fromJson(Map<String, dynamic> json) =
@@ -269,6 +271,7 @@ abstract class _AppNotification implements AppNotification {
   @override
   NotificationType get type;
   @override
+  @TimestampConverter()
   DateTime get timestamp;
   @override
   bool get isRead;

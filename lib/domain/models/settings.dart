@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../data/utils/timestamp_converter.dart';
 
 part 'settings.freezed.dart';
 part 'settings.g.dart';
@@ -9,7 +10,7 @@ class SchoolSettings with _$SchoolSettings {
     required OpeningHours hours,
     @Default([]) List<String> daysOff,
     @Default(4) int maxStudentsPerInstructor,
-    required DateTime updatedAt,
+    @TimestampConverter() required DateTime updatedAt,
   }) = _SchoolSettings;
 
   factory SchoolSettings.fromJson(Map<String, dynamic> json) =>

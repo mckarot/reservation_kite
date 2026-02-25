@@ -23,6 +23,7 @@ mixin _$SchoolSettings {
   OpeningHours get hours => throw _privateConstructorUsedError;
   List<String> get daysOff => throw _privateConstructorUsedError;
   int get maxStudentsPerInstructor => throw _privateConstructorUsedError;
+  @TimestampConverter()
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,7 +42,7 @@ abstract class $SchoolSettingsCopyWith<$Res> {
       {OpeningHours hours,
       List<String> daysOff,
       int maxStudentsPerInstructor,
-      DateTime updatedAt});
+      @TimestampConverter() DateTime updatedAt});
 
   $OpeningHoursCopyWith<$Res> get hours;
 }
@@ -105,7 +106,7 @@ abstract class _$$SchoolSettingsImplCopyWith<$Res>
       {OpeningHours hours,
       List<String> daysOff,
       int maxStudentsPerInstructor,
-      DateTime updatedAt});
+      @TimestampConverter() DateTime updatedAt});
 
   @override
   $OpeningHoursCopyWith<$Res> get hours;
@@ -155,7 +156,7 @@ class _$SchoolSettingsImpl implements _SchoolSettings {
       {required this.hours,
       final List<String> daysOff = const [],
       this.maxStudentsPerInstructor = 4,
-      required this.updatedAt})
+      @TimestampConverter() required this.updatedAt})
       : _daysOff = daysOff;
 
   factory _$SchoolSettingsImpl.fromJson(Map<String, dynamic> json) =>
@@ -176,6 +177,7 @@ class _$SchoolSettingsImpl implements _SchoolSettings {
   @JsonKey()
   final int maxStudentsPerInstructor;
   @override
+  @TimestampConverter()
   final DateTime updatedAt;
 
   @override
@@ -223,10 +225,11 @@ class _$SchoolSettingsImpl implements _SchoolSettings {
 
 abstract class _SchoolSettings implements SchoolSettings {
   const factory _SchoolSettings(
-      {required final OpeningHours hours,
-      final List<String> daysOff,
-      final int maxStudentsPerInstructor,
-      required final DateTime updatedAt}) = _$SchoolSettingsImpl;
+          {required final OpeningHours hours,
+          final List<String> daysOff,
+          final int maxStudentsPerInstructor,
+          @TimestampConverter() required final DateTime updatedAt}) =
+      _$SchoolSettingsImpl;
 
   factory _SchoolSettings.fromJson(Map<String, dynamic> json) =
       _$SchoolSettingsImpl.fromJson;
@@ -238,6 +241,7 @@ abstract class _SchoolSettings implements SchoolSettings {
   @override
   int get maxStudentsPerInstructor;
   @override
+  @TimestampConverter()
   DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)

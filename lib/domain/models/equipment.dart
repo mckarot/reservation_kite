@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../data/utils/timestamp_converter.dart';
 
 part 'equipment.freezed.dart';
 part 'equipment.g.dart';
@@ -33,7 +34,7 @@ class Equipment with _$Equipment {
     required String size,
     @Default(EquipmentStatus.available) EquipmentStatus status,
     @Default('') String notes,
-    required DateTime updatedAt,
+    @TimestampConverter() required DateTime updatedAt,
   }) = _Equipment;
 
   factory Equipment.fromJson(Map<String, dynamic> json) =>

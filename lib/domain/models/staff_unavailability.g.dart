@@ -111,26 +111,26 @@ _$StaffUnavailabilityImpl _$$StaffUnavailabilityImplFromJson(
         Map<String, dynamic> json) =>
     _$StaffUnavailabilityImpl(
       id: json['id'] as String,
-      staffId: json['staffId'] as String,
-      date: DateTime.parse(json['date'] as String),
+      staffId: json['staff_id'] as String,
+      date: const TimestampConverter().fromJson(json['date']),
       slot: $enumDecode(_$TimeSlotEnumMap, json['slot']),
       reason: json['reason'] as String,
       status:
           $enumDecodeNullable(_$UnavailabilityStatusEnumMap, json['status']) ??
               UnavailabilityStatus.pending,
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      createdAt: const TimestampConverter().fromJson(json['created_at']),
     );
 
 Map<String, dynamic> _$$StaffUnavailabilityImplToJson(
         _$StaffUnavailabilityImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'staffId': instance.staffId,
-      'date': instance.date.toIso8601String(),
+      'staff_id': instance.staffId,
+      'date': const TimestampConverter().toJson(instance.date),
       'slot': _$TimeSlotEnumMap[instance.slot]!,
       'reason': instance.reason,
       'status': _$UnavailabilityStatusEnumMap[instance.status]!,
-      'createdAt': instance.createdAt.toIso8601String(),
+      'created_at': const TimestampConverter().toJson(instance.createdAt),
     };
 
 const _$TimeSlotEnumMap = {
