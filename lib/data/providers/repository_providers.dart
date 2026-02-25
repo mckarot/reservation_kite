@@ -22,7 +22,7 @@ import '../repositories/firestore_session_repository.dart';
 import '../repositories/firestore_availability_repository.dart';
 import '../repositories/firestore_transaction_repository.dart';
 import '../repositories/firestore_credit_pack_repository.dart';
-import '../repositories/hive_notification_repository.dart';
+import '../repositories/firestore_notification_repository.dart';
 
 part 'repository_providers.g.dart';
 
@@ -58,7 +58,7 @@ CreditPackRepository creditPackRepository(CreditPackRepositoryRef ref) {
 
 @riverpod
 NotificationRepository notificationRepository(NotificationRepositoryRef ref) {
-  return HiveNotificationRepository();
+  return FirestoreNotificationRepository(FirebaseFirestore.instance);
 }
 
 @riverpod

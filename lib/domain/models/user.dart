@@ -8,16 +8,22 @@ part 'user.g.dart';
 class User with _$User {
   const factory User({
     required String id,
-    required String displayName,
+    @JsonKey(name: 'display_name') required String displayName,
     required String email,
-    String? photoUrl,
+    @JsonKey(name: 'photo_url') String? photoUrl,
     @Default('student') String role,
     int? weight,
-    @Default(0) int walletBalance,
-    @Default(0) int totalCreditsPurchased,
+    @JsonKey(name: 'wallet_balance') @Default(0) int walletBalance,
+    @JsonKey(name: 'total_credits_purchased')
+    @Default(0)
+    int totalCreditsPurchased,
     UserProgress? progress,
-    @TimestampConverter() required DateTime createdAt,
-    @TimestampConverter() required DateTime lastSeen,
+    @TimestampConverter()
+    @JsonKey(name: 'created_at')
+    required DateTime createdAt,
+    @TimestampConverter()
+    @JsonKey(name: 'last_seen')
+    required DateTime lastSeen,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
@@ -26,7 +32,7 @@ class User with _$User {
 @freezed
 class UserProgress with _$UserProgress {
   const factory UserProgress({
-    String? ikoLevel,
+    @JsonKey(name: 'iko_level') String? ikoLevel,
     @Default([]) List<String> checklist,
     @Default([]) List<UserNote> notes,
   }) = _UserProgress;
@@ -57,7 +63,7 @@ class UserNote with _$UserNote {
   const factory UserNote({
     @TimestampConverter() required DateTime date,
     required String content,
-    required String instructorId,
+    @JsonKey(name: 'instructor_id') required String instructorId,
   }) = _UserNote;
 
   factory UserNote.fromJson(Map<String, dynamic> json) =>

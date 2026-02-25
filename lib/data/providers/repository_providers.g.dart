@@ -89,7 +89,7 @@ final staffRepositoryProvider = AutoDisposeProvider<StaffRepository>.internal(
 
 typedef StaffRepositoryRef = AutoDisposeProviderRef<StaffRepository>;
 String _$creditPackRepositoryHash() =>
-    r'80301eb2afd44f6fa99b9918c3051630ff8ec808';
+    r'f7b3ca0fab21b1aff4e0fd59f53fc13eb8ab9dd6';
 
 /// See also [creditPackRepository].
 @ProviderFor(creditPackRepository)
@@ -106,7 +106,7 @@ final creditPackRepositoryProvider =
 
 typedef CreditPackRepositoryRef = AutoDisposeProviderRef<CreditPackRepository>;
 String _$notificationRepositoryHash() =>
-    r'1e3ab4ee475ceae88aa8a4d4ae194075a578e6b0';
+    r'6a420621eaf418544fb02fa667c9726a66f534c3';
 
 /// See also [notificationRepository].
 @ProviderFor(notificationRepository)

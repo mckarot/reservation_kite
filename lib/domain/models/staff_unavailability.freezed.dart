@@ -20,25 +20,17 @@ StaffUnavailability _$StaffUnavailabilityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$StaffUnavailability {
-  @HiveField(0)
   String get id => throw _privateConstructorUsedError;
-  @HiveField(1)
+  @JsonKey(name: 'instructor_id')
   String get staffId => throw _privateConstructorUsedError;
-  @HiveField(2)
   @TimestampConverter()
   DateTime get date => throw _privateConstructorUsedError;
-  @HiveField(3)
   TimeSlot get slot =>
       throw _privateConstructorUsedError; // morning, afternoon, or full_day?
-// On va considérer que TimeSlot couvre morning/afternoon.
-// Pour une journée entière, on créera deux entrées ou on ajoutera une option.
-// Restons simple avec morning/afternoon.
-  @HiveField(4)
   String get reason => throw _privateConstructorUsedError;
-  @HiveField(5)
   UnavailabilityStatus get status => throw _privateConstructorUsedError;
-  @HiveField(6)
   @TimestampConverter()
+  @JsonKey(name: 'created_at')
   DateTime get createdAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -54,13 +46,13 @@ abstract class $StaffUnavailabilityCopyWith<$Res> {
       _$StaffUnavailabilityCopyWithImpl<$Res, StaffUnavailability>;
   @useResult
   $Res call(
-      {@HiveField(0) String id,
-      @HiveField(1) String staffId,
-      @HiveField(2) @TimestampConverter() DateTime date,
-      @HiveField(3) TimeSlot slot,
-      @HiveField(4) String reason,
-      @HiveField(5) UnavailabilityStatus status,
-      @HiveField(6) @TimestampConverter() DateTime createdAt});
+      {String id,
+      @JsonKey(name: 'instructor_id') String staffId,
+      @TimestampConverter() DateTime date,
+      TimeSlot slot,
+      String reason,
+      UnavailabilityStatus status,
+      @TimestampConverter() @JsonKey(name: 'created_at') DateTime createdAt});
 }
 
 /// @nodoc
@@ -126,13 +118,13 @@ abstract class _$$StaffUnavailabilityImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@HiveField(0) String id,
-      @HiveField(1) String staffId,
-      @HiveField(2) @TimestampConverter() DateTime date,
-      @HiveField(3) TimeSlot slot,
-      @HiveField(4) String reason,
-      @HiveField(5) UnavailabilityStatus status,
-      @HiveField(6) @TimestampConverter() DateTime createdAt});
+      {String id,
+      @JsonKey(name: 'instructor_id') String staffId,
+      @TimestampConverter() DateTime date,
+      TimeSlot slot,
+      String reason,
+      UnavailabilityStatus status,
+      @TimestampConverter() @JsonKey(name: 'created_at') DateTime createdAt});
 }
 
 /// @nodoc
@@ -189,47 +181,40 @@ class __$$StaffUnavailabilityImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-@HiveType(typeId: 11)
 class _$StaffUnavailabilityImpl implements _StaffUnavailability {
   const _$StaffUnavailabilityImpl(
-      {@HiveField(0) required this.id,
-      @HiveField(1) required this.staffId,
-      @HiveField(2) @TimestampConverter() required this.date,
-      @HiveField(3) required this.slot,
-      @HiveField(4) required this.reason,
-      @HiveField(5) this.status = UnavailabilityStatus.pending,
-      @HiveField(6) @TimestampConverter() required this.createdAt});
+      {required this.id,
+      @JsonKey(name: 'instructor_id') required this.staffId,
+      @TimestampConverter() required this.date,
+      required this.slot,
+      required this.reason,
+      this.status = UnavailabilityStatus.pending,
+      @TimestampConverter()
+      @JsonKey(name: 'created_at')
+      required this.createdAt});
 
   factory _$StaffUnavailabilityImpl.fromJson(Map<String, dynamic> json) =>
       _$$StaffUnavailabilityImplFromJson(json);
 
   @override
-  @HiveField(0)
   final String id;
   @override
-  @HiveField(1)
+  @JsonKey(name: 'instructor_id')
   final String staffId;
   @override
-  @HiveField(2)
   @TimestampConverter()
   final DateTime date;
   @override
-  @HiveField(3)
   final TimeSlot slot;
 // morning, afternoon, or full_day?
-// On va considérer que TimeSlot couvre morning/afternoon.
-// Pour une journée entière, on créera deux entrées ou on ajoutera une option.
-// Restons simple avec morning/afternoon.
   @override
-  @HiveField(4)
   final String reason;
   @override
   @JsonKey()
-  @HiveField(5)
   final UnavailabilityStatus status;
   @override
-  @HiveField(6)
   @TimestampConverter()
+  @JsonKey(name: 'created_at')
   final DateTime createdAt;
 
   @override
@@ -274,44 +259,36 @@ class _$StaffUnavailabilityImpl implements _StaffUnavailability {
 
 abstract class _StaffUnavailability implements StaffUnavailability {
   const factory _StaffUnavailability(
-      {@HiveField(0) required final String id,
-      @HiveField(1) required final String staffId,
-      @HiveField(2) @TimestampConverter() required final DateTime date,
-      @HiveField(3) required final TimeSlot slot,
-      @HiveField(4) required final String reason,
-      @HiveField(5) final UnavailabilityStatus status,
-      @HiveField(6)
+      {required final String id,
+      @JsonKey(name: 'instructor_id') required final String staffId,
+      @TimestampConverter() required final DateTime date,
+      required final TimeSlot slot,
+      required final String reason,
+      final UnavailabilityStatus status,
       @TimestampConverter()
+      @JsonKey(name: 'created_at')
       required final DateTime createdAt}) = _$StaffUnavailabilityImpl;
 
   factory _StaffUnavailability.fromJson(Map<String, dynamic> json) =
       _$StaffUnavailabilityImpl.fromJson;
 
   @override
-  @HiveField(0)
   String get id;
   @override
-  @HiveField(1)
+  @JsonKey(name: 'instructor_id')
   String get staffId;
   @override
-  @HiveField(2)
   @TimestampConverter()
   DateTime get date;
   @override
-  @HiveField(3)
   TimeSlot get slot;
   @override // morning, afternoon, or full_day?
-// On va considérer que TimeSlot couvre morning/afternoon.
-// Pour une journée entière, on créera deux entrées ou on ajoutera une option.
-// Restons simple avec morning/afternoon.
-  @HiveField(4)
   String get reason;
   @override
-  @HiveField(5)
   UnavailabilityStatus get status;
   @override
-  @HiveField(6)
   @TimestampConverter()
+  @JsonKey(name: 'created_at')
   DateTime get createdAt;
   @override
   @JsonKey(ignore: true)

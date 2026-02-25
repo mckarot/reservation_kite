@@ -7,7 +7,7 @@ part of 'unavailability_notifier.dart';
 // **************************************************************************
 
 String _$unavailabilityNotifierHash() =>
-    r'befb4a379b286a33d37cc458fdb41f72d23acea1';
+    r'ba977c40c3540c5deb7c1c9548b11796dcdd6295';
 
 /// See also [UnavailabilityNotifier].
 @ProviderFor(UnavailabilityNotifier)

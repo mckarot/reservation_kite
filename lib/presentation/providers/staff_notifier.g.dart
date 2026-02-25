@@ -6,7 +6,7 @@ part of 'staff_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$staffNotifierHash() => r'b8a53e08b65107f2428da1660d8c0655771a55d2';
+String _$staffNotifierHash() => r'cdeced71e2100f5b66c2ad7e18c4c2658b11e9eb';
 
 /// See also [StaffNotifier].
 @ProviderFor(StaffNotifier)

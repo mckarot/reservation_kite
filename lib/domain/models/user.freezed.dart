@@ -21,17 +21,23 @@ User _$UserFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$User {
   String get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'display_name')
   String get displayName => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
+  @JsonKey(name: 'photo_url')
   String? get photoUrl => throw _privateConstructorUsedError;
   String get role => throw _privateConstructorUsedError;
   int? get weight => throw _privateConstructorUsedError;
+  @JsonKey(name: 'wallet_balance')
   int get walletBalance => throw _privateConstructorUsedError;
+  @JsonKey(name: 'total_credits_purchased')
   int get totalCreditsPurchased => throw _privateConstructorUsedError;
   UserProgress? get progress => throw _privateConstructorUsedError;
   @TimestampConverter()
+  @JsonKey(name: 'created_at')
   DateTime get createdAt => throw _privateConstructorUsedError;
   @TimestampConverter()
+  @JsonKey(name: 'last_seen')
   DateTime get lastSeen => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -46,16 +52,16 @@ abstract class $UserCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String displayName,
+      @JsonKey(name: 'display_name') String displayName,
       String email,
-      String? photoUrl,
+      @JsonKey(name: 'photo_url') String? photoUrl,
       String role,
       int? weight,
-      int walletBalance,
-      int totalCreditsPurchased,
+      @JsonKey(name: 'wallet_balance') int walletBalance,
+      @JsonKey(name: 'total_credits_purchased') int totalCreditsPurchased,
       UserProgress? progress,
-      @TimestampConverter() DateTime createdAt,
-      @TimestampConverter() DateTime lastSeen});
+      @TimestampConverter() @JsonKey(name: 'created_at') DateTime createdAt,
+      @TimestampConverter() @JsonKey(name: 'last_seen') DateTime lastSeen});
 
   $UserProgressCopyWith<$Res>? get progress;
 }
@@ -155,16 +161,16 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String displayName,
+      @JsonKey(name: 'display_name') String displayName,
       String email,
-      String? photoUrl,
+      @JsonKey(name: 'photo_url') String? photoUrl,
       String role,
       int? weight,
-      int walletBalance,
-      int totalCreditsPurchased,
+      @JsonKey(name: 'wallet_balance') int walletBalance,
+      @JsonKey(name: 'total_credits_purchased') int totalCreditsPurchased,
       UserProgress? progress,
-      @TimestampConverter() DateTime createdAt,
-      @TimestampConverter() DateTime lastSeen});
+      @TimestampConverter() @JsonKey(name: 'created_at') DateTime createdAt,
+      @TimestampConverter() @JsonKey(name: 'last_seen') DateTime lastSeen});
 
   @override
   $UserProgressCopyWith<$Res>? get progress;
@@ -246,16 +252,20 @@ class __$$UserImplCopyWithImpl<$Res>
 class _$UserImpl implements _User {
   const _$UserImpl(
       {required this.id,
-      required this.displayName,
+      @JsonKey(name: 'display_name') required this.displayName,
       required this.email,
-      this.photoUrl,
+      @JsonKey(name: 'photo_url') this.photoUrl,
       this.role = 'student',
       this.weight,
-      this.walletBalance = 0,
-      this.totalCreditsPurchased = 0,
+      @JsonKey(name: 'wallet_balance') this.walletBalance = 0,
+      @JsonKey(name: 'total_credits_purchased') this.totalCreditsPurchased = 0,
       this.progress,
-      @TimestampConverter() required this.createdAt,
-      @TimestampConverter() required this.lastSeen});
+      @TimestampConverter()
+      @JsonKey(name: 'created_at')
+      required this.createdAt,
+      @TimestampConverter()
+      @JsonKey(name: 'last_seen')
+      required this.lastSeen});
 
   factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserImplFromJson(json);
@@ -263,10 +273,12 @@ class _$UserImpl implements _User {
   @override
   final String id;
   @override
+  @JsonKey(name: 'display_name')
   final String displayName;
   @override
   final String email;
   @override
+  @JsonKey(name: 'photo_url')
   final String? photoUrl;
   @override
   @JsonKey()
@@ -274,18 +286,20 @@ class _$UserImpl implements _User {
   @override
   final int? weight;
   @override
-  @JsonKey()
+  @JsonKey(name: 'wallet_balance')
   final int walletBalance;
   @override
-  @JsonKey()
+  @JsonKey(name: 'total_credits_purchased')
   final int totalCreditsPurchased;
   @override
   final UserProgress? progress;
   @override
   @TimestampConverter()
+  @JsonKey(name: 'created_at')
   final DateTime createdAt;
   @override
   @TimestampConverter()
+  @JsonKey(name: 'last_seen')
   final DateTime lastSeen;
 
   @override
@@ -351,42 +365,52 @@ class _$UserImpl implements _User {
 abstract class _User implements User {
   const factory _User(
       {required final String id,
-      required final String displayName,
+      @JsonKey(name: 'display_name') required final String displayName,
       required final String email,
-      final String? photoUrl,
+      @JsonKey(name: 'photo_url') final String? photoUrl,
       final String role,
       final int? weight,
-      final int walletBalance,
-      final int totalCreditsPurchased,
+      @JsonKey(name: 'wallet_balance') final int walletBalance,
+      @JsonKey(name: 'total_credits_purchased') final int totalCreditsPurchased,
       final UserProgress? progress,
-      @TimestampConverter() required final DateTime createdAt,
-      @TimestampConverter() required final DateTime lastSeen}) = _$UserImpl;
+      @TimestampConverter()
+      @JsonKey(name: 'created_at')
+      required final DateTime createdAt,
+      @TimestampConverter()
+      @JsonKey(name: 'last_seen')
+      required final DateTime lastSeen}) = _$UserImpl;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
 
   @override
   String get id;
   @override
+  @JsonKey(name: 'display_name')
   String get displayName;
   @override
   String get email;
   @override
+  @JsonKey(name: 'photo_url')
   String? get photoUrl;
   @override
   String get role;
   @override
   int? get weight;
   @override
+  @JsonKey(name: 'wallet_balance')
   int get walletBalance;
   @override
+  @JsonKey(name: 'total_credits_purchased')
   int get totalCreditsPurchased;
   @override
   UserProgress? get progress;
   @override
   @TimestampConverter()
+  @JsonKey(name: 'created_at')
   DateTime get createdAt;
   @override
   @TimestampConverter()
+  @JsonKey(name: 'last_seen')
   DateTime get lastSeen;
   @override
   @JsonKey(ignore: true)
@@ -400,6 +424,7 @@ UserProgress _$UserProgressFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserProgress {
+  @JsonKey(name: 'iko_level')
   String? get ikoLevel => throw _privateConstructorUsedError;
   List<String> get checklist => throw _privateConstructorUsedError;
   List<UserNote> get notes => throw _privateConstructorUsedError;
@@ -416,7 +441,10 @@ abstract class $UserProgressCopyWith<$Res> {
           UserProgress value, $Res Function(UserProgress) then) =
       _$UserProgressCopyWithImpl<$Res, UserProgress>;
   @useResult
-  $Res call({String? ikoLevel, List<String> checklist, List<UserNote> notes});
+  $Res call(
+      {@JsonKey(name: 'iko_level') String? ikoLevel,
+      List<String> checklist,
+      List<UserNote> notes});
 }
 
 /// @nodoc
@@ -461,7 +489,10 @@ abstract class _$$UserProgressImplCopyWith<$Res>
       __$$UserProgressImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? ikoLevel, List<String> checklist, List<UserNote> notes});
+  $Res call(
+      {@JsonKey(name: 'iko_level') String? ikoLevel,
+      List<String> checklist,
+      List<UserNote> notes});
 }
 
 /// @nodoc
@@ -500,7 +531,7 @@ class __$$UserProgressImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserProgressImpl implements _UserProgress {
   const _$UserProgressImpl(
-      {this.ikoLevel,
+      {@JsonKey(name: 'iko_level') this.ikoLevel,
       final List<String> checklist = const [],
       final List<UserNote> notes = const []})
       : _checklist = checklist,
@@ -510,6 +541,7 @@ class _$UserProgressImpl implements _UserProgress {
       _$$UserProgressImplFromJson(json);
 
   @override
+  @JsonKey(name: 'iko_level')
   final String? ikoLevel;
   final List<String> _checklist;
   @override
@@ -570,7 +602,7 @@ class _$UserProgressImpl implements _UserProgress {
 
 abstract class _UserProgress implements UserProgress {
   const factory _UserProgress(
-      {final String? ikoLevel,
+      {@JsonKey(name: 'iko_level') final String? ikoLevel,
       final List<String> checklist,
       final List<UserNote> notes}) = _$UserProgressImpl;
 
@@ -578,6 +610,7 @@ abstract class _UserProgress implements UserProgress {
       _$UserProgressImpl.fromJson;
 
   @override
+  @JsonKey(name: 'iko_level')
   String? get ikoLevel;
   @override
   List<String> get checklist;
@@ -598,6 +631,7 @@ mixin _$UserNote {
   @TimestampConverter()
   DateTime get date => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
+  @JsonKey(name: 'instructor_id')
   String get instructorId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -614,7 +648,7 @@ abstract class $UserNoteCopyWith<$Res> {
   $Res call(
       {@TimestampConverter() DateTime date,
       String content,
-      String instructorId});
+      @JsonKey(name: 'instructor_id') String instructorId});
 }
 
 /// @nodoc
@@ -662,7 +696,7 @@ abstract class _$$UserNoteImplCopyWith<$Res>
   $Res call(
       {@TimestampConverter() DateTime date,
       String content,
-      String instructorId});
+      @JsonKey(name: 'instructor_id') String instructorId});
 }
 
 /// @nodoc
@@ -703,7 +737,7 @@ class _$UserNoteImpl implements _UserNote {
   const _$UserNoteImpl(
       {@TimestampConverter() required this.date,
       required this.content,
-      required this.instructorId});
+      @JsonKey(name: 'instructor_id') required this.instructorId});
 
   factory _$UserNoteImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserNoteImplFromJson(json);
@@ -714,6 +748,7 @@ class _$UserNoteImpl implements _UserNote {
   @override
   final String content;
   @override
+  @JsonKey(name: 'instructor_id')
   final String instructorId;
 
   @override
@@ -752,9 +787,10 @@ class _$UserNoteImpl implements _UserNote {
 
 abstract class _UserNote implements UserNote {
   const factory _UserNote(
-      {@TimestampConverter() required final DateTime date,
-      required final String content,
-      required final String instructorId}) = _$UserNoteImpl;
+          {@TimestampConverter() required final DateTime date,
+          required final String content,
+          @JsonKey(name: 'instructor_id') required final String instructorId}) =
+      _$UserNoteImpl;
 
   factory _UserNote.fromJson(Map<String, dynamic> json) =
       _$UserNoteImpl.fromJson;
@@ -765,6 +801,7 @@ abstract class _UserNote implements UserNote {
   @override
   String get content;
   @override
+  @JsonKey(name: 'instructor_id')
   String get instructorId;
   @override
   @JsonKey(ignore: true)

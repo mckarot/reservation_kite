@@ -8,7 +8,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'firebase_options.dart';
 
-import 'database/hive_config.dart';
 import 'domain/models/user.dart';
 import 'services/reservation_service.dart';
 import 'presentation/screens/admin_settings_screen.dart';
@@ -55,9 +54,6 @@ void main() async {
   } catch (e) {
     debugPrint('Firebase App Check failed to initialize: $e');
   }
-
-  // Initialiser Hive (temporaire jusqu'à migration complète)
-  await HiveConfig.init();
 
   // Initialiser les locales pour intl
   await initializeDateFormatting('fr_FR', null);
@@ -249,32 +245,16 @@ class InitializationCheckScreen extends ConsumerWidget {
                       .where((u) => u.role == 'student')
                       .toList();
                   if (users.isEmpty) {
-                    return Column(
+                    return const Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.symmetric(vertical: 24.0),
                           child: Text(
-                            'Aucun élève trouvé dans la base Hive.',
+                            'Aucun élève trouvé.',
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Colors.grey),
                           ),
-                        ),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            final testUser = User(
-                              id: const Uuid().v4(),
-                              displayName: 'Élève Test',
-                              email: 'test@kite-school.com',
-                              createdAt: DateTime.now(),
-                              lastSeen: DateTime.now(),
-                            );
-                            ref
-                                .read(userNotifierProvider.notifier)
-                                .addUser(testUser);
-                          },
-                          icon: const Icon(Icons.person_add),
-                          label: const Text('Créer un élève de test'),
                         ),
                       ],
                     );

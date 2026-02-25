@@ -1,27 +1,29 @@
-import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
-import '../../database/hive_config.dart';
 import '../../domain/models/staff_unavailability.dart';
 import '../../domain/models/reservation.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import '../../data/providers/repository_providers.dart';
 
 part 'unavailability_notifier.g.dart';
 
 @riverpod
 class UnavailabilityNotifier extends _$UnavailabilityNotifier {
-  late final Box<String> _box;
-
   @override
   FutureOr<List<StaffUnavailability>> build() async {
-    _box = Hive.box<String>(HiveConfig.unavailabilitiesBox);
-    return _loadUnavailabilities();
+    // Par défaut, on charge les indisponibilités de la journée (ou une plage)
+    // Mais ici le notifier semble être utilisé de façon plus globale ou filtrée en UI
+    // Pour l'instant, chargeons les indisponibilités de l'instructeur courant si applicable
+    // ou retournons une liste vide à remplir par les méthodes
+    return [];
   }
 
-  List<StaffUnavailability> _loadUnavailabilities() {
-    return _box.values
-        .map((s) => StaffUnavailability.fromJson(jsonDecode(s)))
-        .toList();
+  Future<void> loadForInstructor(String instructorId) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      return ref
+          .read(availabilityRepositoryProvider)
+          .getInstructorAvailabilities(instructorId);
+    });
   }
 
   Future<void> requestUnavailability({
@@ -37,12 +39,17 @@ class UnavailabilityNotifier extends _$UnavailabilityNotifier {
       slot: slot,
       reason: reason,
       status: UnavailabilityStatus.pending,
-      createdAt:
-          DateTime.now(), // Devrait idéalement être serverTimestamp si en ligne
+      createdAt: DateTime.now(),
     );
 
-    await _box.put(newEntry.id, jsonEncode(newEntry.toJson()));
-    state = AsyncData([...state.value ?? [], newEntry]);
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      await ref.read(availabilityRepositoryProvider).saveAvailability(newEntry);
+
+      // On recharge ou on met à jour l'état local
+      final current = state.value ?? [];
+      return [...current, newEntry];
+    });
   }
 
   Future<void> updateStatus(String id, UnavailabilityStatus status) async {
@@ -50,16 +57,24 @@ class UnavailabilityNotifier extends _$UnavailabilityNotifier {
     final index = list.indexWhere((u) => u.id == id);
     if (index != -1) {
       final updated = list[index].copyWith(status: status);
-      await _box.put(id, jsonEncode(updated.toJson()));
 
-      final newList = [...list];
-      newList[index] = updated;
-      state = AsyncData(newList);
+      state = const AsyncLoading();
+      state = await AsyncValue.guard(() async {
+        await ref
+            .read(availabilityRepositoryProvider)
+            .saveAvailability(updated);
+        final newList = [...list];
+        newList[index] = updated;
+        return newList;
+      });
     }
   }
 
   Future<void> deleteRequest(String id) async {
-    await _box.delete(id);
-    state = AsyncData((state.value ?? []).where((u) => u.id != id).toList());
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      await ref.read(availabilityRepositoryProvider).deleteAvailability(id);
+      return (state.value ?? []).where((u) => u.id != id).toList();
+    });
   }
 }
