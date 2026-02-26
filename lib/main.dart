@@ -8,24 +8,12 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'firebase_options.dart';
 
 import 'services/reservation_service.dart';
-import 'presentation/screens/admin_settings_screen.dart';
-import 'presentation/screens/staff_admin_screen.dart';
-import 'presentation/screens/booking_screen.dart';
-import 'presentation/screens/user_directory_screen.dart';
-import 'presentation/screens/equipment_admin_screen.dart';
 import 'presentation/screens/pupil_main_screen.dart';
-import 'presentation/screens/admin_dashboard_screen.dart';
 import 'presentation/screens/monitor_main_screen.dart';
-import 'presentation/providers/user_notifier.dart';
-import 'presentation/providers/staff_notifier.dart';
 import 'presentation/providers/auth_state_provider.dart';
 import 'presentation/screens/login_screen.dart';
-import 'presentation/providers/unavailability_notifier.dart';
-import 'domain/models/staff_unavailability.dart';
-import 'domain/models/staff.dart';
 import 'data/providers/repository_providers.dart';
 import 'package:reservation_kite/presentation/screens/admin_screen.dart';
-import 'package:intl/intl.dart';
 
 // Provider pour le service de réservation
 final reservationServiceProvider = ChangeNotifierProvider<ReservationService>((
@@ -107,4 +95,3 @@ class MainApp extends ConsumerWidget {
     );
   }
 }
-

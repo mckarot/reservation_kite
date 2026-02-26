@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../../data/providers/service_providers.dart';
+import '../../services/weather_service.dart';
 import '../providers/booking_notifier.dart';
 import '../providers/user_notifier.dart';
 import '../providers/settings_notifier.dart';
@@ -12,6 +14,8 @@ import '../../domain/models/settings.dart' hide TimeSlot;
 import '../../domain/models/staff_unavailability.dart';
 import '../../domain/logic/booking_validator.dart';
 import '../providers/auth_state_provider.dart';
+
+final weatherProvider = StateProvider<AsyncValue<Weather>>((ref) => const AsyncValue.loading());
 
 class PupilBookingScreen extends ConsumerStatefulWidget {
   const PupilBookingScreen({super.key});
@@ -26,9 +30,26 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
   final _notesController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _fetchWeatherForSelectedDate();
+  }
+
+  @override
   void dispose() {
     _notesController.dispose();
     super.dispose();
+  }
+
+  Future<void> _fetchWeatherForSelectedDate() async {
+    ref.read(weatherProvider.notifier).state = const AsyncValue.loading();
+    try {
+      final weatherService = ref.read(weatherServiceProvider);
+      final weather = await weatherService.getWeatherForDate(_selectedDate);
+      ref.read(weatherProvider.notifier).state = AsyncValue.data(weather);
+    } catch (e, s) {
+      ref.read(weatherProvider.notifier).state = AsyncValue.error(e, s);
+    }
   }
 
   @override
@@ -78,6 +99,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                         );
                         if (date != null) {
                           setState(() => _selectedDate = date);
+                          _fetchWeatherForSelectedDate();
                         }
                       },
                       child: Container(
@@ -105,6 +127,8 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 16),
+                    const _WeatherInfo(),
                     const SizedBox(height: 32),
                     const Text(
                       'Créneau horaire',
@@ -190,7 +214,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 10,
             offset: const Offset(0, -5),
           ),
@@ -339,6 +363,83 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
   }
 }
 
+class _WeatherInfo extends ConsumerWidget {
+  const _WeatherInfo();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final weatherAsync = ref.watch(weatherProvider);
+    return weatherAsync.when(
+      data: (weather) => Card(
+        color: Colors.white,
+        elevation: 2,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _WeatherItem(icon: _getWeatherIcon(weather.weatherCode), label: '${weather.maxTemperature.round()}°C'),
+              _WeatherItem(icon: Icons.air, label: '${weather.windSpeed.round()} km/h'),
+            ],
+          ),
+        ),
+      ),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, _) => Center(child: Text('Erreur météo: ${e.toString()}')),
+    );
+  }
+
+  IconData _getWeatherIcon(int weatherCode) {
+    switch (weatherCode) {
+      case 0:
+        return Icons.wb_sunny; // Ciel clair
+      case 1:
+      case 2:
+      case 3:
+        return Icons.cloud; // Partiellement nuageux
+      case 45:
+      case 48:
+        return Icons.foggy; // Brouillard
+      case 51:
+      case 53:
+      case 55:
+        return Icons.grain; // Bruine
+      case 61:
+      case 63:
+      case 65:
+        return Icons.water_drop; // Pluie
+      case 80:
+      case 81:
+      case 82:
+        return Icons.shower; // Averses
+      case 95:
+      case 96:
+      case 99:
+        return Icons.thunderstorm; // Orage
+      default:
+        return Icons.cloud;
+    }
+  }
+}
+
+class _WeatherItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+
+  const _WeatherItem({required this.icon, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Icon(icon, color: Colors.blue.shade700, size: 32),
+        const SizedBox(height: 8),
+        Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+      ],
+    );
+  }
+}
+
 class _SlotOption extends StatelessWidget {
   final String label;
   final IconData icon;
@@ -368,7 +469,7 @@ class _SlotOption extends StatelessWidget {
             boxShadow: isSelected
                 ? [
                     BoxShadow(
-                      color: Colors.blue.withValues(alpha: 0.3),
+                      color: Colors.blue.withOpacity(0.3),
                       blurRadius: 8,
                       offset: const Offset(0, 4),
                     ),
