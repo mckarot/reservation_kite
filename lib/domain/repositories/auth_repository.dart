@@ -8,7 +8,10 @@ abstract class AuthRepository {
     String email,
     String password, {
     String? role,
+    String? displayName,
+    int? weight,
   });
   Future<void> signOut();
+  Future<void> updateUserProfile(String userId, Map<String, dynamic> data);
   firebase_auth.User? get currentUser;
 }

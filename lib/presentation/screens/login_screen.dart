@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:reservation_kite/presentation/screens/registration_screen.dart';
 import '../../data/providers/repository_providers.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -15,7 +16,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _isLoading = false;
   String? _errorMessage;
-  String _selectedRole = 'student';
 
   @override
   void dispose() {
@@ -61,75 +61,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
-  Future<void> _register() async {
-    if (_passwordController.text.length < 6) {
-      setState(
-        () =>
-            _errorMessage = "Le mot de passe doit faire au moins 6 caractères.",
-      );
-      return;
-    }
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
 
-    try {
-      final authRepo = ref.read(authRepositoryProvider);
-      await authRepo.signUpWithEmailAndPassword(
-        _emailController.text.trim(),
-        _passwordController.text,
-        role: _selectedRole,
-      );
-
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('✅ Compte créé avec succès ! Connectez-vous.'),
-          backgroundColor: Colors.green,
-        ),
-      );
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _errorMessage = "Erreur de création : ${e.toString()}";
-      });
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
-    }
-  }
-
-  Future<void> _checkFirebaseConnection() async {
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
-    try {
-      // Test de lecture simple
-      await FirebaseFirestore.instance
-          .collection('settings')
-          .doc('school_config')
-          .get();
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('✅ Connexion Firebase Firestore OK !'),
-          backgroundColor: Colors.green,
-        ),
-      );
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _errorMessage = "Erreur de connexion Firestore : $e";
-      });
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
-    }
-  }
 
   Future<void> _setupTestData() async {
     setState(() {
@@ -316,62 +248,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   const SizedBox(height: 12),
                   TextButton(
-                    onPressed: _isLoading ? null : _register,
-                    child: const Text('PAS DE COMPTE ? CRÉER UN COMPTE'),
-                  ),
-                  const SizedBox(height: 24),
-                  const Divider(),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'TYPE DE COMPTE À CRÉER',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  SegmentedButton<String>(
-                    segments: const [
-                      ButtonSegment(
-                        value: 'student',
-                        label: Text('Élève'),
-                        icon: Icon(Icons.school, size: 16),
-                      ),
-                      ButtonSegment(
-                        value: 'instructor',
-                        label: Text('Moniteur'),
-                        icon: Icon(Icons.person, size: 16),
-                      ),
-                      ButtonSegment(
-                        value: 'admin',
-                        label: Text('Admin'),
-                        icon: Icon(Icons.admin_panel_settings, size: 16),
-                      ),
-                    ],
-                    selected: {_selectedRole},
-                    onSelectionChanged: (Set<String> newSelection) {
-                      setState(() {
-                        _selectedRole = newSelection.first;
-                      });
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const RegistrationScreen(),
+                      ));
                     },
-                    style: SegmentedButton.styleFrom(
-                      visualDensity: VisualDensity.compact,
-                      textStyle: const TextStyle(fontSize: 12),
-                    ),
+                    child: const Text('PAS DE COMPTE ? CRÉER UN COMPTE'),
                   ),
                   const SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      TextButton.icon(
-                        onPressed: _isLoading ? null : _checkFirebaseConnection,
-                        icon: const Icon(Icons.sync, size: 14),
-                        label: const Text(
-                          'Check Base',
-                          style: TextStyle(fontSize: 11),
-                        ),
-                      ),
                       TextButton.icon(
                         onPressed: _isLoading ? null : _setupTestData,
                         icon: const Icon(Icons.storage, size: 14),

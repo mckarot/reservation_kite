@@ -47,6 +47,8 @@ class FirebaseAuthRepository implements AuthRepository {
     String email,
     String password, {
     String? role,
+    String? displayName,
+    int? weight,
   }) async {
     final credential = await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
@@ -57,8 +59,9 @@ class FirebaseAuthRepository implements AuthRepository {
       final newUser = User(
         id: credential.user!.uid,
         email: email,
-        displayName: email.split('@')[0], // Nom par défaut
+        displayName: displayName ?? email.split('@')[0], // Nom par défaut
         role: role ?? 'student', // Rôle passé ou 'student' par défaut
+        weight: weight,
         createdAt:
             DateTime.now(), // Sera écrasé par le converter si FieldValue est utilisé, mais ici on suit le modèle
         lastSeen: DateTime.now(),
@@ -76,6 +79,11 @@ class FirebaseAuthRepository implements AuthRepository {
       return newUser;
     }
     return null;
+  }
+
+  @override
+  Future<void> updateUserProfile(String userId, Map<String, dynamic> data) async {
+    await _firestore.collection('users').doc(userId).update(data);
   }
 
   @override
