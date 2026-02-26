@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/reservation.dart';
 import '../../domain/models/user.dart';
-import '../providers/staff_session_notifier.dart';
+import '../providers/auth_state_provider.dart';
 import '../providers/user_notifier.dart';
 import '../providers/equipment_notifier.dart';
 import '../../domain/models/equipment.dart';
@@ -136,7 +136,7 @@ class _LessonValidationScreenState
   }
 
   Future<void> _save() async {
-    final instructorId = ref.read(staffSessionNotifierProvider) ?? 'unknown';
+    final instructorId = ref.read(currentUserProvider).value?.id ?? 'unknown';
 
     // Sauvegarder tout en bloc pour éviter les race conditions
     await ref

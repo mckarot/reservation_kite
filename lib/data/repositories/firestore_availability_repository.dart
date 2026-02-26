@@ -52,4 +52,12 @@ class FirestoreAvailabilityRepository implements AvailabilityRepository {
         .map((doc) => StaffUnavailability.fromJson(doc.data()))
         .toList();
   }
+
+  @override
+  Future<List<StaffUnavailability>> getAllAvailabilities() async {
+    final snapshot = await _collection.limit(200).get();
+    return snapshot.docs
+        .map((doc) => StaffUnavailability.fromJson(doc.data()))
+        .toList();
+  }
 }

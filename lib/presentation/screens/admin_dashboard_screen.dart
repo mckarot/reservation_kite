@@ -6,7 +6,12 @@ import '../../domain/models/reservation.dart';
 import '../../domain/models/user.dart';
 import '../providers/booking_notifier.dart';
 import '../providers/staff_notifier.dart';
+import '../providers/unavailability_notifier.dart';
+import '../../domain/models/staff_unavailability.dart';
+import '../../domain/models/staff.dart';
 import '../providers/user_notifier.dart'; // Added for user data
+import 'staff_admin_screen.dart';
+import 'package:intl/intl.dart';
 
 class AdminDashboardScreen extends ConsumerWidget {
   const AdminDashboardScreen({super.key});
@@ -48,6 +53,7 @@ class AdminDashboardScreen extends ConsumerWidget {
                 ),
               ],
             ),
+            const _PendingAbstancesSection(),
             const _PendingRequestsSection(),
             const SizedBox(height: 32),
             const Text(
@@ -119,6 +125,99 @@ class _KpiCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _PendingAbstancesSection extends ConsumerWidget {
+  const _PendingAbstancesSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final unavailabilitiesAsync = ref.watch(unavailabilityNotifierProvider);
+    final staffAsync = ref.watch(staffNotifierProvider);
+
+    return unavailabilitiesAsync.when(
+      data: (list) {
+        final pending = list
+            .where((u) => u.status == UnavailabilityStatus.pending)
+            .toList();
+        if (pending.isEmpty) return const SizedBox();
+
+        final allStaff = staffAsync.value ?? [];
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 32),
+            Row(
+              children: [
+                const Text(
+                  'ABSENCES À VALIDER',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.1,
+                    color: Colors.redAccent,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.redAccent,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    '${pending.length}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            ...pending.map((u) {
+              final staff = allStaff.firstWhere(
+                (s) => s.id == u.staffId,
+                orElse: () => Staff(
+                  id: '',
+                  name: 'Inconnu',
+                  bio: '',
+                  photoUrl: '',
+                  specialties: [],
+                  updatedAt: DateTime.now(),
+                ),
+              );
+              return Card(
+                color: Colors.red.shade50,
+                child: ListTile(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const StaffAdminScreen()),
+                  ),
+                  leading: const Icon(Icons.event_busy, color: Colors.red),
+                  title: Text(
+                    '${staff.name} - ${DateFormat('dd/MM').format(u.date)}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    '${u.slot == TimeSlot.fullDay ? 'Journée entière' : (u.slot == TimeSlot.morning ? 'Matin' : 'Après-midi')} - ${u.reason}',
+                  ),
+                  trailing: const Icon(Icons.chevron_right),
+                ),
+              );
+            }),
+          ],
+        );
+      },
+      loading: () => const SizedBox(),
+      error: (e, _) => const SizedBox(),
     );
   }
 }

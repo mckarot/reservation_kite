@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/session_notifier.dart';
 import '../providers/user_notifier.dart';
 import '../widgets/pupil_dashboard_tab.dart';
 import '../widgets/pupil_history_tab.dart';
@@ -23,12 +22,10 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final activeUserId = ref.watch(sessionNotifierProvider);
-    final usersAsync = ref.watch(userNotifierProvider);
     final currentUserAsync = ref.watch(currentUserProvider);
+    final usersAsync = ref.watch(userNotifierProvider);
 
-    // Fallback sur l'utilisateur Firebase si la simulation n'est pas active
-    final effectiveUserId = activeUserId ?? currentUserAsync.value?.id;
+    final effectiveUserId = currentUserAsync.value?.id;
 
     if (effectiveUserId == null) {
       if (currentUserAsync.isLoading || usersAsync.isLoading) {
@@ -83,9 +80,8 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
             actions: [
               IconButton(
                 icon: const Icon(Icons.logout),
-                tooltip: 'Quitter la simulation',
+                tooltip: 'Se déconnecter',
                 onPressed: () {
-                  ref.read(sessionNotifierProvider.notifier).logout();
                   ref.read(authRepositoryProvider).signOut();
                 },
               ),

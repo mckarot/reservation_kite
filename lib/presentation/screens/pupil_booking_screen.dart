@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../providers/booking_notifier.dart';
-import '../providers/session_notifier.dart';
 import '../providers/user_notifier.dart';
 import '../providers/settings_notifier.dart';
 import '../providers/staff_notifier.dart';
@@ -37,12 +36,10 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
     final bookingsAsync = ref.watch(bookingNotifierProvider);
     final settingsAsync = ref.watch(settingsNotifierProvider);
     final staffAsync = ref.watch(staffNotifierProvider);
-    final pupilId = ref.watch(sessionNotifierProvider);
     final currentUserAsync = ref.watch(currentUserProvider);
     final unavailabilitiesAsync = ref.watch(unavailabilityNotifierProvider);
 
-    // Résolution de l'ID élève efficace (Simulation ou Auth Réelle)
-    final effectivePupilId = pupilId ?? currentUserAsync.value?.id;
+    final effectivePupilId = currentUserAsync.value?.id;
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
@@ -244,7 +241,11 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      isFull ? 'Complet' : 'Places restantes : $remaining',
+                      isFull
+                          ? (maxCap == 0
+                                ? 'Indisponible (Staff absent)'
+                                : 'Complet')
+                          : 'Places restantes : $remaining',
                       style: TextStyle(
                         fontSize: 14,
                         color: isFull ? Colors.red : Colors.green.shade700,

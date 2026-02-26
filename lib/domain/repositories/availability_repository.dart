@@ -7,4 +7,5 @@ abstract class AvailabilityRepository {
   Future<List<StaffUnavailability>> getInstructorAvailabilities(
     String instructorId,
   );
+  Future<List<StaffUnavailability>> getAllAvailabilities();
 }

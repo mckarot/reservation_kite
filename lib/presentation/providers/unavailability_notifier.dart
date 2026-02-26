@@ -10,11 +10,7 @@ part 'unavailability_notifier.g.dart';
 class UnavailabilityNotifier extends _$UnavailabilityNotifier {
   @override
   FutureOr<List<StaffUnavailability>> build() async {
-    // Par défaut, on charge les indisponibilités de la journée (ou une plage)
-    // Mais ici le notifier semble être utilisé de façon plus globale ou filtrée en UI
-    // Pour l'instant, chargeons les indisponibilités de l'instructeur courant si applicable
-    // ou retournons une liste vide à remplir par les méthodes
-    return [];
+    return ref.read(availabilityRepositoryProvider).getAllAvailabilities();
   }
 
   Future<void> loadForInstructor(String instructorId) async {

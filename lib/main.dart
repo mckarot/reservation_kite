@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:uuid/uuid.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'firebase_options.dart';
 
-import 'domain/models/user.dart';
 import 'services/reservation_service.dart';
 import 'presentation/screens/admin_settings_screen.dart';
 import 'presentation/screens/staff_admin_screen.dart';
@@ -20,11 +18,13 @@ import 'presentation/screens/admin_dashboard_screen.dart';
 import 'presentation/screens/monitor_main_screen.dart';
 import 'presentation/providers/user_notifier.dart';
 import 'presentation/providers/staff_notifier.dart';
-import 'presentation/providers/staff_session_notifier.dart';
-import 'presentation/providers/session_notifier.dart';
 import 'presentation/providers/auth_state_provider.dart';
 import 'presentation/screens/login_screen.dart';
+import 'presentation/providers/unavailability_notifier.dart';
+import 'domain/models/staff_unavailability.dart';
+import 'domain/models/staff.dart';
 import 'data/providers/repository_providers.dart';
+import 'package:intl/intl.dart';
 
 // Provider pour le service de réservation
 final reservationServiceProvider = ChangeNotifierProvider<ReservationService>((
@@ -133,6 +133,7 @@ class InitializationCheckScreen extends ConsumerWidget {
               'Système Pilotage École',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
+            const _PendingAbsencesAlert(),
             const SizedBox(height: 24),
             ElevatedButton.icon(
               onPressed: () => Navigator.push(
@@ -167,7 +168,23 @@ class InitializationCheckScreen extends ConsumerWidget {
                 context,
                 MaterialPageRoute(builder: (_) => const StaffAdminScreen()),
               ),
-              icon: const Icon(Icons.people),
+              icon: Consumer(
+                builder: (context, ref, _) {
+                  final unavailabilities =
+                      ref.watch(unavailabilityNotifierProvider).value ?? [];
+                  final pendingCount = unavailabilities
+                      .where((u) => u.status == UnavailabilityStatus.pending)
+                      .length;
+
+                  if (pendingCount > 0) {
+                    return Badge(
+                      label: Text('$pendingCount'),
+                      child: const Icon(Icons.people),
+                    );
+                  }
+                  return const Icon(Icons.people);
+                },
+              ),
               label: const Text('Gérer le Staff'),
             ),
             const SizedBox(height: 16),
@@ -203,168 +220,101 @@ class InitializationCheckScreen extends ConsumerWidget {
                 backgroundColor: Colors.blue.shade50,
               ),
             ),
-            const Divider(height: 48),
-            ElevatedButton.icon(
-              onPressed: () => _showPupilSelector(context, ref),
-              icon: const Icon(Icons.school, color: Colors.indigo),
-              label: const Text('Simulation Mode Élève'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.indigo.shade50,
-              ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: () => _showStaffSelector(context, ref),
-              icon: const Icon(Icons.group),
-              label: const Text('Simulation Mode Moniteur'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange.shade50,
-                foregroundColor: Colors.orange.shade900,
-              ),
-            ),
           ],
         ),
       ),
     );
   }
+}
 
-  void _showPupilSelector(BuildContext context, WidgetRef ref) {
-    showDialog(
-      context: context,
-      builder: (context) => Consumer(
-        builder: (context, ref, _) {
-          final usersAsync = ref.watch(userNotifierProvider);
+class _PendingAbsencesAlert extends ConsumerWidget {
+  const _PendingAbsencesAlert();
 
-          return AlertDialog(
-            title: const Text('Choisir un élève pour la démo'),
-            content: SizedBox(
-              width: double.maxFinite,
-              child: usersAsync.when(
-                data: (allUsers) {
-                  final users = allUsers
-                      .where((u) => u.role == 'student')
-                      .toList();
-                  if (users.isEmpty) {
-                    return const Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 24.0),
-                          child: Text(
-                            'Aucun élève trouvé.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: users.length,
-                    itemBuilder: (context, index) {
-                      final u = users[index];
-                      return ListTile(
-                        leading: const Icon(Icons.person),
-                        title: Text(u.displayName),
-                        subtitle: Text(u.email),
-                        onTap: () {
-                          ref
-                              .read(sessionNotifierProvider.notifier)
-                              .login(u.id);
-                          Navigator.pop(context);
-                        },
-                      );
-                    },
-                  );
-                },
-                loading: () => const SizedBox(
-                  height: 100,
-                  child: Center(child: CircularProgressIndicator()),
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final unavailabilitiesAsync = ref.watch(unavailabilityNotifierProvider);
+    final staffAsync = ref.watch(staffNotifierProvider);
+
+    return unavailabilitiesAsync.when(
+      data: (list) {
+        final pending = list
+            .where((u) => u.status == UnavailabilityStatus.pending)
+            .toList();
+        if (pending.isEmpty) return const SizedBox();
+
+        final allStaff = staffAsync.value ?? [];
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'ABSENCES À VALIDER',
+                style: TextStyle(
+                  color: Colors.redAccent,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
                 ),
-                error: (e, _) => Text('Erreur: $e'),
               ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Fermer'),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-
-  void _showStaffSelector(BuildContext context, WidgetRef ref) {
-    showDialog(
-      context: context,
-      builder: (context) => Consumer(
-        builder: (context, ref, _) {
-          final staffAsync = ref.watch(staffNotifierProvider);
-
-          return AlertDialog(
-            title: const Text('Choisir un moniteur (Simulation)'),
-            content: SizedBox(
-              width: double.maxFinite,
-              child: staffAsync.when(
-                data: (staffList) {
-                  final activeStaff = staffList
-                      .where((s) => s.isActive)
-                      .toList();
-                  if (activeStaff.isEmpty) {
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 24.0),
-                      child: Text(
-                        'Aucun moniteur actif trouvé.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.grey),
+              const SizedBox(height: 8),
+              ...pending.take(2).map((u) {
+                final staff = allStaff.firstWhere(
+                  (s) => s.id == u.staffId,
+                  orElse: () => Staff(
+                    id: '',
+                    name: '...',
+                    bio: '',
+                    photoUrl: '',
+                    specialties: [],
+                    updatedAt: DateTime.now(),
+                  ),
+                );
+                return Card(
+                  color: Colors.red.shade50,
+                  elevation: 0,
+                  margin: const EdgeInsets.only(bottom: 8),
+                  child: ListTile(
+                    dense: true,
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const StaffAdminScreen(),
                       ),
-                    );
-                  }
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: activeStaff.length,
-                    itemBuilder: (context, index) {
-                      final s = activeStaff[index];
-                      return ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: s.photoUrl.isNotEmpty
-                              ? NetworkImage(s.photoUrl)
-                              : null,
-                          child: s.photoUrl.isEmpty
-                              ? Text(s.name.substring(0, 1).toUpperCase())
-                              : null,
-                        ),
-                        title: Text(s.name),
-                        subtitle: Text(s.specialties.join(', ')),
-                        onTap: () {
-                          ref
-                              .read(staffSessionNotifierProvider.notifier)
-                              .login(s.id);
-                          Navigator.pop(context);
-                        },
-                      );
-                    },
-                  );
-                },
-                loading: () => const SizedBox(
-                  height: 100,
-                  child: Center(child: CircularProgressIndicator()),
+                    ),
+                    leading: const Icon(
+                      Icons.warning_amber_rounded,
+                      color: Colors.redAccent,
+                      size: 20,
+                    ),
+                    title: Text(
+                      '${staff.name} - ${DateFormat('dd/MM').format(u.date)}',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    trailing: const Icon(Icons.chevron_right, size: 16),
+                  ),
+                );
+              }),
+              if (pending.length > 2)
+                TextButton(
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const StaffAdminScreen()),
+                  ),
+                  child: Text(
+                    'Voir les ${pending.length} demandes...',
+                    style: const TextStyle(fontSize: 12),
+                  ),
                 ),
-                error: (e, _) => Text('Erreur: $e'),
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Fermer'),
-              ),
             ],
-          );
-        },
-      ),
+          ),
+        );
+      },
+      loading: () => const SizedBox(),
+      error: (e, _) => const SizedBox(),
     );
   }
 }

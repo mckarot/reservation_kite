@@ -2,7 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 import '../../domain/models/app_notification.dart';
 import '../../data/providers/repository_providers.dart';
-import 'session_notifier.dart';
+import 'auth_state_provider.dart';
 
 part 'notification_notifier.g.dart';
 
@@ -10,7 +10,7 @@ part 'notification_notifier.g.dart';
 class NotificationNotifier extends _$NotificationNotifier {
   @override
   FutureOr<List<AppNotification>> build() async {
-    final userId = ref.watch(sessionNotifierProvider);
+    final userId = ref.watch(currentUserProvider).value?.id;
     if (userId == null) return [];
     return _fetchNotifications(userId);
   }
@@ -38,14 +38,14 @@ class NotificationNotifier extends _$NotificationNotifier {
     await repo.saveNotification(notification);
 
     // Si c'est l'utilisateur actuellement connecté, on rafraîchit
-    final currentUserId = ref.read(sessionNotifierProvider);
+    final currentUserId = ref.read(currentUserProvider).value?.id;
     if (currentUserId == userId) {
       state = AsyncData(await _fetchNotifications(userId));
     }
   }
 
   Future<void> markAsRead(String id) async {
-    final userId = ref.read(sessionNotifierProvider);
+    final userId = ref.read(currentUserProvider).value?.id;
     if (userId == null) return;
 
     await ref.read(notificationRepositoryProvider).markAsRead(id);
@@ -53,7 +53,7 @@ class NotificationNotifier extends _$NotificationNotifier {
   }
 
   Future<void> deleteNotification(String id) async {
-    final userId = ref.read(sessionNotifierProvider);
+    final userId = ref.read(currentUserProvider).value?.id;
     if (userId == null) return;
 
     await ref.read(notificationRepositoryProvider).deleteNotification(id);

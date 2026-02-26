@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/staff_session_notifier.dart';
 import '../providers/staff_notifier.dart';
 import '../providers/booking_notifier.dart';
 import '../providers/user_notifier.dart';
@@ -24,12 +23,11 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final staffId = ref.watch(staffSessionNotifierProvider);
+    final currentUserAsync = ref.watch(currentUserProvider);
     final staffAsync = ref.watch(staffNotifierProvider);
     final bookingsAsync = ref.watch(bookingNotifierProvider);
-    final currentUserAsync = ref.watch(currentUserProvider);
 
-    final effectiveStaffId = staffId ?? currentUserAsync.value?.id;
+    final effectiveStaffId = currentUserAsync.value?.id;
 
     if (effectiveStaffId == null) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
@@ -47,7 +45,6 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              ref.read(staffSessionNotifierProvider.notifier).logout();
               ref.read(authRepositoryProvider).signOut();
             },
           ),
