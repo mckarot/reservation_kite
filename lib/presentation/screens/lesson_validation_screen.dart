@@ -6,6 +6,7 @@ import '../providers/auth_state_provider.dart';
 import '../providers/user_notifier.dart';
 import '../providers/equipment_notifier.dart';
 import '../../domain/models/equipment.dart';
+import '../../l10n/app_localizations.dart';
 
 class LessonValidationScreen extends ConsumerStatefulWidget {
   final Reservation reservation;
@@ -37,16 +38,17 @@ class _LessonValidationScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text('Validation : ${widget.pupil.displayName}')),
+      appBar: AppBar(title: Text(l10n.validationTitle(widget.pupil.displayName))),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Compétences validées aujourd\'hui',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Text(
+              l10n.skillsValidatedToday,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             ...UserProgress.ikoSkillsByLevel.entries.map((entry) {
@@ -91,9 +93,9 @@ class _LessonValidationScreenState
               );
             }).toList(),
             const SizedBox(height: 32),
-            const Text(
-              'Niveau IKO Global',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Text(
+              l10n.ikoGlobalLevel,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             DropdownButton<String>(
               isExpanded: true,
@@ -104,23 +106,23 @@ class _LessonValidationScreenState
               onChanged: (val) => setState(() => _selectedLevel = val!),
             ),
             const SizedBox(height: 32),
-            const Text(
-              'Note pédagogique',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Text(
+              l10n.pedagogicalNote,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: _noteController,
-              decoration: const InputDecoration(
-                hintText: 'Comment s\'est passée la séance ?',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                hintText: l10n.sessionNoteHint,
+                border: const OutlineInputBorder(),
               ),
               maxLines: 4,
             ),
             const SizedBox(height: 32),
-            const Text(
-              'Incident Matériel ?',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Text(
+              l10n.materialIncident,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             _EquipmentIncidentSection(),
@@ -134,7 +136,7 @@ class _LessonValidationScreenState
                   backgroundColor: Colors.green.shade700,
                   foregroundColor: Colors.white,
                 ),
-                child: const Text('Valider la progression'),
+                child: Text(l10n.validateProgress),
               ),
             ),
           ],
@@ -144,6 +146,7 @@ class _LessonValidationScreenState
   }
 
   Future<void> _save() async {
+    final l10n = AppLocalizations.of(context)!;
     final instructorId = ref.read(currentUserProvider).value?.id ?? 'unknown';
 
     // Sauvegarder tout en bloc pour éviter les race conditions
@@ -167,7 +170,7 @@ class _LessonValidationScreenState
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Progression enregistrée !')),
+        SnackBar(content: Text(l10n.progressSaved)),
       );
       Navigator.pop(context);
     }
@@ -186,6 +189,7 @@ class __EquipmentIncidentSectionState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final equipAsync = ref.watch(equipmentNotifierProvider);
 
     return equipAsync.when(
@@ -199,9 +203,9 @@ class __EquipmentIncidentSectionState
             DropdownButtonFormField<String>(
               initialValue: _selectedEquipId,
               isExpanded: true,
-              decoration: const InputDecoration(
-                hintText: 'Sélectionner le matériel avec un souci',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                hintText: l10n.selectEquipmentIssue,
+                border: const OutlineInputBorder(),
               ),
               items: available
                   .map(
@@ -222,7 +226,7 @@ class __EquipmentIncidentSectionState
                       onPressed: () =>
                           _updateStatus(EquipmentStatus.maintenance),
                       icon: const Icon(Icons.build, size: 16),
-                      label: const Text('Maintenance'),
+                      label: Text(l10n.maintenance),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: Colors.orange,
                       ),
@@ -233,7 +237,7 @@ class __EquipmentIncidentSectionState
                     child: OutlinedButton.icon(
                       onPressed: () => _updateStatus(EquipmentStatus.damaged),
                       icon: const Icon(Icons.report_problem, size: 16),
-                      label: const Text('HS'),
+                      label: Text(l10n.damaged),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: Colors.red,
                       ),
@@ -246,18 +250,19 @@ class __EquipmentIncidentSectionState
         );
       },
       loading: () => const CircularProgressIndicator(),
-      error: (_, __) => const Text('Erreur chargement matériel'),
+      error: (_, __) => Text(l10n.errorLoadingEquipment),
     );
   }
 
   void _updateStatus(EquipmentStatus status) {
+    final l10n = AppLocalizations.of(context)!;
     if (_selectedEquipId == null) return;
     ref
         .read(equipmentNotifierProvider.notifier)
         .updateStatus(_selectedEquipId!, status);
     setState(() => _selectedEquipId = null);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Statut matériel mis à jour !')),
+      SnackBar(content: Text(l10n.equipmentStatusUpdated)),
     );
   }
 }

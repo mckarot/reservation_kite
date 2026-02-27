@@ -2,24 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/booking_notifier.dart';
 import '../../domain/models/reservation.dart';
+import '../../l10n/app_localizations.dart';
 
 class PupilHistoryTab extends ConsumerWidget {
   final String userId;
   const PupilHistoryTab({super.key, required this.userId});
 
-  String _translateSlot(TimeSlot slot) {
+  String _translateSlot(TimeSlot slot, AppLocalizations l10n) {
     switch (slot) {
       case TimeSlot.morning:
-        return 'Matin';
+        return l10n.slotMorning;
       case TimeSlot.afternoon:
-        return 'Après-midi';
+        return l10n.slotAfternoon;
       default:
-        return 'Inconnu';
+        return l10n.slotUnknown;
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final bookingsAsync = ref.watch(bookingNotifierProvider);
 
     return bookingsAsync.when(
@@ -30,8 +32,8 @@ class PupilHistoryTab extends ConsumerWidget {
         myBookings.sort((a, b) => b.date.compareTo(a.date));
 
         if (myBookings.isEmpty) {
-          return const Center(
-            child: Text('Tu n\'as pas encore de cours de prévu.'),
+          return Center(
+            child: Text(l10n.noLessonsScheduled),
           );
         }
 
@@ -52,10 +54,10 @@ class PupilHistoryTab extends ConsumerWidget {
                   color: isFuture ? Colors.blue : Colors.grey,
                 ),
                 title: Text(
-                  'Cours du ${b.date.day}/${b.date.month}/${b.date.year}',
+                  '${l10n.lessonOn} ${b.date.day}/${b.date.month}/${b.date.year}',
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text('Créneau: ${_translateSlot(b.slot)}'),
+                subtitle: Text('${l10n.slotLabel}: ${_translateSlot(b.slot, l10n)}'),
                 trailing: _StatusBadge(status: b.status, isFuture: isFuture),
               ),
             );
@@ -63,7 +65,7 @@ class PupilHistoryTab extends ConsumerWidget {
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, _) => Center(child: Text('Erreur: $err')),
+      error: (err, _) => Center(child: Text('${l10n.errorLabel}: $err')),
     );
   }
 }
@@ -74,32 +76,41 @@ class _StatusBadge extends StatelessWidget {
 
   const _StatusBadge({required this.status, required this.isFuture});
 
+  String _getLabel(AppLocalizations l10n) {
+    switch (status) {
+      case ReservationStatus.pending:
+        return l10n.statusPending;
+      case ReservationStatus.confirmed:
+        return isFuture ? l10n.statusUpcoming : l10n.statusCompleted;
+      case ReservationStatus.cancelled:
+        return l10n.statusCancelled;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final label = _getLabel(l10n);
+    
     Color color;
-    String label;
-
     switch (status) {
       case ReservationStatus.pending:
         color = Colors.orange;
-        label = 'EN ATTENTE';
         break;
       case ReservationStatus.confirmed:
         color = isFuture ? Colors.blue : Colors.green;
-        label = isFuture ? 'À VENIR' : 'TERMINÉ';
         break;
       case ReservationStatus.cancelled:
         color = Colors.red;
-        label = 'ANNULÉ';
         break;
     }
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Text(
         label,

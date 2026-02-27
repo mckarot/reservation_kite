@@ -982,89 +982,171 @@ L'IA **DOIT** suivre cette TODO list dans l'ordre pour éviter les hallucination
 ### **PHASE 1 : CONFIGURATION (Priorité Haute)**
 
 #### ✅ Tâche 1.1 : Ajouter les dépendances
-- [ ] Modifier `pubspec.yaml` → Ajouter `flutter_localizations`
-- [ ] Modifier `pubspec.yaml` → Ajouter `shared_preferences`
-- [ ] Modifier `pubspec.yaml` → Ajouter `flutter: generate: true`
-- [ ] Exécuter `flutter pub get`
-- [ ] **Validation :** `flutter analyze` doit passer sans erreur
+- [x] Modifier `pubspec.yaml` → Ajouter `flutter_localizations`
+- [x] Modifier `pubspec.yaml` → Ajouter `shared_preferences`
+- [x] Modifier `pubspec.yaml` → Ajouter `flutter: generate: true`
+- [x] Exécuter `flutter pub get`
+- [x] **Validation :** `flutter analyze` doit passer sans erreur
 
 #### ✅ Tâche 1.2 : Créer la configuration l10n
-- [ ] Créer `l10n.yaml` à la racine
-- [ ] Créer le dossier `lib/l10n/`
-- [ ] **Validation :** Les fichiers existent
+- [x] Créer `l10n.yaml` à la racine
+- [x] Créer le dossier `lib/l10n/`
+- [x] **Validation :** Les fichiers existent
 
 #### ✅ Tâche 1.3 : Créer les fichiers ARB
-- [ ] Créer `lib/l10n/app_fr.arb` (template, ~100 clés)
-- [ ] Créer `lib/l10n/app_en.arb` (mêmes clés)
-- [ ] Créer `lib/l10n/app_es.arb` (mêmes clés)
-- [ ] Créer `lib/l10n/app_pt.arb` (mêmes clés)
-- [ ] Créer `lib/l10n/app_zh.arb` (mêmes clés)
-- [ ] **Validation :** `flutter gen-l10n` doit générer sans erreur
+- [x] Créer `lib/l10n/app_fr.arb` (template, ~100 clés)
+- [x] Créer `lib/l10n/app_en.arb` (mêmes clés)
+- [x] Créer `lib/l10n/app_es.arb` (mêmes clés)
+- [x] Créer `lib/l10n/app_pt.arb` (mêmes clés)
+- [x] Créer `lib/l10n/app_zh.arb` (mêmes clés)
+- [x] **Validation :** `flutter gen-l10n` doit générer sans erreur
 
 ---
 
 ### **PHASE 2 : PROVIDERS & CONFIG (Priorité Haute)**
 
 #### ✅ Tâche 2.1 : Créer le provider de langue
-- [ ] Créer `lib/presentation/providers/locale_provider.dart`
-- [ ] Implémenter `LocaleNotifier` avec Riverpod
-- [ ] Sauvegarder dans `SharedPreferences`
-- [ ] Exécuter `build_runner`
-- [ ] **Validation :** Le provider compile sans erreur
+- [x] Créer `lib/presentation/providers/locale_provider.dart`
+- [x] Implémenter `LocaleNotifier` avec Riverpod
+- [x] Sauvegarder dans `SharedPreferences`
+- [x] Exécuter `build_runner`
+- [x] **Validation :** Le provider compile sans erreur
 
 #### ✅ Tâche 2.2 : Configurer MaterialApp
-- [ ] Importer `flutter_localizations` dans `main.dart`
-- [ ] Importer `AppLocalizations` dans `main.dart`
-- [ ] Ajouter `localizationsDelegates` dans `MaterialApp`
-- [ ] Ajouter `supportedLocales` (fr, en, es, pt, zh)
-- [ ] Ajouter `locale: ref.watch(localeProvider)`
-- [ ] **Validation :** L'app compile et démarre
+- [x] Importer `flutter_localizations` dans `main.dart`
+- [x] Importer `AppLocalizations` dans `main.dart`
+- [x] Ajouter `localizationsDelegates` dans `MaterialApp`
+- [x] Ajouter `supportedLocales` (fr, en, es, pt, zh)
+- [x] Ajouter `locale: ref.watch(localeProvider)`
+- [x] **Validation :** L'app compile et démarre
 
 ---
 
 ### **PHASE 3 : UI - ÉCRANS PRINCIPAUX (Priorité Moyenne)**
 
 #### ✅ Tâche 3.1 : Login Screen
-- [ ] Remplacer tous les textes en dur par `AppLocalizations`
-- [ ] Tester la connexion
-- [ ] **Validation :** Plus aucun texte en dur dans `login_screen.dart`
+- [x] Remplacer tous les textes en dur par `AppLocalizations`
+- [x] Tester la connexion
+- [x] **Validation :** Plus aucun texte en dur dans `login_screen.dart`
 
-#### ✅ Tâche 3.2 : Pupil Dashboard
-- [ ] Remplacer "Bonjour", "Solde", "Progression", etc.
-- [ ] Gérer les placeholders (`welcomeMessage(name)`)
-- [ ] **Validation :** Plus aucun texte en dur dans `pupil_dashboard_tab.dart`
+#### ✅ Tâche 3.2 : Registration Screen
+- [x] Remplacer tous les textes en dur par `AppLocalizations`
+- [x] Gérer les placeholders et messages d'erreur
+- [x] **Validation :** Plus aucun texte en dur dans `registration_screen.dart`
 
-#### ✅ Tâche 3.3 : Booking Screen
-- [ ] Remplacer "Réservations", "Matin", "Après-midi", etc.
-- [ ] **Validation :** Plus aucun texte en dur dans `booking_screen.dart`
+#### ✅ Tâche 3.3 : Pupil Booking Screen
+- [x] Remplacer "Réservations", "Matin", "Après-midi", etc.
+- [x] **Validation :** Plus aucun texte en dur dans `pupil_booking_screen.dart`
 
 #### ✅ Tâche 3.4 : Admin Screen
-- [ ] Remplacer "Panneau Administrateur", "Réglages", etc.
-- [ ] **Validation :** Plus aucun texte en dur dans `admin_screen.dart`
+- [x] Remplacer "Panneau Administrateur", "Réglages", etc.
+- [x] Remplacer l'alerte des absences en attente
+- [x] **Validation :** Plus aucun texte en dur dans `admin_screen.dart`
 
 ---
 
-### **PHASE 4 : UI - ÉCRANS SECONDAIRES (Priorité Basse)**
+### **PHASE 4 : UI - ÉCRANS PAR PROFIL UTILISATEUR (Nouvelle Priorité)**
 
-#### ✅ Tâche 4.1 : Settings Screen
-- [ ] Ajouter le `LanguageSelector` widget
-- [ ] Remplacer les autres textes
-- [ ] **Validation :** Le sélecteur de langue fonctionne
+#### 🎯 ORDRE DE PRIORITÉ :
+1. **Élèves** (Pupil) - En premier
+2. **Moniteurs** (Monitor) - En second
+3. **Admin** - En dernier
 
-#### ✅ Tâche 4.2 : Notification Screen
-- [ ] Remplacer "Notifications", "Marquer comme lu", etc.
+---
+
+#### **4.1 : ÉCRANS ÉLÈVES (Pupil) - PRIORITÉ 1**
+
+#### ✅ Tâche 4.1.1 : Pupil Main Screen
+- [x] Remplacer l'écran principal des élèves
+- [x] **Validation :** Plus aucun texte en dur dans `pupil_main_screen.dart`
+
+#### ✅ Tâche 4.1.2 : Pupil Dashboard Tab
+- [x] Déjà internationalisé
+- [x] **Validation :** Tous les textes utilisent `AppLocalizations`
+
+#### ✅ Tâche 4.1.3 : Pupil History Tab
+- [x] Remplacer l'historique des sessions
+- [x] **Validation :** Plus aucun texte en dur dans `pupil_history_tab.dart`
+
+#### ✅ Tâche 4.1.4 : User Detail Screen
+- [x] Remplacer les détails utilisateur, "Progression", "Wallet", etc.
+- [x] **Validation :** Plus aucun texte en dur dans `user_detail_screen.dart`
+
+#### ✅ Tâche 4.1.5 : Lesson Validation Screen
+- [x] Remplacer "Validation de leçon", "Compétences", etc.
+- [x] **Validation :** Plus aucun texte en dur dans `lesson_validation_screen.dart`
+
+---
+
+#### **4.2 : ÉCRANS MONITEURS (Monitor) - PRIORITÉ 2**
+
+#### ❌ Tâche 4.2.1 : Monitor Main Screen
+- [ ] Remplacer l'écran principal des moniteurs
+- [ ] **Validation :** Plus aucun texte en dur dans `monitor_main_screen.dart`
+
+#### ❌ Tâche 4.2.2 : Booking Screen (Moniteur)
+- [ ] Remplacer les textes de réservation pour moniteurs
 - [ ] **Validation :** Plus aucun texte en dur
 
-#### ✅ Tâche 4.3 : Progress Screens
-- [ ] Remplacer les niveaux IKO
-- [ ] Remplacer les compétences
-- [ ] **Validation :** Les niveaux s'affichent dans la bonne langue
+---
+
+#### **4.3 : ÉCRANS ADMIN - PRIORITÉ 3**
+
+#### ✅ Tâche 4.3.1 : Staff Admin Screen
+- [x] Remplacer "Gérer le Staff", "Bio", "Spécialités", etc.
+- [x] Remplacer les statuts d'absence (Pending, Approved, Rejected)
+- [x] **Validation :** Plus aucun texte en dur dans `staff_admin_screen.dart`
+
+#### ❌ Tâche 4.3.2 : Admin Settings Screen
+- [ ] Remplacer "Réglages", "Horaires", "Jours de repos", etc.
+- [ ] Remplacer les paramètres de capacité
+- [ ] **Validation :** Plus aucun texte en dur dans `admin_settings_screen.dart`
+
+#### ❌ Tâche 4.3.3 : Admin Dashboard Screen
+- [ ] Remplacer "Dashboard", "KPIs", "Revenus", etc.
+- [ ] **Validation :** Plus aucun texte en dur dans `admin_dashboard_screen.dart`
+
+#### ❌ Tâche 4.3.4 : User Directory Screen
+- [ ] Remplacer "Répertoire Élèves", "Recherche", etc.
+- [ ] **Validation :** Plus aucun texte en dur dans `user_directory_screen.dart`
+
+#### ❌ Tâche 4.3.5 : Equipment Admin Screen
+- [ ] Remplacer "Gestion du Matériel", "Neuf", "Occasion", etc.
+- [ ] **Validation :** Plus aucun texte en dur dans `equipment_admin_screen.dart`
+
+#### ❌ Tâche 4.3.6 : Booking Screen (Admin)
+- [ ] Remplacer les textes de réservation admin
+- [ ] **Validation :** Plus aucun texte en dur dans `booking_screen.dart`
+
+#### ❌ Tâche 4.3.7 : Notification Center Screen
+- [ ] Remplacer "Notifications", "Marquer comme lu", etc.
+- [ ] **Validation :** Plus aucun texte en dur dans `notification_center_screen.dart`
+
+#### ❌ Tâche 4.3.8 : Credit Pack Admin Screen
+- [ ] Remplacer la gestion des packs de crédits
+- [ ] **Validation :** Plus aucun texte en dur dans `credit_pack_admin_screen.dart`
+
+---
+
+#### **4.4 : WIDGETS COMMUNS**
+
+#### ✅ Tâche 4.4.1 : Language Selector
+- [x] Widget déjà internationalisé
+- [x] **Validation :** Fonctionne avec toutes les langues
+
+#### ❌ Tâche 4.4.2 : Pupil Dashboard Tab
+- [ ] À vérifier et internationaliser si nécessaire
+- [ ] **Validation :** Plus aucun texte en dur
+
+#### ❌ Tâche 4.4.3 : Pupil History Tab
+- [ ] À internationaliser
+- [ ] **Validation :** Plus aucun texte en dur
 
 ---
 
 ### **PHASE 5 : TESTS & VALIDATION (Priorité Haute)**
 
-#### ✅ Tâche 5.1 : Tests manuels
+#### ❌ Tâche 5.1 : Tests manuels
 - [ ] Changer de langue → FR
 - [ ] Changer de langue → EN
 - [ ] Changer de langue → ES
@@ -1072,7 +1154,7 @@ L'IA **DOIT** suivre cette TODO list dans l'ordre pour éviter les hallucination
 - [ ] Changer de langue → ZH
 - [ ] Fermer l'app → Rouvrir → Vérifier que la langue persiste
 
-#### ✅ Tâche 5.2 : Vérification complète
+#### ❌ Tâche 5.2 : Vérification complète
 - [ ] `flutter analyze` — aucun warning
 - [ ] `flutter test` — tous les tests passent
 - [ ] Audit des textes en dur restants (grep)
@@ -1098,6 +1180,39 @@ L'IA **DOIT** suivre cette TODO list dans l'ordre pour éviter les hallucination
 # Trouver tous les Text() avec des chaînes en dur non traduites
 grep -rn "Text('.*')" lib/ --include="*.dart" | grep -v "AppLocalizations" | grep -v ".g.dart" | grep -v ".freezed.dart"
 ```
+
+---
+
+## 📊 PROGRESSION ACTUELLE
+
+| Phase | État | Écrans/Composants |
+|-------|------|-------------------|
+| **Phase 1 : Configuration** | ✅ 100% | 3/3 tâches |
+| **Phase 2 : Providers** | ✅ 100% | 2/2 tâches |
+| **Phase 3 : Écrans principaux** | ✅ 100% | 4/4 écrans |
+| **Phase 4.1 : Écrans Élèves** | ✅ 100% | 5/5 écrans |
+| **Phase 4.2 : Écrans Moniteurs** | ⏳ 0% | 0/2 écrans |
+| **Phase 4.3 : Écrans Admin** | ⏳ 12% | 1/8 écrans |
+| **Phase 4.4 : Widgets** | ⏳ 33% | 1/3 widgets |
+| **Phase 5 : Tests** | ⏳ 0% | 0/2 tâches |
+
+**Total : 10 écrans internationalisés sur 17 (59%)**
+
+---
+
+### **PROCHAINES ÉTAPES RECOMMANDÉES (Ordre de priorité) :**
+
+#### 🥈 PRIORITÉ 2 - ÉCRANS MONITEURS :
+1. **`monitor_main_screen.dart`** - Écran principal des moniteurs
+2. **`booking_screen.dart`** - Réservations (vue moniteur)
+
+#### 🥉 PRIORITÉ 3 - ÉCRANS ADMIN :
+3. **`admin_settings_screen.dart`** - Configuration de l'école
+4. **`admin_dashboard_screen.dart`** - Tableau de bord KPIs
+5. **`user_directory_screen.dart`** - Répertoire des élèves
+6. **`equipment_admin_screen.dart`** - Gestion du matériel
+7. **`notification_center_screen.dart`** - Centre de notifications
+8. **`credit_pack_admin_screen.dart`** - Packs de crédits
 
 ---
 
@@ -1137,9 +1252,15 @@ Quand tu demanderas à l'IA d'implémenter :
 
 ---
 
-**Dernière mise à jour :** 2026-02-26  
-**Version du document :** 1.0  
-**Statut :** Prêt pour implémentation
+**Dernière mise à jour :** 2026-02-27
+**Version du document :** 1.7
+**Statut :** En cours - 10/17 écrans internationalisés (59%)
+
+**Changement de priorité :** Les écrans sont maintenant traités par profil utilisateur :
+1. ✅ Écrans principaux (Login, Registration, Admin, Pupil Booking)
+2. ✅ Écrans Élèves - 5/5 faits (COMPLET !)
+3. ⏳ Écrans Moniteurs (Monitor) - **PROCHAINE ÉTAPE**
+4. ⏳ Écrans Admin
 
 ---
 
@@ -1149,4 +1270,4 @@ Quand tu demanderas à l'IA d'implémenter :
 |---------|-------|--------|
 | `IMPLEMENTATION_PUSH_NOTIFICATIONS.md` | Notifications push (FCM) | ✅ Créé |
 | `FEATURE_WEATHER_LOCATION.md` | Configuration latitude/longitude météo | ✅ Créé |
-| `FEATURE_INTERNATIONALIZATION.md` | Internationalisation (multi-langues) | ✅ Créé |
+| `FEATURE_INTERNATIONALIZATION.md` | Internationalisation (multi-langues) | ✅ Mis à jour |

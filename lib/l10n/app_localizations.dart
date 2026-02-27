@@ -859,6 +859,438 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Ajouter une photo'**
   String get uploadPhoto;
+
+  /// No description provided for @staffManagement.
+  ///
+  /// In fr, this message translates to:
+  /// **'Gestion du Staff / RH'**
+  String get staffManagement;
+
+  /// No description provided for @staffTab.
+  ///
+  /// In fr, this message translates to:
+  /// **'Effectif'**
+  String get staffTab;
+
+  /// No description provided for @absencesTab.
+  ///
+  /// In fr, this message translates to:
+  /// **'Absences'**
+  String get absencesTab;
+
+  /// No description provided for @pendingHeader.
+  ///
+  /// In fr, this message translates to:
+  /// **'EN ATTENTE'**
+  String get pendingHeader;
+
+  /// No description provided for @historyHeader.
+  ///
+  /// In fr, this message translates to:
+  /// **'HISTORIQUE'**
+  String get historyHeader;
+
+  /// No description provided for @slotFullDay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Journée entière'**
+  String get slotFullDay;
+
+  /// No description provided for @slotMorning.
+  ///
+  /// In fr, this message translates to:
+  /// **'Matin'**
+  String get slotMorning;
+
+  /// No description provided for @slotAfternoon.
+  ///
+  /// In fr, this message translates to:
+  /// **'Après-midi'**
+  String get slotAfternoon;
+
+  /// No description provided for @reasonLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Motif'**
+  String get reasonLabel;
+
+  /// No description provided for @noRequests.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune demande.'**
+  String get noRequests;
+
+  /// No description provided for @editInstructor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier Moniteur'**
+  String get editInstructor;
+
+  /// No description provided for @addInstructor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter Moniteur'**
+  String get addInstructor;
+
+  /// No description provided for @fullName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom Complet'**
+  String get fullName;
+
+  /// No description provided for @bio.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bio'**
+  String get bio;
+
+  /// No description provided for @specialtiesHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Spécialités (virgule)'**
+  String get specialtiesHint;
+
+  /// No description provided for @photoUrl.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photo URL'**
+  String get photoUrl;
+
+  /// No description provided for @loginCredentials.
+  ///
+  /// In fr, this message translates to:
+  /// **'Identifiants de connexion'**
+  String get loginCredentials;
+
+  /// No description provided for @passwordHint6.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe (min 6 car.)'**
+  String get passwordHint6;
+
+  /// No description provided for @cancelButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get cancelButton;
+
+  /// No description provided for @saveButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer'**
+  String get saveButton;
+
+  /// No description provided for @addButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter'**
+  String get addButton;
+
+  /// No description provided for @statusPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'EN ATTENTE'**
+  String get statusPending;
+
+  /// No description provided for @statusApproved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Validé'**
+  String get statusApproved;
+
+  /// No description provided for @statusRejected.
+  ///
+  /// In fr, this message translates to:
+  /// **'Refusé'**
+  String get statusRejected;
+
+  /// No description provided for @errorLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Erreur'**
+  String get errorLabel;
+
+  /// No description provided for @sessionExpired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Session expirée ou profil introuvable'**
+  String get sessionExpired;
+
+  /// No description provided for @noUsersFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun utilisateur trouvé dans la base.'**
+  String get noUsersFound;
+
+  /// No description provided for @pupilSpace.
+  ///
+  /// In fr, this message translates to:
+  /// **'Espace Élève'**
+  String get pupilSpace;
+
+  /// No description provided for @myProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ma Progression'**
+  String get myProgress;
+
+  /// No description provided for @history.
+  ///
+  /// In fr, this message translates to:
+  /// **'Historique'**
+  String get history;
+
+  /// No description provided for @logoutTooltip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se déconnecter'**
+  String get logoutTooltip;
+
+  /// No description provided for @homeTab.
+  ///
+  /// In fr, this message translates to:
+  /// **'Accueil'**
+  String get homeTab;
+
+  /// No description provided for @progressTab.
+  ///
+  /// In fr, this message translates to:
+  /// **'Progrès'**
+  String get progressTab;
+
+  /// No description provided for @alertsTab.
+  ///
+  /// In fr, this message translates to:
+  /// **'Alertes'**
+  String get alertsTab;
+
+  /// No description provided for @historyTab.
+  ///
+  /// In fr, this message translates to:
+  /// **'Historique'**
+  String get historyTab;
+
+  /// No description provided for @bookButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réserver'**
+  String get bookButton;
+
+  /// No description provided for @slotUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inconnu'**
+  String get slotUnknown;
+
+  /// No description provided for @noLessonsScheduled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu n\'as pas encore de cours de prévu.'**
+  String get noLessonsScheduled;
+
+  /// No description provided for @lessonOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cours du'**
+  String get lessonOn;
+
+  /// No description provided for @slotLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créneau'**
+  String get slotLabel;
+
+  /// No description provided for @statusUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'À VENIR'**
+  String get statusUpcoming;
+
+  /// No description provided for @statusCompleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'TERMINÉ'**
+  String get statusCompleted;
+
+  /// No description provided for @statusCancelled.
+  ///
+  /// In fr, this message translates to:
+  /// **'ANNULÉ'**
+  String get statusCancelled;
+
+  /// No description provided for @profileTab.
+  ///
+  /// In fr, this message translates to:
+  /// **'Profil'**
+  String get profileTab;
+
+  /// No description provided for @notesTab.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notes'**
+  String get notesTab;
+
+  /// No description provided for @nameLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom'**
+  String get nameLabel;
+
+  /// No description provided for @currentBalance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde actuel'**
+  String get currentBalance;
+
+  /// No description provided for @credits.
+  ///
+  /// In fr, this message translates to:
+  /// **'crédits'**
+  String get credits;
+
+  /// No description provided for @sellPack.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vendre un Pack'**
+  String get sellPack;
+
+  /// No description provided for @creditAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créditer le compte'**
+  String get creditAccount;
+
+  /// No description provided for @noStandardPack.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun pack standard trouvé.\nUtilisez la saisie sur mesure ci-dessous.'**
+  String get noStandardPack;
+
+  /// No description provided for @customEntry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisie sur mesure'**
+  String get customEntry;
+
+  /// No description provided for @numberOfSessions.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nombre de séances'**
+  String get numberOfSessions;
+
+  /// No description provided for @packAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pack {name} ajouté !'**
+  String packAdded(String name);
+
+  /// No description provided for @sessionsAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} séances ajoutées !'**
+  String sessionsAdded(int count);
+
+  /// No description provided for @adjustTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajuster le total (Admin)'**
+  String get adjustTotal;
+
+  /// No description provided for @modifyBalance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier solde (Manuel)'**
+  String get modifyBalance;
+
+  /// No description provided for @validate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valider'**
+  String get validate;
+
+  /// No description provided for @invalidNumber.
+  ///
+  /// In fr, this message translates to:
+  /// **'Veuillez saisir un nombre valide'**
+  String get invalidNumber;
+
+  /// No description provided for @validationTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Validation : {name}'**
+  String validationTitle(String name);
+
+  /// No description provided for @skillsValidatedToday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compétences validées aujourd\'hui'**
+  String get skillsValidatedToday;
+
+  /// No description provided for @ikoGlobalLevel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Niveau IKO Global'**
+  String get ikoGlobalLevel;
+
+  /// No description provided for @pedagogicalNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'Note pédagogique'**
+  String get pedagogicalNote;
+
+  /// No description provided for @sessionNoteHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comment s\'est passée la séance ?'**
+  String get sessionNoteHint;
+
+  /// No description provided for @materialIncident.
+  ///
+  /// In fr, this message translates to:
+  /// **'Incident Matériel ?'**
+  String get materialIncident;
+
+  /// No description provided for @selectEquipmentIssue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sélectionner le matériel avec un souci'**
+  String get selectEquipmentIssue;
+
+  /// No description provided for @maintenance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Maintenance'**
+  String get maintenance;
+
+  /// No description provided for @damaged.
+  ///
+  /// In fr, this message translates to:
+  /// **'HS'**
+  String get damaged;
+
+  /// No description provided for @validateProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valider la progression'**
+  String get validateProgress;
+
+  /// No description provided for @progressSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Progression enregistrée !'**
+  String get progressSaved;
+
+  /// No description provided for @errorLoadingEquipment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Erreur chargement matériel'**
+  String get errorLoadingEquipment;
+
+  /// No description provided for @equipmentStatusUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Statut matériel mis à jour !'**
+  String get equipmentStatusUpdated;
 }
 
 class _AppLocalizationsDelegate

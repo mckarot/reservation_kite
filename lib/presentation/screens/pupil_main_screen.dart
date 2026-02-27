@@ -9,6 +9,7 @@ import 'notification_center_screen.dart';
 import '../providers/notification_notifier.dart';
 import '../providers/auth_state_provider.dart';
 import '../../data/providers/repository_providers.dart';
+import '../../l10n/app_localizations.dart';
 
 class PupilMainScreen extends ConsumerStatefulWidget {
   const PupilMainScreen({super.key});
@@ -22,6 +23,7 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final currentUserAsync = ref.watch(currentUserProvider);
     final usersAsync = ref.watch(userNotifierProvider);
 
@@ -31,15 +33,13 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
       if (currentUserAsync.isLoading || usersAsync.isLoading) {
         return const Scaffold(body: Center(child: CircularProgressIndicator()));
       }
-      return const Scaffold(
+      return Scaffold(
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Session expirée ou profil introuvable'),
-              SizedBox(height: 16),
-              // On laisse une chance de retour au login si vraiment perdu
-              // mais normalement MainApp gère ça.
+              Text(l10n.sessionExpired),
+              const SizedBox(height: 16),
             ],
           ),
         ),
@@ -49,8 +49,8 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
     return usersAsync.when(
       data: (users) {
         if (users.isEmpty) {
-          return const Scaffold(
-            body: Center(child: Text('Aucun utilisateur trouvé dans la base.')),
+          return Scaffold(
+            body: Center(child: Text(l10n.noUsersFound)),
           );
         }
 
@@ -70,17 +70,17 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
           appBar: AppBar(
             title: Text(
               _currentIndex == 0
-                  ? 'Espace Élève'
+                  ? l10n.pupilSpace
                   : _currentIndex == 1
-                  ? 'Ma Progression'
+                  ? l10n.myProgress
                   : _currentIndex == 2
-                  ? 'Notifications'
-                  : 'Historique',
+                  ? l10n.notifications
+                  : l10n.history,
             ),
             actions: [
               IconButton(
                 icon: const Icon(Icons.logout),
-                tooltip: 'Se déconnecter',
+                tooltip: l10n.logoutTooltip,
                 onPressed: () {
                   ref.read(authRepositoryProvider).signOut();
                 },
@@ -93,13 +93,13 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
             currentIndex: _currentIndex,
             onTap: (index) => setState(() => _currentIndex = index),
             items: [
-              const BottomNavigationBarItem(
-                icon: Icon(Icons.dashboard),
-                label: 'Accueil',
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.dashboard),
+                label: l10n.homeTab,
               ),
-              const BottomNavigationBarItem(
-                icon: Icon(Icons.trending_up),
-                label: 'Progrès',
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.trending_up),
+                label: l10n.progressTab,
               ),
               BottomNavigationBarItem(
                 icon: Consumer(
@@ -114,11 +114,11 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
                     );
                   },
                 ),
-                label: 'Alertes',
+                label: l10n.alertsTab,
               ),
-              const BottomNavigationBarItem(
-                icon: Icon(Icons.history),
-                label: 'Historique',
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.history),
+                label: l10n.historyTab,
               ),
             ],
           ),
@@ -127,14 +127,14 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
               context,
               MaterialPageRoute(builder: (_) => const PupilBookingScreen()),
             ),
-            label: const Text('Réserver'),
+            label: Text(l10n.bookButton),
             icon: const Icon(Icons.add),
           ),
         );
       },
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
-      error: (err, _) => Scaffold(body: Center(child: Text('Erreur: $err'))),
+      error: (err, _) => Scaffold(body: Center(child: Text('${l10n.errorLabel}: $err'))),
     );
   }
 }

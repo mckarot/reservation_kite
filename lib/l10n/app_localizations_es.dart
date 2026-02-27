@@ -398,4 +398,227 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get uploadPhoto => 'Añadir una foto';
+
+  @override
+  String get staffManagement => 'Gestión de Staff / RRHH';
+
+  @override
+  String get staffTab => 'Personal';
+
+  @override
+  String get absencesTab => 'Ausencias';
+
+  @override
+  String get pendingHeader => 'PENDIENTE';
+
+  @override
+  String get historyHeader => 'HISTORIAL';
+
+  @override
+  String get slotFullDay => 'Día completo';
+
+  @override
+  String get slotMorning => 'Mañana';
+
+  @override
+  String get slotAfternoon => 'Tarde';
+
+  @override
+  String get reasonLabel => 'Motivo';
+
+  @override
+  String get noRequests => 'Sin solicitudes.';
+
+  @override
+  String get editInstructor => 'Editar Instructor';
+
+  @override
+  String get addInstructor => 'Añadir Instructor';
+
+  @override
+  String get fullName => 'Nombre Completo';
+
+  @override
+  String get bio => 'Biografía';
+
+  @override
+  String get specialtiesHint => 'Especialidades (separadas por comas)';
+
+  @override
+  String get photoUrl => 'URL de foto';
+
+  @override
+  String get loginCredentials => 'Credenciales de acceso';
+
+  @override
+  String get passwordHint6 => 'Contraseña (mínimo 6 caracteres)';
+
+  @override
+  String get cancelButton => 'Cancelar';
+
+  @override
+  String get saveButton => 'Guardar';
+
+  @override
+  String get addButton => 'Añadir';
+
+  @override
+  String get statusPending => 'PENDIENTE';
+
+  @override
+  String get statusApproved => 'Aprobado';
+
+  @override
+  String get statusRejected => 'Rechazado';
+
+  @override
+  String get errorLabel => 'Error';
+
+  @override
+  String get sessionExpired => 'Sesión expirada o perfil no encontrado';
+
+  @override
+  String get noUsersFound => 'No se encontraron usuarios en la base de datos.';
+
+  @override
+  String get pupilSpace => 'Área del Estudiante';
+
+  @override
+  String get myProgress => 'Mi Progreso';
+
+  @override
+  String get history => 'Historial';
+
+  @override
+  String get logoutTooltip => 'Cerrar sesión';
+
+  @override
+  String get homeTab => 'Inicio';
+
+  @override
+  String get progressTab => 'Progreso';
+
+  @override
+  String get alertsTab => 'Alertas';
+
+  @override
+  String get historyTab => 'Historial';
+
+  @override
+  String get bookButton => 'Reservar';
+
+  @override
+  String get slotUnknown => 'Desconocido';
+
+  @override
+  String get noLessonsScheduled => 'Aún no tienes ninguna clase programada.';
+
+  @override
+  String get lessonOn => 'Clase del';
+
+  @override
+  String get slotLabel => 'Franja';
+
+  @override
+  String get statusUpcoming => 'PRÓXIMAMENTE';
+
+  @override
+  String get statusCompleted => 'COMPLETADO';
+
+  @override
+  String get statusCancelled => 'CANCELADO';
+
+  @override
+  String get profileTab => 'Perfil';
+
+  @override
+  String get notesTab => 'Notas';
+
+  @override
+  String get nameLabel => 'Nombre';
+
+  @override
+  String get currentBalance => 'Saldo actual';
+
+  @override
+  String get credits => 'créditos';
+
+  @override
+  String get sellPack => 'Vender un Pack';
+
+  @override
+  String get creditAccount => 'Acreditar cuenta';
+
+  @override
+  String get noStandardPack =>
+      'No se encontró ningún pack estándar.\nUtilice la entrada personalizada a continuación.';
+
+  @override
+  String get customEntry => 'Entrada personalizada';
+
+  @override
+  String get numberOfSessions => 'Número de sesiones';
+
+  @override
+  String packAdded(String name) {
+    return '¡Pack $name añadido!';
+  }
+
+  @override
+  String sessionsAdded(int count) {
+    return '¡$count sesiones añadidas!';
+  }
+
+  @override
+  String get adjustTotal => 'Ajustar total (Admin)';
+
+  @override
+  String get modifyBalance => 'Modificar saldo (Manual)';
+
+  @override
+  String get validate => 'Validar';
+
+  @override
+  String get invalidNumber => 'Por favor, introduzca un número válido';
+
+  @override
+  String validationTitle(String name) {
+    return 'Validación: $name';
+  }
+
+  @override
+  String get skillsValidatedToday => 'Habilidades validadas hoy';
+
+  @override
+  String get ikoGlobalLevel => 'Nivel IKO Global';
+
+  @override
+  String get pedagogicalNote => 'Nota pedagógica';
+
+  @override
+  String get sessionNoteHint => '¿Cómo fue la sesión?';
+
+  @override
+  String get materialIncident => '¿Incidente de equipo?';
+
+  @override
+  String get selectEquipmentIssue => 'Seleccionar equipo con problema';
+
+  @override
+  String get maintenance => 'Mantenimiento';
+
+  @override
+  String get damaged => 'Averiado';
+
+  @override
+  String get validateProgress => 'Validar progreso';
+
+  @override
+  String get progressSaved => '¡Progreso guardado!';
+
+  @override
+  String get errorLoadingEquipment => 'Error al cargar equipo';
+
+  @override
+  String get equipmentStatusUpdated => '¡Estado del equipo actualizado!';
 }

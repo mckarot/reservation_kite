@@ -391,4 +391,226 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get uploadPhoto => '添加照片';
+
+  @override
+  String get staffManagement => '员工管理/人力资源';
+
+  @override
+  String get staffTab => '员工';
+
+  @override
+  String get absencesTab => '缺勤';
+
+  @override
+  String get pendingHeader => '待处理';
+
+  @override
+  String get historyHeader => '历史记录';
+
+  @override
+  String get slotFullDay => '全天';
+
+  @override
+  String get slotMorning => '早上';
+
+  @override
+  String get slotAfternoon => '下午';
+
+  @override
+  String get reasonLabel => '原因';
+
+  @override
+  String get noRequests => '无请求。';
+
+  @override
+  String get editInstructor => '编辑教练';
+
+  @override
+  String get addInstructor => '添加教练';
+
+  @override
+  String get fullName => '全名';
+
+  @override
+  String get bio => '个人简介';
+
+  @override
+  String get specialtiesHint => '专长（用逗号分隔）';
+
+  @override
+  String get photoUrl => '照片网址';
+
+  @override
+  String get loginCredentials => '登录凭证';
+
+  @override
+  String get passwordHint6 => '密码（至少 6 个字符）';
+
+  @override
+  String get cancelButton => '取消';
+
+  @override
+  String get saveButton => '保存';
+
+  @override
+  String get addButton => '添加';
+
+  @override
+  String get statusPending => '待处理';
+
+  @override
+  String get statusApproved => '已批准';
+
+  @override
+  String get statusRejected => '已拒绝';
+
+  @override
+  String get errorLabel => '错误';
+
+  @override
+  String get sessionExpired => '会话已过期或未找到个人资料';
+
+  @override
+  String get noUsersFound => '数据库中未找到用户。';
+
+  @override
+  String get pupilSpace => '学生区域';
+
+  @override
+  String get myProgress => '我的进度';
+
+  @override
+  String get history => '历史记录';
+
+  @override
+  String get logoutTooltip => '退出';
+
+  @override
+  String get homeTab => '首页';
+
+  @override
+  String get progressTab => '进度';
+
+  @override
+  String get alertsTab => '提醒';
+
+  @override
+  String get historyTab => '历史记录';
+
+  @override
+  String get bookButton => '预订';
+
+  @override
+  String get slotUnknown => '未知';
+
+  @override
+  String get noLessonsScheduled => '您还没有任何课程安排。';
+
+  @override
+  String get lessonOn => '课程日期';
+
+  @override
+  String get slotLabel => '时间段';
+
+  @override
+  String get statusUpcoming => '即将开始';
+
+  @override
+  String get statusCompleted => '已完成';
+
+  @override
+  String get statusCancelled => '已取消';
+
+  @override
+  String get profileTab => '个人资料';
+
+  @override
+  String get notesTab => '备注';
+
+  @override
+  String get nameLabel => '姓名';
+
+  @override
+  String get currentBalance => '当前余额';
+
+  @override
+  String get credits => '积分';
+
+  @override
+  String get sellPack => '出售套餐';
+
+  @override
+  String get creditAccount => '充值账户';
+
+  @override
+  String get noStandardPack => '未找到标准套餐。\n请使用下面的自定义输入。';
+
+  @override
+  String get customEntry => '自定义输入';
+
+  @override
+  String get numberOfSessions => '课程数量';
+
+  @override
+  String packAdded(String name) {
+    return '套餐 $name 已添加！';
+  }
+
+  @override
+  String sessionsAdded(int count) {
+    return '已添加 $count 节课！';
+  }
+
+  @override
+  String get adjustTotal => '调整总额（管理员）';
+
+  @override
+  String get modifyBalance => '修改余额（手动）';
+
+  @override
+  String get validate => '验证';
+
+  @override
+  String get invalidNumber => '请输入有效的数字';
+
+  @override
+  String validationTitle(String name) {
+    return '验证：$name';
+  }
+
+  @override
+  String get skillsValidatedToday => '今天验证的技能';
+
+  @override
+  String get ikoGlobalLevel => 'IKO 全球级别';
+
+  @override
+  String get pedagogicalNote => '教学备注';
+
+  @override
+  String get sessionNoteHint => '课程进行得如何？';
+
+  @override
+  String get materialIncident => '设备事故？';
+
+  @override
+  String get selectEquipmentIssue => '选择有问题的设备';
+
+  @override
+  String get maintenance => '维护';
+
+  @override
+  String get damaged => '损坏';
+
+  @override
+  String get validateProgress => '验证进度';
+
+  @override
+  String get progressSaved => '进度已保存！';
+
+  @override
+  String get errorLoadingEquipment => '加载设备时出错';
+
+  @override
+  String get equipmentStatusUpdated => '设备状态已更新！';
 }

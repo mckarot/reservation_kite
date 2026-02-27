@@ -6,12 +6,14 @@ import '../providers/unavailability_notifier.dart';
 import '../../domain/models/staff_unavailability.dart';
 import '../../domain/models/reservation.dart';
 import 'package:intl/intl.dart';
+import '../../l10n/app_localizations.dart';
 
 class StaffAdminScreen extends ConsumerWidget {
   const StaffAdminScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final staffAsync = ref.watch(staffNotifierProvider);
     final unavailabilitiesAsync = ref.watch(unavailabilityNotifierProvider);
 
@@ -19,11 +21,11 @@ class StaffAdminScreen extends ConsumerWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Gestion du Staff / RH'),
-          bottom: const TabBar(
+          title: Text(l10n.staffManagement),
+          bottom: TabBar(
             tabs: [
-              Tab(icon: Icon(Icons.group), text: 'Effectif'),
-              Tab(icon: Icon(Icons.event_busy), text: 'Absences'),
+              Tab(icon: const Icon(Icons.group), text: l10n.staffTab),
+              Tab(icon: const Icon(Icons.event_busy), text: l10n.absencesTab),
             ],
           ),
           actions: [
@@ -72,7 +74,7 @@ class StaffAdminScreen extends ConsumerWidget {
                 },
               ),
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, stack) => Center(child: Text('Erreur: $err')),
+              error: (err, stack) => Center(child: Text('${l10n.errorLabel}: $err')),
             ),
             // Tab 2: Absence Requests
             unavailabilitiesAsync.when(
@@ -89,11 +91,11 @@ class StaffAdminScreen extends ConsumerWidget {
                 return ListView(
                   children: [
                     if (pending.isNotEmpty) ...[
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
                         child: Text(
-                          'EN ATTENTE',
-                          style: TextStyle(
+                          l10n.pendingHeader,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.orange,
                           ),
@@ -113,9 +115,9 @@ class StaffAdminScreen extends ConsumerWidget {
                         );
                         return ListTile(
                           title: Text(
-                            '${staff.name} - ${DateFormat('dd/MM').format(u.date)} (${u.slot == TimeSlot.fullDay ? 'Journée entière' : (u.slot == TimeSlot.morning ? 'Matin' : 'Aprem')})',
+                            '${staff.name} - ${DateFormat('dd/MM').format(u.date)} (${u.slot == TimeSlot.fullDay ? l10n.slotFullDay : (u.slot == TimeSlot.morning ? l10n.slotMorning : l10n.slotAfternoon)})',
                           ),
-                          subtitle: Text('Motif: ${u.reason}'),
+                          subtitle: Text('${l10n.reasonLabel}: ${u.reason}'),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -153,11 +155,11 @@ class StaffAdminScreen extends ConsumerWidget {
                       }),
                     ],
                     if (others.isNotEmpty) ...[
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
                         child: Text(
-                          'HISTORIQUE',
-                          style: TextStyle(
+                          l10n.historyHeader,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.grey,
                           ),
@@ -177,7 +179,7 @@ class StaffAdminScreen extends ConsumerWidget {
                         );
                         return ListTile(
                           title: Text(
-                            '${staff.name} - ${DateFormat('dd/MM').format(u.date)} (${u.slot == TimeSlot.fullDay ? 'Journée entière' : (u.slot == TimeSlot.morning ? 'Matin' : 'Aprem')})',
+                            '${staff.name} - ${DateFormat('dd/MM').format(u.date)} (${u.slot == TimeSlot.fullDay ? l10n.slotFullDay : (u.slot == TimeSlot.morning ? l10n.slotMorning : l10n.slotAfternoon)})',
                           ),
                           subtitle: Text(u.reason),
                           trailing: _StatusBadge(status: u.status),
@@ -185,10 +187,10 @@ class StaffAdminScreen extends ConsumerWidget {
                       }),
                     ],
                     if (pending.isEmpty && others.isEmpty)
-                      const Center(
+                      Center(
                         child: Padding(
-                          padding: EdgeInsets.all(32),
-                          child: Text('Aucune demande.'),
+                          padding: const EdgeInsets.all(32),
+                          child: Text(l10n.noRequests),
                         ),
                       ),
                   ],
@@ -204,6 +206,7 @@ class StaffAdminScreen extends ConsumerWidget {
   }
 
   void _showStaffDialog(BuildContext context, WidgetRef ref, {Staff? staff}) {
+    final l10n = AppLocalizations.of(context)!;
     final isEditing = staff != null;
     final nameController = TextEditingController(text: staff?.name);
     final bioController = TextEditingController(text: staff?.bio);
@@ -217,45 +220,45 @@ class StaffAdminScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(isEditing ? 'Modifier Moniteur' : 'Ajouter Moniteur'),
+        title: Text(isEditing ? l10n.editInstructor : l10n.addInstructor),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: nameController,
-                decoration: const InputDecoration(labelText: 'Nom Complet'),
+                decoration: InputDecoration(labelText: l10n.fullName),
               ),
               TextField(
                 controller: bioController,
-                decoration: const InputDecoration(labelText: 'Bio'),
+                decoration: InputDecoration(labelText: l10n.bio),
                 maxLines: 3,
               ),
               TextField(
                 controller: specialtiesController,
-                decoration: const InputDecoration(
-                  labelText: 'Spécialités (virgule)',
+                decoration: InputDecoration(
+                  labelText: l10n.specialtiesHint,
                 ),
               ),
               TextField(
                 controller: photoController,
-                decoration: const InputDecoration(labelText: 'Photo URL'),
+                decoration: InputDecoration(labelText: l10n.photoUrl),
               ),
               if (!isEditing) ...[
                 const Divider(height: 32),
-                const Text(
-                  'Identifiants de connexion',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                Text(
+                  l10n.loginCredentials,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 TextField(
                   controller: emailController,
-                  decoration: const InputDecoration(labelText: 'Email'),
+                  decoration: InputDecoration(labelText: l10n.emailLabel),
                   keyboardType: TextInputType.emailAddress,
                 ),
                 TextField(
                   controller: passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Mot de passe (min 6 car.)',
+                  decoration: InputDecoration(
+                    labelText: l10n.passwordHint6,
                   ),
                   obscureText: true,
                 ),
@@ -266,7 +269,7 @@ class StaffAdminScreen extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Annuler'),
+            child: Text(l10n.cancelButton),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -305,7 +308,7 @@ class StaffAdminScreen extends ConsumerWidget {
               }
               if (context.mounted) Navigator.pop(context);
             },
-            child: Text(isEditing ? 'Enregistrer' : 'Ajouter'),
+            child: Text(isEditing ? l10n.saveButton : l10n.addButton),
           ),
         ],
       ),
@@ -319,20 +322,21 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     Color color;
     String label;
     switch (status) {
       case UnavailabilityStatus.pending:
         color = Colors.orange;
-        label = 'Attente';
+        label = l10n.statusPending;
         break;
       case UnavailabilityStatus.approved:
         color = Colors.green;
-        label = 'Validé';
+        label = l10n.statusApproved;
         break;
       case UnavailabilityStatus.rejected:
         color = Colors.red;
-        label = 'Refusé';
+        label = l10n.statusRejected;
         break;
     }
     return Container(
