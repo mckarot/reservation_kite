@@ -264,6 +264,27 @@ class _StatItem extends StatelessWidget {
     required this.color,
   });
 
+  String _getTranslatedIkoLevel(BuildContext context, String level) {
+    final l10n = AppLocalizations.of(context)!;
+    // Mapping des niveaux IKO vers les traductions
+    switch (level) {
+      case 'Niveau 1 - Découverte':
+      case 'Niveau 1':
+        return l10n.ikoLevel1Discovery;
+      case 'Niveau 2 - Intermédiaire':
+      case 'Niveau 2':
+        return l10n.ikoLevel2Intermediate;
+      case 'Niveau 3 - Indépendant':
+      case 'Niveau 3':
+        return l10n.ikoLevel3Independent;
+      case 'Niveau 4 - Perfectionnement':
+      case 'Niveau 4':
+        return l10n.ikoLevel4Advanced;
+      default:
+        return level;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -279,7 +300,7 @@ class _StatItem extends StatelessWidget {
             Icon(icon, color: color),
             const SizedBox(height: 8),
             Text(
-              value,
+              _getTranslatedIkoLevel(context, value),
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             Text(

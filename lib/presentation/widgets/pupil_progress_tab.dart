@@ -74,6 +74,26 @@ class _LevelCard extends StatelessWidget {
   final int checkedItemsCount;
   const _LevelCard({required this.ikoLevel, required this.checkedItemsCount});
 
+  String _getTranslatedShortLevel(AppLocalizations l10n, String level) {
+    // Mapping des niveaux IKO courts vers les traductions
+    switch (level) {
+      case 'Niveau 1':
+      case 'Niveau 1 - Découverte':
+        return l10n.ikoLevel1Discovery;
+      case 'Niveau 2':
+      case 'Niveau 2 - Intermédiaire':
+        return l10n.ikoLevel2Intermediate;
+      case 'Niveau 3':
+      case 'Niveau 3 - Indépendant':
+        return l10n.ikoLevel3Independent;
+      case 'Niveau 4':
+      case 'Niveau 4 - Perfectionnement':
+        return l10n.ikoLevel4Advanced;
+      default:
+        return level;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -103,7 +123,7 @@ class _LevelCard extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            ikoLevel,
+            _getTranslatedShortLevel(l10n, ikoLevel),
             style: const TextStyle(
               color: Colors.white,
               fontSize: 32,
