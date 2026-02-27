@@ -1,87 +1,98 @@
-# Gemini Agent Rules for Reservation Kite Project
+# Règles Agent Gemini pour le Projet Reservation Kite
 
-## 1. PRODUCT VISION
-Complete Flutter management application for Kite Surf schools: reservations, subscriptions, pedagogical tracking, dynamic staff and schedule management.
+## 1. VISION DU PRODUIT
+Application complète de gestion pour écoles de Kite Surf : réservations, abonnements, suivi pédagogique, gestion dynamique du Staff et des Horaires.
 
-**Target users:**
-- **Student**: Reserves, chooses instructor, consults credits and progress.
-- **Instructor**: Manages profile (bio, photo, specialties) and availabilities.
-- **Administrator**: Manages the school via a Control Panel (Schedules, Staff, Finances, Validations).
+**Utilisateurs cibles :**
+- **Élève** : Réserve, choisit son moniteur, consulte ses crédits et sa progression.
+- **Moniteur** : Gère son profil (bio, photo, spécialités) et ses disponibilités.
+- **Administrateur** : Pilote l'école via un Panneau de Contrôle (Horaires, Staff, Finances, Validations).
 
 ---
 
-## 2. TECHNICAL ARCHITECTURE
+## 2. ARCHITECTURE TECHNIQUE
 
 ### Stack
 - **Flutter/Dart**
-- **Firebase**: Firestore, Auth, App Check (mandatory)
-- **Riverpod**: State management with generators (`@riverpod`)
-- **Freezed**: Immutable models
-- **Clean Architecture**: Strict separation `data` / `domain` / `presentation`
+- **Firebase** : Firestore, Auth, App Check (obligatoire)
+- **Riverpod** : State management avec générateurs (`@riverpod`)
+- **Freezed** : Modèles immuables
+- **Clean Architecture** : Séparation stricte `data` / `domain` / `presentation`
 
 ### Structure
 ```
 lib/
 ├── data/           # Repositories Firestore, providers
-├── domain/         # Models, repository interfaces
+├── domain/         # Modèles, interfaces repositories
 └── presentation/   # UI, screens, widgets, notifiers
 ```
 
-### Code Conventions
-- Generated files: `.g.dart` (riverpod_generator)
-- `FieldValue.serverTimestamp()` mandatory for Firestore timestamps
-- **`DateTime.now()` FORBIDDEN** for Firestore
-- Any Firestore query must have a `.limit()`
-- `if (!mounted)` mandatory after `await` using `BuildContext`
-- Any Provider/Notifier method must return an `AsyncValue` or be wrapped in a guard for uniform error handling
+### Conventions de Code
+- Fichiers générés : `.g.dart` (riverpod_generator)
+- `FieldValue.serverTimestamp()` obligatoire pour les timestamps Firestore
+- **`DateTime.now()` INTERDIT** pour Firestore
+- Toute requête Firestore doit avoir un `.limit()`
+- `if (!mounted)` obligatoire après `await` utilisant `BuildContext`
+- Toute méthode de Provider/Notifier doit retourner un `AsyncValue` ou être wrappée dans un guard pour une gestion d'erreur uniforme
 
 ---
 
-## 3. AGENT INSTRUCTIONS (NON-NEGOTIABLE RULES)
+## 3. INSTRUCTIONS POUR L'AGENT (RÈGLES NON-NÉGOCIABLES)
 
-### Before Any Modification
-1. **Analyze existing code** before any non-trivial modification.
-2. **Check `firestore_schema.md`** as the single source of truth for any data structure.
-3. Work with an **interactive Todo List** for complex tasks.
+### Avant Toute Modification
+1. **Analyser le code existant** avant toute modification non triviale.
+2. **Vérifier `firestore_schema.md`** comme source de vérité pour toute structure de données.
+3. Travailler par **Todo List interactive** pour les tâches complexes.
 
-### Development Constraints
-- **Zero theory**, provide **only diffs** (never complete files).
-- **No side effects** without explicit validation (write, delete, send, mutate).
-- **No direct Firestore writes** for critical data -> must go through Cloud Function.
-- **No automatic retry** on writes.
+### Contraintes de Développement
+- **Zéro théorie**, fournir **uniquement des diffs** (jamais de fichiers complets).
+- **Aucun effet de bord** sans validation explicite (écriture, suppression, envoi, mutation).
+- **Aucune écriture directe Firestore** pour les données critiques → passer par Cloud Function.
+- **Pas de retry automatique** sur les écritures.
 
-### Quality & Validation
-- If `flutter analyze`, a test or a rule fails: **STOP**, explain the problem, do not loop on corrections.
-- Any exception must be **justified, validated, explicitly mentioned**.
-- Respond in **French**.
+### Operations Git
+- **Jamais d'initiative git** (add, commit, push, restore, etc.) sans instruction explicite de l'utilisateur.
+- L'utilisateur gère lui-même les commits et l'envoi vers le dépôt distant.
 
-### Impact Review (Mandatory for Firestore/Auth/Cloud Functions)
-For any modification, specify:
-- **Cost impact** (Firestore queries, reads/writes).
-- **Security impact** (Firestore rules, data access).
-- **UX impact** (clear, generic, never technical error messages).
+### Internationalisation (i18n)
+- **Toujours utiliser `AppLocalizations`** pour les textes affichés à l'utilisateur (jamais de texte en dur).
+- Les nouvelles chaînes de caractères doivent être ajoutées dans **tous les fichiers `.arb`** (`app_fr.arb`, `app_en.arb`, `app_es.arb`, `app_pt.arb`, `app_zh.arb`).
+- Le français (`app_fr.arb`) sert de template de référence.
+- Après ajout de traductions : exécuter `flutter gen-l10n` pour générer le code.
+- Vérifier que les textes dynamiques utilisent les placeholders : `"welcomeMessage": "Bonjour, {name}"` avec `@welcomeMessage` définissant les paramètres.
 
-### Validation Protocol
-1. **Static Verification**: `flutter analyze` — fix warnings (`prefer_const_constructors`, `use_build_context_synchronously`).
-2. **Architecture Verification**: If model/Provider modified -> `dart run build_runner build --delete-conflicting-outputs`.
-3. **Firebase Control**: Validate the presence of `.limit()` and the existence of fields in `firestore_schema.md`.
-4. **Performance Audit**: No widget > 100 lines (extract sub-widgets if necessary).
+### Qualité & Validation
+- Si `flutter analyze`, un test ou une règle échoue : **STOP**, expliquer le problème, ne pas corriger en boucle.
+- Toute exception doit être **justifiée, validée, explicitement mentionnée**.
+- Répondre en **Français**.
+
+### Revue d'Impact (Obligatoire pour Firestore/Auth/Cloud Functions)
+Préciser pour toute modification :
+- **Impact coût** (requêtes Firestore, lectures/écritures).
+- **Impact sécurité** (règles Firestore, accès données).
+- **Impact UX** (messages d'erreur clairs, génériques, jamais techniques).
+
+### Protocole de Validation
+1. **Vérification Statique** : `flutter analyze` — corriger warnings (`prefer_const_constructors`, `use_build_context_synchronously`).
+2. **Vérification d'Architecture** : Si modèle/Provider modifié → `dart run build_runner build --delete-conflicting-outputs`.
+3. **Contrôle Firebase** : Valider la présence du `.limit()` et l'existence des champs dans `firestore_schema.md`.
+4. **Audit de Performance** : Aucun widget > 100 lignes (extraire sous-widgets si nécessaire).
 
 ---
 
-## 4. USEFUL COMMANDS
+## 4. COMMANDES UTILES
 
 ```bash
-# Build runner for code generation
+# Build runner pour code generation
 flutter pub run build_runner build --delete-conflicting-outputs
 
-# Static analysis
+# Analyse statique
 flutter analyze
 
 # Tests
 flutter test
 
-# Run with device
+# Run avec device
 flutter run
 
 # Clean build

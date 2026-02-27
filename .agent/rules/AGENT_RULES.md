@@ -52,6 +52,23 @@ Tu dois STRICTEMENT respecter le document :
 
 ---
 
+## OPERATIONS GIT
+
+- **Jamais d'initiative git** (add, commit, push, restore, etc.) sans instruction explicite de l'utilisateur
+- L'utilisateur gère lui-même les commits et l'envoi vers le dépôt distant
+
+---
+
+## INTERNATIONALISATION (I18N)
+
+- **Toujours utiliser `AppLocalizations`** pour les textes affichés à l'utilisateur (jamais de texte en dur)
+- Les nouvelles chaînes de caractères doivent être ajoutées dans **tous les fichiers `.arb`** (`app_fr.arb`, `app_en.arb`, `app_es.arb`, `app_pt.arb`, `app_zh.arb`)
+- Le français (`app_fr.arb`) sert de template de référence
+- Après ajout de traductions : exécuter `flutter gen-l10n` pour générer le code
+- Vérifier que les textes dynamiques utilisent les placeholders : `"welcomeMessage": "Bonjour, {name}"` avec `@welcomeMessage` définissant les paramètres
+
+---
+
 ## ARCHITECTURE IMPOSÉE
 
 - Flutter + Firebase uniquement

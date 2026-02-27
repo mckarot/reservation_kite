@@ -123,6 +123,17 @@ lib/
 - **Aucune écriture directe Firestore** pour les données critiques → passer par Cloud Function
 - **Pas de retry automatique** sur les écritures
 
+### Operations Git
+- **Jamais d'initiative git** (add, commit, push, restore, etc.) sans instruction explicite de l'utilisateur
+- L'utilisateur gère lui-même les commits et l'envoi vers le dépôt distant
+
+### Internationalisation (i18n)
+- **Toujours utiliser `AppLocalizations`** pour les textes affichés à l'utilisateur (jamais de texte en dur)
+- Les nouvelles chaînes de caractères doivent être ajoutées dans **tous les fichiers `.arb`** (`app_fr.arb`, `app_en.arb`, `app_es.arb`, `app_pt.arb`, `app_zh.arb`)
+- Le français (`app_fr.arb`) sert de template de référence
+- Après ajout de traductions : exécuter `flutter gen-l10n` pour générer le code
+- Vérifier que les textes dynamiques utilisent les placeholders : `"welcomeMessage": "Bonjour, {name}"` avec `@welcomeMessage` définissant les paramètres
+
 ### Qualité & Validation
 - Si `flutter analyze`, un test ou une règle échoue : **STOP**, expliquer le problème, ne pas corriger en boucle
 - Toute exception doit être **justifiée, validée, explicitement mentionnée**
