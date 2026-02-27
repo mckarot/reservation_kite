@@ -26,27 +26,17 @@ class _LessonValidationScreenState
     extends ConsumerState<LessonValidationScreen> {
   final _noteController = TextEditingController();
   final List<String> _selectedItems = [];
-  String _selectedLevel = 'Niveau 1';
+  String _selectedLevel = UserProgress.ikoSkillsByLevel.keys.first;
 
   @override
   void initState() {
     super.initState();
     _selectedItems.addAll(widget.pupil.progress?.checklist ?? []);
-    _selectedLevel = widget.pupil.progress?.ikoLevel ?? 'Niveau 1';
+    _selectedLevel = widget.pupil.progress?.ikoLevel ?? UserProgress.ikoSkillsByLevel.keys.first;
   }
 
   @override
   Widget build(BuildContext context) {
-    final allItems = [
-      'Préparer son aile',
-      'Systèmes de sécurité',
-      'Pilotage zone neutre',
-      'Décollage / Atterrissage',
-      'Body drag',
-      'Water start',
-      'Remonter au vent',
-    ];
-
     return Scaffold(
       appBar: AppBar(title: Text('Validation : ${widget.pupil.displayName}')),
       body: SingleChildScrollView(
@@ -59,26 +49,47 @@ class _LessonValidationScreenState
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: allItems.map((item) {
-                final isSelected = _selectedItems.contains(item);
-                return FilterChip(
-                  label: Text(item),
-                  selected: isSelected,
-                  onSelected: (val) {
-                    setState(() {
-                      if (val) {
-                        _selectedItems.add(item);
-                      } else {
-                        _selectedItems.remove(item);
-                      }
-                    });
-                  },
-                );
-              }).toList(),
-            ),
+            ...UserProgress.ikoSkillsByLevel.entries.map((entry) {
+              final level = entry.key;
+              final skills = entry.value;
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      level,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue.shade700,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: skills.map((item) {
+                        final isSelected = _selectedItems.contains(item);
+                        return FilterChip(
+                          label: Text(item),
+                          selected: isSelected,
+                          onSelected: (val) {
+                            setState(() {
+                              if (val) {
+                                _selectedItems.add(item);
+                              } else {
+                                _selectedItems.remove(item);
+                              }
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
             const SizedBox(height: 32),
             const Text(
               'Niveau IKO Global',
@@ -87,12 +98,9 @@ class _LessonValidationScreenState
             DropdownButton<String>(
               isExpanded: true,
               value: _selectedLevel,
-              items: [
-                'Niveau 1',
-                'Niveau 2',
-                'Niveau 3',
-                'Niveau 4',
-              ].map((l) => DropdownMenuItem(value: l, child: Text(l))).toList(),
+              items: UserProgress.ikoSkillsByLevel.keys
+                  .map((l) => DropdownMenuItem(value: l, child: Text(l)))
+                  .toList(),
               onChanged: (val) => setState(() => _selectedLevel = val!),
             ),
             const SizedBox(height: 32),

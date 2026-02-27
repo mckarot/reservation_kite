@@ -49,6 +49,11 @@ class UserProgress with _$UserProgress {
       'Navigation de base',
     ],
     'Niveau 3 - Indépendant': ['Remontée au vent', 'Transitions & Sauts'],
+    'Niveau 4 - Perfectionnement': [
+      'Saut de base',
+      'Jibe',
+      'Saut avec grab',
+    ],
   };
 
   static List<String> get allIkoSkills =>

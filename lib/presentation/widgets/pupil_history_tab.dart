@@ -7,6 +7,17 @@ class PupilHistoryTab extends ConsumerWidget {
   final String userId;
   const PupilHistoryTab({super.key, required this.userId});
 
+  String _translateSlot(TimeSlot slot) {
+    switch (slot) {
+      case TimeSlot.morning:
+        return 'Matin';
+      case TimeSlot.afternoon:
+        return 'Après-midi';
+      default:
+        return 'Inconnu';
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bookingsAsync = ref.watch(bookingNotifierProvider);
@@ -44,7 +55,7 @@ class PupilHistoryTab extends ConsumerWidget {
                   'Cours du ${b.date.day}/${b.date.month}/${b.date.year}',
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text('Créneau: ${b.slot.name.toUpperCase()}'),
+                subtitle: Text('Créneau: ${_translateSlot(b.slot)}'),
                 trailing: _StatusBadge(status: b.status, isFuture: isFuture),
               ),
             );
