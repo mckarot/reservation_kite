@@ -1753,6 +1753,126 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Prix (€)'**
   String get priceLabel;
+
+  /// No description provided for @defaultIkoLevel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Niveau 1'**
+  String get defaultIkoLevel;
+
+  /// No description provided for @myAcquisitions.
+  ///
+  /// In fr, this message translates to:
+  /// **'MES ACQUISITIONS'**
+  String get myAcquisitions;
+
+  /// No description provided for @instructorNotes.
+  ///
+  /// In fr, this message translates to:
+  /// **'NOTES DU MONITEUR'**
+  String get instructorNotes;
+
+  /// No description provided for @noNotesYet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune note pour le moment.'**
+  String get noNotesYet;
+
+  /// No description provided for @currentLevel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Niveau Actuel'**
+  String get currentLevel;
+
+  /// No description provided for @byInstructor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par {name}'**
+  String byInstructor(Object name);
+
+  /// No description provided for @unknownInstructor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moniteur Inconnu'**
+  String get unknownInstructor;
+
+  /// No description provided for @instructorLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moniteur: {name}'**
+  String instructorLabel(Object name);
+
+  /// No description provided for @addLessonNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une note de cours'**
+  String get addLessonNote;
+
+  /// No description provided for @sessionFeedback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Feedback de session'**
+  String get sessionFeedback;
+
+  /// No description provided for @instructor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moniteur'**
+  String get instructor;
+
+  /// No description provided for @observations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Observations'**
+  String get observations;
+
+  /// No description provided for @observationsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'ex: Bonne progression waterstart...'**
+  String get observationsHint;
+
+  /// No description provided for @currentIkoLevel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Niveau IKO actuel : {level}'**
+  String currentIkoLevel(Object level);
+
+  /// No description provided for @notDefined.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non défini'**
+  String get notDefined;
+
+  /// No description provided for @progressChecklist.
+  ///
+  /// In fr, this message translates to:
+  /// **'Checklist de progression'**
+  String get progressChecklist;
+
+  /// No description provided for @lessonPlanning.
+  ///
+  /// In fr, this message translates to:
+  /// **'PLANNING DES COURS'**
+  String get lessonPlanning;
+
+  /// No description provided for @unknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inconnu'**
+  String get unknown;
+
+  /// No description provided for @packDetails.
+  ///
+  /// In fr, this message translates to:
+  /// **'{credits} séances • {price}€'**
+  String packDetails(int credits, double price);
+
+  /// No description provided for @notAvailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'N/A'**
+  String get notAvailable;
 }
 
 class _AppLocalizationsDelegate

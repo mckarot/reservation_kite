@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/user.dart';
 import '../providers/staff_notifier.dart';
+import '../../l10n/app_localizations.dart';
 
 class PupilProgressTab extends ConsumerWidget {
   final User user;
@@ -9,6 +10,7 @@ class PupilProgressTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final progress = user.progress ?? const UserProgress();
     final staffAsync = ref.watch(staffNotifierProvider);
     final staffList = staffAsync.value ?? [];
@@ -19,29 +21,35 @@ class PupilProgressTab extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _LevelCard(
-            ikoLevel: progress.ikoLevel ?? 'Niveau 1',
+            ikoLevel: progress.ikoLevel ?? l10n.defaultIkoLevel,
             checkedItemsCount: progress.checklist.length,
           ),
           const SizedBox(height: 24),
-          const Text(
-            'MES ACQUISITIONS',
-            style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2),
+          Text(
+            l10n.myAcquisitions,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
+            ),
           ),
           const SizedBox(height: 12),
           _ChecklistSection(checkedItems: progress.checklist),
           const SizedBox(height: 32),
-          const Text(
-            'NOTES DU MONITEUR',
-            style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2),
+          Text(
+            l10n.instructorNotes,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
+            ),
           ),
           const SizedBox(height: 12),
           if (progress.notes.isEmpty)
-            const Center(
+            Center(
               child: Padding(
-                padding: EdgeInsets.all(32.0),
+                padding: const EdgeInsets.all(32.0),
                 child: Text(
-                  'Aucune note pour le moment.',
-                  style: TextStyle(color: Colors.grey),
+                  l10n.noNotesYet,
+                  style: const TextStyle(color: Colors.grey),
                 ),
               ),
             )
@@ -68,6 +76,7 @@ class _LevelCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -88,9 +97,9 @@ class _LevelCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Niveau Actuel',
-            style: TextStyle(color: Colors.white70, fontSize: 14),
+          Text(
+            l10n.currentLevel,
+            style: const TextStyle(color: Colors.white70, fontSize: 14),
           ),
           const SizedBox(height: 4),
           Text(
@@ -203,6 +212,7 @@ class _NoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -222,7 +232,7 @@ class _NoteCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Par $instructorName',
+                  l10n.byInstructor(instructorName),
                   style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ],

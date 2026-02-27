@@ -345,5 +345,32 @@
   "cancelButton": "取消",
   "createButton": "创建",
   "staffTab": "员工",
-  "absencesTab": "缺席"
+  "absencesTab": "缺席",
+  "defaultIkoLevel": "1 级",
+  "myAcquisitions": "我的收获",
+  "instructorNotes": "教练笔记",
+  "noNotesYet": "暂无笔记。",
+  "currentLevel": "当前级别",
+  "byInstructor": "由 {name}",
+  "unknownInstructor": "未知教练",
+  "instructorLabel": "教练：{name}",
+  "addLessonNote": "添加课程笔记",
+  "sessionFeedback": "课程反馈",
+  "instructor": "教练",
+  "observations": "观察",
+  "observationsHint": "例如：水上起步进展良好...",
+  "saveButton": "保存",
+  "currentIkoLevel": "当前 IKO 级别：{level}",
+  "notDefined": "未定义",
+  "progressChecklist": "进度清单",
+  "lessonPlanning": "课程计划",
+  "unknown": "未知",
+  "packDetails": "{credits} 节课 • {price}€",
+  "@packDetails": {
+    "placeholders": {
+      "credits": {"type": "int"},
+      "price": {"type": "double"}
+    }
+  },
+  "notAvailable": "N/A"
 }

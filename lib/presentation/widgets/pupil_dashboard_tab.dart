@@ -93,7 +93,7 @@ class PupilDashboardTab extends ConsumerWidget {
             children: [
               _StatItem(
                 label: l10n.ikoLevel,
-                value: user.progress?.ikoLevel ?? 'N/A',
+                value: user.progress?.ikoLevel ?? l10n.notAvailable,
                 icon: Icons.star,
                 color: Colors.amber,
               ),

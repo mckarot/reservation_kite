@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import '../providers/staff_notifier.dart';
 import '../providers/booking_notifier.dart';
 import '../providers/user_notifier.dart';
@@ -109,11 +110,11 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
                 selectedDate: _selectedDate,
                 onDateSelected: (date) => setState(() => _selectedDate = date),
               ),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                 child: Text(
-                  'PLANNING DES COURS',
-                  style: TextStyle(
+                  l10n.lessonPlanning,
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.1,
                     color: Colors.grey,
@@ -438,24 +439,10 @@ class _DateSelector extends StatelessWidget {
   }
 
   String _getWeekdayShort(int day) {
-    switch (day) {
-      case 1:
-        return 'lun';
-      case 2:
-        return 'mar';
-      case 3:
-        return 'mer';
-      case 4:
-        return 'jeu';
-      case 5:
-        return 'ven';
-      case 6:
-        return 'sam';
-      case 7:
-        return 'dim';
-      default:
-        return '';
-    }
+    // Utiliser DateFormat pour une localisation automatique
+    final now = DateTime.now();
+    final date = DateTime(now.year, now.month, now.day).add(Duration(days: day - 1));
+    return DateFormat('EEE').format(date);
   }
 }
 

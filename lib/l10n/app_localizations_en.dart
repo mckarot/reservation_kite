@@ -853,4 +853,72 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get priceLabel => 'Price (€)';
+
+  @override
+  String get defaultIkoLevel => 'Level 1';
+
+  @override
+  String get myAcquisitions => 'MY ACQUISITIONS';
+
+  @override
+  String get instructorNotes => 'INSTRUCTOR NOTES';
+
+  @override
+  String get noNotesYet => 'No notes yet.';
+
+  @override
+  String get currentLevel => 'Current Level';
+
+  @override
+  String byInstructor(Object name) {
+    return 'By $name';
+  }
+
+  @override
+  String get unknownInstructor => 'Unknown Instructor';
+
+  @override
+  String instructorLabel(Object name) {
+    return 'Instructor: $name';
+  }
+
+  @override
+  String get addLessonNote => 'Add lesson note';
+
+  @override
+  String get sessionFeedback => 'Session feedback';
+
+  @override
+  String get instructor => 'Instructor';
+
+  @override
+  String get observations => 'Observations';
+
+  @override
+  String get observationsHint => 'e.g., Good progress on waterstart...';
+
+  @override
+  String currentIkoLevel(Object level) {
+    return 'Current IKO Level: $level';
+  }
+
+  @override
+  String get notDefined => 'Not defined';
+
+  @override
+  String get progressChecklist => 'Progress checklist';
+
+  @override
+  String get lessonPlanning => 'LESSON PLANNING';
+
+  @override
+  String get unknown => 'Unknown';
+
+  @override
+  String packDetails(int credits, double price) {
+    return '$credits sessions • €$price';
+  }
+
+  @override
+  String get notAvailable => 'N/A';
 }

@@ -4,6 +4,7 @@ import '../providers/user_notifier.dart';
 import '../../domain/models/user.dart';
 import '../../domain/models/staff.dart';
 import '../providers/staff_notifier.dart';
+import '../../l10n/app_localizations.dart';
 
 class UserNotesTab extends ConsumerWidget {
   final User user;
@@ -11,13 +12,14 @@ class UserNotesTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final notes = user.progress?.notes ?? [];
 
     return Column(
       children: [
         Expanded(
           child: notes.isEmpty
-              ? const Center(child: Text('Aucune note pour le moment'))
+              ? Center(child: Text(l10n.noNotesYet))
               : ListView.builder(
                   padding: const EdgeInsets.all(16),
                   itemCount: notes.length,
@@ -33,7 +35,7 @@ class UserNotesTab extends ConsumerWidget {
                           (s) => s.id == note.instructorId,
                           orElse: () => Staff(
                             id: note.instructorId,
-                            name: 'Moniteur Inconnu',
+                            name: l10n.unknownInstructor,
                             bio: '',
                             photoUrl: '',
                             updatedAt: DateTime.now(),
@@ -50,7 +52,7 @@ class UserNotesTab extends ConsumerWidget {
                         ),
                         subtitle: Text(note.content),
                         trailing: Text(
-                          'Moniteur: $instructorName',
+                          l10n.instructorLabel(instructorName),
                           style: const TextStyle(
                             fontSize: 10,
                             color: Colors.grey,
@@ -66,7 +68,7 @@ class UserNotesTab extends ConsumerWidget {
           child: ElevatedButton.icon(
             onPressed: () => _showAddNoteDialog(context, ref),
             icon: const Icon(Icons.add_comment),
-            label: const Text('Ajouter une note de cours'),
+            label: Text(l10n.addLessonNote),
           ),
         ),
       ],
@@ -74,6 +76,7 @@ class UserNotesTab extends ConsumerWidget {
   }
 
   void _showAddNoteDialog(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final contentController = TextEditingController();
     String? selectedStaffId;
 
@@ -83,12 +86,12 @@ class UserNotesTab extends ConsumerWidget {
         builder: (context, ref, _) {
           final staff = ref.watch(staffNotifierProvider).value ?? [];
           return AlertDialog(
-            title: const Text('Feedback de session'),
+            title: Text(l10n.sessionFeedback),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(labelText: 'Moniteur'),
+                  decoration: InputDecoration(labelText: l10n.instructor),
                   items: staff
                       .map(
                         (s) =>
@@ -100,9 +103,9 @@ class UserNotesTab extends ConsumerWidget {
                 const SizedBox(height: 16),
                 TextField(
                   controller: contentController,
-                  decoration: const InputDecoration(
-                    labelText: 'Observations',
-                    hintText: 'ex: Bonne progression waterstart...',
+                  decoration: InputDecoration(
+                    labelText: l10n.observations,
+                    hintText: l10n.observationsHint,
                   ),
                   maxLines: 3,
                 ),
@@ -111,7 +114,7 @@ class UserNotesTab extends ConsumerWidget {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Annuler'),
+                child: Text(l10n.cancelButton),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -128,7 +131,7 @@ class UserNotesTab extends ConsumerWidget {
                     Navigator.pop(context);
                   }
                 },
-                child: const Text('Enregistrer'),
+                child: Text(l10n.saveButton),
               ),
             ],
           );

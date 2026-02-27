@@ -159,7 +159,7 @@ class _ProfileTab extends ConsumerWidget {
                                 ),
                               ),
                               subtitle: Text(
-                                '${pack.credits} séances • ${pack.price}€',
+                                l10n.packDetails(pack.credits, pack.price),
                               ),
                               onTap: () {
                                 ref

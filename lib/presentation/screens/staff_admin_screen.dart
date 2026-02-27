@@ -106,7 +106,7 @@ class StaffAdminScreen extends ConsumerWidget {
                           (s) => s.id == u.staffId,
                           orElse: () => Staff(
                             id: '',
-                            name: 'Inconnu',
+                            name: l10n.unknown,
                             bio: '',
                             photoUrl: '',
                             specialties: [],
@@ -170,7 +170,7 @@ class StaffAdminScreen extends ConsumerWidget {
                           (s) => s.id == u.staffId,
                           orElse: () => Staff(
                             id: '',
-                            name: 'Inconnu',
+                            name: l10n.unknown,
                             bio: '',
                             photoUrl: '',
                             specialties: [],

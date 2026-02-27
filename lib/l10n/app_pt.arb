@@ -345,5 +345,32 @@
   "cancelButton": "Cancelar",
   "createButton": "Criar",
   "staffTab": "Equipa",
-  "absencesTab": "Ausências"
+  "absencesTab": "Ausências",
+  "defaultIkoLevel": "Nível 1",
+  "myAcquisitions": "MINHAS AQUISIÇÕES",
+  "instructorNotes": "NOTAS DO INSTRUTOR",
+  "noNotesYet": "Nenhuma nota por enquanto.",
+  "currentLevel": "Nível Atual",
+  "byInstructor": "Por {name}",
+  "unknownInstructor": "Instrutor Desconhecido",
+  "instructorLabel": "Instrutor: {name}",
+  "addLessonNote": "Adicionar nota de aula",
+  "sessionFeedback": "Feedback da sessão",
+  "instructor": "Instrutor",
+  "observations": "Observações",
+  "observationsHint": "ex: Boa progressão no waterstart...",
+  "saveButton": "Guardar",
+  "currentIkoLevel": "Nível IKO atual: {level}",
+  "notDefined": "Não definido",
+  "progressChecklist": "Lista de progresso",
+  "lessonPlanning": "PLANEJAMENTO DE AULAS",
+  "unknown": "Desconhecido",
+  "packDetails": "{credits} sessões • {price}€",
+  "@packDetails": {
+    "placeholders": {
+      "credits": {"type": "int"},
+      "price": {"type": "double"}
+    }
+  },
+  "notAvailable": "N/D"
 }

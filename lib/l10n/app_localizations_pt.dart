@@ -855,4 +855,72 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get priceLabel => 'Preço (€)';
+
+  @override
+  String get defaultIkoLevel => 'Nível 1';
+
+  @override
+  String get myAcquisitions => 'MINHAS AQUISIÇÕES';
+
+  @override
+  String get instructorNotes => 'NOTAS DO INSTRUTOR';
+
+  @override
+  String get noNotesYet => 'Nenhuma nota por enquanto.';
+
+  @override
+  String get currentLevel => 'Nível Atual';
+
+  @override
+  String byInstructor(Object name) {
+    return 'Por $name';
+  }
+
+  @override
+  String get unknownInstructor => 'Instrutor Desconhecido';
+
+  @override
+  String instructorLabel(Object name) {
+    return 'Instrutor: $name';
+  }
+
+  @override
+  String get addLessonNote => 'Adicionar nota de aula';
+
+  @override
+  String get sessionFeedback => 'Feedback da sessão';
+
+  @override
+  String get instructor => 'Instrutor';
+
+  @override
+  String get observations => 'Observações';
+
+  @override
+  String get observationsHint => 'ex: Boa progressão no waterstart...';
+
+  @override
+  String currentIkoLevel(Object level) {
+    return 'Nível IKO atual: $level';
+  }
+
+  @override
+  String get notDefined => 'Não definido';
+
+  @override
+  String get progressChecklist => 'Lista de progresso';
+
+  @override
+  String get lessonPlanning => 'PLANEJAMENTO DE AULAS';
+
+  @override
+  String get unknown => 'Desconhecido';
+
+  @override
+  String packDetails(int credits, double price) {
+    return '$credits sessões • $price€';
+  }
+
+  @override
+  String get notAvailable => 'N/D';
 }

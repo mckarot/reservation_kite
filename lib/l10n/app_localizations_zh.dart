@@ -846,4 +846,72 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get priceLabel => '价格 (€)';
+
+  @override
+  String get defaultIkoLevel => '1 级';
+
+  @override
+  String get myAcquisitions => '我的收获';
+
+  @override
+  String get instructorNotes => '教练笔记';
+
+  @override
+  String get noNotesYet => '暂无笔记。';
+
+  @override
+  String get currentLevel => '当前级别';
+
+  @override
+  String byInstructor(Object name) {
+    return '由 $name';
+  }
+
+  @override
+  String get unknownInstructor => '未知教练';
+
+  @override
+  String instructorLabel(Object name) {
+    return '教练：$name';
+  }
+
+  @override
+  String get addLessonNote => '添加课程笔记';
+
+  @override
+  String get sessionFeedback => '课程反馈';
+
+  @override
+  String get instructor => '教练';
+
+  @override
+  String get observations => '观察';
+
+  @override
+  String get observationsHint => '例如：水上起步进展良好...';
+
+  @override
+  String currentIkoLevel(Object level) {
+    return '当前 IKO 级别：$level';
+  }
+
+  @override
+  String get notDefined => '未定义';
+
+  @override
+  String get progressChecklist => '进度清单';
+
+  @override
+  String get lessonPlanning => '课程计划';
+
+  @override
+  String get unknown => '未知';
+
+  @override
+  String packDetails(int credits, double price) {
+    return '$credits 节课 • $price€';
+  }
+
+  @override
+  String get notAvailable => 'N/A';
 }

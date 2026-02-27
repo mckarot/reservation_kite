@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/user_notifier.dart';
 import '../../domain/models/user.dart';
+import '../../l10n/app_localizations.dart';
 
 class UserProgressTab extends ConsumerWidget {
   final User user;
@@ -9,6 +10,7 @@ class UserProgressTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final progress = user.progress ?? const UserProgress();
 
     return SingleChildScrollView(
@@ -17,13 +19,13 @@ class UserProgressTab extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Niveau IKO actuel : ${progress.ikoLevel ?? "Non défini"}',
+            l10n.currentIkoLevel(progress.ikoLevel ?? l10n.notDefined),
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
           const SizedBox(height: 16),
-          const Text(
-            'Checklist de progression',
-            style: TextStyle(color: Colors.grey),
+          Text(
+            l10n.progressChecklist,
+            style: const TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 8),
           ...UserProgress.ikoSkillsByLevel.entries.map((entry) {

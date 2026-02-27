@@ -348,5 +348,32 @@
   "cancelButton": "Annuler",
   "createButton": "Créer",
   "staffTab": "Staff",
-  "absencesTab": "Absences"
+  "absencesTab": "Absences",
+  "defaultIkoLevel": "Niveau 1",
+  "myAcquisitions": "MES ACQUISITIONS",
+  "instructorNotes": "NOTES DU MONITEUR",
+  "noNotesYet": "Aucune note pour le moment.",
+  "currentLevel": "Niveau Actuel",
+  "byInstructor": "Par {name}",
+  "unknownInstructor": "Moniteur Inconnu",
+  "instructorLabel": "Moniteur: {name}",
+  "addLessonNote": "Ajouter une note de cours",
+  "sessionFeedback": "Feedback de session",
+  "instructor": "Moniteur",
+  "observations": "Observations",
+  "observationsHint": "ex: Bonne progression waterstart...",
+  "saveButton": "Enregistrer",
+  "currentIkoLevel": "Niveau IKO actuel : {level}",
+  "notDefined": "Non défini",
+  "progressChecklist": "Checklist de progression",
+  "lessonPlanning": "PLANNING DES COURS",
+  "unknown": "Inconnu",
+  "packDetails": "{credits} séances • {price}€",
+  "@packDetails": {
+    "placeholders": {
+      "credits": {"type": "int"},
+      "price": {"type": "double"}
+    }
+  },
+  "notAvailable": "N/A"
 }
