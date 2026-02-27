@@ -28,6 +28,30 @@ class Weather {
   }
 }
 
+class CurrentWeather {
+  final double temperature;
+  final double windSpeed;
+  final double windDirection;
+  final int weatherCode;
+
+  CurrentWeather({
+    required this.temperature,
+    required this.windSpeed,
+    required this.windDirection,
+    required this.weatherCode,
+  });
+
+  factory CurrentWeather.fromJson(Map<String, dynamic> json) {
+    final currentWeather = json['current_weather'];
+    return CurrentWeather(
+      temperature: (currentWeather['temperature'] as num).toDouble(),
+      windSpeed: (currentWeather['windspeed'] as num).toDouble(),
+      windDirection: (currentWeather['winddirection'] as num).toDouble(),
+      weatherCode: (currentWeather['weathercode'] as num).toInt(),
+    );
+  }
+}
+
 class WeatherService {
   static const String _baseUrl = 'https://api.open-meteo.com/v1/forecast';
   static const double _latitude = 14.54;
@@ -45,6 +69,20 @@ class WeatherService {
       return Weather.fromJson(data, 0);
     } else {
       throw Exception('Failed to load weather data');
+    }
+  }
+
+  Future<CurrentWeather> getCurrentWeather() async {
+    final url = Uri.parse(
+        '$_baseUrl?latitude=$_latitude&longitude=$_longitude&current_weather=true&timezone=auto');
+
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return CurrentWeather.fromJson(data);
+    } else {
+      throw Exception('Failed to load current weather data');
     }
   }
 }

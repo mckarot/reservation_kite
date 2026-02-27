@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../data/providers/service_providers.dart';
 import '../../domain/models/user.dart';
+import '../../services/weather_service.dart';
 
 class PupilDashboardTab extends StatelessWidget {
   final User user;
@@ -21,6 +24,8 @@ class PupilDashboardTab extends StatelessWidget {
             'Prêt pour une session ?',
             style: TextStyle(color: Colors.grey, fontSize: 16),
           ),
+          const SizedBox(height: 24),
+          const _CurrentWeatherCard(),
           const SizedBox(height: 32),
 
           // Card Solde Premium
@@ -35,7 +40,7 @@ class PupilDashboardTab extends StatelessWidget {
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.blue.withValues(alpha: 0.3),
+                  color: Colors.blue.withOpacity(0.3),
                   blurRadius: 15,
                   offset: const Offset(0, 8),
                 ),
@@ -125,6 +130,122 @@ class PupilDashboardTab extends StatelessWidget {
     );
   }
 }
+
+class _CurrentWeatherCard extends ConsumerWidget {
+  const _CurrentWeatherCard();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final weatherAsync = ref.watch(currentWeatherProvider);
+    return weatherAsync.when(
+      data: (weather) => Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: Colors.grey.shade200),
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Météo Actuelle',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                Icon(_getWeatherIcon(weather.weatherCode), color: Colors.blue.shade700, size: 24),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _WeatherInfoItem(
+                  icon: Icons.thermostat,
+                  label: '${weather.temperature.round()}°C',
+                ),
+                _WeatherInfoItem(
+                  icon: Icons.air,
+                  label: '${weather.windSpeed.round()} km/h',
+                ),
+                _WeatherInfoItem(
+                  icon: Icons.explore,
+                  label: _getWindDirection(weather.windDirection),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, _) => const SizedBox.shrink(), // Ne rien afficher en cas d'erreur
+    );
+  }
+
+  String _getWindDirection(double degrees) {
+    if (degrees > 337.5 || degrees <= 22.5) return 'N';
+    if (degrees > 22.5 && degrees <= 67.5) return 'NE';
+    if (degrees > 67.5 && degrees <= 112.5) return 'E';
+    if (degrees > 112.5 && degrees <= 157.5) return 'SE';
+    if (degrees > 157.5 && degrees <= 202.5) return 'S';
+    if (degrees > 202.5 && degrees <= 247.5) return 'SW';
+    if (degrees > 247.5 && degrees <= 292.5) return 'W';
+    if (degrees > 292.5 && degrees <= 337.5) return 'NW';
+    return '';
+  }
+
+  IconData _getWeatherIcon(int weatherCode) {
+    switch (weatherCode) {
+      case 0:
+        return Icons.wb_sunny;
+      case 1:
+      case 2:
+      case 3:
+        return Icons.cloud;
+      case 45:
+      case 48:
+        return Icons.foggy;
+      case 51:
+      case 53:
+      case 55:
+        return Icons.grain;
+      case 61:
+      case 63:
+      case 65:
+        return Icons.water_drop;
+      case 80:
+      case 81:
+      case 82:
+        return Icons.shower;
+      case 95:
+      case 96:
+      case 99:
+        return Icons.thunderstorm;
+      default:
+        return Icons.cloud;
+    }
+  }
+}
+
+class _WeatherInfoItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+
+  const _WeatherInfoItem({required this.icon, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Icon(icon, color: Colors.blue.shade700, size: 28),
+        const SizedBox(height: 8),
+        Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+      ],
+    );
+  }
+}
+
 
 class _StatItem extends StatelessWidget {
   final String label;
