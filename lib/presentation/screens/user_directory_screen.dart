@@ -4,17 +4,19 @@ import 'package:uuid/uuid.dart';
 import '../../domain/models/user.dart';
 import '../providers/user_notifier.dart';
 import 'user_detail_screen.dart';
+import '../../l10n/app_localizations.dart';
 
 class UserDirectoryScreen extends ConsumerWidget {
   const UserDirectoryScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final usersAsync = ref.watch(userNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Répertoire Élèves'),
+        title: Text(l10n.studentDirectory),
         actions: [
           IconButton(
             icon: const Icon(Icons.person_add),
@@ -27,7 +29,7 @@ class UserDirectoryScreen extends ConsumerWidget {
           final users = allUsers.where((u) => u.role == 'student').toList();
 
           if (users.isEmpty) {
-            return const Center(child: Text('Aucun élève enregistré'));
+            return Center(child: Text(l10n.noStudentsRegistered));
           }
           return ListView.builder(
             itemCount: users.length,
@@ -38,7 +40,7 @@ class UserDirectoryScreen extends ConsumerWidget {
                   child: Text(user.displayName.substring(0, 1).toUpperCase()),
                 ),
                 title: Text(user.displayName),
-                subtitle: Text('Solde: ${user.walletBalance} crédits'),
+                subtitle: Text('${l10n.balanceLabel}: ${user.walletBalance} ${l10n.credits}'),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => Navigator.push(
                   context,
@@ -51,29 +53,30 @@ class UserDirectoryScreen extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, _) => Center(child: Text('Erreur: $err')),
+        error: (err, _) => Center(child: Text('${l10n.errorLabel}: $err')),
       ),
     );
   }
 
   void _showAddUserDialog(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final nameController = TextEditingController();
     final emailController = TextEditingController();
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Nouvel Élève'),
+        title: Text(l10n.newStudent),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(labelText: 'Nom Complet'),
+              decoration: InputDecoration(labelText: l10n.fullNameLabel),
             ),
             TextField(
               controller: emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
+              decoration: InputDecoration(labelText: l10n.emailLabel),
               keyboardType: TextInputType.emailAddress,
             ),
           ],
@@ -81,7 +84,7 @@ class UserDirectoryScreen extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Annuler'),
+            child: Text(l10n.cancelButton),
           ),
           ElevatedButton(
             onPressed: () {
@@ -96,7 +99,7 @@ class UserDirectoryScreen extends ConsumerWidget {
               ref.read(userNotifierProvider.notifier).addUser(newUser);
               Navigator.pop(context);
             },
-            child: const Text('Créer'),
+            child: Text(l10n.createButton),
           ),
         ],
       ),

@@ -368,7 +368,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get registrationTitle => 'Créer un compte';
 
   @override
-  String get fullNameLabel => 'Nom complet';
+  String get fullNameLabel => 'Nom Complet';
 
   @override
   String get fullNameHint => 'Votre nom complet';
@@ -399,7 +399,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get uploadPhoto => 'Ajouter une photo';
 
   @override
-  String get staffManagement => 'Gestion du Staff / RH';
+  String get staffManagement => 'Gestion du Staff';
 
   @override
   String get staffTab => 'Effectif';
@@ -704,4 +704,155 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get notesHint => 'Ex: Préférence moniteur...';
+
+  @override
+  String get schoolSettings => 'Réglages École';
+
+  @override
+  String get settingsNotFound => 'Erreur : Paramètres non trouvés';
+
+  @override
+  String get morningHours => 'Horaires Matin';
+
+  @override
+  String get afternoonHours => 'Horaires Après-midi';
+
+  @override
+  String get startLabel => 'Début';
+
+  @override
+  String get endLabel => 'Fin';
+
+  @override
+  String get maxStudentsPerInstructor => 'Max élèves par moniteur';
+
+  @override
+  String get settingsSaved => 'Réglages enregistrés !';
+
+  @override
+  String get packCatalog => 'Catalogue des Forfaits';
+
+  @override
+  String get packCatalogSubtitle => 'Définir les prix et sessions par pack';
+
+  @override
+  String get staffManagementSubtitle => 'Ajouter ou modifier des moniteurs';
+
+  @override
+  String get equipmentManagementSubtitle =>
+      'Inventaire des ailes, boards et harnais';
+
+  @override
+  String get schoolDashboard => 'Pilotage École';
+
+  @override
+  String get keyMetrics => 'CHIFFRES CLÉS';
+
+  @override
+  String get totalSales => 'Ventes Totales';
+
+  @override
+  String get totalEngagement => 'En engagement';
+
+  @override
+  String get pendingAbsences => 'ABSENCES À VALIDER';
+
+  @override
+  String get pendingRequests => 'DEMANDES EN ATTENTE';
+
+  @override
+  String get upcomingPlanning => 'PLANNING À VENIR';
+
+  @override
+  String get topClientsVolume => 'TOP CLIENTS (VOLUME)';
+
+  @override
+  String get noSessionsPlanned => 'Aucune session prévue';
+
+  @override
+  String get chooseInstructor => 'Choisir un moniteur :';
+
+  @override
+  String get confirmAndAssign => 'Confirmer & Assigner';
+
+  @override
+  String get noStudentsRegistered => 'Aucun élève enregistré';
+
+  @override
+  String get balanceLabel => 'Solde';
+
+  @override
+  String get newStudent => 'Nouvel Élève';
+
+  @override
+  String get createButton => 'Créer';
+
+  @override
+  String get noEquipmentInCategory => 'Aucun équipement dans cette catégorie.';
+
+  @override
+  String get addEquipment => 'Ajouter du matériel';
+
+  @override
+  String get typeLabel => 'Type';
+
+  @override
+  String get brandLabel => 'Marque (ex: F-One, North)';
+
+  @override
+  String get modelLabel => 'Modèle (ex: Bandit, Rebel)';
+
+  @override
+  String get sizeLabel => 'Taille (ex: 9m, 138cm)';
+
+  @override
+  String get statusAvailable => 'DISPO';
+
+  @override
+  String get statusMaintenance => 'MAINTENANCE';
+
+  @override
+  String get statusDamaged => 'HORS SERVICE';
+
+  @override
+  String get makeAvailable => 'Rendre Disponible';
+
+  @override
+  String get setMaintenance => 'Mettre en Maintenance';
+
+  @override
+  String get setDamaged => 'Déclarer Hors Service';
+
+  @override
+  String get deleteButton => 'Supprimer';
+
+  @override
+  String get myNotifications => 'Mes Notifications';
+
+  @override
+  String get noNotificationsYet => 'Aucune notification pour le moment.';
+
+  @override
+  String get deleteAll => 'Tout supprimer';
+
+  @override
+  String get packCatalogTitle => 'Catalogue Forfaits';
+
+  @override
+  String get sessions => 'séances';
+
+  @override
+  String get newPack => 'Nouveau Forfait';
+
+  @override
+  String get createPackTitle => 'Créer un forfait';
+
+  @override
+  String get packNameLabel => 'Nom (ex: Pack 10h)';
+
+  @override
+  String get numberOfCredits => 'Nombre de crédits';
+
+  @override
+  String get priceLabel => 'Prix (€)';
 }

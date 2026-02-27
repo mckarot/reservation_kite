@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import '../../domain/models/equipment.dart';
 import '../providers/equipment_notifier.dart';
+import '../../l10n/app_localizations.dart';
 
 class EquipmentAdminScreen extends ConsumerStatefulWidget {
   const EquipmentAdminScreen({super.key});
@@ -17,11 +18,12 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final equipmentAsync = ref.watch(equipmentNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gestion du Matériel'),
+        title: Text(l10n.equipmentManagement),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -39,8 +41,8 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
                     .where((e) => e.type == _selectedType)
                     .toList();
                 if (filtered.isEmpty) {
-                  return const Center(
-                    child: Text('Aucun équipement dans cette catégorie.'),
+                  return Center(
+                    child: Text(l10n.noEquipmentInCategory),
                   );
                 }
                 return ListView.builder(
@@ -53,7 +55,7 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, _) => Center(child: Text('Erreur: $e')),
+              error: (e, _) => Center(child: Text('${l10n.errorLabel}: $e')),
             ),
           ),
         ],
@@ -86,6 +88,7 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
   }
 
   void _showAddEquipmentDialog(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final brandController = TextEditingController();
     final modelController = TextEditingController();
     final sizeController = TextEditingController();
@@ -95,14 +98,14 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          title: const Text('Ajouter du matériel'),
+          title: Text(l10n.addEquipment),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 DropdownButtonFormField<EquipmentType>(
                   initialValue: dialogType,
-                  decoration: const InputDecoration(labelText: 'Type'),
+                  decoration: InputDecoration(labelText: l10n.typeLabel),
                   items: EquipmentType.values
                       .map(
                         (t) => DropdownMenuItem(
@@ -115,20 +118,20 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
                 ),
                 TextField(
                   controller: brandController,
-                  decoration: const InputDecoration(
-                    labelText: 'Marque (ex: F-One, North)',
+                  decoration: InputDecoration(
+                    labelText: l10n.brandLabel,
                   ),
                 ),
                 TextField(
                   controller: modelController,
-                  decoration: const InputDecoration(
-                    labelText: 'Modèle (ex: Bandit, Rebel)',
+                  decoration: InputDecoration(
+                    labelText: l10n.modelLabel,
                   ),
                 ),
                 TextField(
                   controller: sizeController,
-                  decoration: const InputDecoration(
-                    labelText: 'Taille (ex: 9m, 138cm)',
+                  decoration: InputDecoration(
+                    labelText: l10n.sizeLabel,
                   ),
                 ),
               ],
@@ -137,7 +140,7 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Annuler'),
+              child: Text(l10n.cancelButton),
             ),
             ElevatedButton(
               onPressed: () {
@@ -157,7 +160,7 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
                   Navigator.pop(context);
                 }
               },
-              child: const Text('Ajouter'),
+              child: Text(l10n.addButton),
             ),
           ],
         ),
@@ -172,21 +175,22 @@ class _EquipmentTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     Color statusColor;
     String statusLabel;
 
     switch (equipment.status) {
       case EquipmentStatus.available:
         statusColor = Colors.green;
-        statusLabel = 'DISPO';
+        statusLabel = l10n.statusAvailable;
         break;
       case EquipmentStatus.maintenance:
         statusColor = Colors.orange;
-        statusLabel = 'MAINTENANCE';
+        statusLabel = l10n.statusMaintenance;
         break;
       case EquipmentStatus.damaged:
         statusColor = Colors.red;
-        statusLabel = 'HORS SERVICE';
+        statusLabel = l10n.statusDamaged;
         break;
     }
 
@@ -226,26 +230,26 @@ class _EquipmentTile extends ConsumerWidget {
                 .updateStatus(equipment.id, status);
           },
           itemBuilder: (context) => [
-            const PopupMenuItem(
+            PopupMenuItem(
               value: EquipmentStatus.available,
-              child: Text('Rendre Disponible'),
+              child: Text(l10n.makeAvailable),
             ),
-            const PopupMenuItem(
+            PopupMenuItem(
               value: EquipmentStatus.maintenance,
-              child: Text('Mettre en Maintenance'),
+              child: Text(l10n.setMaintenance),
             ),
-            const PopupMenuItem(
+            PopupMenuItem(
               value: EquipmentStatus.damaged,
-              child: Text('Déclarer Hors Service'),
+              child: Text(l10n.setDamaged),
             ),
             const PopupMenuDivider(),
             PopupMenuItem(
               onTap: () => ref
                   .read(equipmentNotifierProvider.notifier)
                   .deleteEquipment(equipment.id),
-              child: const Text(
-                'Supprimer',
-                style: TextStyle(color: Colors.red),
+              child: Text(
+                l10n.deleteButton,
+                style: const TextStyle(color: Colors.red),
               ),
             ),
           ],

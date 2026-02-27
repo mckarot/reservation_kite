@@ -9,27 +9,29 @@ import '../providers/staff_notifier.dart';
 import '../providers/unavailability_notifier.dart';
 import '../../domain/models/staff_unavailability.dart';
 import '../../domain/models/staff.dart';
-import '../providers/user_notifier.dart'; // Added for user data
+import '../providers/user_notifier.dart';
 import 'staff_admin_screen.dart';
 import 'package:intl/intl.dart';
+import '../../l10n/app_localizations.dart';
 
 class AdminDashboardScreen extends ConsumerWidget {
   const AdminDashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final stats = ref.watch(financialStatsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Pilotage École')),
+      appBar: AppBar(title: Text(l10n.schoolDashboard)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'CHIFFRES CLÉS',
-              style: TextStyle(
+            Text(
+              l10n.keyMetrics,
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.1,
                 color: Colors.grey,
@@ -39,14 +41,14 @@ class AdminDashboardScreen extends ConsumerWidget {
             Row(
               children: [
                 _KpiCard(
-                  label: 'Ventes Totales',
+                  label: l10n.totalSales,
                   value: '${stats['totalSales']} crédits',
                   icon: Icons.monetization_on,
                   color: Colors.green,
                 ),
                 const SizedBox(width: 16),
                 _KpiCard(
-                  label: 'En engagement',
+                  label: l10n.totalEngagement,
                   value: '${stats['totalEngagement']} crédits',
                   icon: Icons.account_balance_wallet,
                   color: Colors.blue,
@@ -56,9 +58,9 @@ class AdminDashboardScreen extends ConsumerWidget {
             const _PendingAbstancesSection(),
             const _PendingRequestsSection(),
             const SizedBox(height: 32),
-            const Text(
-              'PLANNING À VENIR',
-              style: TextStyle(
+            Text(
+              l10n.upcomingPlanning,
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.1,
                 color: Colors.grey,
@@ -69,9 +71,9 @@ class AdminDashboardScreen extends ConsumerWidget {
               sessions: stats['upcomingSessions'] as List<Reservation>,
             ),
             const SizedBox(height: 32),
-            const Text(
-              'TOP CLIENTS (VOLUME)',
-              style: TextStyle(
+            Text(
+              l10n.topClientsVolume,
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.1,
                 color: Colors.grey,
@@ -134,6 +136,7 @@ class _PendingAbstancesSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final unavailabilitiesAsync = ref.watch(unavailabilityNotifierProvider);
     final staffAsync = ref.watch(staffNotifierProvider);
 
@@ -152,9 +155,9 @@ class _PendingAbstancesSection extends ConsumerWidget {
             const SizedBox(height: 32),
             Row(
               children: [
-                const Text(
-                  'ABSENCES À VALIDER',
-                  style: TextStyle(
+                Text(
+                  l10n.pendingAbsences,
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.1,
                     color: Colors.redAccent,
@@ -207,7 +210,7 @@ class _PendingAbstancesSection extends ConsumerWidget {
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
-                    '${u.slot == TimeSlot.fullDay ? 'Journée entière' : (u.slot == TimeSlot.morning ? 'Matin' : 'Après-midi')} - ${u.reason}',
+                    '${u.slot == TimeSlot.fullDay ? l10n.fullDay : (u.slot == TimeSlot.morning ? l10n.morning : l10n.afternoon)} - ${u.reason}',
                   ),
                   trailing: const Icon(Icons.chevron_right),
                 ),
@@ -227,6 +230,7 @@ class _PendingRequestsSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final bookingsAsync = ref.watch(bookingNotifierProvider);
     final staffAsync = ref.watch(staffNotifierProvider);
 
@@ -241,9 +245,9 @@ class _PendingRequestsSection extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 32),
-            const Text(
-              'DEMANDES EN ATTENTE',
-              style: TextStyle(
+            Text(
+              l10n.pendingRequests,
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.1,
                 color: Colors.orange,
@@ -262,13 +266,13 @@ class _PendingRequestsSection extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${res.date.day}/${res.date.month} - ${res.slot == TimeSlot.morning ? "Matin" : "Après-midi"}',
+                        '${res.date.day}/${res.date.month} - ${res.slot == TimeSlot.morning ? l10n.morning : l10n.afternoon}',
                       ),
                       if (res.notes.isNotEmpty)
                         Padding(
                           padding: const EdgeInsets.only(top: 4.0),
                           child: Text(
-                            'Note: ${res.notes}',
+                            '${l10n.noteLabel}: ${res.notes}',
                             style: const TextStyle(
                               fontStyle: FontStyle.italic,
                               color: Colors.orangeAccent,
@@ -317,12 +321,13 @@ class _PendingRequestsSection extends ConsumerWidget {
     List? staff,
   ) {
     if (staff == null) return;
+    final l10n = AppLocalizations.of(context)!;
     final activeStaff = staff.where((s) => s.isActive).toList();
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Confirmer & Assigner'),
+        title: Text(l10n.confirmAndAssign),
         content: SizedBox(
           width: double.maxFinite,
           child: Column(
@@ -351,9 +356,9 @@ class _PendingRequestsSection extends ConsumerWidget {
                 ),
                 const SizedBox(height: 16),
               ],
-              const Text(
-                'Choisir un moniteur :',
-                style: TextStyle(fontWeight: FontWeight.bold),
+              Text(
+                l10n.chooseInstructor,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Flexible(
@@ -392,11 +397,12 @@ class _UpcomingSessionsCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     if (sessions.isEmpty) {
-      return const Center(
+      return Center(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Text('Aucune session prévue'),
+          padding: const EdgeInsets.all(16.0),
+          child: Text(l10n.noSessionsPlanned),
         ),
       );
     }
@@ -431,7 +437,7 @@ class _UpcomingSessionsCard extends ConsumerWidget {
                         ),
                       );
                     },
-                    child: const Text('Valider'),
+                    child: Text(l10n.validate),
                   )
                 : const Icon(Icons.chevron_right, size: 16),
           ),

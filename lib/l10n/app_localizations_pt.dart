@@ -367,7 +367,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get registrationTitle => 'Criar conta';
 
   @override
-  String get fullNameLabel => 'Nome completo';
+  String get fullNameLabel => 'Nome Completo';
 
   @override
   String get fullNameHint => 'Seu nome completo';
@@ -398,7 +398,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get uploadPhoto => 'Adicionar uma foto';
 
   @override
-  String get staffManagement => 'Gestão de Staff / RH';
+  String get staffManagement => 'Gestão de Equipa';
 
   @override
   String get staffTab => 'Equipe';
@@ -455,7 +455,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get cancelButton => 'Cancelar';
 
   @override
-  String get saveButton => 'Salvar';
+  String get saveButton => 'Guardar';
 
   @override
   String get addButton => 'Adicionar';
@@ -704,4 +704,155 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get notesHint => 'Ex: Preferência de instrutor...';
+
+  @override
+  String get schoolSettings => 'Configurações da Escola';
+
+  @override
+  String get settingsNotFound => 'Erro: Configurações não encontradas';
+
+  @override
+  String get morningHours => 'Horário da Manhã';
+
+  @override
+  String get afternoonHours => 'Horário da Tarde';
+
+  @override
+  String get startLabel => 'Início';
+
+  @override
+  String get endLabel => 'Fim';
+
+  @override
+  String get maxStudentsPerInstructor => 'Máx. alunos por instrutor';
+
+  @override
+  String get settingsSaved => 'Configurações guardadas!';
+
+  @override
+  String get packCatalog => 'Catálogo de Pacotes';
+
+  @override
+  String get packCatalogSubtitle => 'Definir preços e sessões por pacote';
+
+  @override
+  String get staffManagementSubtitle => 'Adicionar ou modificar instrutores';
+
+  @override
+  String get equipmentManagementSubtitle =>
+      'Inventário de kites, pranchas e arneses';
+
+  @override
+  String get schoolDashboard => 'Painel da Escola';
+
+  @override
+  String get keyMetrics => 'MÉTRICAS CHAVE';
+
+  @override
+  String get totalSales => 'Vendas Totais';
+
+  @override
+  String get totalEngagement => 'Em compromisso';
+
+  @override
+  String get pendingAbsences => 'AUSENCIAS PARA VALIDAR';
+
+  @override
+  String get pendingRequests => 'PEDIDOS PENDENTES';
+
+  @override
+  String get upcomingPlanning => 'CALENDÁRIO PRÓXIMO';
+
+  @override
+  String get topClientsVolume => 'MELHORES CLIENTES (VOLUME)';
+
+  @override
+  String get noSessionsPlanned => 'Nenhuma sessão programada';
+
+  @override
+  String get chooseInstructor => 'Escolher um instrutor:';
+
+  @override
+  String get confirmAndAssign => 'Confirmar e Atribuir';
+
+  @override
+  String get noStudentsRegistered => 'Nenhum aluno registrado';
+
+  @override
+  String get balanceLabel => 'Saldo';
+
+  @override
+  String get newStudent => 'Novo Aluno';
+
+  @override
+  String get createButton => 'Criar';
+
+  @override
+  String get noEquipmentInCategory => 'Nenhum equipamento nesta categoria.';
+
+  @override
+  String get addEquipment => 'Adicionar equipamento';
+
+  @override
+  String get typeLabel => 'Tipo';
+
+  @override
+  String get brandLabel => 'Marca (ex: F-One, North)';
+
+  @override
+  String get modelLabel => 'Modelo (ex: Bandit, Rebel)';
+
+  @override
+  String get sizeLabel => 'Tamanho (ex: 9m, 138cm)';
+
+  @override
+  String get statusAvailable => 'DISPONÍVEL';
+
+  @override
+  String get statusMaintenance => 'MANUTENÇÃO';
+
+  @override
+  String get statusDamaged => 'DANIFICADO';
+
+  @override
+  String get makeAvailable => 'Tornar Disponível';
+
+  @override
+  String get setMaintenance => 'Colocar em Manutenção';
+
+  @override
+  String get setDamaged => 'Declarar como Danificado';
+
+  @override
+  String get deleteButton => 'Eliminar';
+
+  @override
+  String get myNotifications => 'Minhas Notificações';
+
+  @override
+  String get noNotificationsYet => 'Nenhuma notificação por enquanto.';
+
+  @override
+  String get deleteAll => 'Eliminar tudo';
+
+  @override
+  String get packCatalogTitle => 'Catálogo de Pacotes';
+
+  @override
+  String get sessions => 'sessões';
+
+  @override
+  String get newPack => 'Novo Pacote';
+
+  @override
+  String get createPackTitle => 'Criar um pacote';
+
+  @override
+  String get packNameLabel => 'Nome (ex: Pacote 10h)';
+
+  @override
+  String get numberOfCredits => 'Número de créditos';
+
+  @override
+  String get priceLabel => 'Preço (€)';
 }

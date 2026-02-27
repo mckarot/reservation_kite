@@ -803,7 +803,7 @@ abstract class AppLocalizations {
   /// No description provided for @fullNameLabel.
   ///
   /// In fr, this message translates to:
-  /// **'Nom complet'**
+  /// **'Nom Complet'**
   String get fullNameLabel;
 
   /// No description provided for @fullNameHint.
@@ -863,7 +863,7 @@ abstract class AppLocalizations {
   /// No description provided for @staffManagement.
   ///
   /// In fr, this message translates to:
-  /// **'Gestion du Staff / RH'**
+  /// **'Gestion du Staff'**
   String get staffManagement;
 
   /// No description provided for @staffTab.
@@ -1453,6 +1453,306 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Ex: Préférence moniteur...'**
   String get notesHint;
+
+  /// No description provided for @schoolSettings.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglages École'**
+  String get schoolSettings;
+
+  /// No description provided for @settingsNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Erreur : Paramètres non trouvés'**
+  String get settingsNotFound;
+
+  /// No description provided for @morningHours.
+  ///
+  /// In fr, this message translates to:
+  /// **'Horaires Matin'**
+  String get morningHours;
+
+  /// No description provided for @afternoonHours.
+  ///
+  /// In fr, this message translates to:
+  /// **'Horaires Après-midi'**
+  String get afternoonHours;
+
+  /// No description provided for @startLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Début'**
+  String get startLabel;
+
+  /// No description provided for @endLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fin'**
+  String get endLabel;
+
+  /// No description provided for @maxStudentsPerInstructor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Max élèves par moniteur'**
+  String get maxStudentsPerInstructor;
+
+  /// No description provided for @settingsSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglages enregistrés !'**
+  String get settingsSaved;
+
+  /// No description provided for @packCatalog.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catalogue des Forfaits'**
+  String get packCatalog;
+
+  /// No description provided for @packCatalogSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Définir les prix et sessions par pack'**
+  String get packCatalogSubtitle;
+
+  /// No description provided for @staffManagementSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter ou modifier des moniteurs'**
+  String get staffManagementSubtitle;
+
+  /// No description provided for @equipmentManagementSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inventaire des ailes, boards et harnais'**
+  String get equipmentManagementSubtitle;
+
+  /// No description provided for @schoolDashboard.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pilotage École'**
+  String get schoolDashboard;
+
+  /// No description provided for @keyMetrics.
+  ///
+  /// In fr, this message translates to:
+  /// **'CHIFFRES CLÉS'**
+  String get keyMetrics;
+
+  /// No description provided for @totalSales.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ventes Totales'**
+  String get totalSales;
+
+  /// No description provided for @totalEngagement.
+  ///
+  /// In fr, this message translates to:
+  /// **'En engagement'**
+  String get totalEngagement;
+
+  /// No description provided for @pendingAbsences.
+  ///
+  /// In fr, this message translates to:
+  /// **'ABSENCES À VALIDER'**
+  String get pendingAbsences;
+
+  /// No description provided for @pendingRequests.
+  ///
+  /// In fr, this message translates to:
+  /// **'DEMANDES EN ATTENTE'**
+  String get pendingRequests;
+
+  /// No description provided for @upcomingPlanning.
+  ///
+  /// In fr, this message translates to:
+  /// **'PLANNING À VENIR'**
+  String get upcomingPlanning;
+
+  /// No description provided for @topClientsVolume.
+  ///
+  /// In fr, this message translates to:
+  /// **'TOP CLIENTS (VOLUME)'**
+  String get topClientsVolume;
+
+  /// No description provided for @noSessionsPlanned.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune session prévue'**
+  String get noSessionsPlanned;
+
+  /// No description provided for @chooseInstructor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir un moniteur :'**
+  String get chooseInstructor;
+
+  /// No description provided for @confirmAndAssign.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confirmer & Assigner'**
+  String get confirmAndAssign;
+
+  /// No description provided for @noStudentsRegistered.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun élève enregistré'**
+  String get noStudentsRegistered;
+
+  /// No description provided for @balanceLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde'**
+  String get balanceLabel;
+
+  /// No description provided for @newStudent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvel Élève'**
+  String get newStudent;
+
+  /// No description provided for @createButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer'**
+  String get createButton;
+
+  /// No description provided for @noEquipmentInCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun équipement dans cette catégorie.'**
+  String get noEquipmentInCategory;
+
+  /// No description provided for @addEquipment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter du matériel'**
+  String get addEquipment;
+
+  /// No description provided for @typeLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type'**
+  String get typeLabel;
+
+  /// No description provided for @brandLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Marque (ex: F-One, North)'**
+  String get brandLabel;
+
+  /// No description provided for @modelLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modèle (ex: Bandit, Rebel)'**
+  String get modelLabel;
+
+  /// No description provided for @sizeLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taille (ex: 9m, 138cm)'**
+  String get sizeLabel;
+
+  /// No description provided for @statusAvailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'DISPO'**
+  String get statusAvailable;
+
+  /// No description provided for @statusMaintenance.
+  ///
+  /// In fr, this message translates to:
+  /// **'MAINTENANCE'**
+  String get statusMaintenance;
+
+  /// No description provided for @statusDamaged.
+  ///
+  /// In fr, this message translates to:
+  /// **'HORS SERVICE'**
+  String get statusDamaged;
+
+  /// No description provided for @makeAvailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rendre Disponible'**
+  String get makeAvailable;
+
+  /// No description provided for @setMaintenance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mettre en Maintenance'**
+  String get setMaintenance;
+
+  /// No description provided for @setDamaged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déclarer Hors Service'**
+  String get setDamaged;
+
+  /// No description provided for @deleteButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get deleteButton;
+
+  /// No description provided for @myNotifications.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mes Notifications'**
+  String get myNotifications;
+
+  /// No description provided for @noNotificationsYet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune notification pour le moment.'**
+  String get noNotificationsYet;
+
+  /// No description provided for @deleteAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout supprimer'**
+  String get deleteAll;
+
+  /// No description provided for @packCatalogTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catalogue Forfaits'**
+  String get packCatalogTitle;
+
+  /// No description provided for @sessions.
+  ///
+  /// In fr, this message translates to:
+  /// **'séances'**
+  String get sessions;
+
+  /// No description provided for @newPack.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau Forfait'**
+  String get newPack;
+
+  /// No description provided for @createPackTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer un forfait'**
+  String get createPackTitle;
+
+  /// No description provided for @packNameLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom (ex: Pack 10h)'**
+  String get packNameLabel;
+
+  /// No description provided for @numberOfCredits.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nombre de crédits'**
+  String get numberOfCredits;
+
+  /// No description provided for @priceLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix (€)'**
+  String get priceLabel;
 }
 
 class _AppLocalizationsDelegate

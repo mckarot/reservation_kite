@@ -369,7 +369,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get registrationTitle => 'Crear cuenta';
 
   @override
-  String get fullNameLabel => 'Nombre completo';
+  String get fullNameLabel => 'Nombre Completo';
 
   @override
   String get fullNameHint => 'Tu nombre completo';
@@ -400,7 +400,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get uploadPhoto => 'Añadir una foto';
 
   @override
-  String get staffManagement => 'Gestión de Staff / RRHH';
+  String get staffManagement => 'Gestión de Personal';
 
   @override
   String get staffTab => 'Personal';
@@ -705,4 +705,155 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get notesHint => 'Ej: Preferencia de instructor...';
+
+  @override
+  String get schoolSettings => 'Configuración de la Escuela';
+
+  @override
+  String get settingsNotFound => 'Error: Configuración no encontrada';
+
+  @override
+  String get morningHours => 'Horario de Mañana';
+
+  @override
+  String get afternoonHours => 'Horario de Tarde';
+
+  @override
+  String get startLabel => 'Inicio';
+
+  @override
+  String get endLabel => 'Fin';
+
+  @override
+  String get maxStudentsPerInstructor => 'Máx. estudiantes por instructor';
+
+  @override
+  String get settingsSaved => '¡Configuración guardada!';
+
+  @override
+  String get packCatalog => 'Catálogo de Packs';
+
+  @override
+  String get packCatalogSubtitle => 'Definir precios y sesiones por pack';
+
+  @override
+  String get staffManagementSubtitle => 'Añadir o modificar instructores';
+
+  @override
+  String get equipmentManagementSubtitle =>
+      'Inventario de cometas, tablas y arneses';
+
+  @override
+  String get schoolDashboard => 'Panel de la Escuela';
+
+  @override
+  String get keyMetrics => 'MÉTRICAS CLAVE';
+
+  @override
+  String get totalSales => 'Ventas Totales';
+
+  @override
+  String get totalEngagement => 'En compromiso';
+
+  @override
+  String get pendingAbsences => 'AUSENCIAS POR VALIDAR';
+
+  @override
+  String get pendingRequests => 'SOLICITUDES PENDIENTES';
+
+  @override
+  String get upcomingPlanning => 'CALENDARIO PRÓXIMO';
+
+  @override
+  String get topClientsVolume => 'MEJORES CLIENTES (VOLUMEN)';
+
+  @override
+  String get noSessionsPlanned => 'No hay sesiones programadas';
+
+  @override
+  String get chooseInstructor => 'Elegir un instructor:';
+
+  @override
+  String get confirmAndAssign => 'Confirmar y Asignar';
+
+  @override
+  String get noStudentsRegistered => 'No hay estudiantes registrados';
+
+  @override
+  String get balanceLabel => 'Saldo';
+
+  @override
+  String get newStudent => 'Nuevo Estudiante';
+
+  @override
+  String get createButton => 'Crear';
+
+  @override
+  String get noEquipmentInCategory => 'No hay equipo en esta categoría.';
+
+  @override
+  String get addEquipment => 'Añadir equipo';
+
+  @override
+  String get typeLabel => 'Tipo';
+
+  @override
+  String get brandLabel => 'Marca (ej: F-One, North)';
+
+  @override
+  String get modelLabel => 'Modelo (ej: Bandit, Rebel)';
+
+  @override
+  String get sizeLabel => 'Tamaño (ej: 9m, 138cm)';
+
+  @override
+  String get statusAvailable => 'DISPONIBLE';
+
+  @override
+  String get statusMaintenance => 'MANTENIMIENTO';
+
+  @override
+  String get statusDamaged => 'AVERIADO';
+
+  @override
+  String get makeAvailable => 'Hacer Disponible';
+
+  @override
+  String get setMaintenance => 'Poner en Mantenimiento';
+
+  @override
+  String get setDamaged => 'Declarar Averiado';
+
+  @override
+  String get deleteButton => 'Eliminar';
+
+  @override
+  String get myNotifications => 'Mis Notificaciones';
+
+  @override
+  String get noNotificationsYet => 'Ninguna notificación por el momento.';
+
+  @override
+  String get deleteAll => 'Eliminar todo';
+
+  @override
+  String get packCatalogTitle => 'Catálogo de Packs';
+
+  @override
+  String get sessions => 'sesiones';
+
+  @override
+  String get newPack => 'Nuevo Pack';
+
+  @override
+  String get createPackTitle => 'Crear un pack';
+
+  @override
+  String get packNameLabel => 'Nombre (ej: Pack 10h)';
+
+  @override
+  String get numberOfCredits => 'Número de créditos';
+
+  @override
+  String get priceLabel => 'Precio (€)';
 }

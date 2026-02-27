@@ -366,7 +366,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get registrationTitle => 'Create account';
 
   @override
-  String get fullNameLabel => 'Full name';
+  String get fullNameLabel => 'Full Name';
 
   @override
   String get fullNameHint => 'Your full name';
@@ -397,7 +397,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get uploadPhoto => 'Add a photo';
 
   @override
-  String get staffManagement => 'Staff Management / HR';
+  String get staffManagement => 'Staff Management';
 
   @override
   String get staffTab => 'Staff';
@@ -702,4 +702,155 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notesHint => 'E.g., Instructor preference...';
+
+  @override
+  String get schoolSettings => 'School Settings';
+
+  @override
+  String get settingsNotFound => 'Error: Settings not found';
+
+  @override
+  String get morningHours => 'Morning hours';
+
+  @override
+  String get afternoonHours => 'Afternoon hours';
+
+  @override
+  String get startLabel => 'Start';
+
+  @override
+  String get endLabel => 'End';
+
+  @override
+  String get maxStudentsPerInstructor => 'Max students per instructor';
+
+  @override
+  String get settingsSaved => 'Settings saved!';
+
+  @override
+  String get packCatalog => 'Pack Catalog';
+
+  @override
+  String get packCatalogSubtitle => 'Define prices and sessions per pack';
+
+  @override
+  String get staffManagementSubtitle => 'Add or modify instructors';
+
+  @override
+  String get equipmentManagementSubtitle =>
+      'Inventory of kites, boards and harnesses';
+
+  @override
+  String get schoolDashboard => 'School Dashboard';
+
+  @override
+  String get keyMetrics => 'KEY METRICS';
+
+  @override
+  String get totalSales => 'Total Sales';
+
+  @override
+  String get totalEngagement => 'In engagement';
+
+  @override
+  String get pendingAbsences => 'PENDING ABSENCES';
+
+  @override
+  String get pendingRequests => 'PENDING REQUESTS';
+
+  @override
+  String get upcomingPlanning => 'UPCOMING SCHEDULE';
+
+  @override
+  String get topClientsVolume => 'TOP CLIENTS (VOLUME)';
+
+  @override
+  String get noSessionsPlanned => 'No sessions scheduled';
+
+  @override
+  String get chooseInstructor => 'Choose an instructor:';
+
+  @override
+  String get confirmAndAssign => 'Confirm & Assign';
+
+  @override
+  String get noStudentsRegistered => 'No students registered';
+
+  @override
+  String get balanceLabel => 'Balance';
+
+  @override
+  String get newStudent => 'New Student';
+
+  @override
+  String get createButton => 'Create';
+
+  @override
+  String get noEquipmentInCategory => 'No equipment in this category.';
+
+  @override
+  String get addEquipment => 'Add equipment';
+
+  @override
+  String get typeLabel => 'Type';
+
+  @override
+  String get brandLabel => 'Brand (e.g., F-One, North)';
+
+  @override
+  String get modelLabel => 'Model (e.g., Bandit, Rebel)';
+
+  @override
+  String get sizeLabel => 'Size (e.g., 9m, 138cm)';
+
+  @override
+  String get statusAvailable => 'AVAILABLE';
+
+  @override
+  String get statusMaintenance => 'MAINTENANCE';
+
+  @override
+  String get statusDamaged => 'DAMAGED';
+
+  @override
+  String get makeAvailable => 'Make Available';
+
+  @override
+  String get setMaintenance => 'Set to Maintenance';
+
+  @override
+  String get setDamaged => 'Mark as Damaged';
+
+  @override
+  String get deleteButton => 'Delete';
+
+  @override
+  String get myNotifications => 'My Notifications';
+
+  @override
+  String get noNotificationsYet => 'No notifications yet.';
+
+  @override
+  String get deleteAll => 'Delete all';
+
+  @override
+  String get packCatalogTitle => 'Pack Catalog';
+
+  @override
+  String get sessions => 'sessions';
+
+  @override
+  String get newPack => 'New Pack';
+
+  @override
+  String get createPackTitle => 'Create a pack';
+
+  @override
+  String get packNameLabel => 'Name (e.g., 10h Pack)';
+
+  @override
+  String get numberOfCredits => 'Number of credits';
+
+  @override
+  String get priceLabel => 'Price (€)';
 }

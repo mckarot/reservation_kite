@@ -3,17 +3,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/notification_notifier.dart';
 import '../../domain/models/app_notification.dart';
 import 'package:intl/intl.dart';
+import '../../l10n/app_localizations.dart';
 
 class NotificationCenterScreen extends ConsumerWidget {
   const NotificationCenterScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final notificationsAsync = ref.watch(notificationNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mes Notifications'),
+        title: Text(l10n.myNotifications),
         actions: [
           notificationsAsync
                   .whenData(
@@ -43,9 +45,9 @@ class NotificationCenterScreen extends ConsumerWidget {
                     color: Colors.grey.shade300,
                   ),
                   const SizedBox(height: 16),
-                  const Text(
-                    'Aucune notification pour le moment.',
-                    style: TextStyle(color: Colors.grey),
+                  Text(
+                    l10n.noNotificationsYet,
+                    style: const TextStyle(color: Colors.grey),
                   ),
                 ],
               ),
@@ -62,7 +64,7 @@ class NotificationCenterScreen extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Erreur: $e')),
+        error: (e, _) => Center(child: Text('${l10n.errorLabel}: $e')),
       ),
     );
   }

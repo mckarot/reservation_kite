@@ -3,16 +3,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/credit_pack_notifier.dart';
 import '../../domain/models/credit_pack.dart';
 import 'package:uuid/uuid.dart';
+import '../../l10n/app_localizations.dart';
 
 class CreditPackAdminScreen extends ConsumerWidget {
   const CreditPackAdminScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final packsAsync = ref.watch(creditPackNotifierProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Catalogue Forfaits')),
+      appBar: AppBar(title: Text(l10n.packCatalogTitle)),
       body: packsAsync.when(
         data: (packs) => ListView.builder(
           padding: const EdgeInsets.all(16),
@@ -25,7 +27,7 @@ class CreditPackAdminScreen extends ConsumerWidget {
                   pack.name,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text('${pack.credits} séances • ${pack.price} €'),
+                subtitle: Text('${pack.credits} ${l10n.sessions} • ${pack.price} €'),
                 trailing: IconButton(
                   icon: const Icon(Icons.delete_outline, color: Colors.red),
                   onPressed: () => ref
@@ -37,17 +39,18 @@ class CreditPackAdminScreen extends ConsumerWidget {
           },
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Erreur: $e')),
+        error: (e, _) => Center(child: Text('${l10n.errorLabel}: $e')),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showAddPackDialog(context, ref),
-        label: const Text('Nouveau Forfait'),
+        label: Text(l10n.newPack),
         icon: const Icon(Icons.add),
       ),
     );
   }
 
   void _showAddPackDialog(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final nameController = TextEditingController();
     final creditsController = TextEditingController();
     final priceController = TextEditingController();
@@ -55,24 +58,28 @@ class CreditPackAdminScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Créer un forfait'),
+        title: Text(l10n.createPackTitle),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(
-                labelText: 'Nom (ex: Pack 10h)',
+              decoration: InputDecoration(
+                labelText: l10n.packNameLabel,
               ),
             ),
             TextField(
               controller: creditsController,
-              decoration: const InputDecoration(labelText: 'Nombre de crédits'),
+              decoration: InputDecoration(
+                labelText: l10n.numberOfCredits,
+              ),
               keyboardType: TextInputType.number,
             ),
             TextField(
               controller: priceController,
-              decoration: const InputDecoration(labelText: 'Prix (€)'),
+              decoration: InputDecoration(
+                labelText: l10n.priceLabel,
+              ),
               keyboardType: TextInputType.number,
             ),
           ],
@@ -80,7 +87,7 @@ class CreditPackAdminScreen extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Annuler'),
+            child: Text(l10n.cancelButton),
           ),
           ElevatedButton(
             onPressed: () {
@@ -93,7 +100,7 @@ class CreditPackAdminScreen extends ConsumerWidget {
               ref.read(creditPackNotifierProvider.notifier).addPack(pack);
               Navigator.pop(context);
             },
-            child: const Text('Créer'),
+            child: Text(l10n.createButton),
           ),
         ],
       ),

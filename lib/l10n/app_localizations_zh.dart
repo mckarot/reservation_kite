@@ -393,7 +393,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get uploadPhoto => '添加照片';
 
   @override
-  String get staffManagement => '员工管理/人力资源';
+  String get staffManagement => '员工管理';
 
   @override
   String get staffTab => '员工';
@@ -696,4 +696,154 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get notesHint => '例如：教练偏好...';
+
+  @override
+  String get schoolSettings => '学校设置';
+
+  @override
+  String get settingsNotFound => '错误：未找到设置';
+
+  @override
+  String get morningHours => '早上时间';
+
+  @override
+  String get afternoonHours => '下午时间';
+
+  @override
+  String get startLabel => '开始';
+
+  @override
+  String get endLabel => '结束';
+
+  @override
+  String get maxStudentsPerInstructor => '每名教练最多学生数';
+
+  @override
+  String get settingsSaved => '设置已保存！';
+
+  @override
+  String get packCatalog => '套餐目录';
+
+  @override
+  String get packCatalogSubtitle => '定义每个套餐的价格和课程';
+
+  @override
+  String get staffManagementSubtitle => '添加或修改教练';
+
+  @override
+  String get equipmentManagementSubtitle => '风筝、板和 harness 库存';
+
+  @override
+  String get schoolDashboard => '学校仪表板';
+
+  @override
+  String get keyMetrics => '关键指标';
+
+  @override
+  String get totalSales => '总销售额';
+
+  @override
+  String get totalEngagement => '承诺中';
+
+  @override
+  String get pendingAbsences => '待批准的缺席';
+
+  @override
+  String get pendingRequests => '待处理的请求';
+
+  @override
+  String get upcomingPlanning => '即将到来的计划';
+
+  @override
+  String get topClientsVolume => '顶级客户（数量）';
+
+  @override
+  String get noSessionsPlanned => '没有计划的课程';
+
+  @override
+  String get chooseInstructor => '选择教练：';
+
+  @override
+  String get confirmAndAssign => '确认并分配';
+
+  @override
+  String get noStudentsRegistered => '没有注册的学生';
+
+  @override
+  String get balanceLabel => '余额';
+
+  @override
+  String get newStudent => '新学生';
+
+  @override
+  String get createButton => '创建';
+
+  @override
+  String get noEquipmentInCategory => '此类别中没有设备。';
+
+  @override
+  String get addEquipment => '添加设备';
+
+  @override
+  String get typeLabel => '类型';
+
+  @override
+  String get brandLabel => '品牌（例如：F-One, North）';
+
+  @override
+  String get modelLabel => '型号（例如：Bandit, Rebel）';
+
+  @override
+  String get sizeLabel => '尺寸（例如：9m, 138cm）';
+
+  @override
+  String get statusAvailable => '可用';
+
+  @override
+  String get statusMaintenance => '维护中';
+
+  @override
+  String get statusDamaged => '损坏';
+
+  @override
+  String get makeAvailable => '设为可用';
+
+  @override
+  String get setMaintenance => '设为维护';
+
+  @override
+  String get setDamaged => '标记为损坏';
+
+  @override
+  String get deleteButton => '删除';
+
+  @override
+  String get myNotifications => '我的通知';
+
+  @override
+  String get noNotificationsYet => '暂无通知。';
+
+  @override
+  String get deleteAll => '全部删除';
+
+  @override
+  String get packCatalogTitle => '套餐目录';
+
+  @override
+  String get sessions => '节课';
+
+  @override
+  String get newPack => '新套餐';
+
+  @override
+  String get createPackTitle => '创建套餐';
+
+  @override
+  String get packNameLabel => '名称（例如：10 小时套餐）';
+
+  @override
+  String get numberOfCredits => '积分数量';
+
+  @override
+  String get priceLabel => '价格 (€)';
 }

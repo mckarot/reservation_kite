@@ -5,6 +5,7 @@ import '../providers/settings_notifier.dart';
 import 'staff_admin_screen.dart';
 import 'credit_pack_admin_screen.dart';
 import 'equipment_admin_screen.dart';
+import '../../l10n/app_localizations.dart';
 
 class AdminSettingsScreen extends ConsumerStatefulWidget {
   const AdminSettingsScreen({super.key});
@@ -50,14 +51,15 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final settingsAsync = ref.watch(settingsNotifierProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Réglages École')),
+      appBar: AppBar(title: Text(l10n.schoolSettings)),
       body: settingsAsync.when(
         data: (settings) {
           if (settings == null) {
-            return const Center(child: Text('Erreur : Paramètres non trouvés'));
+            return Center(child: Text(l10n.settingsNotFound));
           }
 
           if (_morningStartController.text.isEmpty) {
@@ -69,45 +71,45 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                const Text(
-                  'Horaires Matin',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                Text(
+                  l10n.morningHours,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Row(
                   children: [
                     Expanded(
                       child: TextFormField(
                         controller: _morningStartController,
-                        decoration: const InputDecoration(labelText: 'Début'),
+                        decoration: InputDecoration(labelText: l10n.startLabel),
                       ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
                       child: TextFormField(
                         controller: _morningEndController,
-                        decoration: const InputDecoration(labelText: 'Fin'),
+                        decoration: InputDecoration(labelText: l10n.endLabel),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 24),
-                const Text(
-                  'Horaires Après-midi',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                Text(
+                  l10n.afternoonHours,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Row(
                   children: [
                     Expanded(
                       child: TextFormField(
                         controller: _afternoonStartController,
-                        decoration: const InputDecoration(labelText: 'Début'),
+                        decoration: InputDecoration(labelText: l10n.startLabel),
                       ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
                       child: TextFormField(
                         controller: _afternoonEndController,
-                        decoration: const InputDecoration(labelText: 'Fin'),
+                        decoration: InputDecoration(labelText: l10n.endLabel),
                       ),
                     ),
                   ],
@@ -115,8 +117,8 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                 const SizedBox(height: 24),
                 DropdownButtonFormField<int>(
                   initialValue: _maxStudents,
-                  decoration: const InputDecoration(
-                    labelText: 'Max élèves par moniteur',
+                  decoration: InputDecoration(
+                    labelText: l10n.maxStudentsPerInstructor,
                   ),
                   items: List.generate(10, (i) => i + 1)
                       .map(
@@ -151,17 +153,17 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
 
                       if (!mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Réglages enregistrés !')),
+                        SnackBar(content: Text(l10n.settingsSaved)),
                       );
                     }
                   },
-                  child: const Text('Enregistrer'),
+                  child: Text(l10n.saveButton),
                 ),
                 const Divider(height: 48),
                 ListTile(
                   leading: const Icon(Icons.sell, color: Colors.purple),
-                  title: const Text('Catalogue des Forfaits'),
-                  subtitle: const Text('Définir les prix et sessions par pack'),
+                  title: Text(l10n.packCatalog),
+                  subtitle: Text(l10n.packCatalogSubtitle),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.push(
                     context,
@@ -172,8 +174,8 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.people, color: Colors.blue),
-                  title: const Text('Gestion du Staff'),
-                  subtitle: const Text('Ajouter ou modifier des moniteurs'),
+                  title: Text(l10n.staffManagement),
+                  subtitle: Text(l10n.staffManagementSubtitle),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.push(
                     context,
@@ -182,10 +184,8 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.inventory, color: Colors.orange),
-                  title: const Text('Gestion du Matériel'),
-                  subtitle: const Text(
-                    'Inventaire des ailes, boards et harnais',
-                  ),
+                  title: Text(l10n.equipmentManagement),
+                  subtitle: Text(l10n.equipmentManagementSubtitle),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.push(
                     context,
@@ -199,7 +199,7 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text('Erreur: $err')),
+        error: (err, stack) => Center(child: Text('${l10n.errorLabel}: $err')),
       ),
     );
   }
