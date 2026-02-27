@@ -375,5 +375,20 @@
       "price": {"type": "double"}
     }
   },
-  "notAvailable": "N/A"
+  "notAvailable": "N/A",
+  "ikoLevel1Discovery": "Niveau 1 - Découverte",
+  "ikoLevel2Intermediate": "Niveau 2 - Intermédiaire",
+  "ikoLevel3Independent": "Niveau 3 - Indépendant",
+  "ikoLevel4Advanced": "Niveau 4 - Perfectionnement",
+  "skillPreparationSafety": "Préparation & Sécurité",
+  "skillNeutralZonePiloting": "Pilotage zone neutre",
+  "skillTakeoffLanding": "Décollage / Atterrissage",
+  "skillBodyDrag": "Nage tractée (Body Drag)",
+  "skillWaterstart": "Waterstart",
+  "skillBasicNavigation": "Navigation de base",
+  "skillUpwind": "Remontée au vent",
+  "skillTransitionsJumps": "Transitions & Sauts",
+  "skillBasicJump": "Saut de base",
+  "skillJibe": "Jibe",
+  "skillJumpWithGrab": "Saut avec grab"
 }

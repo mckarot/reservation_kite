@@ -372,5 +372,20 @@
       "price": {"type": "double"}
     }
   },
-  "notAvailable": "N/A"
+  "notAvailable": "N/A",
+  "ikoLevel1Discovery": "1 级 - 入门",
+  "ikoLevel2Intermediate": "2 级 - 中级",
+  "ikoLevel3Independent": "3 级 - 独立",
+  "ikoLevel4Advanced": "4 级 - 高级",
+  "skillPreparationSafety": "准备与安全",
+  "skillNeutralZonePiloting": "中立区操控",
+  "skillTakeoffLanding": "起飞/降落",
+  "skillBodyDrag": "拖曳游泳",
+  "skillWaterstart": "水上起步",
+  "skillBasicNavigation": "基础航行",
+  "skillUpwind": "逆风航行",
+  "skillTransitionsJumps": "转换与跳跃",
+  "skillBasicJump": "基础跳跃",
+  "skillJibe": "换向",
+  "skillJumpWithGrab": "抓板跳跃"
 }

@@ -921,4 +921,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notAvailable => 'N/A';
+
+  @override
+  String get ikoLevel1Discovery => 'Level 1 - Discovery';
+
+  @override
+  String get ikoLevel2Intermediate => 'Level 2 - Intermediate';
+
+  @override
+  String get ikoLevel3Independent => 'Level 3 - Independent';
+
+  @override
+  String get ikoLevel4Advanced => 'Level 4 - Advanced';
+
+  @override
+  String get skillPreparationSafety => 'Preparation & Safety';
+
+  @override
+  String get skillNeutralZonePiloting => 'Neutral zone piloting';
+
+  @override
+  String get skillTakeoffLanding => 'Takeoff / Landing';
+
+  @override
+  String get skillBasicNavigation => 'Basic navigation';
+
+  @override
+  String get skillTransitionsJumps => 'Transitions & Jumps';
+
+  @override
+  String get skillJumpWithGrab => 'Jump with grab';
 }

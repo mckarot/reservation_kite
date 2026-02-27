@@ -134,8 +134,55 @@ class _ChecklistSection extends StatelessWidget {
   final List<String> checkedItems;
   const _ChecklistSection({required this.checkedItems});
 
+  String _getTranslatedLevelName(AppLocalizations l10n, String levelName) {
+    // Mapping des noms de niveaux IKO vers les traductions
+    switch (levelName) {
+      case 'Niveau 1 - Découverte':
+        return l10n.ikoLevel1Discovery;
+      case 'Niveau 2 - Intermédiaire':
+        return l10n.ikoLevel2Intermediate;
+      case 'Niveau 3 - Indépendant':
+        return l10n.ikoLevel3Independent;
+      case 'Niveau 4 - Perfectionnement':
+        return l10n.ikoLevel4Advanced;
+      default:
+        return levelName;
+    }
+  }
+
+  String _getTranslatedSkill(AppLocalizations l10n, String skill) {
+    // Mapping des compétences IKO vers les traductions
+    switch (skill) {
+      case 'Préparation & Sécurité':
+        return l10n.skillPreparationSafety;
+      case 'Pilotage zone neutre':
+        return l10n.skillNeutralZonePiloting;
+      case 'Décollage / Atterrissage':
+        return l10n.skillTakeoffLanding;
+      case 'Nage tractée (Body Drag)':
+        return l10n.skillBodyDrag;
+      case 'Waterstart':
+        return l10n.skillWaterstart;
+      case 'Navigation de base':
+        return l10n.skillBasicNavigation;
+      case 'Remontée au vent':
+        return l10n.skillUpwind;
+      case 'Transitions & Sauts':
+        return l10n.skillTransitionsJumps;
+      case 'Saut de base':
+        return l10n.skillBasicJump;
+      case 'Jibe':
+        return l10n.skillJibe;
+      case 'Saut avec grab':
+        return l10n.skillJumpWithGrab;
+      default:
+        return skill;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: UserProgress.ikoSkillsByLevel.entries.map((entry) {
@@ -147,7 +194,7 @@ class _ChecklistSection extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 16, bottom: 8),
               child: Text(
-                levelName.toUpperCase(),
+                _getTranslatedLevelName(l10n, levelName).toUpperCase(),
                 style: const TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
@@ -161,6 +208,7 @@ class _ChecklistSection extends StatelessWidget {
               runSpacing: 8,
               children: skills.map((item) {
                 final isDone = checkedItems.contains(item);
+                final translatedSkill = _getTranslatedSkill(l10n, item);
                 return Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,
@@ -185,7 +233,7 @@ class _ChecklistSection extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        item,
+                        translatedSkill,
                         style: TextStyle(
                           fontSize: 11,
                           color: isDone

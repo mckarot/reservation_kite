@@ -1873,6 +1873,66 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'N/A'**
   String get notAvailable;
+
+  /// No description provided for @ikoLevel1Discovery.
+  ///
+  /// In fr, this message translates to:
+  /// **'Niveau 1 - Découverte'**
+  String get ikoLevel1Discovery;
+
+  /// No description provided for @ikoLevel2Intermediate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Niveau 2 - Intermédiaire'**
+  String get ikoLevel2Intermediate;
+
+  /// No description provided for @ikoLevel3Independent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Niveau 3 - Indépendant'**
+  String get ikoLevel3Independent;
+
+  /// No description provided for @ikoLevel4Advanced.
+  ///
+  /// In fr, this message translates to:
+  /// **'Niveau 4 - Perfectionnement'**
+  String get ikoLevel4Advanced;
+
+  /// No description provided for @skillPreparationSafety.
+  ///
+  /// In fr, this message translates to:
+  /// **'Préparation & Sécurité'**
+  String get skillPreparationSafety;
+
+  /// No description provided for @skillNeutralZonePiloting.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pilotage zone neutre'**
+  String get skillNeutralZonePiloting;
+
+  /// No description provided for @skillTakeoffLanding.
+  ///
+  /// In fr, this message translates to:
+  /// **'Décollage / Atterrissage'**
+  String get skillTakeoffLanding;
+
+  /// No description provided for @skillBasicNavigation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Navigation de base'**
+  String get skillBasicNavigation;
+
+  /// No description provided for @skillTransitionsJumps.
+  ///
+  /// In fr, this message translates to:
+  /// **'Transitions & Sauts'**
+  String get skillTransitionsJumps;
+
+  /// No description provided for @skillJumpWithGrab.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saut avec grab'**
+  String get skillJumpWithGrab;
 }
 
 class _AppLocalizationsDelegate

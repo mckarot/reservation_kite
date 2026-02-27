@@ -914,4 +914,34 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get notAvailable => 'N/A';
+
+  @override
+  String get ikoLevel1Discovery => '1 级 - 入门';
+
+  @override
+  String get ikoLevel2Intermediate => '2 级 - 中级';
+
+  @override
+  String get ikoLevel3Independent => '3 级 - 独立';
+
+  @override
+  String get ikoLevel4Advanced => '4 级 - 高级';
+
+  @override
+  String get skillPreparationSafety => '准备与安全';
+
+  @override
+  String get skillNeutralZonePiloting => '中立区操控';
+
+  @override
+  String get skillTakeoffLanding => '起飞/降落';
+
+  @override
+  String get skillBasicNavigation => '基础航行';
+
+  @override
+  String get skillTransitionsJumps => '转换与跳跃';
+
+  @override
+  String get skillJumpWithGrab => '抓板跳跃';
 }
