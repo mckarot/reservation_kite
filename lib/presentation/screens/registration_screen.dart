@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import '../../data/providers/repository_providers.dart';
+import '../../l10n/app_localizations.dart';
 
 class RegistrationScreen extends ConsumerStatefulWidget {
   const RegistrationScreen({super.key});
@@ -49,16 +50,16 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
       await storageRef.putFile(_image!);
       return await storageRef.getDownloadURL();
     } catch (e) {
-      // Gérer l'erreur d'upload
       return null;
     }
   }
 
   Future<void> _register() async {
+    final l10n = AppLocalizations.of(context)!;
     if (_formKey.currentState?.validate() ?? false) {
       if (_passwordController.text != _confirmPasswordController.text) {
         setState(() {
-          _errorMessage = "Les mots de passe ne correspondent pas.";
+          _errorMessage = l10n.passwordsMismatch;
         });
         return;
       }
@@ -88,8 +89,8 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('✅ Compte créé avec succès ! Vous pouvez vous connecter.'),
+          SnackBar(
+            content: Text(l10n.accountCreatedSuccess),
             backgroundColor: Colors.green,
           ),
         );
@@ -98,7 +99,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
       } catch (e) {
         if (!mounted) return;
         setState(() {
-          _errorMessage = "Erreur : ${e.toString()}";
+          _errorMessage = '${l10n.genericError} : ${e.toString()}';
           _isLoading = false;
         });
       }
@@ -107,6 +108,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade50,
       body: Center(
@@ -138,14 +140,15 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _displayNameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Nom complet',
-                        prefixIcon: Icon(Icons.person),
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: l10n.fullNameLabel,
+                        hintText: l10n.fullNameHint,
+                        prefixIcon: const Icon(Icons.person),
+                        border: const OutlineInputBorder(),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Veuillez entrer votre nom complet.';
+                          return l10n.fullNameHint;
                         }
                         return null;
                       },
@@ -153,15 +156,16 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _emailController,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        prefixIcon: Icon(Icons.email),
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: l10n.emailLabel,
+                        hintText: l10n.emailHint,
+                        prefixIcon: const Icon(Icons.email),
+                        border: const OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || !value.contains('@')) {
-                          return 'Veuillez entrer un email valide.';
+                          return l10n.emailHint;
                         }
                         return null;
                       },
@@ -169,15 +173,16 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _passwordController,
-                      decoration: const InputDecoration(
-                        labelText: 'Mot de passe',
-                        prefixIcon: Icon(Icons.lock),
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: l10n.passwordLabel,
+                        hintText: l10n.passwordHint,
+                        prefixIcon: const Icon(Icons.lock),
+                        border: const OutlineInputBorder(),
                       ),
                       obscureText: true,
                       validator: (value) {
                         if (value == null || value.length < 6) {
-                          return 'Le mot de passe doit faire au moins 6 caractères.';
+                          return l10n.passwordHintError;
                         }
                         return null;
                       },
@@ -185,21 +190,21 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _confirmPasswordController,
-                      decoration: const InputDecoration(
-                        labelText: 'Confirmer le mot de passe',
-                        prefixIcon: Icon(Icons.lock),
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: l10n.confirmPasswordLabel,
+                        prefixIcon: const Icon(Icons.lock),
+                        border: const OutlineInputBorder(),
                       ),
                       obscureText: true,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _weightController,
-                      decoration: const InputDecoration(
-                        labelText: 'Poids (kg)',
-                        prefixIcon: Icon(Icons.fitness_center),
-                        border: OutlineInputBorder(),
-                        hintText: 'Optionnel',
+                      decoration: InputDecoration(
+                        labelText: l10n.weightLabel,
+                        hintText: l10n.weightHint,
+                        prefixIcon: const Icon(Icons.fitness_center),
+                        border: const OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,
                     ),
@@ -225,13 +230,13 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                         ),
                         child: _isLoading
                             ? const CircularProgressIndicator(color: Colors.white)
-                            : const Text('CRÉER LE COMPTE'),
+                            : Text(l10n.createAccountButton),
                       ),
                     ),
                     const SizedBox(height: 12),
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      child: const Text('DÉJÀ UN COMPTE ? SE CONNECTER'),
+                      child: Text(l10n.alreadyHaveAccount),
                     )
                   ],
                 ),

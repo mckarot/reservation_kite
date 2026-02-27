@@ -10,6 +10,7 @@ import 'package:reservation_kite/presentation/screens/user_directory_screen.dart
 import '../../data/providers/repository_providers.dart';
 import '../../domain/models/staff.dart';
 import '../../domain/models/staff_unavailability.dart';
+import '../../l10n/app_localizations.dart';
 import '../providers/staff_notifier.dart';
 import '../providers/unavailability_notifier.dart';
 
@@ -18,36 +19,37 @@ class AdminScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final List<_DashboardItem> items = [
       _DashboardItem(
-        title: 'Dashboard (KPIs)',
+        title: l10n.dashboardKPIs,
         icon: Icons.dashboard_customize,
         route: const AdminDashboardScreen(),
         color: Colors.blue.shade700,
       ),
       _DashboardItem(
-        title: 'Réglages',
+        title: l10n.settings,
         icon: Icons.settings,
         route: const AdminSettingsScreen(),
       ),
       _DashboardItem(
-        title: 'Gérer le Staff',
+        title: l10n.manageStaff,
         icon: Icons.people,
         route: const StaffAdminScreen(),
         hasBadge: true,
       ),
       _DashboardItem(
-        title: 'Répertoire Élèves',
+        title: l10n.studentDirectory,
         icon: Icons.person_search,
         route: const UserDirectoryScreen(),
       ),
       _DashboardItem(
-        title: 'Gestion Matériel',
+        title: l10n.equipmentManagement,
         icon: Icons.inventory_2,
         route: const EquipmentAdminScreen(),
       ),
       _DashboardItem(
-        title: 'Calendrier',
+        title: l10n.calendarBookings,
         icon: Icons.calendar_month,
         route: const BookingScreen(),
       ),
@@ -55,12 +57,12 @@ class AdminScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Panneau Administrateur'),
+        title: Text(l10n.adminScreenTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () => ref.read(authRepositoryProvider).signOut(),
-            tooltip: 'Déconnexion',
+            tooltip: l10n.logoutButton,
           ),
         ],
       ),
@@ -160,6 +162,7 @@ class _PendingAbsencesAlert extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final unavailabilitiesAsync = ref.watch(unavailabilityNotifierProvider);
     final staffAsync = ref.watch(staffNotifierProvider);
 
@@ -180,9 +183,9 @@ class _PendingAbsencesAlert extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'ABSENCES À VALIDER',
-                  style: TextStyle(
+                Text(
+                  l10n.pendingAbsencesAlert,
+                  style: const TextStyle(
                     color: Colors.redAccent,
                     fontWeight: FontWeight.bold,
                   ),
@@ -193,7 +196,7 @@ class _PendingAbsencesAlert extends ConsumerWidget {
                     (s) => s.id == u.staffId,
                     orElse: () => Staff(
                       id: '',
-                      name: 'Inconnu',
+                      name: l10n.notFound,
                       bio: '',
                       photoUrl: '',
                       specialties: [],
@@ -222,7 +225,7 @@ class _PendingAbsencesAlert extends ConsumerWidget {
                         context,
                         MaterialPageRoute(builder: (_) => const StaffAdminScreen()),
                       ),
-                      child: Text('Voir les ${pending.length} demandes...'),
+                      child: Text(l10n.seeRequests(pending.length)),
                     ),
                   ),
               ],

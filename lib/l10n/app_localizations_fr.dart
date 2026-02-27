@@ -346,4 +346,55 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get tryAgain => 'Réessayer';
+
+  @override
+  String get adminScreenTitle => 'Panneau Administrateur';
+
+  @override
+  String get pendingAbsencesAlert => 'ABSENCES À VALIDER';
+
+  @override
+  String get dashboardKPIs => 'Dashboard (KPIs)';
+
+  @override
+  String get calendarBookings => 'Calendrier';
+
+  @override
+  String seeRequests(int count) {
+    return 'Voir les $count demandes...';
+  }
+
+  @override
+  String get registrationTitle => 'Créer un compte';
+
+  @override
+  String get fullNameLabel => 'Nom complet';
+
+  @override
+  String get fullNameHint => 'Votre nom complet';
+
+  @override
+  String get confirmPasswordLabel => 'Confirmer le mot de passe';
+
+  @override
+  String get weightLabel => 'Poids (kg)';
+
+  @override
+  String get weightHint => 'Optionnel';
+
+  @override
+  String get createAccountButton => 'CRÉER LE COMPTE';
+
+  @override
+  String get alreadyHaveAccount => 'DÉJÀ UN COMPTE ? SE CONNECTER';
+
+  @override
+  String get passwordsMismatch => 'Les mots de passe ne correspondent pas.';
+
+  @override
+  String get accountCreatedSuccess =>
+      '✅ Compte créé avec succès ! Vous pouvez vous connecter.';
+
+  @override
+  String get uploadPhoto => 'Ajouter une photo';
 }

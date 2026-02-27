@@ -123,5 +123,26 @@
   "networkError": "Erreur de connexion",
   "unauthorized": "Non autorisé",
   "notFound": "Non trouvé",
-  "tryAgain": "Réessayer"
+  "tryAgain": "Réessayer",
+  "adminScreenTitle": "Panneau Administrateur",
+  "pendingAbsencesAlert": "ABSENCES À VALIDER",
+  "dashboardKPIs": "Dashboard (KPIs)",
+  "calendarBookings": "Calendrier",
+  "seeRequests": "Voir les {count} demandes...",
+  "@seeRequests": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "registrationTitle": "Créer un compte",
+  "fullNameLabel": "Nom complet",
+  "fullNameHint": "Votre nom complet",
+  "confirmPasswordLabel": "Confirmer le mot de passe",
+  "weightLabel": "Poids (kg)",
+  "weightHint": "Optionnel",
+  "createAccountButton": "CRÉER LE COMPTE",
+  "alreadyHaveAccount": "DÉJÀ UN COMPTE ? SE CONNECTER",
+  "passwordsMismatch": "Les mots de passe ne correspondent pas.",
+  "accountCreatedSuccess": "✅ Compte créé avec succès ! Vous pouvez vous connecter.",
+  "uploadPhoto": "Ajouter une photo"
 }

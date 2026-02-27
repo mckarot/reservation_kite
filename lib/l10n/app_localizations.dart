@@ -763,6 +763,102 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Réessayer'**
   String get tryAgain;
+
+  /// No description provided for @adminScreenTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Panneau Administrateur'**
+  String get adminScreenTitle;
+
+  /// No description provided for @pendingAbsencesAlert.
+  ///
+  /// In fr, this message translates to:
+  /// **'ABSENCES À VALIDER'**
+  String get pendingAbsencesAlert;
+
+  /// No description provided for @dashboardKPIs.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dashboard (KPIs)'**
+  String get dashboardKPIs;
+
+  /// No description provided for @calendarBookings.
+  ///
+  /// In fr, this message translates to:
+  /// **'Calendrier'**
+  String get calendarBookings;
+
+  /// No description provided for @seeRequests.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir les {count} demandes...'**
+  String seeRequests(int count);
+
+  /// No description provided for @registrationTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer un compte'**
+  String get registrationTitle;
+
+  /// No description provided for @fullNameLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom complet'**
+  String get fullNameLabel;
+
+  /// No description provided for @fullNameHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre nom complet'**
+  String get fullNameHint;
+
+  /// No description provided for @confirmPasswordLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confirmer le mot de passe'**
+  String get confirmPasswordLabel;
+
+  /// No description provided for @weightLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Poids (kg)'**
+  String get weightLabel;
+
+  /// No description provided for @weightHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Optionnel'**
+  String get weightHint;
+
+  /// No description provided for @createAccountButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'CRÉER LE COMPTE'**
+  String get createAccountButton;
+
+  /// No description provided for @alreadyHaveAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'DÉJÀ UN COMPTE ? SE CONNECTER'**
+  String get alreadyHaveAccount;
+
+  /// No description provided for @passwordsMismatch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les mots de passe ne correspondent pas.'**
+  String get passwordsMismatch;
+
+  /// No description provided for @accountCreatedSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'✅ Compte créé avec succès ! Vous pouvez vous connecter.'**
+  String get accountCreatedSuccess;
+
+  /// No description provided for @uploadPhoto.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une photo'**
+  String get uploadPhoto;
 }
 
 class _AppLocalizationsDelegate

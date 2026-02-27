@@ -347,4 +347,55 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tryAgain => 'Intentar de nuevo';
+
+  @override
+  String get adminScreenTitle => 'Panel de Administración';
+
+  @override
+  String get pendingAbsencesAlert => 'AUSENCIAS POR VALIDAR';
+
+  @override
+  String get dashboardKPIs => 'Tablero (KPIs)';
+
+  @override
+  String get calendarBookings => 'Calendario';
+
+  @override
+  String seeRequests(int count) {
+    return 'Ver $count solicitudes...';
+  }
+
+  @override
+  String get registrationTitle => 'Crear cuenta';
+
+  @override
+  String get fullNameLabel => 'Nombre completo';
+
+  @override
+  String get fullNameHint => 'Tu nombre completo';
+
+  @override
+  String get confirmPasswordLabel => 'Confirmar contraseña';
+
+  @override
+  String get weightLabel => 'Peso (kg)';
+
+  @override
+  String get weightHint => 'Opcional';
+
+  @override
+  String get createAccountButton => 'CREAR CUENTA';
+
+  @override
+  String get alreadyHaveAccount => '¿YA TIENES CUENTA? INICIAR SESIÓN';
+
+  @override
+  String get passwordsMismatch => 'Las contraseñas no coinciden.';
+
+  @override
+  String get accountCreatedSuccess =>
+      '✅ ¡Cuenta creada exitosamente! Puedes iniciar sesión.';
+
+  @override
+  String get uploadPhoto => 'Añadir una foto';
 }

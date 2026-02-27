@@ -120,5 +120,26 @@
   "networkError": "连接错误",
   "unauthorized": "未授权",
   "notFound": "未找到",
-  "tryAgain": "重试"
+  "tryAgain": "重试",
+  "adminScreenTitle": "管理面板",
+  "pendingAbsencesAlert": "待确认的缺勤",
+  "dashboardKPIs": "仪表板（KPI）",
+  "calendarBookings": "日历",
+  "seeRequests": "查看 {count} 个请求...",
+  "@seeRequests": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "registrationTitle": "创建账户",
+  "fullNameLabel": "全名",
+  "fullNameHint": "您的全名",
+  "confirmPasswordLabel": "确认密码",
+  "weightLabel": "体重（kg）",
+  "weightHint": "可选",
+  "createAccountButton": "创建账户",
+  "alreadyHaveAccount": "已有账户？登录",
+  "passwordsMismatch": "密码不匹配。",
+  "accountCreatedSuccess": "✅ 账户创建成功！您可以登录了。",
+  "uploadPhoto": "添加照片"
 }

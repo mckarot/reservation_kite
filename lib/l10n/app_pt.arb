@@ -120,5 +120,26 @@
   "networkError": "Erro de conexão",
   "unauthorized": "Não autorizado",
   "notFound": "Não encontrado",
-  "tryAgain": "Tentar novamente"
+  "tryAgain": "Tentar novamente",
+  "adminScreenTitle": "Painel Administrativo",
+  "pendingAbsencesAlert": "AUSENCIAS PARA VALIDAR",
+  "dashboardKPIs": "Painel (KPIs)",
+  "calendarBookings": "Calendário",
+  "seeRequests": "Ver {count} solicitações...",
+  "@seeRequests": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "registrationTitle": "Criar conta",
+  "fullNameLabel": "Nome completo",
+  "fullNameHint": "Seu nome completo",
+  "confirmPasswordLabel": "Confirmar senha",
+  "weightLabel": "Peso (kg)",
+  "weightHint": "Opcional",
+  "createAccountButton": "CRIAR CONTA",
+  "alreadyHaveAccount": "JÁ TEM UMA CONTA? ENTRAR",
+  "passwordsMismatch": "As senhas não coincidem.",
+  "accountCreatedSuccess": "✅ Conta criada com sucesso! Você pode fazer login.",
+  "uploadPhoto": "Adicionar uma foto"
 }

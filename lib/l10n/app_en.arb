@@ -120,5 +120,26 @@
   "networkError": "Connection error",
   "unauthorized": "Unauthorized",
   "notFound": "Not found",
-  "tryAgain": "Try again"
+  "tryAgain": "Try again",
+  "adminScreenTitle": "Admin Panel",
+  "pendingAbsencesAlert": "ABSENCES TO VALIDATE",
+  "dashboardKPIs": "Dashboard (KPIs)",
+  "calendarBookings": "Calendar",
+  "seeRequests": "See {count} requests...",
+  "@seeRequests": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "registrationTitle": "Create account",
+  "fullNameLabel": "Full name",
+  "fullNameHint": "Your full name",
+  "confirmPasswordLabel": "Confirm password",
+  "weightLabel": "Weight (kg)",
+  "weightHint": "Optional",
+  "createAccountButton": "CREATE ACCOUNT",
+  "alreadyHaveAccount": "ALREADY HAVE AN ACCOUNT? LOGIN",
+  "passwordsMismatch": "Passwords do not match.",
+  "accountCreatedSuccess": "✅ Account created successfully! You can login.",
+  "uploadPhoto": "Add a photo"
 }

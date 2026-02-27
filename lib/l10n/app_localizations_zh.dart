@@ -341,4 +341,54 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tryAgain => '重试';
+
+  @override
+  String get adminScreenTitle => '管理面板';
+
+  @override
+  String get pendingAbsencesAlert => '待确认的缺勤';
+
+  @override
+  String get dashboardKPIs => '仪表板（KPI）';
+
+  @override
+  String get calendarBookings => '日历';
+
+  @override
+  String seeRequests(int count) {
+    return '查看 $count 个请求...';
+  }
+
+  @override
+  String get registrationTitle => '创建账户';
+
+  @override
+  String get fullNameLabel => '全名';
+
+  @override
+  String get fullNameHint => '您的全名';
+
+  @override
+  String get confirmPasswordLabel => '确认密码';
+
+  @override
+  String get weightLabel => '体重（kg）';
+
+  @override
+  String get weightHint => '可选';
+
+  @override
+  String get createAccountButton => '创建账户';
+
+  @override
+  String get alreadyHaveAccount => '已有账户？登录';
+
+  @override
+  String get passwordsMismatch => '密码不匹配。';
+
+  @override
+  String get accountCreatedSuccess => '✅ 账户创建成功！您可以登录了。';
+
+  @override
+  String get uploadPhoto => '添加照片';
 }
