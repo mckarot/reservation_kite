@@ -3,26 +3,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/providers/service_providers.dart';
 import '../../domain/models/user.dart';
 import '../../services/weather_service.dart';
+import '../../l10n/app_localizations.dart';
 
-class PupilDashboardTab extends StatelessWidget {
+class PupilDashboardTab extends ConsumerWidget {
   final User user;
   const PupilDashboardTab({super.key, required this.user});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Bonjour, ${user.displayName.split(" ")[0]} 🤙',
+            '${l10n.welcomeMessage(user.displayName.split(" ")[0])} 🤙',
             style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Prêt pour une session ?',
-            style: TextStyle(color: Colors.grey, fontSize: 16),
+          Text(
+            l10n.readyForSession,
+            style: const TextStyle(color: Colors.grey, fontSize: 16),
           ),
           const SizedBox(height: 24),
           const _CurrentWeatherCard(),
@@ -49,18 +52,18 @@ class PupilDashboardTab extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'MON SOLDE',
-                      style: TextStyle(
+                      l10n.myBalance,
+                      style: const TextStyle(
                         color: Colors.white70,
                         letterSpacing: 1.2,
                         fontSize: 12,
                       ),
                     ),
-                    Icon(Icons.waves, color: Colors.white70, size: 20),
+                    const Icon(Icons.waves, color: Colors.white70, size: 20),
                   ],
                 ),
                 const SizedBox(height: 12),
@@ -72,31 +75,31 @@ class PupilDashboardTab extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const Text(
-                  'SEANCES RESTANTES',
-                  style: TextStyle(color: Colors.white70, fontSize: 12),
+                Text(
+                  l10n.sessionsRemaining,
+                  style: const TextStyle(color: Colors.white70, fontSize: 12),
                 ),
               ],
             ),
           ),
 
           const SizedBox(height: 32),
-          const Text(
-            'STATS RAPIDES',
-            style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.1),
+          Text(
+            l10n.quickStats,
+            style: const TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.1),
           ),
           const SizedBox(height: 16),
           Row(
             children: [
               _StatItem(
-                label: 'Niveau IKO',
+                label: l10n.ikoLevel,
                 value: user.progress?.ikoLevel ?? 'N/A',
                 icon: Icons.star,
                 color: Colors.amber,
               ),
               const SizedBox(width: 16),
               _StatItem(
-                label: 'Progression',
+                label: l10n.progression,
                 value:
                     '${user.progress?.checklist.length ?? 0}/${UserProgress.allIkoSkills.length}',
                 icon: Icons.flag,
@@ -112,14 +115,14 @@ class PupilDashboardTab extends StatelessWidget {
               color: Colors.grey.shade100,
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Row(
+            child: Row(
               children: [
-                Icon(Icons.info_outline, color: Colors.blue),
-                SizedBox(width: 16),
+                const Icon(Icons.info_outline, color: Colors.blue),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Text(
-                    'Pensez à prendre votre crème solaire. Rendez-vous au cabanon 15min avant !',
-                    style: TextStyle(fontSize: 13),
+                    l10n.weatherInfo,
+                    style: const TextStyle(fontSize: 13),
                   ),
                 ),
               ],
@@ -136,6 +139,7 @@ class _CurrentWeatherCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final weatherAsync = ref.watch(currentWeatherProvider);
     return weatherAsync.when(
       data: (weather) => Container(
@@ -150,9 +154,9 @@ class _CurrentWeatherCard extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Météo Actuelle',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                Text(
+                  l10n.currentWeather,
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 Icon(_getWeatherIcon(weather.weatherCode), color: Colors.blue.shade700, size: 24),
               ],
@@ -167,7 +171,7 @@ class _CurrentWeatherCard extends ConsumerWidget {
                 ),
                 _WeatherInfoItem(
                   icon: Icons.air,
-                  label: '${weather.windSpeed.round()} km/h',
+                  label: '${weather.windSpeed.round()} ${l10n.kmh}',
                 ),
                 _WeatherInfoItem(
                   icon: Icons.explore,
@@ -179,7 +183,7 @@ class _CurrentWeatherCard extends ConsumerWidget {
         ),
       ),
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => const SizedBox.shrink(), // Ne rien afficher en cas d'erreur
+      error: (e, _) => const SizedBox.shrink(),
     );
   }
 

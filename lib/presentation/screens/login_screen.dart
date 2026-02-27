@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:reservation_kite/presentation/screens/registration_screen.dart';
 import '../../data/providers/repository_providers.dart';
+import '../../l10n/app_localizations.dart';
+import '../providers/locale_provider.dart';
+import '../widgets/language_selector.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -25,10 +28,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _login() async {
+    final l10n = AppLocalizations.of(context)!;
+    
     if (_passwordController.text.length < 6) {
       setState(
         () =>
-            _errorMessage = "Le mot de passe doit faire au moins 6 caractères.",
+            _errorMessage = l10n.passwordHintError,
       );
       return;
     }
@@ -48,14 +53,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
       if (user == null) {
         setState(() {
-          _errorMessage = "Utilisateur non trouvé ou erreur de connexion.";
+          _errorMessage = l10n.loginError;
           _isLoading = false;
         });
       }
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _errorMessage = "Erreur : ${e.toString()}";
+        _errorMessage = "${l10n.genericError} : ${e.toString()}";
         _isLoading = false;
       });
     }
@@ -64,6 +69,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
 
   Future<void> _setupTestData() async {
+    final l10n = AppLocalizations.of(context)!;
+    
     setState(() {
       _isLoading = true;
       _errorMessage = null;
@@ -153,15 +160,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('🚀 Données de test et collections initialisées !'),
+        SnackBar(
+          content: Text('🚀 ${l10n.initSchemaSuccess}'),
           backgroundColor: Colors.blue,
         ),
       );
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _errorMessage = "Erreur d'initialisation : $e";
+        _errorMessage = "${l10n.initSchemaError}: $e";
       });
     } finally {
       if (mounted) {
@@ -172,8 +179,42 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localeAsync = ref.watch(localeNotifierProvider);
+    final currentLocale = localeAsync.value ?? const Locale('fr');
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade50,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(
+          l10n.appName,
+          style: const TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: DropdownButton<Locale>(
+              value: currentLocale,
+              underline: const SizedBox(),
+              icon: const Icon(Icons.language, color: Colors.blueGrey),
+              items: const [
+                DropdownMenuItem(value: Locale('fr'), child: Text('🇫🇷 FR')),
+                DropdownMenuItem(value: Locale('en'), child: Text('🇬🇧 EN')),
+                DropdownMenuItem(value: Locale('es'), child: Text('🇪🇸 ES')),
+                DropdownMenuItem(value: Locale('pt'), child: Text('🇵🇹 PT')),
+                DropdownMenuItem(value: Locale('zh'), child: Text('🇨🇳 ZH')),
+              ],
+              onChanged: (locale) {
+                if (locale != null) {
+                  ref.read(localeNotifierProvider.notifier).setLocale(locale.languageCode);
+                }
+              },
+            ),
+          ),
+        ],
+      ),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
@@ -189,35 +230,38 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 children: [
                   const Icon(Icons.sailing, size: 64, color: Colors.blueGrey),
                   const SizedBox(height: 16),
-                  const Text(
-                    'Kite Reserve',
-                    style: TextStyle(
+                  Text(
+                    l10n.appName,
+                    style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: Colors.blueGrey,
                     ),
                   ),
-                  const Text(
-                    'Migration Firebase v2',
-                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                  const SizedBox(height: 8),
+                  Text(
+                    l10n.loginTitle,
+                    style: const TextStyle(color: Colors.grey, fontSize: 14),
                   ),
                   const SizedBox(height: 32),
                   TextField(
                     controller: _emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      prefixIcon: Icon(Icons.email),
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: l10n.emailLabel,
+                      hintText: l10n.emailHint,
+                      prefixIcon: const Icon(Icons.email),
+                      border: const OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.emailAddress,
                   ),
                   const SizedBox(height: 16),
                   TextField(
                     controller: _passwordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Mot de passe',
-                      prefixIcon: Icon(Icons.lock),
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: l10n.passwordLabel,
+                      hintText: l10n.passwordHint,
+                      prefixIcon: const Icon(Icons.lock),
+                      border: const OutlineInputBorder(),
                     ),
                     obscureText: true,
                   ),
@@ -243,7 +287,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       child: _isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text('SE CONNECTER'),
+                          : Text(l10n.loginButton),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -253,7 +297,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         builder: (context) => const RegistrationScreen(),
                       ));
                     },
-                    child: const Text('PAS DE COMPTE ? CRÉER UN COMPTE'),
+                    child: Text(l10n.noAccount),
                   ),
                   const SizedBox(height: 24),
                   Row(
@@ -262,9 +306,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       TextButton.icon(
                         onPressed: _isLoading ? null : _setupTestData,
                         icon: const Icon(Icons.storage, size: 14),
-                        label: const Text(
-                          'Init Schéma',
-                          style: TextStyle(fontSize: 11),
+                        label: Text(
+                          l10n.initSchema,
+                          style: const TextStyle(fontSize: 11),
                         ),
                       ),
                     ],

@@ -14,6 +14,7 @@ import '../../domain/models/settings.dart' hide TimeSlot;
 import '../../domain/models/staff_unavailability.dart';
 import '../../domain/logic/booking_validator.dart';
 import '../providers/auth_state_provider.dart';
+import '../../l10n/app_localizations.dart';
 
 final weatherProvider = StateProvider<AsyncValue<Weather>>((ref) => const AsyncValue.loading());
 
@@ -42,13 +43,15 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
   }
 
   Future<void> _fetchWeatherForSelectedDate() async {
+    final l10n = AppLocalizations.of(context)!;
+    
     ref.read(weatherProvider.notifier).state = const AsyncValue.loading();
     final today = DateTime.now();
     final difference = _selectedDate.difference(today).inDays;
 
     if (difference > 14) {
       ref.read(weatherProvider.notifier).state = AsyncValue.error(
-        'La date est trop lointaine pour une prévision météo précise.',
+        l10n.weatherDateTooFar,
         StackTrace.current,
       );
       return;
@@ -65,6 +68,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final bookingsAsync = ref.watch(bookingNotifierProvider);
     final settingsAsync = ref.watch(settingsNotifierProvider);
     final staffAsync = ref.watch(staffNotifierProvider);
@@ -76,7 +80,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
-        title: const Text('Solliciter un cours'),
+        title: Text(l10n.bookingScreen),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
@@ -90,9 +94,9 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Choisissez une date',
-                      style: TextStyle(
+                    Text(
+                      l10n.selectDate,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -141,9 +145,9 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                     const SizedBox(height: 16),
                     const _WeatherInfo(),
                     const SizedBox(height: 32),
-                    const Text(
-                      'Créneau horaire',
-                      style: TextStyle(
+                    Text(
+                      l10n.selectSlot,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -152,7 +156,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                     Row(
                       children: [
                         _SlotOption(
-                          label: 'Matin',
+                          label: l10n.morning,
                           icon: Icons.wb_sunny_outlined,
                           isSelected: _selectedSlot == TimeSlot.morning,
                           onTap: () =>
@@ -160,7 +164,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                         ),
                         const SizedBox(width: 16),
                         _SlotOption(
-                          label: 'Après-midi',
+                          label: l10n.afternoon,
                           icon: Icons.wb_twilight,
                           isSelected: _selectedSlot == TimeSlot.afternoon,
                           onTap: () => setState(
@@ -170,9 +174,9 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                       ],
                     ),
                     const SizedBox(height: 32),
-                    const Text(
-                      'Notes ou préférences (optionnel)',
-                      style: TextStyle(
+                    Text(
+                      l10n.bookingNotes,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -181,8 +185,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                     TextField(
                       controller: _notesController,
                       decoration: InputDecoration(
-                        hintText:
-                            'Ex: Préférence pour un moniteur, niveau actuel...',
+                        hintText: l10n.bookingNotesHint,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -219,6 +222,8 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
     AsyncValue<List<StaffUnavailability>> unavailabilitiesAsync,
     String? pupilId,
   ) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -278,9 +283,9 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                     Text(
                       isFull
                           ? (maxCap == 0
-                                ? 'Indisponible (Staff absent)'
-                                : 'Complet')
-                          : 'Places restantes : $remaining',
+                                ? l10n.slotUnavailable
+                                : l10n.slotFull)
+                          : '${l10n.remainingSlots} $remaining',
                       style: TextStyle(
                         fontSize: 14,
                         color: isFull ? Colors.red : Colors.green.shade700,
@@ -305,9 +310,9 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                         borderRadius: BorderRadius.circular(16),
                       ),
                     ),
-                    child: const Text(
-                      'Envoyer la demande',
-                      style: TextStyle(
+                    child: Text(
+                      l10n.sendRequest,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 0.5,
@@ -331,6 +336,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
     String? pupilId,
   ) async {
     if (pupilId == null) return;
+    final l10n = AppLocalizations.of(context)!;
 
     final usersAsync = ref.read(userNotifierProvider);
     final user = usersAsync.value?.firstWhere((u) => u.id == pupilId);
@@ -339,9 +345,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
 
     if (user.walletBalance <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Solde insuffisant. Veuillez recharger votre compte.'),
-        ),
+        SnackBar(content: Text(l10n.insufficientBalance)),
       );
       return;
     }
@@ -364,9 +368,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
         ).showSnackBar(SnackBar(content: Text(error)));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Demande envoyée ! En attente de validation admin.'),
-          ),
+          SnackBar(content: Text(l10n.bookingSent)),
         );
         Navigator.pop(context);
       }
@@ -391,6 +393,7 @@ class _WeatherInfo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final weatherAsync = ref.watch(weatherProvider);
     return weatherAsync.when(
       data: (weather) => Column(
@@ -404,16 +407,16 @@ class _WeatherInfo extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   _WeatherItem(icon: _getWeatherIcon(weather.weatherCode), label: '${weather.maxTemperature.round()}°C'),
-                  _WeatherItem(icon: Icons.air, label: '${weather.windSpeed.round()} km/h'),
+                  _WeatherItem(icon: Icons.air, label: '${weather.windSpeed.round()} ${l10n.kmh}'),
                   _WeatherItem(icon: Icons.explore, label: _getWindDirection(weather.windDirection)),
                 ],
               ),
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Météo à titre indicatif, susceptible de changer.',
-            style: TextStyle(fontSize: 12, color: Colors.grey),
+          Text(
+            l10n.weatherInfo,
+            style: const TextStyle(fontSize: 12, color: Colors.grey),
             textAlign: TextAlign.center,
           ),
         ],
@@ -421,7 +424,7 @@ class _WeatherInfo extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, _) => Center(
         child: Text(
-          e is String ? e : 'Erreur météo: ${e.toString()}',
+          e is String ? e : '${l10n.genericError}: ${e.toString()}',
           textAlign: TextAlign.center,
           style: const TextStyle(color: Colors.red),
         ),

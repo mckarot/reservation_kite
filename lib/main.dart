@@ -7,10 +7,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'firebase_options.dart';
 
+import 'l10n/app_localizations.dart';
 import 'services/reservation_service.dart';
 import 'presentation/screens/pupil_main_screen.dart';
 import 'presentation/screens/monitor_main_screen.dart';
 import 'presentation/providers/auth_state_provider.dart';
+import 'presentation/providers/locale_provider.dart';
 import 'presentation/screens/login_screen.dart';
 import 'data/providers/repository_providers.dart';
 import 'package:reservation_kite/presentation/screens/admin_screen.dart';
@@ -56,6 +58,7 @@ class MainApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(currentUserProvider);
+    final localeAsync = ref.watch(localeNotifierProvider);
 
     Widget home = authState.when(
       data: (user) {
@@ -85,12 +88,19 @@ class MainApp extends ConsumerWidget {
         useMaterial3: true,
       ),
       localizationsDelegates: const [
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [Locale('fr', 'FR')],
-      locale: const Locale('fr', 'FR'),
+      supportedLocales: const [
+        Locale('fr'),  // Français
+        Locale('en'),  // Anglais
+        Locale('es'),  // Espagnol
+        Locale('pt'),  // Portugais
+        Locale('zh'),  // Chinois
+      ],
+      locale: localeAsync.value ?? const Locale('fr'),
       home: home,
     );
   }
