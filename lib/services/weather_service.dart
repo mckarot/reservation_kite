@@ -7,12 +7,14 @@ class Weather {
   final int weatherCode;
   final double maxTemperature;
   final double windSpeed;
+  final double windDirection;
 
   Weather({
     required this.date,
     required this.weatherCode,
     required this.maxTemperature,
     required this.windSpeed,
+    required this.windDirection,
   });
 
   factory Weather.fromJson(Map<String, dynamic> json, int index) {
@@ -21,6 +23,7 @@ class Weather {
       weatherCode: (json['daily']['weathercode'][index] as num).toInt(),
       maxTemperature: (json['daily']['temperature_2m_max'][index] as num).toDouble(),
       windSpeed: (json['daily']['windspeed_10m_max'][index] as num).toDouble(),
+      windDirection: (json['daily']['winddirection_10m_dominant'][index] as num).toDouble(),
     );
   }
 }
@@ -33,7 +36,7 @@ class WeatherService {
   Future<Weather> getWeatherForDate(DateTime date) async {
     final formattedDate = DateFormat('yyyy-MM-dd').format(date);
     final url = Uri.parse(
-        '$_baseUrl?latitude=$_latitude&longitude=$_longitude&daily=weathercode,temperature_2m_max,windspeed_10m_max&start_date=$formattedDate&end_date=$formattedDate&timezone=auto');
+        '$_baseUrl?latitude=$_latitude&longitude=$_longitude&daily=weathercode,temperature_2m_max,windspeed_10m_max,winddirection_10m_dominant&start_date=$formattedDate&end_date=$formattedDate&timezone=auto');
 
     final response = await http.get(url);
 

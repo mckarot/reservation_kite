@@ -43,6 +43,17 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
 
   Future<void> _fetchWeatherForSelectedDate() async {
     ref.read(weatherProvider.notifier).state = const AsyncValue.loading();
+    final today = DateTime.now();
+    final difference = _selectedDate.difference(today).inDays;
+
+    if (difference > 14) {
+      ref.read(weatherProvider.notifier).state = AsyncValue.error(
+        'La date est trop lointaine pour une prévision météo précise.',
+        StackTrace.current,
+      );
+      return;
+    }
+
     try {
       final weatherService = ref.read(weatherServiceProvider);
       final weather = await weatherService.getWeatherForDate(_selectedDate);
@@ -366,26 +377,55 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
 class _WeatherInfo extends ConsumerWidget {
   const _WeatherInfo();
 
+  String _getWindDirection(double degrees) {
+    if (degrees > 337.5 || degrees <= 22.5) return 'N';
+    if (degrees > 22.5 && degrees <= 67.5) return 'NE';
+    if (degrees > 67.5 && degrees <= 112.5) return 'E';
+    if (degrees > 112.5 && degrees <= 157.5) return 'SE';
+    if (degrees > 157.5 && degrees <= 202.5) return 'S';
+    if (degrees > 202.5 && degrees <= 247.5) return 'SW';
+    if (degrees > 247.5 && degrees <= 292.5) return 'W';
+    if (degrees > 292.5 && degrees <= 337.5) return 'NW';
+    return '';
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final weatherAsync = ref.watch(weatherProvider);
     return weatherAsync.when(
-      data: (weather) => Card(
-        color: Colors.white,
-        elevation: 2,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _WeatherItem(icon: _getWeatherIcon(weather.weatherCode), label: '${weather.maxTemperature.round()}°C'),
-              _WeatherItem(icon: Icons.air, label: '${weather.windSpeed.round()} km/h'),
-            ],
+      data: (weather) => Column(
+        children: [
+          Card(
+            color: Colors.white,
+            elevation: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _WeatherItem(icon: _getWeatherIcon(weather.weatherCode), label: '${weather.maxTemperature.round()}°C'),
+                  _WeatherItem(icon: Icons.air, label: '${weather.windSpeed.round()} km/h'),
+                  _WeatherItem(icon: Icons.explore, label: _getWindDirection(weather.windDirection)),
+                ],
+              ),
+            ),
           ),
-        ),
+          const SizedBox(height: 8),
+          const Text(
+            'Météo à titre indicatif, susceptible de changer.',
+            style: TextStyle(fontSize: 12, color: Colors.grey),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(child: Text('Erreur météo: ${e.toString()}')),
+      error: (e, _) => Center(
+        child: Text(
+          e is String ? e : 'Erreur météo: ${e.toString()}',
+          textAlign: TextAlign.center,
+          style: const TextStyle(color: Colors.red),
+        ),
+      ),
     );
   }
 
