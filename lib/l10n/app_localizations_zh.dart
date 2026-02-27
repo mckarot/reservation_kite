@@ -399,7 +399,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get staffTab => '员工';
 
   @override
-  String get absencesTab => '缺勤';
+  String get absencesTab => '缺席';
 
   @override
   String get pendingHeader => '待处理';

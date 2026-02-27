@@ -343,5 +343,7 @@
   "numberOfCredits": "Número de créditos",
   "priceLabel": "Preço (€)",
   "cancelButton": "Cancelar",
-  "createButton": "Criar"
+  "createButton": "Criar",
+  "staffTab": "Equipa",
+  "absencesTab": "Ausências"
 }

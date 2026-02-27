@@ -869,7 +869,7 @@ abstract class AppLocalizations {
   /// No description provided for @staffTab.
   ///
   /// In fr, this message translates to:
-  /// **'Effectif'**
+  /// **'Staff'**
   String get staffTab;
 
   /// No description provided for @absencesTab.

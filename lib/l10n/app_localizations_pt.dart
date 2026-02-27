@@ -401,7 +401,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get staffManagement => 'Gestão de Equipa';
 
   @override
-  String get staffTab => 'Equipe';
+  String get staffTab => 'Equipa';
 
   @override
   String get absencesTab => 'Ausências';

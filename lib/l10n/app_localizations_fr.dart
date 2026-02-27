@@ -402,7 +402,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get staffManagement => 'Gestion du Staff';
 
   @override
-  String get staffTab => 'Effectif';
+  String get staffTab => 'Staff';
 
   @override
   String get absencesTab => 'Absences';

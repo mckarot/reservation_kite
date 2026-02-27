@@ -343,5 +343,7 @@
   "numberOfCredits": "积分数量",
   "priceLabel": "价格 (€)",
   "cancelButton": "取消",
-  "createButton": "创建"
+  "createButton": "创建",
+  "staffTab": "员工",
+  "absencesTab": "缺席"
 }
