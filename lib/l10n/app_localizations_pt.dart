@@ -461,7 +461,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get addButton => 'Adicionar';
 
   @override
-  String get statusPending => 'PENDENTE';
+  String get statusPending => 'Pendente';
 
   @override
   String get statusApproved => 'Aprovado';
@@ -620,4 +620,88 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get equipmentStatusUpdated => 'Status do equipamento atualizado!';
+
+  @override
+  String get monitorSpace => 'Espaço do Instrutor';
+
+  @override
+  String get myAbsences => 'Minhas Ausências';
+
+  @override
+  String get monitorProfileNotActive => 'Perfil de Instrutor não ativado';
+
+  @override
+  String get monitorProfileNotActiveDesc =>
+      'Sua conta foi criada, mas um administrador ainda precisa adicioná-lo à equipe da escola para ativar seu espaço.';
+
+  @override
+  String get signOut => 'SAIR';
+
+  @override
+  String get lessonPlan => 'PLANO DE AULAS';
+
+  @override
+  String get noLessonsAssigned => 'Nenhuma aula atribuída para este dia';
+
+  @override
+  String get declareAbsence => 'Declarar uma ausência';
+
+  @override
+  String get noAbsencesDeclared => 'Nenhuma ausência declarada.';
+
+  @override
+  String get absenceRequestTitle => 'Solicitação de ausência';
+
+  @override
+  String get timeSlot => 'Período';
+
+  @override
+  String get absenceReasonHint => 'Motivo (ex: Pessoal, Doença)';
+
+  @override
+  String get send => 'Enviar';
+
+  @override
+  String greeting(String name) {
+    return 'Olá, $name! 🤙';
+  }
+
+  @override
+  String get offSystem => 'Fora do Sistema';
+
+  @override
+  String get fullDay => 'Dia inteiro';
+
+  @override
+  String get reservations => 'Reservas';
+
+  @override
+  String get dateLabel => 'Data';
+
+  @override
+  String get noReservationsOnSlot => 'Nenhuma reserva para este período';
+
+  @override
+  String get instructorUnassigned => 'Instrutor não atribuído';
+
+  @override
+  String get noteLabel => 'Nota';
+
+  @override
+  String get newReservation => 'Nova Reserva';
+
+  @override
+  String get clientNameLabel => 'Nome do Cliente';
+
+  @override
+  String get instructorOptional => 'Instrutor (Opcional)';
+
+  @override
+  String get randomInstructor => 'Aleatório / Equipe';
+
+  @override
+  String get notesLabel => 'Notas / Comentários';
+
+  @override
+  String get notesHint => 'Ex: Preferência de instrutor...';
 }

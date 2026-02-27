@@ -613,4 +613,87 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get equipmentStatusUpdated => '设备状态已更新！';
+
+  @override
+  String get monitorSpace => '教练空间';
+
+  @override
+  String get myAbsences => '我的缺席';
+
+  @override
+  String get monitorProfileNotActive => '教练资料未激活';
+
+  @override
+  String get monitorProfileNotActiveDesc => '您的账户已创建，但管理员仍需将您添加到学校员工名单以激活您的空间。';
+
+  @override
+  String get signOut => '退出登录';
+
+  @override
+  String get lessonPlan => '课程计划';
+
+  @override
+  String get noLessonsAssigned => '今天没有分配的课程';
+
+  @override
+  String get declareAbsence => '申报缺席';
+
+  @override
+  String get noAbsencesDeclared => '没有申报的缺席。';
+
+  @override
+  String get absenceRequestTitle => '缺席申请';
+
+  @override
+  String get timeSlot => '时间段';
+
+  @override
+  String get absenceReasonHint => '原因（例如：个人、生病）';
+
+  @override
+  String get send => '发送';
+
+  @override
+  String greeting(String name) {
+    return '你好，$name！🤙';
+  }
+
+  @override
+  String get offSystem => '系统外';
+
+  @override
+  String get fullDay => '全天';
+
+  @override
+  String get reservations => '预订';
+
+  @override
+  String get dateLabel => '日期';
+
+  @override
+  String get noReservationsOnSlot => '此时间段没有预订';
+
+  @override
+  String get instructorUnassigned => '未分配教练';
+
+  @override
+  String get noteLabel => '备注';
+
+  @override
+  String get newReservation => '新预订';
+
+  @override
+  String get clientNameLabel => '客户姓名';
+
+  @override
+  String get instructorOptional => '教练（可选）';
+
+  @override
+  String get randomInstructor => '随机/团队';
+
+  @override
+  String get notesLabel => '注释/评论';
+
+  @override
+  String get notesHint => '例如：教练偏好...';
 }

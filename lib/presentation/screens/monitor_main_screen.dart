@@ -10,6 +10,7 @@ import '../../domain/models/reservation.dart';
 import '../../domain/models/staff.dart';
 import '../../domain/models/staff_unavailability.dart';
 import '../providers/unavailability_notifier.dart';
+import '../../l10n/app_localizations.dart';
 
 class MonitorMainScreen extends ConsumerStatefulWidget {
   const MonitorMainScreen({super.key});
@@ -23,6 +24,7 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final currentUserAsync = ref.watch(currentUserProvider);
     final staffAsync = ref.watch(staffNotifierProvider);
     final bookingsAsync = ref.watch(bookingNotifierProvider);
@@ -35,11 +37,11 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Espace Moniteur'),
+        title: Text(l10n.monitorSpace),
         actions: [
           IconButton(
             icon: const Icon(Icons.event_busy),
-            tooltip: 'Mes Absences',
+            tooltip: l10n.myAbsences,
             onPressed: () => _showAbsenceDialog(context, ref, effectiveStaffId),
           ),
           IconButton(
@@ -69,15 +71,15 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
                       ),
                       SizedBox(height: 16),
                       Text(
-                        'Profil Moniteur non activé',
-                        style: TextStyle(
+                        l10n.monitorProfileNotActive,
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       SizedBox(height: 8),
                       Text(
-                        'Votre compte a été créé, mais un administrateur doit encore vous ajouter à l\'effectif de l\'école pour activer votre espace.',
+                        l10n.monitorProfileNotActiveDesc,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 24),
@@ -85,7 +87,7 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
                         onPressed: () =>
                             ref.read(authRepositoryProvider).signOut(),
                         icon: const Icon(Icons.logout),
-                        label: const Text('SE DÉCONNECTER'),
+                        label: Text(l10n.signOut),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blueGrey,
                           foregroundColor: Colors.white,
@@ -132,8 +134,8 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
                     }).toList();
 
                     if (myLessons.isEmpty) {
-                      return const Center(
-                        child: Text('Aucun cours assigné pour ce jour'),
+                      return Center(
+                        child: Text(l10n.noLessonsAssigned),
                       );
                     }
 
@@ -147,14 +149,14 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
                   },
                   loading: () =>
                       const Center(child: CircularProgressIndicator()),
-                  error: (e, _) => Center(child: Text('Erreur: $e')),
+                  error: (e, _) => Center(child: Text('${l10n.errorLabel}: $e')),
                 ),
               ),
             ],
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Erreur: $e')),
+        error: (e, _) => Center(child: Text('${l10n.errorLabel}: $e')),
       ),
     );
   }
@@ -173,10 +175,11 @@ class _AbsenceManagementDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final unavailabilitiesAsync = ref.watch(unavailabilityNotifierProvider);
 
     return AlertDialog(
-      title: const Text('Mes Absences'),
+      title: Text(l10n.myAbsences),
       content: SizedBox(
         width: double.maxFinite,
         child: Column(
@@ -185,7 +188,7 @@ class _AbsenceManagementDialog extends ConsumerWidget {
             ElevatedButton.icon(
               onPressed: () => _requestAbsence(context, ref),
               icon: const Icon(Icons.add),
-              label: const Text('Déclarer une absence'),
+              label: Text(l10n.declareAbsence),
             ),
             const Divider(),
             Flexible(
@@ -195,11 +198,11 @@ class _AbsenceManagementDialog extends ConsumerWidget {
                       .where((u) => u.staffId == staffId)
                       .toList();
                   if (myAbsences.isEmpty) {
-                    return const Padding(
-                      padding: EdgeInsets.all(16.0),
+                    return Padding(
+                      padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        'Aucune absence déclarée.',
-                        style: TextStyle(color: Colors.grey),
+                        l10n.noAbsencesDeclared,
+                        style: const TextStyle(color: Colors.grey),
                       ),
                     );
                   }
@@ -211,10 +214,10 @@ class _AbsenceManagementDialog extends ConsumerWidget {
                       return ListTile(
                         dense: true,
                         title: Text(
-                          '${u.date.day}/${u.date.month} - ${u.slot == TimeSlot.fullDay ? 'Journée entière' : (u.slot == TimeSlot.morning ? 'Matin' : 'Aprem')}',
+                          '${u.date.day}/${u.date.month} - ${u.slot == TimeSlot.fullDay ? l10n.fullDay : (u.slot == TimeSlot.morning ? l10n.morning : l10n.afternoon)}',
                         ),
                         subtitle: Text(u.reason),
-                        trailing: _StatusBadge(status: u.status),
+                        trailing: _StatusBadge(status: u.status, l10n: l10n),
                         onLongPress: u.status == UnavailabilityStatus.pending
                             ? () => ref
                                   .read(unavailabilityNotifierProvider.notifier)
@@ -225,7 +228,7 @@ class _AbsenceManagementDialog extends ConsumerWidget {
                   );
                 },
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (e, _) => Text('Erreur: $e'),
+                error: (e, _) => Text('${l10n.errorLabel}: $e'),
               ),
             ),
           ],
@@ -234,13 +237,14 @@ class _AbsenceManagementDialog extends ConsumerWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Fermer'),
+          child: Text(l10n.close),
         ),
       ],
     );
   }
 
   void _requestAbsence(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
     DateTime selectedDate = DateTime.now().add(const Duration(days: 1));
     TimeSlot selectedSlot = TimeSlot.morning;
     final reasonController = TextEditingController();
@@ -249,7 +253,7 @@ class _AbsenceManagementDialog extends ConsumerWidget {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: const Text('Demande d\'absence'),
+          title: Text(l10n.absenceRequestTitle),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -271,19 +275,19 @@ class _AbsenceManagementDialog extends ConsumerWidget {
               const SizedBox(height: 8),
               DropdownButtonFormField<TimeSlot>(
                 initialValue: selectedSlot,
-                decoration: const InputDecoration(labelText: 'Créneau'),
-                items: const [
+                decoration: InputDecoration(labelText: l10n.timeSlot),
+                items: [
                   DropdownMenuItem(
                     value: TimeSlot.morning,
-                    child: Text('Matin'),
+                    child: Text(l10n.morning),
                   ),
                   DropdownMenuItem(
                     value: TimeSlot.afternoon,
-                    child: Text('Après-midi'),
+                    child: Text(l10n.afternoon),
                   ),
                   DropdownMenuItem(
                     value: TimeSlot.fullDay,
-                    child: Text('Journée entière'),
+                    child: Text(l10n.fullDay),
                   ),
                 ],
                 onChanged: (val) => setState(() => selectedSlot = val!),
@@ -291,8 +295,8 @@ class _AbsenceManagementDialog extends ConsumerWidget {
               const SizedBox(height: 8),
               TextField(
                 controller: reasonController,
-                decoration: const InputDecoration(
-                  labelText: 'Motif (ex: Perso, Maladie)',
+                decoration: InputDecoration(
+                  labelText: l10n.absenceReasonHint,
                 ),
               ),
             ],
@@ -300,7 +304,7 @@ class _AbsenceManagementDialog extends ConsumerWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Annuler'),
+              child: Text(l10n.cancelButton),
             ),
             ElevatedButton(
               onPressed: () {
@@ -314,7 +318,7 @@ class _AbsenceManagementDialog extends ConsumerWidget {
                     );
                 Navigator.pop(context);
               },
-              child: const Text('Envoyer'),
+              child: Text(l10n.send),
             ),
           ],
         ),
@@ -325,7 +329,8 @@ class _AbsenceManagementDialog extends ConsumerWidget {
 
 class _StatusBadge extends StatelessWidget {
   final UnavailabilityStatus status;
-  const _StatusBadge({required this.status});
+  final AppLocalizations l10n;
+  const _StatusBadge({required this.status, required this.l10n});
 
   @override
   Widget build(BuildContext context) {
@@ -334,15 +339,15 @@ class _StatusBadge extends StatelessWidget {
     switch (status) {
       case UnavailabilityStatus.pending:
         color = Colors.orange;
-        label = 'Attente';
+        label = l10n.statusPending;
         break;
       case UnavailabilityStatus.approved:
         color = Colors.green;
-        label = 'Validé';
+        label = l10n.statusApproved;
         break;
       case UnavailabilityStatus.rejected:
         color = Colors.red;
-        label = 'Refusé';
+        label = l10n.statusRejected;
         break;
     }
     return Container(
@@ -460,6 +465,7 @@ class _MonitorHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -483,7 +489,7 @@ class _MonitorHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Salut, ${staff.name} ! 🤙',
+                  l10n.greeting(staff.name),
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -508,6 +514,7 @@ class _LessonCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final users = ref.watch(userNotifierProvider).value ?? [];
     final pupil = users.any((u) => u.id == reservation.pupilId)
         ? users.firstWhere((u) => u.id == reservation.pupilId)
@@ -539,7 +546,7 @@ class _LessonCard extends ConsumerWidget {
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               subtitle: Text(
-                reservation.slot == TimeSlot.morning ? 'Matin' : 'Après-midi',
+                reservation.slot == TimeSlot.morning ? l10n.morning : l10n.afternoon,
               ),
               trailing: pupil != null
                   ? ElevatedButton(
@@ -554,9 +561,9 @@ class _LessonCard extends ConsumerWidget {
                           ),
                         );
                       },
-                      child: const Text('Valider'),
+                      child: Text(l10n.validate),
                     )
-                  : const Badge(label: Text('Hors Système')),
+                  : Badge(label: Text(l10n.offSystem)),
             ),
             if (reservation.notes.isNotEmpty) ...[
               const Divider(),

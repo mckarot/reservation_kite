@@ -989,7 +989,7 @@ abstract class AppLocalizations {
   /// No description provided for @statusPending.
   ///
   /// In fr, this message translates to:
-  /// **'EN ATTENTE'**
+  /// **'Attente'**
   String get statusPending;
 
   /// No description provided for @statusApproved.
@@ -1291,6 +1291,168 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Statut matériel mis à jour !'**
   String get equipmentStatusUpdated;
+
+  /// No description provided for @monitorSpace.
+  ///
+  /// In fr, this message translates to:
+  /// **'Espace Moniteur'**
+  String get monitorSpace;
+
+  /// No description provided for @myAbsences.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mes Absences'**
+  String get myAbsences;
+
+  /// No description provided for @monitorProfileNotActive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Profil Moniteur non activé'**
+  String get monitorProfileNotActive;
+
+  /// No description provided for @monitorProfileNotActiveDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre compte a été créé, mais un administrateur doit encore vous ajouter à l\'effectif de l\'école pour activer votre espace.'**
+  String get monitorProfileNotActiveDesc;
+
+  /// No description provided for @signOut.
+  ///
+  /// In fr, this message translates to:
+  /// **'SE DÉCONNECTER'**
+  String get signOut;
+
+  /// No description provided for @lessonPlan.
+  ///
+  /// In fr, this message translates to:
+  /// **'PLANNING DES COURS'**
+  String get lessonPlan;
+
+  /// No description provided for @noLessonsAssigned.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun cours assigné pour ce jour'**
+  String get noLessonsAssigned;
+
+  /// No description provided for @declareAbsence.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déclarer une absence'**
+  String get declareAbsence;
+
+  /// No description provided for @noAbsencesDeclared.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune absence déclarée.'**
+  String get noAbsencesDeclared;
+
+  /// No description provided for @absenceRequestTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demande d\'absence'**
+  String get absenceRequestTitle;
+
+  /// No description provided for @timeSlot.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créneau'**
+  String get timeSlot;
+
+  /// No description provided for @absenceReasonHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Motif (ex: Perso, Maladie)'**
+  String get absenceReasonHint;
+
+  /// No description provided for @send.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer'**
+  String get send;
+
+  /// No description provided for @greeting.
+  ///
+  /// In fr, this message translates to:
+  /// **'Salut, {name} ! 🤙'**
+  String greeting(String name);
+
+  /// No description provided for @offSystem.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hors Système'**
+  String get offSystem;
+
+  /// No description provided for @fullDay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Journée entière'**
+  String get fullDay;
+
+  /// No description provided for @reservations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réservations'**
+  String get reservations;
+
+  /// No description provided for @dateLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date'**
+  String get dateLabel;
+
+  /// No description provided for @noReservationsOnSlot.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune réservation sur ce créneau'**
+  String get noReservationsOnSlot;
+
+  /// No description provided for @instructorUnassigned.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moniteur non assigné'**
+  String get instructorUnassigned;
+
+  /// No description provided for @noteLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Note'**
+  String get noteLabel;
+
+  /// No description provided for @newReservation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle Réservation'**
+  String get newReservation;
+
+  /// No description provided for @clientNameLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom du Client'**
+  String get clientNameLabel;
+
+  /// No description provided for @instructorOptional.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moniteur (Optionnel)'**
+  String get instructorOptional;
+
+  /// No description provided for @randomInstructor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Au hasard / Équipe'**
+  String get randomInstructor;
+
+  /// No description provided for @notesLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notes / Commentaires'**
+  String get notesLabel;
+
+  /// No description provided for @notesHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ex: Préférence moniteur...'**
+  String get notesHint;
 }
 
 class _AppLocalizationsDelegate

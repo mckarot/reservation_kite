@@ -1080,13 +1080,13 @@ L'IA **DOIT** suivre cette TODO list dans l'ordre pour éviter les hallucination
 
 #### **4.2 : ÉCRANS MONITEURS (Monitor) - PRIORITÉ 2**
 
-#### ❌ Tâche 4.2.1 : Monitor Main Screen
-- [ ] Remplacer l'écran principal des moniteurs
-- [ ] **Validation :** Plus aucun texte en dur dans `monitor_main_screen.dart`
+#### ✅ Tâche 4.2.1 : Monitor Main Screen
+- [x] Remplacer l'écran principal des moniteurs
+- [x] **Validation :** Plus aucun texte en dur dans `monitor_main_screen.dart`
 
-#### ❌ Tâche 4.2.2 : Booking Screen (Moniteur)
-- [ ] Remplacer les textes de réservation pour moniteurs
-- [ ] **Validation :** Plus aucun texte en dur
+#### ✅ Tâche 4.2.2 : Booking Screen (Moniteur)
+- [x] Remplacer les textes de réservation pour moniteurs
+- [x] **Validation :** Plus aucun texte en dur dans `booking_screen.dart`
 
 ---
 
@@ -1191,28 +1191,24 @@ grep -rn "Text('.*')" lib/ --include="*.dart" | grep -v "AppLocalizations" | gre
 | **Phase 2 : Providers** | ✅ 100% | 2/2 tâches |
 | **Phase 3 : Écrans principaux** | ✅ 100% | 4/4 écrans |
 | **Phase 4.1 : Écrans Élèves** | ✅ 100% | 5/5 écrans |
-| **Phase 4.2 : Écrans Moniteurs** | ⏳ 0% | 0/2 écrans |
+| **Phase 4.2 : Écrans Moniteurs** | ✅ 100% | 2/2 écrans |
 | **Phase 4.3 : Écrans Admin** | ⏳ 12% | 1/8 écrans |
 | **Phase 4.4 : Widgets** | ⏳ 33% | 1/3 widgets |
 | **Phase 5 : Tests** | ⏳ 0% | 0/2 tâches |
 
-**Total : 10 écrans internationalisés sur 17 (59%)**
+**Total : 12 écrans internationalisés sur 17 (71%)**
 
 ---
 
 ### **PROCHAINES ÉTAPES RECOMMANDÉES (Ordre de priorité) :**
 
-#### 🥈 PRIORITÉ 2 - ÉCRANS MONITEURS :
-1. **`monitor_main_screen.dart`** - Écran principal des moniteurs
-2. **`booking_screen.dart`** - Réservations (vue moniteur)
-
 #### 🥉 PRIORITÉ 3 - ÉCRANS ADMIN :
-3. **`admin_settings_screen.dart`** - Configuration de l'école
-4. **`admin_dashboard_screen.dart`** - Tableau de bord KPIs
-5. **`user_directory_screen.dart`** - Répertoire des élèves
-6. **`equipment_admin_screen.dart`** - Gestion du matériel
-7. **`notification_center_screen.dart`** - Centre de notifications
-8. **`credit_pack_admin_screen.dart`** - Packs de crédits
+1. **`admin_settings_screen.dart`** - Configuration de l'école
+2. **`admin_dashboard_screen.dart`** - Tableau de bord KPIs
+3. **`user_directory_screen.dart`** - Répertoire des élèves
+4. **`equipment_admin_screen.dart`** - Gestion du matériel
+5. **`notification_center_screen.dart`** - Centre de notifications
+6. **`credit_pack_admin_screen.dart`** - Packs de crédits
 
 ---
 
@@ -1253,14 +1249,14 @@ Quand tu demanderas à l'IA d'implémenter :
 ---
 
 **Dernière mise à jour :** 2026-02-27
-**Version du document :** 1.7
-**Statut :** En cours - 10/17 écrans internationalisés (59%)
+**Version du document :** 1.9
+**Statut :** En cours - 12/17 écrans internationalisés (71%)
 
 **Changement de priorité :** Les écrans sont maintenant traités par profil utilisateur :
 1. ✅ Écrans principaux (Login, Registration, Admin, Pupil Booking)
 2. ✅ Écrans Élèves - 5/5 faits (COMPLET !)
-3. ⏳ Écrans Moniteurs (Monitor) - **PROCHAINE ÉTAPE**
-4. ⏳ Écrans Admin
+3. ✅ Écrans Moniteurs - 2/2 faits (COMPLET !)
+4. ⏳ Écrans Admin - 1/8 faits
 
 ---
 

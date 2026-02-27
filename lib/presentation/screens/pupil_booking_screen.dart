@@ -29,11 +29,20 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
   DateTime _selectedDate = DateTime.now().add(const Duration(days: 1));
   TimeSlot _selectedSlot = TimeSlot.morning;
   final _notesController = TextEditingController();
+  bool _initialized = false;
 
   @override
   void initState() {
     super.initState();
-    _fetchWeatherForSelectedDate();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_initialized) {
+      _fetchWeatherForSelectedDate();
+      _initialized = true;
+    }
   }
 
   @override
@@ -44,7 +53,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
 
   Future<void> _fetchWeatherForSelectedDate() async {
     final l10n = AppLocalizations.of(context)!;
-    
+
     ref.read(weatherProvider.notifier).state = const AsyncValue.loading();
     final today = DateTime.now();
     final difference = _selectedDate.difference(today).inDays;

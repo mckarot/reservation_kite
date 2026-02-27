@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/reservation.dart';
 import '../providers/booking_notifier.dart';
 import '../providers/staff_notifier.dart';
+import '../../l10n/app_localizations.dart';
 
 class BookingScreen extends ConsumerStatefulWidget {
   const BookingScreen({super.key});
@@ -27,17 +28,18 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final bookingsAsync = ref.watch(bookingNotifierProvider);
     // staffAsync unused here, but used in dialog Consumer
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Réservations')),
+      appBar: AppBar(title: Text(l10n.reservations)),
       body: Column(
         children: [
           // Header / Calendar Placeholder
           ListTile(
             title: Text(
-              'Date: ${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
+              '${l10n.dateLabel}: ${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
             ),
             trailing: IconButton(
               icon: const Icon(Icons.calendar_today),
@@ -53,11 +55,11 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
             ),
           ),
           SegmentedButton<TimeSlot>(
-            segments: const [
-              ButtonSegment(value: TimeSlot.morning, label: Text('Matin')),
+            segments: [
+              ButtonSegment(value: TimeSlot.morning, label: Text(l10n.morning)),
               ButtonSegment(
                 value: TimeSlot.afternoon,
-                label: Text('Après-midi'),
+                label: Text(l10n.afternoon),
               ),
             ],
             selected: {_selectedSlot},
@@ -80,8 +82,8 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                     .toList();
 
                 if (filtered.isEmpty) {
-                  return const Center(
-                    child: Text('Aucune réservation sur ce créneau'),
+                  return Center(
+                    child: Text(l10n.noReservationsOnSlot),
                   );
                 }
 
@@ -94,10 +96,10 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(b.staffId ?? 'Moniteur non assigné'),
+                          Text(b.staffId ?? l10n.instructorUnassigned),
                           if (b.notes.isNotEmpty)
                             Text(
-                              'Note: ${b.notes}',
+                              '${l10n.noteLabel}: ${b.notes}',
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontStyle: FontStyle.italic,
@@ -117,7 +119,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, _) => Center(child: Text('Erreur: $err')),
+              error: (err, _) => Center(child: Text('${l10n.errorLabel}: $err')),
             ),
           ),
         ],
@@ -134,26 +136,27 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
       context: context,
       builder: (context) => Consumer(
         builder: (context, ref, _) {
+          final l10n = AppLocalizations.of(context)!;
           final staff = ref.watch(staffNotifierProvider).value ?? [];
           return AlertDialog(
-            title: const Text('Nouvelle Réservation'),
+            title: Text(l10n.newReservation),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   controller: _clientNameController,
-                  decoration: const InputDecoration(labelText: 'Nom du Client'),
+                  decoration: InputDecoration(labelText: l10n.clientNameLabel),
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(
-                    labelText: 'Moniteur (Optionnel)',
+                  decoration: InputDecoration(
+                    labelText: l10n.instructorOptional,
                   ),
                   initialValue: _selectedStaffId,
                   items: [
-                    const DropdownMenuItem(
+                    DropdownMenuItem(
                       value: null,
-                      child: Text('Au hasard / Équipe'),
+                      child: Text(l10n.randomInstructor),
                     ),
                     ...staff.map(
                       (s) => DropdownMenuItem(value: s.id, child: Text(s.name)),
@@ -164,9 +167,9 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                 const SizedBox(height: 16),
                 TextField(
                   controller: _manualNotesController,
-                  decoration: const InputDecoration(
-                    labelText: 'Notes / Commentaires',
-                    hintText: 'Ex: Préférence moniteur...',
+                  decoration: InputDecoration(
+                    labelText: l10n.notesLabel,
+                    hintText: l10n.notesHint,
                   ),
                 ),
               ],
@@ -174,7 +177,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Annuler'),
+                child: Text(l10n.cancelButton),
               ),
               ElevatedButton(
                 onPressed: () async {
@@ -200,7 +203,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                     }
                   }
                 },
-                child: const Text('Réserver'),
+                child: Text(l10n.bookButton),
               ),
             ],
           );
