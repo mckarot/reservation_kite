@@ -145,7 +145,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                             Text(
                               DateFormat(
                                 'EEEE d MMMM yyyy',
-                                'fr_FR',
+                                l10n.localeName,
                               ).format(_selectedDate),
                               style: const TextStyle(fontSize: 16),
                             ),
