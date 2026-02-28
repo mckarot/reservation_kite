@@ -42,7 +42,8 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_initialized) {
-      _fetchWeatherForSelectedDate();
+      // Delay the weather fetch to avoid modifying provider during build
+      Future.microtask(() => _fetchWeatherForSelectedDate());
       _initialized = true;
     }
   }
