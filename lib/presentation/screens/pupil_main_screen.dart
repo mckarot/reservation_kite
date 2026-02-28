@@ -23,7 +23,7 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final currentUserAsync = ref.watch(currentUserProvider);
     final usersAsync = ref.watch(userNotifierProvider);
 
@@ -37,10 +37,7 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(l10n.sessionExpired),
-              const SizedBox(height: 16),
-            ],
+            children: [Text(l10n.sessionExpired), const SizedBox(height: 16)],
           ),
         ),
       );
@@ -49,9 +46,7 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
     return usersAsync.when(
       data: (users) {
         if (users.isEmpty) {
-          return Scaffold(
-            body: Center(child: Text(l10n.noUsersFound)),
-          );
+          return Scaffold(body: Center(child: Text(l10n.noUsersFound)));
         }
 
         final user = users.firstWhere(
@@ -134,7 +129,8 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
       },
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
-      error: (err, _) => Scaffold(body: Center(child: Text('${l10n.errorLabel}: $err'))),
+      error: (err, _) =>
+          Scaffold(body: Center(child: Text('${l10n.errorLabel}: $err'))),
     );
   }
 }

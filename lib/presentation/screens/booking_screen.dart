@@ -28,7 +28,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final bookingsAsync = ref.watch(bookingNotifierProvider);
     // staffAsync unused here, but used in dialog Consumer
 
@@ -82,9 +82,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                     .toList();
 
                 if (filtered.isEmpty) {
-                  return Center(
-                    child: Text(l10n.noReservationsOnSlot),
-                  );
+                  return Center(child: Text(l10n.noReservationsOnSlot));
                 }
 
                 return ListView.builder(
@@ -119,7 +117,8 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, _) => Center(child: Text('${l10n.errorLabel}: $err')),
+              error: (err, _) =>
+                  Center(child: Text('${l10n.errorLabel}: $err')),
             ),
           ),
         ],
@@ -136,7 +135,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
       context: context,
       builder: (context) => Consumer(
         builder: (context, ref, _) {
-          final l10n = AppLocalizations.of(context)!;
+          final l10n = AppLocalizations.of(context);
           final staff = ref.watch(staffNotifierProvider).value ?? [];
           return AlertDialog(
             title: Text(l10n.newReservation),

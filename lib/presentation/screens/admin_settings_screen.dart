@@ -51,7 +51,7 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final settingsAsync = ref.watch(settingsNotifierProvider);
 
     return Scaffold(

@@ -11,8 +11,8 @@ class PupilDashboardTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    
+    final l10n = AppLocalizations.of(context);
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -86,7 +86,10 @@ class PupilDashboardTab extends ConsumerWidget {
           const SizedBox(height: 32),
           Text(
             l10n.quickStats,
-            style: const TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.1),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.1,
+            ),
           ),
           const SizedBox(height: 16),
           Row(
@@ -139,7 +142,7 @@ class _CurrentWeatherCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final weatherAsync = ref.watch(currentWeatherProvider);
     return weatherAsync.when(
       data: (weather) => Container(
@@ -156,9 +159,16 @@ class _CurrentWeatherCard extends ConsumerWidget {
               children: [
                 Text(
                   l10n.currentWeather,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
-                Icon(_getWeatherIcon(weather.weatherCode), color: Colors.blue.shade700, size: 24),
+                Icon(
+                  _getWeatherIcon(weather.weatherCode),
+                  color: Colors.blue.shade700,
+                  size: 24,
+                ),
               ],
             ),
             const SizedBox(height: 16),
@@ -178,7 +188,7 @@ class _CurrentWeatherCard extends ConsumerWidget {
                   label: _getWindDirection(weather.windDirection),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),
@@ -244,12 +254,14 @@ class _WeatherInfoItem extends StatelessWidget {
       children: [
         Icon(icon, color: Colors.blue.shade700, size: 28),
         const SizedBox(height: 8),
-        Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+        Text(
+          label,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+        ),
       ],
     );
   }
 }
-
 
 class _StatItem extends StatelessWidget {
   final String label;
@@ -265,7 +277,7 @@ class _StatItem extends StatelessWidget {
   });
 
   String _getTranslatedIkoLevel(BuildContext context, String level) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     // Mapping des niveaux IKO vers les traductions
     switch (level) {
       case 'Niveau 1 - Découverte':

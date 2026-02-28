@@ -19,7 +19,7 @@ class AdminDashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final stats = ref.watch(financialStatsProvider);
 
     return Scaffold(
@@ -136,7 +136,7 @@ class _PendingAbstancesSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final unavailabilitiesAsync = ref.watch(unavailabilityNotifierProvider);
     final staffAsync = ref.watch(staffNotifierProvider);
 
@@ -230,7 +230,7 @@ class _PendingRequestsSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final bookingsAsync = ref.watch(bookingNotifierProvider);
     final staffAsync = ref.watch(staffNotifierProvider);
 
@@ -321,7 +321,7 @@ class _PendingRequestsSection extends ConsumerWidget {
     List? staff,
   ) {
     if (staff == null) return;
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final activeStaff = staff.where((s) => s.isActive).toList();
 
     showDialog(
@@ -397,7 +397,7 @@ class _UpcomingSessionsCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     if (sessions.isEmpty) {
       return Center(
         child: Padding(

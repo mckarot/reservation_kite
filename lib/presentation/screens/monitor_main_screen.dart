@@ -25,7 +25,7 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final currentUserAsync = ref.watch(currentUserProvider);
     final staffAsync = ref.watch(staffNotifierProvider);
     final bookingsAsync = ref.watch(bookingNotifierProvider);
@@ -135,9 +135,7 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
                     }).toList();
 
                     if (myLessons.isEmpty) {
-                      return Center(
-                        child: Text(l10n.noLessonsAssigned),
-                      );
+                      return Center(child: Text(l10n.noLessonsAssigned));
                     }
 
                     return ListView.builder(
@@ -150,7 +148,8 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
                   },
                   loading: () =>
                       const Center(child: CircularProgressIndicator()),
-                  error: (e, _) => Center(child: Text('${l10n.errorLabel}: $e')),
+                  error: (e, _) =>
+                      Center(child: Text('${l10n.errorLabel}: $e')),
                 ),
               ),
             ],
@@ -176,7 +175,7 @@ class _AbsenceManagementDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final unavailabilitiesAsync = ref.watch(unavailabilityNotifierProvider);
 
     return AlertDialog(
@@ -245,7 +244,7 @@ class _AbsenceManagementDialog extends ConsumerWidget {
   }
 
   void _requestAbsence(BuildContext context, WidgetRef ref) async {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     DateTime selectedDate = DateTime.now().add(const Duration(days: 1));
     TimeSlot selectedSlot = TimeSlot.morning;
     final reasonController = TextEditingController();
@@ -296,9 +295,7 @@ class _AbsenceManagementDialog extends ConsumerWidget {
               const SizedBox(height: 8),
               TextField(
                 controller: reasonController,
-                decoration: InputDecoration(
-                  labelText: l10n.absenceReasonHint,
-                ),
+                decoration: InputDecoration(labelText: l10n.absenceReasonHint),
               ),
             ],
           ),
@@ -380,6 +377,7 @@ class _DateSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       height: 90,
       padding: const EdgeInsets.symmetric(vertical: 12),
@@ -414,7 +412,7 @@ class _DateSelector extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    _getWeekdayShort(date.weekday),
+                    _getWeekdayShort(l10n, date.weekday),
                     style: TextStyle(
                       fontSize: 12,
                       color: isSelected ? Colors.white : Colors.grey,
@@ -438,11 +436,15 @@ class _DateSelector extends StatelessWidget {
     );
   }
 
-  String _getWeekdayShort(int day) {
-    // Utiliser DateFormat pour une localisation automatique
+  String _getWeekdayShort(AppLocalizations l10n, int day) {
+    // Utiliser DateFormat avec la locale de l'application pour une localisation automatique
     final now = DateTime.now();
-    final date = DateTime(now.year, now.month, now.day).add(Duration(days: day - 1));
-    return DateFormat('EEE').format(date);
+    final date = DateTime(
+      now.year,
+      now.month,
+      now.day,
+    ).add(Duration(days: day - 1));
+    return DateFormat('EEE', l10n.localeName).format(date);
   }
 }
 
@@ -452,7 +454,7 @@ class _MonitorHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -501,7 +503,7 @@ class _LessonCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final users = ref.watch(userNotifierProvider).value ?? [];
     final pupil = users.any((u) => u.id == reservation.pupilId)
         ? users.firstWhere((u) => u.id == reservation.pupilId)
@@ -533,7 +535,9 @@ class _LessonCard extends ConsumerWidget {
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               subtitle: Text(
-                reservation.slot == TimeSlot.morning ? l10n.morning : l10n.afternoon,
+                reservation.slot == TimeSlot.morning
+                    ? l10n.morning
+                    : l10n.afternoon,
               ),
               trailing: pupil != null
                   ? ElevatedButton(

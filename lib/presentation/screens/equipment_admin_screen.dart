@@ -18,7 +18,7 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final equipmentAsync = ref.watch(equipmentNotifierProvider);
 
     return Scaffold(
@@ -41,9 +41,7 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
                     .where((e) => e.type == _selectedType)
                     .toList();
                 if (filtered.isEmpty) {
-                  return Center(
-                    child: Text(l10n.noEquipmentInCategory),
-                  );
+                  return Center(child: Text(l10n.noEquipmentInCategory));
                 }
                 return ListView.builder(
                   padding: const EdgeInsets.all(16),
@@ -88,7 +86,7 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
   }
 
   void _showAddEquipmentDialog(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final brandController = TextEditingController();
     final modelController = TextEditingController();
     final sizeController = TextEditingController();
@@ -118,21 +116,15 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
                 ),
                 TextField(
                   controller: brandController,
-                  decoration: InputDecoration(
-                    labelText: l10n.brandLabel,
-                  ),
+                  decoration: InputDecoration(labelText: l10n.brandLabel),
                 ),
                 TextField(
                   controller: modelController,
-                  decoration: InputDecoration(
-                    labelText: l10n.modelLabel,
-                  ),
+                  decoration: InputDecoration(labelText: l10n.modelLabel),
                 ),
                 TextField(
                   controller: sizeController,
-                  decoration: InputDecoration(
-                    labelText: l10n.sizeLabel,
-                  ),
+                  decoration: InputDecoration(labelText: l10n.sizeLabel),
                 ),
               ],
             ),
@@ -175,7 +167,7 @@ class _EquipmentTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     Color statusColor;
     String statusLabel;
 

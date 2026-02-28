@@ -16,7 +16,9 @@ import '../../domain/logic/booking_validator.dart';
 import '../providers/auth_state_provider.dart';
 import '../../l10n/app_localizations.dart';
 
-final weatherProvider = StateProvider<AsyncValue<Weather>>((ref) => const AsyncValue.loading());
+final weatherProvider = StateProvider<AsyncValue<Weather>>(
+  (ref) => const AsyncValue.loading(),
+);
 
 class PupilBookingScreen extends ConsumerStatefulWidget {
   const PupilBookingScreen({super.key});
@@ -52,7 +54,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
   }
 
   Future<void> _fetchWeatherForSelectedDate() async {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
 
     ref.read(weatherProvider.notifier).state = const AsyncValue.loading();
     final today = DateTime.now();
@@ -77,7 +79,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final bookingsAsync = ref.watch(bookingNotifierProvider);
     final settingsAsync = ref.watch(settingsNotifierProvider);
     final staffAsync = ref.watch(staffNotifierProvider);
@@ -231,8 +233,8 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
     AsyncValue<List<StaffUnavailability>> unavailabilitiesAsync,
     String? pupilId,
   ) {
-    final l10n = AppLocalizations.of(context)!;
-    
+    final l10n = AppLocalizations.of(context);
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -291,9 +293,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                     const SizedBox(width: 8),
                     Text(
                       isFull
-                          ? (maxCap == 0
-                                ? l10n.slotUnavailable
-                                : l10n.slotFull)
+                          ? (maxCap == 0 ? l10n.slotUnavailable : l10n.slotFull)
                           : '${l10n.remainingSlots} $remaining',
                       style: TextStyle(
                         fontSize: 14,
@@ -345,7 +345,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
     String? pupilId,
   ) async {
     if (pupilId == null) return;
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
 
     final usersAsync = ref.read(userNotifierProvider);
     final user = usersAsync.value?.firstWhere((u) => u.id == pupilId);
@@ -353,9 +353,9 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
     if (user == null) return;
 
     if (user.walletBalance <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.insufficientBalance)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.insufficientBalance)));
       return;
     }
 
@@ -376,9 +376,9 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
           context,
         ).showSnackBar(SnackBar(content: Text(error)));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.bookingSent)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.bookingSent)));
         Navigator.pop(context);
       }
     }
@@ -402,7 +402,7 @@ class _WeatherInfo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final weatherAsync = ref.watch(weatherProvider);
     return weatherAsync.when(
       data: (weather) => Column(
@@ -415,9 +415,18 @@ class _WeatherInfo extends ConsumerWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _WeatherItem(icon: _getWeatherIcon(weather.weatherCode), label: '${weather.maxTemperature.round()}°C'),
-                  _WeatherItem(icon: Icons.air, label: '${weather.windSpeed.round()} ${l10n.kmh}'),
-                  _WeatherItem(icon: Icons.explore, label: _getWindDirection(weather.windDirection)),
+                  _WeatherItem(
+                    icon: _getWeatherIcon(weather.weatherCode),
+                    label: '${weather.maxTemperature.round()}°C',
+                  ),
+                  _WeatherItem(
+                    icon: Icons.air,
+                    label: '${weather.windSpeed.round()} ${l10n.kmh}',
+                  ),
+                  _WeatherItem(
+                    icon: Icons.explore,
+                    label: _getWindDirection(weather.windDirection),
+                  ),
                 ],
               ),
             ),

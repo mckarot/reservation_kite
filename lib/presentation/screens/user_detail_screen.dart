@@ -13,7 +13,7 @@ class UserDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final usersAsync = ref.watch(userNotifierProvider);
 
     return usersAsync.when(
@@ -27,7 +27,10 @@ class UserDetailScreen extends ConsumerWidget {
               bottom: TabBar(
                 tabs: [
                   Tab(icon: const Icon(Icons.person), text: l10n.profileTab),
-                  Tab(icon: const Icon(Icons.trending_up), text: l10n.progressTab),
+                  Tab(
+                    icon: const Icon(Icons.trending_up),
+                    text: l10n.progressTab,
+                  ),
                   Tab(icon: const Icon(Icons.history_edu), text: l10n.notesTab),
                 ],
               ),
@@ -44,7 +47,8 @@ class UserDetailScreen extends ConsumerWidget {
       },
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
-      error: (err, _) => Scaffold(body: Center(child: Text('${l10n.errorLabel}: $err'))),
+      error: (err, _) =>
+          Scaffold(body: Center(child: Text('${l10n.errorLabel}: $err'))),
     );
   }
 }
@@ -56,7 +60,7 @@ class _ProfileTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -111,7 +115,7 @@ class _ProfileTab extends ConsumerWidget {
   }
 
   void _showTopUpOptions(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -133,7 +137,10 @@ class _ProfileTab extends ConsumerWidget {
                           child: Text(
                             l10n.noStandardPack,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(color: Colors.grey, fontSize: 13),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 13,
+                            ),
                           ),
                         );
                       }
@@ -251,7 +258,7 @@ class _ProfileTab extends ConsumerWidget {
   }
 
   void _showManualDialog(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final controller = TextEditingController(
       text: user.walletBalance.toString(),
     );
@@ -273,11 +280,9 @@ class _ProfileTab extends ConsumerWidget {
             onPressed: () {
               final newBalance = int.tryParse(controller.text);
               if (newBalance == null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(l10n.invalidNumber),
-                  ),
-                );
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(l10n.invalidNumber)));
                 return;
               }
               ref

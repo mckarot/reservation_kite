@@ -19,7 +19,7 @@ class AdminScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final List<_DashboardItem> items = [
       _DashboardItem(
         title: l10n.dashboardKPIs,
@@ -117,17 +117,20 @@ class _DashboardCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Widget icon = Icon(item.icon, size: 40, color: item.color ?? Theme.of(context).primaryColor);
+    Widget icon = Icon(
+      item.icon,
+      size: 40,
+      color: item.color ?? Theme.of(context).primaryColor,
+    );
 
     if (item.hasBadge) {
-      final unavailabilities = ref.watch(unavailabilityNotifierProvider).value ?? [];
-      final pendingCount =
-          unavailabilities.where((u) => u.status == UnavailabilityStatus.pending).length;
+      final unavailabilities =
+          ref.watch(unavailabilityNotifierProvider).value ?? [];
+      final pendingCount = unavailabilities
+          .where((u) => u.status == UnavailabilityStatus.pending)
+          .length;
       if (pendingCount > 0) {
-        icon = Badge(
-          label: Text('$pendingCount'),
-          child: icon,
-        );
+        icon = Badge(label: Text('$pendingCount'), child: icon);
       }
     }
 
@@ -162,14 +165,15 @@ class _PendingAbsencesAlert extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final unavailabilitiesAsync = ref.watch(unavailabilityNotifierProvider);
     final staffAsync = ref.watch(staffNotifierProvider);
 
     return unavailabilitiesAsync.when(
       data: (list) {
-        final pending =
-            list.where((u) => u.status == UnavailabilityStatus.pending).toList();
+        final pending = list
+            .where((u) => u.status == UnavailabilityStatus.pending)
+            .toList();
         if (pending.isEmpty) return const SizedBox.shrink();
 
         final allStaff = staffAsync.value ?? [];
@@ -205,7 +209,10 @@ class _PendingAbsencesAlert extends ConsumerWidget {
                   );
                   return ListTile(
                     dense: true,
-                    leading: const Icon(Icons.warning_amber_rounded, color: Colors.redAccent),
+                    leading: const Icon(
+                      Icons.warning_amber_rounded,
+                      color: Colors.redAccent,
+                    ),
                     title: Text(
                       '${staff.name} - ${DateFormat('dd/MM').format(u.date)}',
                       style: const TextStyle(fontWeight: FontWeight.bold),
@@ -213,7 +220,9 @@ class _PendingAbsencesAlert extends ConsumerWidget {
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const StaffAdminScreen()),
+                      MaterialPageRoute(
+                        builder: (_) => const StaffAdminScreen(),
+                      ),
                     ),
                   );
                 }),
@@ -223,7 +232,9 @@ class _PendingAbsencesAlert extends ConsumerWidget {
                     child: TextButton(
                       onPressed: () => Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const StaffAdminScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => const StaffAdminScreen(),
+                        ),
                       ),
                       child: Text(l10n.seeRequests(pending.length)),
                     ),

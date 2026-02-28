@@ -12,7 +12,7 @@ class UserNotesTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final notes = user.progress?.notes ?? [];
 
     return Column(
@@ -76,7 +76,7 @@ class UserNotesTab extends ConsumerWidget {
   }
 
   void _showAddNoteDialog(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final contentController = TextEditingController();
     String? selectedStaffId;
 

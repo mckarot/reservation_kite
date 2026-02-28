@@ -21,7 +21,7 @@ class PupilHistoryTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final bookingsAsync = ref.watch(bookingNotifierProvider);
 
     return bookingsAsync.when(
@@ -32,9 +32,7 @@ class PupilHistoryTab extends ConsumerWidget {
         myBookings.sort((a, b) => b.date.compareTo(a.date));
 
         if (myBookings.isEmpty) {
-          return Center(
-            child: Text(l10n.noLessonsScheduled),
-          );
+          return Center(child: Text(l10n.noLessonsScheduled));
         }
 
         return ListView.builder(
@@ -57,7 +55,9 @@ class PupilHistoryTab extends ConsumerWidget {
                   '${l10n.lessonOn} ${b.date.day}/${b.date.month}/${b.date.year}',
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text('${l10n.slotLabel}: ${_translateSlot(b.slot, l10n)}'),
+                subtitle: Text(
+                  '${l10n.slotLabel}: ${_translateSlot(b.slot, l10n)}',
+                ),
                 trailing: _StatusBadge(status: b.status, isFuture: isFuture),
               ),
             );
@@ -89,9 +89,9 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final label = _getLabel(l10n);
-    
+
     Color color;
     switch (status) {
       case ReservationStatus.pending:

@@ -22,7 +22,7 @@ class LanguageSelector extends ConsumerWidget {
                 const Icon(Icons.language, color: Colors.blue),
                 const SizedBox(width: 8),
                 Text(
-                  AppLocalizations.of(context)!.language,
+                  AppLocalizations.of(context).language,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -35,15 +35,29 @@ class LanguageSelector extends ConsumerWidget {
               value: currentLocale,
               isExpanded: true,
               items: const [
-                DropdownMenuItem(value: Locale('fr'), child: Text('🇫🇷 Français')),
-                DropdownMenuItem(value: Locale('en'), child: Text('🇬🇧 English')),
-                DropdownMenuItem(value: Locale('es'), child: Text('🇪🇸 Español')),
-                DropdownMenuItem(value: Locale('pt'), child: Text('🇵🇹 Português')),
+                DropdownMenuItem(
+                  value: Locale('fr'),
+                  child: Text('🇫🇷 Français'),
+                ),
+                DropdownMenuItem(
+                  value: Locale('en'),
+                  child: Text('🇬🇧 English'),
+                ),
+                DropdownMenuItem(
+                  value: Locale('es'),
+                  child: Text('🇪🇸 Español'),
+                ),
+                DropdownMenuItem(
+                  value: Locale('pt'),
+                  child: Text('🇵🇹 Português'),
+                ),
                 DropdownMenuItem(value: Locale('zh'), child: Text('🇨🇳 中文')),
               ],
               onChanged: (locale) {
                 if (locale != null) {
-                  ref.read(localeNotifierProvider.notifier).setLocale(locale.languageCode);
+                  ref
+                      .read(localeNotifierProvider.notifier)
+                      .setLocale(locale.languageCode);
                 }
               },
             ),

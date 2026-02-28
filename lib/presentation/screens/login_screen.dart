@@ -28,13 +28,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _login() async {
-    final l10n = AppLocalizations.of(context)!;
-    
+    final l10n = AppLocalizations.of(context);
+
     if (_passwordController.text.length < 6) {
-      setState(
-        () =>
-            _errorMessage = l10n.passwordHintError,
-      );
+      setState(() => _errorMessage = l10n.passwordHintError);
       return;
     }
     setState(() {
@@ -66,11 +63,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
-
-
   Future<void> _setupTestData() async {
-    final l10n = AppLocalizations.of(context)!;
-    
+    final l10n = AppLocalizations.of(context);
+
     setState(() {
       _isLoading = true;
       _errorMessage = null;
@@ -181,7 +176,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final localeAsync = ref.watch(localeNotifierProvider);
     final currentLocale = localeAsync.value ?? const Locale('fr');
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade50,
@@ -190,7 +185,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         elevation: 0,
         title: Text(
           l10n.appName,
-          style: const TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            color: Colors.blueGrey,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         actions: [
           Padding(
@@ -208,7 +206,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ],
               onChanged: (locale) {
                 if (locale != null) {
-                  ref.read(localeNotifierProvider.notifier).setLocale(locale.languageCode);
+                  ref
+                      .read(localeNotifierProvider.notifier)
+                      .setLocale(locale.languageCode);
                 }
               },
             ),
@@ -293,9 +293,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   const SizedBox(height: 12),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const RegistrationScreen(),
-                      ));
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const RegistrationScreen(),
+                        ),
+                      );
                     },
                     child: Text(l10n.noAccount),
                   ),

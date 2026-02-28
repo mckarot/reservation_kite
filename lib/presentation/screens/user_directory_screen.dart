@@ -11,7 +11,7 @@ class UserDirectoryScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final usersAsync = ref.watch(userNotifierProvider);
 
     return Scaffold(
@@ -40,7 +40,9 @@ class UserDirectoryScreen extends ConsumerWidget {
                   child: Text(user.displayName.substring(0, 1).toUpperCase()),
                 ),
                 title: Text(user.displayName),
-                subtitle: Text('${l10n.balanceLabel}: ${user.walletBalance} ${l10n.credits}'),
+                subtitle: Text(
+                  '${l10n.balanceLabel}: ${user.walletBalance} ${l10n.credits}',
+                ),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => Navigator.push(
                   context,
@@ -59,7 +61,7 @@ class UserDirectoryScreen extends ConsumerWidget {
   }
 
   void _showAddUserDialog(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final nameController = TextEditingController();
     final emailController = TextEditingController();
 

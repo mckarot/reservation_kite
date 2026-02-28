@@ -13,7 +13,7 @@ class StaffAdminScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final staffAsync = ref.watch(staffNotifierProvider);
     final unavailabilitiesAsync = ref.watch(unavailabilityNotifierProvider);
 
@@ -74,7 +74,8 @@ class StaffAdminScreen extends ConsumerWidget {
                 },
               ),
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, stack) => Center(child: Text('${l10n.errorLabel}: $err')),
+              error: (err, stack) =>
+                  Center(child: Text('${l10n.errorLabel}: $err')),
             ),
             // Tab 2: Absence Requests
             unavailabilitiesAsync.when(
@@ -206,7 +207,7 @@ class StaffAdminScreen extends ConsumerWidget {
   }
 
   void _showStaffDialog(BuildContext context, WidgetRef ref, {Staff? staff}) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final isEditing = staff != null;
     final nameController = TextEditingController(text: staff?.name);
     final bioController = TextEditingController(text: staff?.bio);
@@ -236,9 +237,7 @@ class StaffAdminScreen extends ConsumerWidget {
               ),
               TextField(
                 controller: specialtiesController,
-                decoration: InputDecoration(
-                  labelText: l10n.specialtiesHint,
-                ),
+                decoration: InputDecoration(labelText: l10n.specialtiesHint),
               ),
               TextField(
                 controller: photoController,
@@ -257,9 +256,7 @@ class StaffAdminScreen extends ConsumerWidget {
                 ),
                 TextField(
                   controller: passwordController,
-                  decoration: InputDecoration(
-                    labelText: l10n.passwordHint6,
-                  ),
+                  decoration: InputDecoration(labelText: l10n.passwordHint6),
                   obscureText: true,
                 ),
               ],
@@ -322,7 +319,7 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     Color color;
     String label;
     switch (status) {

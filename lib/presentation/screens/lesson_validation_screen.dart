@@ -33,14 +33,18 @@ class _LessonValidationScreenState
   void initState() {
     super.initState();
     _selectedItems.addAll(widget.pupil.progress?.checklist ?? []);
-    _selectedLevel = widget.pupil.progress?.ikoLevel ?? UserProgress.ikoSkillsByLevel.keys.first;
+    _selectedLevel =
+        widget.pupil.progress?.ikoLevel ??
+        UserProgress.ikoSkillsByLevel.keys.first;
   }
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.validationTitle(widget.pupil.displayName))),
+      appBar: AppBar(
+        title: Text(l10n.validationTitle(widget.pupil.displayName)),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -91,7 +95,7 @@ class _LessonValidationScreenState
                   ],
                 ),
               );
-            }).toList(),
+            }),
             const SizedBox(height: 32),
             Text(
               l10n.ikoGlobalLevel,
@@ -146,7 +150,7 @@ class _LessonValidationScreenState
   }
 
   Future<void> _save() async {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final instructorId = ref.read(currentUserProvider).value?.id ?? 'unknown';
 
     // Sauvegarder tout en bloc pour éviter les race conditions
@@ -169,9 +173,9 @@ class _LessonValidationScreenState
         );
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.progressSaved)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.progressSaved)));
       Navigator.pop(context);
     }
   }
@@ -189,7 +193,7 @@ class __EquipmentIncidentSectionState
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final equipAsync = ref.watch(equipmentNotifierProvider);
 
     return equipAsync.when(
@@ -255,14 +259,14 @@ class __EquipmentIncidentSectionState
   }
 
   void _updateStatus(EquipmentStatus status) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     if (_selectedEquipId == null) return;
     ref
         .read(equipmentNotifierProvider.notifier)
         .updateStatus(_selectedEquipId!, status);
     setState(() => _selectedEquipId = null);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(l10n.equipmentStatusUpdated)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(l10n.equipmentStatusUpdated)));
   }
 }

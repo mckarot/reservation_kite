@@ -10,7 +10,7 @@ class CreditPackAdminScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final packsAsync = ref.watch(creditPackNotifierProvider);
 
     return Scaffold(
@@ -27,7 +27,9 @@ class CreditPackAdminScreen extends ConsumerWidget {
                   pack.name,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text('${pack.credits} ${l10n.sessions} • ${pack.price} €'),
+                subtitle: Text(
+                  '${pack.credits} ${l10n.sessions} • ${pack.price} €',
+                ),
                 trailing: IconButton(
                   icon: const Icon(Icons.delete_outline, color: Colors.red),
                   onPressed: () => ref
@@ -50,7 +52,7 @@ class CreditPackAdminScreen extends ConsumerWidget {
   }
 
   void _showAddPackDialog(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final nameController = TextEditingController();
     final creditsController = TextEditingController();
     final priceController = TextEditingController();
@@ -64,22 +66,16 @@ class CreditPackAdminScreen extends ConsumerWidget {
           children: [
             TextField(
               controller: nameController,
-              decoration: InputDecoration(
-                labelText: l10n.packNameLabel,
-              ),
+              decoration: InputDecoration(labelText: l10n.packNameLabel),
             ),
             TextField(
               controller: creditsController,
-              decoration: InputDecoration(
-                labelText: l10n.numberOfCredits,
-              ),
+              decoration: InputDecoration(labelText: l10n.numberOfCredits),
               keyboardType: TextInputType.number,
             ),
             TextField(
               controller: priceController,
-              decoration: InputDecoration(
-                labelText: l10n.priceLabel,
-              ),
+              decoration: InputDecoration(labelText: l10n.priceLabel),
               keyboardType: TextInputType.number,
             ),
           ],

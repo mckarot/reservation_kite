@@ -35,7 +35,9 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
   }
 
   Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
@@ -46,7 +48,10 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
   Future<String?> _uploadProfilePicture(String userId) async {
     if (_image == null) return null;
     try {
-      final storageRef = FirebaseStorage.instance.ref().child('user_photos').child('$userId.jpg');
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('user_photos')
+          .child('$userId.jpg');
       await storageRef.putFile(_image!);
       return await storageRef.getDownloadURL();
     } catch (e) {
@@ -55,7 +60,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
   }
 
   Future<void> _register() async {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     if (_formKey.currentState?.validate() ?? false) {
       if (_passwordController.text != _confirmPasswordController.text) {
         setState(() {
@@ -82,7 +87,9 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
         if (userCredential != null) {
           final photoUrl = await _uploadProfilePicture(userCredential.id);
           if (photoUrl != null) {
-            await authRepo.updateUserProfile(userCredential.id, {'photo_url': photoUrl});
+            await authRepo.updateUserProfile(userCredential.id, {
+              'photo_url': photoUrl,
+            });
           }
         }
 
@@ -95,7 +102,6 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
           ),
         );
         Navigator.of(context).pop();
-
       } catch (e) {
         if (!mounted) return;
         setState(() {
@@ -108,7 +114,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade50,
       body: Center(
@@ -131,9 +137,15 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                       child: CircleAvatar(
                         radius: 50,
                         backgroundColor: Colors.grey.shade200,
-                        backgroundImage: _image != null ? FileImage(_image!) : null,
+                        backgroundImage: _image != null
+                            ? FileImage(_image!)
+                            : null,
                         child: _image == null
-                            ? const Icon(Icons.add_a_photo, size: 50, color: Colors.grey)
+                            ? const Icon(
+                                Icons.add_a_photo,
+                                size: 50,
+                                color: Colors.grey,
+                              )
                             : null,
                       ),
                     ),
@@ -221,7 +233,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: _isLoading ? null : _register,
-                         style: ElevatedButton.styleFrom(
+                        style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blueGrey,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
@@ -229,7 +241,9 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                           ),
                         ),
                         child: _isLoading
-                            ? const CircularProgressIndicator(color: Colors.white)
+                            ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
                             : Text(l10n.createAccountButton),
                       ),
                     ),
@@ -237,7 +251,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),
                       child: Text(l10n.alreadyHaveAccount),
-                    )
+                    ),
                   ],
                 ),
               ),

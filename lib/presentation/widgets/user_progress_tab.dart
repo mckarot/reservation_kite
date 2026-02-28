@@ -10,7 +10,7 @@ class UserProgressTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final progress = user.progress ?? const UserProgress();
 
     return SingleChildScrollView(
