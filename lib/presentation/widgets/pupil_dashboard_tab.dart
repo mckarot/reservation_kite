@@ -14,7 +14,7 @@ class PupilDashboardTab extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 100),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -29,6 +29,26 @@ class PupilDashboardTab extends ConsumerWidget {
           ),
           const SizedBox(height: 24),
           const _CurrentWeatherCard(),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.info_outline, color: Colors.blue),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    l10n.weatherInfo,
+                    style: const TextStyle(fontSize: 13),
+                  ),
+                ),
+              ],
+            ),
+          ),
           const SizedBox(height: 32),
 
           // Card Solde Premium
@@ -115,17 +135,36 @@ class PupilDashboardTab extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.grey.shade100,
+              gradient: LinearGradient(
+                colors: [Colors.orange.shade50, Colors.amber.shade50],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
               borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.orange.shade200),
             ),
             child: Row(
               children: [
-                const Icon(Icons.info_outline, color: Colors.blue),
+                Icon(Icons.sunny_snowing, color: Colors.orange.shade700, size: 32),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: Text(
-                    l10n.weatherInfo,
-                    style: const TextStyle(fontSize: 13),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.sunSafetyReminder,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Colors.orange,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        l10n.sunSafetyTip,
+                        style: const TextStyle(fontSize: 12, color: Colors.orange),
+                      ),
+                    ],
                   ),
                 ),
               ],

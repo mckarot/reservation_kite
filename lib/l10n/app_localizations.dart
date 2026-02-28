@@ -1880,6 +1880,18 @@ abstract class AppLocalizations {
   /// **'nds'**
   String get knots;
 
+  /// No description provided for @sunSafetyReminder.
+  ///
+  /// In fr, this message translates to:
+  /// **'Protection solaire ☀️'**
+  String get sunSafetyReminder;
+
+  /// No description provided for @sunSafetyTip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pensez à mettre de la crème solaire et à prendre vos lunettes de soleil !'**
+  String get sunSafetyTip;
+
   /// No description provided for @ikoLevel1Discovery.
   ///
   /// In fr, this message translates to:

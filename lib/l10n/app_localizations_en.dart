@@ -926,6 +926,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get knots => 'kts';
 
   @override
+  String get sunSafetyReminder => 'Sun Protection ☀️';
+
+  @override
+  String get sunSafetyTip =>
+      'Remember to apply sunscreen and bring your sunglasses!';
+
+  @override
   String get ikoLevel1Discovery => 'Level 1 - Discovery';
 
   @override

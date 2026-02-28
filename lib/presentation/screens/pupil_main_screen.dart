@@ -124,6 +124,8 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
             ),
             label: Text(l10n.bookButton),
             icon: const Icon(Icons.add),
+            elevation: 8,
+            backgroundColor: Colors.blue.withValues(alpha: 0.4),
           ),
         );
       },

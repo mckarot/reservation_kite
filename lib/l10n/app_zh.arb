@@ -374,6 +374,8 @@
   },
   "notAvailable": "N/A",
   "knots": "节",
+  "sunSafetyReminder": "防晒保护 ☀️",
+  "sunSafetyTip": "记得涂防晒霜，带上太阳镜！",
   "ikoLevel1Discovery": "1 级 - 入门",
   "ikoLevel2Intermediate": "2 级 - 中级",
   "ikoLevel3Independent": "3 级 - 独立",

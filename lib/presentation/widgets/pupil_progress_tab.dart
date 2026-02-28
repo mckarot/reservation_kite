@@ -16,7 +16,7 @@ class PupilProgressTab extends ConsumerWidget {
     final staffList = staffAsync.value ?? [];
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 100),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -919,6 +919,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get knots => '节';
 
   @override
+  String get sunSafetyReminder => '防晒保护 ☀️';
+
+  @override
+  String get sunSafetyTip => '记得涂防晒霜，带上太阳镜！';
+
+  @override
   String get ikoLevel1Discovery => '1 级 - 入门';
 
   @override

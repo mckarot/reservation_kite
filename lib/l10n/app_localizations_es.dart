@@ -929,6 +929,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get knots => 'nds';
 
   @override
+  String get sunSafetyReminder => 'Protección Solar ☀️';
+
+  @override
+  String get sunSafetyTip =>
+      '¡Recuerda aplicar protector solar y traer tus gafas de sol!';
+
+  @override
   String get ikoLevel1Discovery => 'Nivel 1 - Descubrimiento';
 
   @override

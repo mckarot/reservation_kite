@@ -374,6 +374,8 @@
   },
   "notAvailable": "N/A",
   "knots": "kts",
+  "sunSafetyReminder": "Sun Protection ☀️",
+  "sunSafetyTip": "Remember to apply sunscreen and bring your sunglasses!",
   "ikoLevel1Discovery": "Level 1 - Discovery",
   "ikoLevel2Intermediate": "Level 2 - Intermediate",
   "ikoLevel3Independent": "Level 3 - Independent",
