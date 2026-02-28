@@ -373,6 +373,7 @@
     }
   },
   "notAvailable": "N/A",
+  "knots": "节",
   "ikoLevel1Discovery": "1 级 - 入门",
   "ikoLevel2Intermediate": "2 级 - 中级",
   "ikoLevel3Independent": "3 级 - 独立",

@@ -926,6 +926,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get notAvailable => 'N/D';
 
   @override
+  String get knots => 'nds';
+
+  @override
   String get ikoLevel1Discovery => 'Nivel 1 - Descubrimiento';
 
   @override

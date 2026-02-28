@@ -373,6 +373,7 @@
     }
   },
   "notAvailable": "N/A",
+  "knots": "kts",
   "ikoLevel1Discovery": "Level 1 - Discovery",
   "ikoLevel2Intermediate": "Level 2 - Intermediate",
   "ikoLevel3Independent": "Level 3 - Independent",

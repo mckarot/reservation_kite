@@ -916,6 +916,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get notAvailable => 'N/A';
 
   @override
+  String get knots => '节';
+
+  @override
   String get ikoLevel1Discovery => '1 级 - 入门';
 
   @override

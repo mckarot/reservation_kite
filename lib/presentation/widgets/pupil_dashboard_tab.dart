@@ -181,7 +181,7 @@ class _CurrentWeatherCard extends ConsumerWidget {
                 ),
                 _WeatherInfoItem(
                   icon: Icons.air,
-                  label: '${weather.windSpeed.round()} ${l10n.kmh}',
+                  label: '${(weather.windSpeed / 1.852).round()} ${l10n.knots}',
                 ),
                 _WeatherInfoItem(
                   icon: Icons.explore,

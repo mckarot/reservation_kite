@@ -1874,6 +1874,12 @@ abstract class AppLocalizations {
   /// **'N/A'**
   String get notAvailable;
 
+  /// No description provided for @knots.
+  ///
+  /// In fr, this message translates to:
+  /// **'nds'**
+  String get knots;
+
   /// No description provided for @ikoLevel1Discovery.
   ///
   /// In fr, this message translates to:

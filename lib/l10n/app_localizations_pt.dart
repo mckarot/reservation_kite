@@ -925,6 +925,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get notAvailable => 'N/D';
 
   @override
+  String get knots => 'nds';
+
+  @override
   String get ikoLevel1Discovery => 'Nível 1 - Descoberta';
 
   @override
