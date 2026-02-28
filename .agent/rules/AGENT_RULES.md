@@ -80,6 +80,8 @@ Tu dois STRICTEMENT respecter le document :
   - Presentation
 - `if (!mounted)` obligatoire après `await` utilisant `BuildContext`
 - Toute méthode de Provider/Notifier doit être wrappée dans un guard ou retourner un AsyncValue pour assurer une gestion d'erreur uniforme en UI.
+- **Thème dynamique** : L'application doit supporter les modes clair/sombre et la personnalisation des couleurs par l'admin
+- **Couleurs centralisées** : Utiliser `Theme.of(context)` et `ColorScheme` (jamais de couleurs en dur)
 ---
 
 ## FIREBASE — CONTRAINTES STRICTES

@@ -34,6 +34,8 @@ lib/
 - Toute requête Firestore doit avoir un `.limit()`
 - `if (!mounted)` obligatoire après `await` utilisant `BuildContext`
 - Toute méthode de Provider/Notifier doit retourner un `AsyncValue` ou être wrappée dans un guard pour une gestion d'erreur uniforme
+- **Thème dynamique** : L'application doit supporter les modes clair/sombre et la personnalisation des couleurs par l'admin
+- **Couleurs centralisées** : Utiliser `Theme.of(context)` et `ColorScheme` (jamais de couleurs en dur dans les widgets)
 
 ---
 
@@ -107,6 +109,37 @@ lib/
 ### Sécurité
 - Firebase Auth + App Check
 - Règles Firestore : accès restreint (élève → ses données, staff → élèves de sa session, admin → tout)
+
+---
+
+## 5.5 SYSTÈME DE THÈME (FEATURE COMPLÈTE)
+
+### Modes de Thème
+- **Clair** : Thème par défaut avec couleurs claires
+- **Sombre** : Thème optimisé pour une utilisation nocturne
+- **Système** : Suit le thème du device (iOS/Android)
+
+### Personnalisation Admin
+- **Couleur primaire** : Couleur principale de la marque
+- **Couleur secondaire** : Couleur d'accentuation
+- **Couleur d'accent** : Couleur pour les éléments importants
+- **5 thèmes prédéfinis** : Kitesurf (défaut), Sunset, Ocean, Tropical, Midnight
+- **Personnalisation complète** : Color picker pour chaque couleur
+
+### Architecture
+- **Modèle** : `AppThemeSettings` (Freezed) avec themeMode, primaryColor, secondaryColor, accentColor
+- **Provider** : `themeNotifierProvider` (StateNotifier) pour gérer l'état du thème
+- **Persistance** : SharedPreferences pour sauvegarder les préférences
+- **Application** : `MaterialApp.themeMode`, `theme`, `darkTheme`
+
+### Règles d'Implémentation
+- **Jamais de couleurs en dur** : Toujours utiliser `Theme.of(context).colorScheme.*`
+- **Migration progressive** : Remplacer toutes les couleurs en dur par des références au thème
+- **Contraste accessible** : Respecter WCAG AA (ratio 4.5:1 minimum)
+- **Animation fluide** : Transition de 300ms lors du changement de thème
+
+### Références
+- Voir `FEATURE_THEME_SYSTEM.md` pour les spécifications complètes (8 phases, 21 tâches)
 
 ---
 
