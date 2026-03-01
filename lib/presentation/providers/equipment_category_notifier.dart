@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
 import '../../domain/models/equipment_category.dart';
 import '../../data/repositories/equipment_category_repository.dart';
 import '../../data/sources/equipment_category_firestore_datasource.dart';
@@ -23,30 +24,34 @@ final equipmentCategoryNotifierProvider = StateNotifierProvider<EquipmentCategor
 
 class EquipmentCategoryNotifier extends StateNotifier<AsyncValue<List<EquipmentCategory>>> {
   final EquipmentCategoryRepository _repository;
+  StreamSubscription<List<EquipmentCategory>>? _subscription;
+  bool _isReordering = false;
 
   EquipmentCategoryNotifier(this._repository) : super(const AsyncValue.loading()) {
     _init();
   }
 
+  bool get isReordering => _isReordering;
+
   void _init() {
-    state = const AsyncValue.loading();
-    _repository.watchAll().listen(
+    _subscription = _repository.watchAll().listen(
       (categories) {
         if (!mounted) return;
-        print('📡 [Stream] Catégories reçues du stream: ${categories.length}');
-        for (var c in categories) {
-          print('   - ${c.name} (order: ${c.order})');
-        }
+        // Pendant le reorder, on ignore les mises à jour du stream pour éviter les flickers
+        if (_isReordering) return;
         state = AsyncValue.data(categories);
       },
       onError: (error, stackTrace) {
         if (!mounted) return;
-        print('❌ [Stream] ERREUR equipment_category_notifier:');
-        print('   Error: $error');
-        print('   Stack: $stackTrace');
-        state = AsyncValue.error(error, stackTrace);
+        state = AsyncValue.data([]);
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
   }
 
   Future<void> createCategory(String name) async {
@@ -105,7 +110,6 @@ class EquipmentCategoryNotifier extends StateNotifier<AsyncValue<List<EquipmentC
       
       // Si on déplace vers le bas (oldOrder < newOrder)
       if (oldOrder < newOrder) {
-        // Décrémenter l'ordre de tous les éléments entre oldOrder et newOrder
         for (final c in categories) {
           if (c.order > oldOrder && c.order <= newOrder && c.id != categoryId) {
             print('   - Décrémenter ${c.name}: ${c.order} → ${c.order - 1}');
@@ -115,7 +119,6 @@ class EquipmentCategoryNotifier extends StateNotifier<AsyncValue<List<EquipmentC
       } 
       // Si on déplace vers le haut (oldOrder > newOrder)
       else if (oldOrder > newOrder) {
-        // Incrémenter l'ordre de tous les éléments entre newOrder et oldOrder
         for (final c in categories) {
           if (c.order >= newOrder && c.order < oldOrder && c.id != categoryId) {
             print('   - Incrémenter ${c.name}: ${c.order} → ${c.order + 1}');

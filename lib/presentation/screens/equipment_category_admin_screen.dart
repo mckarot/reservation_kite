@@ -14,6 +14,8 @@ class EquipmentCategoryAdminScreen extends ConsumerStatefulWidget {
 
 class _EquipmentCategoryAdminScreenState
     extends ConsumerState<EquipmentCategoryAdminScreen> {
+  bool _isReordering = false;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -32,6 +34,20 @@ class _EquipmentCategoryAdminScreenState
       ),
       body: categoriesAsync.when(
         data: (categories) {
+          // Afficher le loading pendant le réordonnancement
+          if (_isReordering) {
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 16),
+                  Text('Réorganisation en cours...'),
+                ],
+              ),
+            );
+          }
+          
           if (categories.isEmpty) {
             return Center(
               child: Column(
@@ -55,34 +71,26 @@ class _EquipmentCategoryAdminScreenState
             padding: const EdgeInsets.all(16),
             itemCount: categories.length,
             onReorder: (oldIndex, newIndex) async {
-              print('🔄 ========== DRAG & DROP START ==========');
-              print('   oldIndex: $oldIndex, newIndex: $newIndex');
-              print('   Categories avant reorder:');
-              for (var i = 0; i < categories.length; i++) {
-                print('     [$i] ${categories[i].name} (order: ${categories[i].order})');
-              }
+              print('🔄 Reorder: $oldIndex → $newIndex');
+              setState(() => _isReordering = true);
               
-              // Ajustement pour le drag & drop
               final adjustedIndex = newIndex > oldIndex ? newIndex - 1 : newIndex;
               final newOrder = adjustedIndex + 1;
               final category = categories[oldIndex];
-              
-              print('   Category à déplacer: ${category.name}');
-              print('   Nouvel order: $newOrder');
-              
               try {
                 await ref
                     .read(equipmentCategoryNotifierProvider.notifier)
                     .reorderCategory(category.id, newOrder);
-                print('✅ Reorder successful!');
+                // Attendre un peu avant de cacher le loading
+                await Future.delayed(const Duration(milliseconds: 500));
               } catch (e) {
-                print('❌ Erreur reorder: $e');
+                print('❌ Erreur: $e');
+              } finally {
+                if (mounted) setState(() => _isReordering = false);
               }
-              print('🔄 ========== DRAG & DROP END ==========');
             },
             itemBuilder: (context, index) {
               final category = categories[index];
-              print('📋 Category[$index]: ${category.name} (order: ${category.order}, equipments: ${category.equipmentIds.length})');
               return Material(
                 key: ValueKey(category.id),
                 color: Colors.transparent,
@@ -96,7 +104,22 @@ class _EquipmentCategoryAdminScreenState
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(child: Text('Erreur: $error')),
+        error: (error, _) => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.error_outline, size: 64, color: Colors.orange),
+              const SizedBox(height: 16),
+              Text('Erreur: $error'),
+              const SizedBox(height: 16),
+              ElevatedButton.icon(
+                icon: const Icon(Icons.refresh),
+                label: const Text('Rafraîchir'),
+                onPressed: () => ref.invalidate(equipmentCategoryNotifierProvider),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

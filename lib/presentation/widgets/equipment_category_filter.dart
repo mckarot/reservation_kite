@@ -58,7 +58,7 @@ class EquipmentCategoryFilter extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(child: Text('Erreur: $error')),
+        error: (error, _) => Center(child: Text('')), // Silent error to avoid UI flicker
       ),
     );
   }
