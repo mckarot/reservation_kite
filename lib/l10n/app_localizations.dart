@@ -2011,18 +2011,6 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Tous'**
   String get all;
-
-  /// No description provided for @createCategories.
-  ///
-  /// In fr, this message translates to:
-  /// **'Créer catégories'**
-  String get createCategories;
-
-  /// No description provided for @categoriesCreatedSuccess.
-  ///
-  /// In fr, this message translates to:
-  /// **'6 catégories d\'équipement créées avec succès !'**
-  String get categoriesCreatedSuccess;
 }
 
 class _AppLocalizationsDelegate

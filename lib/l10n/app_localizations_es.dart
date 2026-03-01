@@ -997,11 +997,4 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get all => 'Todos';
-
-  @override
-  String get createCategories => 'Crear categorías';
-
-  @override
-  String get categoriesCreatedSuccess =>
-      '¡6 categorías de equipamiento creadas con éxito!';
 }

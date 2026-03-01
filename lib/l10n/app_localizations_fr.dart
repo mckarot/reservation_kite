@@ -996,11 +996,4 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get all => 'Tous';
-
-  @override
-  String get createCategories => 'Créer catégories';
-
-  @override
-  String get categoriesCreatedSuccess =>
-      '6 catégories d\'équipement créées avec succès !';
 }

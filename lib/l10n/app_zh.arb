@@ -400,7 +400,5 @@
   "categoryName": "类别名称",
   "selectCategory": "选择类别",
   "noEquipmentCategories": "无装备类别",
-  "all": "全部",
-  "createCategories": "创建类别",
-  "categoriesCreatedSuccess": "6 个装备类别创建成功！"
+  "all": "全部"
 }

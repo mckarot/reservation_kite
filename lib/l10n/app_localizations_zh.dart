@@ -985,10 +985,4 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get all => '全部';
-
-  @override
-  String get createCategories => '创建类别';
-
-  @override
-  String get categoriesCreatedSuccess => '6 个装备类别创建成功！';
 }

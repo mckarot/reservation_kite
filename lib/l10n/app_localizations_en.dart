@@ -994,11 +994,4 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get all => 'All';
-
-  @override
-  String get createCategories => 'Create categories';
-
-  @override
-  String get categoriesCreatedSuccess =>
-      '6 equipment categories created successfully!';
 }

@@ -400,7 +400,5 @@
   "categoryName": "Nome da categoria",
   "selectCategory": "Selecionar uma categoria",
   "noEquipmentCategories": "Sem categorias de equipamento",
-  "all": "Todos",
-  "createCategories": "Criar categorias",
-  "categoriesCreatedSuccess": "6 categorias de equipamento criadas com sucesso!"
+  "all": "Todos"
 }
