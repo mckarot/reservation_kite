@@ -13,9 +13,12 @@ import 'presentation/screens/pupil_main_screen.dart';
 import 'presentation/screens/monitor_main_screen.dart';
 import 'presentation/providers/auth_state_provider.dart';
 import 'presentation/providers/locale_provider.dart';
+import 'presentation/providers/theme_notifier.dart';
 import 'presentation/screens/login_screen.dart';
 import 'data/providers/repository_providers.dart';
-import 'package:reservation_kite/presentation/screens/admin_screen.dart';
+import 'presentation/screens/admin_screen.dart';
+import 'presentation/theme/app_theme.dart';
+import 'domain/models/app_theme_settings.dart';
 
 // Provider pour le service de réservation
 final reservationServiceProvider = ChangeNotifierProvider<ReservationService>((
@@ -59,6 +62,7 @@ class MainApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(currentUserProvider);
     final localeAsync = ref.watch(localeNotifierProvider);
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
 
     Widget home = authState.when(
       data: (user) {
@@ -80,13 +84,21 @@ class MainApp extends ConsumerWidget {
       error: (e, _) => Scaffold(body: Center(child: Text('Erreur: $e'))),
     );
 
+    // Obtenir les paramètres de thème
+    final themeSettings = themeSettingsAsync.value;
+    final themeMode = themeSettings?.themeMode ?? ThemeMode.system;
+    final lightTheme = AppTheme.createLightTheme(themeSettings ?? AppThemeSettings.defaults());
+    final darkTheme = AppTheme.createDarkTheme(themeSettings ?? AppThemeSettings.defaults());
+
     return MaterialApp(
       title: 'Kite Reserve',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
-        useMaterial3: true,
-      ),
+      
+      // Thèmes dynamiques
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: themeMode,
+      
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

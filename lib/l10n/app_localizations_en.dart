@@ -704,7 +704,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notesHint => 'E.g., Instructor preference...';
 
   @override
-  String get schoolSettings => 'School Settings';
+  String get schoolSettings => 'School settings';
 
   @override
   String get settingsNotFound => 'Error: Settings not found';
@@ -994,4 +994,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get all => 'All';
+
+  @override
+  String get appearanceSection => 'Appearance';
+
+  @override
+  String get themeMode => 'Theme mode';
+
+  @override
+  String get lightMode => 'Light Mode';
+
+  @override
+  String get darkMode => 'Dark Mode';
+
+  @override
+  String get systemTheme => 'System (Device)';
+
+  @override
+  String get brandColors => 'Brand colors';
+
+  @override
+  String get primaryColor => 'Primary color';
+
+  @override
+  String get secondaryColor => 'Secondary color';
+
+  @override
+  String get accentColor => 'Accent color';
+
+  @override
+  String get themePresets => 'Theme presets';
+
+  @override
+  String get customColor => 'Custom...';
+
+  @override
+  String get preview => 'Preview';
+
+  @override
+  String get resetToDefaults => 'Reset to defaults';
+
+  @override
+  String get themeApplied => 'Theme applied!';
+
+  @override
+  String get colorsReset => 'Colors reset';
 }

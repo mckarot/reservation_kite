@@ -707,7 +707,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get notesHint => 'Ej: Preferencia de instructor...';
 
   @override
-  String get schoolSettings => 'Configuración de la Escuela';
+  String get schoolSettings => 'Configuración de la escuela';
 
   @override
   String get settingsNotFound => 'Error: Configuración no encontrada';
@@ -997,4 +997,49 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get all => 'Todos';
+
+  @override
+  String get appearanceSection => 'Apariencia';
+
+  @override
+  String get themeMode => 'Modo del tema';
+
+  @override
+  String get lightMode => 'Modo Claro';
+
+  @override
+  String get darkMode => 'Modo Oscuro';
+
+  @override
+  String get systemTheme => 'Sistema (Dispositivo)';
+
+  @override
+  String get brandColors => 'Colores de la marca';
+
+  @override
+  String get primaryColor => 'Color principal';
+
+  @override
+  String get secondaryColor => 'Color secundario';
+
+  @override
+  String get accentColor => 'Color de acento';
+
+  @override
+  String get themePresets => 'Temas predefinidos';
+
+  @override
+  String get customColor => 'Personalizado...';
+
+  @override
+  String get preview => 'Vista previa';
+
+  @override
+  String get resetToDefaults => 'Restablecer';
+
+  @override
+  String get themeApplied => '¡Tema aplicado!';
+
+  @override
+  String get colorsReset => 'Colores restablecidos';
 }

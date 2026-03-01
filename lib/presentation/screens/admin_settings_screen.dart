@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/settings.dart';
 import '../providers/settings_notifier.dart';
+import '../providers/theme_notifier.dart';
+import '../widgets/theme_selector.dart';
+import '../widgets/color_picker.dart';
+import '../widgets/theme_preview.dart';
+import '../../domain/models/app_theme_settings.dart';
 import 'staff_admin_screen.dart';
 import 'credit_pack_admin_screen.dart';
 import 'equipment_admin_screen.dart';
@@ -159,6 +164,89 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                   },
                   child: Text(l10n.saveButton),
                 ),
+                
+                // Section Apparence / Thème
+                const Divider(height: 48),
+                Text(
+                  '🎨 ${l10n.appearanceSection}',
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                
+                // Sélecteur de mode (Clair/Sombre/Système)
+                Text(
+                  l10n.themeMode,
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+                const ThemeSelector(),
+                
+                // Aperçu du thème
+                const ThemePreview(),
+                
+                // Couleurs de la marque
+                Text(
+                  l10n.brandColors,
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 8),
+                Consumer(
+                  builder: (context, ref, _) {
+                    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+                    final themeSettings = themeSettingsAsync.value;
+                    
+                    if (themeSettings == null) {
+                      return const CircularProgressIndicator();
+                    }
+                    
+                    final notifier = ref.read(themeNotifierProvider.notifier);
+                    
+                    return Column(
+                      children: [
+                        ColorPicker(
+                          title: l10n.primaryColor,
+                          selectedColor: themeSettings.primary,
+                          onColorSelected: (color) => notifier.setPrimaryColor(color),
+                        ),
+                        const SizedBox(height: 16),
+                        ColorPicker(
+                          title: l10n.secondaryColor,
+                          selectedColor: themeSettings.secondary,
+                          onColorSelected: (color) => notifier.setSecondaryColor(color),
+                        ),
+                        const SizedBox(height: 16),
+                        ColorPicker(
+                          title: l10n.accentColor,
+                          selectedColor: themeSettings.accent,
+                          onColorSelected: (color) => notifier.setAccentColor(color),
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: () {
+                                  notifier.resetToDefaults();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(l10n.colorsReset),
+                                      duration: const Duration(seconds: 2),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(Icons.refresh),
+                                label: Text(l10n.resetToDefaults),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                
                 const Divider(height: 48),
                 ListTile(
                   leading: const Icon(Icons.sell, color: Colors.purple),

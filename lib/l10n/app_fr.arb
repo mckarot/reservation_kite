@@ -403,5 +403,21 @@
   "categoryName": "Nom de la catégorie",
   "selectCategory": "Sélectionner une catégorie",
   "noEquipmentCategories": "Aucune catégorie d'équipement",
-  "all": "Tous"
+  "all": "Tous",
+  "appearanceSection": "Apparence",
+  "themeMode": "Mode du thème",
+  "lightMode": "Mode Clair",
+  "darkMode": "Mode Sombre",
+  "systemTheme": "Système (Device)",
+  "brandColors": "Couleurs de la marque",
+  "primaryColor": "Couleur principale",
+  "secondaryColor": "Couleur secondaire",
+  "accentColor": "Couleur d'accent",
+  "themePresets": "Thèmes prédéfinis",
+  "customColor": "Personnalisée...",
+  "preview": "Aperçu",
+  "resetToDefaults": "Réinitialiser",
+  "themeApplied": "Thème appliqué !",
+  "colorsReset": "Couleurs réinitialisées",
+  "schoolSettings": "Paramètres de l'école"
 }

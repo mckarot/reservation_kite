@@ -985,4 +985,49 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get all => '全部';
+
+  @override
+  String get appearanceSection => '外观';
+
+  @override
+  String get themeMode => '主题模式';
+
+  @override
+  String get lightMode => '浅色模式';
+
+  @override
+  String get darkMode => '深色模式';
+
+  @override
+  String get systemTheme => '系统（设备）';
+
+  @override
+  String get brandColors => '品牌颜色';
+
+  @override
+  String get primaryColor => '主色';
+
+  @override
+  String get secondaryColor => '辅助色';
+
+  @override
+  String get accentColor => '强调色';
+
+  @override
+  String get themePresets => '预设主题';
+
+  @override
+  String get customColor => '自定义...';
+
+  @override
+  String get preview => '预览';
+
+  @override
+  String get resetToDefaults => '重置';
+
+  @override
+  String get themeApplied => '主题已应用！';
+
+  @override
+  String get colorsReset => '颜色已重置';
 }

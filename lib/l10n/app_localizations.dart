@@ -1457,7 +1457,7 @@ abstract class AppLocalizations {
   /// No description provided for @schoolSettings.
   ///
   /// In fr, this message translates to:
-  /// **'Réglages École'**
+  /// **'Paramètres de l\'école'**
   String get schoolSettings;
 
   /// No description provided for @settingsNotFound.
@@ -2011,6 +2011,96 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Tous'**
   String get all;
+
+  /// No description provided for @appearanceSection.
+  ///
+  /// In fr, this message translates to:
+  /// **'Apparence'**
+  String get appearanceSection;
+
+  /// No description provided for @themeMode.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mode du thème'**
+  String get themeMode;
+
+  /// No description provided for @lightMode.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mode Clair'**
+  String get lightMode;
+
+  /// No description provided for @darkMode.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mode Sombre'**
+  String get darkMode;
+
+  /// No description provided for @systemTheme.
+  ///
+  /// In fr, this message translates to:
+  /// **'Système (Device)'**
+  String get systemTheme;
+
+  /// No description provided for @brandColors.
+  ///
+  /// In fr, this message translates to:
+  /// **'Couleurs de la marque'**
+  String get brandColors;
+
+  /// No description provided for @primaryColor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Couleur principale'**
+  String get primaryColor;
+
+  /// No description provided for @secondaryColor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Couleur secondaire'**
+  String get secondaryColor;
+
+  /// No description provided for @accentColor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Couleur d\'accent'**
+  String get accentColor;
+
+  /// No description provided for @themePresets.
+  ///
+  /// In fr, this message translates to:
+  /// **'Thèmes prédéfinis'**
+  String get themePresets;
+
+  /// No description provided for @customColor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Personnalisée...'**
+  String get customColor;
+
+  /// No description provided for @preview.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aperçu'**
+  String get preview;
+
+  /// No description provided for @resetToDefaults.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réinitialiser'**
+  String get resetToDefaults;
+
+  /// No description provided for @themeApplied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Thème appliqué !'**
+  String get themeApplied;
+
+  /// No description provided for @colorsReset.
+  ///
+  /// In fr, this message translates to:
+  /// **'Couleurs réinitialisées'**
+  String get colorsReset;
 }
 
 class _AppLocalizationsDelegate

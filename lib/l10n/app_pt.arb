@@ -400,5 +400,21 @@
   "categoryName": "Nome da categoria",
   "selectCategory": "Selecionar uma categoria",
   "noEquipmentCategories": "Sem categorias de equipamento",
-  "all": "Todos"
+  "all": "Todos",
+  "appearanceSection": "Aparência",
+  "themeMode": "Modo do tema",
+  "lightMode": "Modo Claro",
+  "darkMode": "Modo Escuro",
+  "systemTheme": "Sistema (Dispositivo)",
+  "brandColors": "Cores da marca",
+  "primaryColor": "Cor primária",
+  "secondaryColor": "Cor secundária",
+  "accentColor": "Cor de destaque",
+  "themePresets": "Temas predefinidos",
+  "customColor": "Personalizado...",
+  "preview": "Visualizar",
+  "resetToDefaults": "Redefinir",
+  "themeApplied": "Tema aplicado!",
+  "colorsReset": "Cores redefinidas",
+  "schoolSettings": "Configurações da escola"
 }

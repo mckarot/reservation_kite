@@ -400,5 +400,21 @@
   "categoryName": "类别名称",
   "selectCategory": "选择类别",
   "noEquipmentCategories": "无装备类别",
-  "all": "全部"
+  "all": "全部",
+  "appearanceSection": "外观",
+  "themeMode": "主题模式",
+  "lightMode": "浅色模式",
+  "darkMode": "深色模式",
+  "systemTheme": "系统（设备）",
+  "brandColors": "品牌颜色",
+  "primaryColor": "主色",
+  "secondaryColor": "辅助色",
+  "accentColor": "强调色",
+  "themePresets": "预设主题",
+  "customColor": "自定义...",
+  "preview": "预览",
+  "resetToDefaults": "重置",
+  "themeApplied": "主题已应用！",
+  "colorsReset": "颜色已重置",
+  "schoolSettings": "学校设置"
 }
