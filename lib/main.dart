@@ -64,6 +64,11 @@ class MainApp extends ConsumerWidget {
     final localeAsync = ref.watch(localeNotifierProvider);
     final themeSettingsAsync = ref.watch(themeNotifierProvider);
 
+    // Mettre à jour l'ID utilisateur dans le ThemeNotifier
+    authState.whenData((user) {
+      ref.read(themeNotifierProvider.notifier).setCurrentUserId(user?.id);
+    });
+
     Widget home = authState.when(
       data: (user) {
         if (user == null) return const LoginScreen();

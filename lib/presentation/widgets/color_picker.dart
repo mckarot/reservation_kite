@@ -109,16 +109,12 @@ class ColorPicker extends ConsumerWidget {
   }
 
   void _showCustomColorPicker(BuildContext context, AppLocalizations l10n) async {
-    // Pour l'instant, on utilise un dialog simple
-    // Plus tard, on pourra utiliser flutter_colorpicker
     final color = await showDialog<Color>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(l10n.customColor),
-        content: SingleChildScrollView(
-          child: ColorPickerGrid(
-            onColorSelected: (color) => Navigator.pop(context, color),
-          ),
+        content: ColorPickerGrid(
+          onColorSelected: (color) => Navigator.pop(context, color),
         ),
         actions: [
           TextButton(
@@ -166,27 +162,31 @@ class ColorPickerGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 6,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
-      ),
-      itemCount: _colors.length,
-      itemBuilder: (context, index) {
-        final color = _colors[index];
-        return GestureDetector(
-          onTap: () => onColorSelected(color),
-          child: Container(
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey.shade300),
+    return SizedBox(
+      width: 300,
+      height: 300,
+      child: GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 6,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+        ),
+        itemCount: _colors.length,
+        itemBuilder: (context, index) {
+          final color = _colors[index];
+          return GestureDetector(
+            onTap: () => onColorSelected(color),
+            child: Container(
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
