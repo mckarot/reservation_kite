@@ -14,23 +14,17 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-Equipment _$EquipmentFromJson(Map<String, dynamic> json) {
-  return _Equipment.fromJson(json);
-}
-
 /// @nodoc
 mixin _$Equipment {
   String get id => throw _privateConstructorUsedError;
-  EquipmentType get type => throw _privateConstructorUsedError;
+  String get categoryId => throw _privateConstructorUsedError;
   String get brand => throw _privateConstructorUsedError;
   String get model => throw _privateConstructorUsedError;
   String get size => throw _privateConstructorUsedError;
   EquipmentStatus get status => throw _privateConstructorUsedError;
   String get notes => throw _privateConstructorUsedError;
-  @TimestampConverter()
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $EquipmentCopyWith<Equipment> get copyWith =>
       throw _privateConstructorUsedError;
@@ -43,13 +37,13 @@ abstract class $EquipmentCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      EquipmentType type,
+      String categoryId,
       String brand,
       String model,
       String size,
       EquipmentStatus status,
       String notes,
-      @TimestampConverter() DateTime updatedAt});
+      DateTime updatedAt});
 }
 
 /// @nodoc
@@ -66,7 +60,7 @@ class _$EquipmentCopyWithImpl<$Res, $Val extends Equipment>
   @override
   $Res call({
     Object? id = null,
-    Object? type = null,
+    Object? categoryId = null,
     Object? brand = null,
     Object? model = null,
     Object? size = null,
@@ -79,10 +73,10 @@ class _$EquipmentCopyWithImpl<$Res, $Val extends Equipment>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as EquipmentType,
+      categoryId: null == categoryId
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as String,
       brand: null == brand
           ? _value.brand
           : brand // ignore: cast_nullable_to_non_nullable
@@ -121,13 +115,13 @@ abstract class _$$EquipmentImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
-      EquipmentType type,
+      String categoryId,
       String brand,
       String model,
       String size,
       EquipmentStatus status,
       String notes,
-      @TimestampConverter() DateTime updatedAt});
+      DateTime updatedAt});
 }
 
 /// @nodoc
@@ -142,7 +136,7 @@ class __$$EquipmentImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? type = null,
+    Object? categoryId = null,
     Object? brand = null,
     Object? model = null,
     Object? size = null,
@@ -155,10 +149,10 @@ class __$$EquipmentImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as EquipmentType,
+      categoryId: null == categoryId
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as String,
       brand: null == brand
           ? _value.brand
           : brand // ignore: cast_nullable_to_non_nullable
@@ -188,25 +182,22 @@ class __$$EquipmentImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$EquipmentImpl implements _Equipment {
   const _$EquipmentImpl(
       {required this.id,
-      required this.type,
+      required this.categoryId,
       required this.brand,
       required this.model,
       required this.size,
       this.status = EquipmentStatus.available,
       this.notes = '',
-      @TimestampConverter() required this.updatedAt});
-
-  factory _$EquipmentImpl.fromJson(Map<String, dynamic> json) =>
-      _$$EquipmentImplFromJson(json);
+      required this.updatedAt});
 
   @override
   final String id;
   @override
-  final EquipmentType type;
+  final String categoryId;
   @override
   final String brand;
   @override
@@ -220,12 +211,11 @@ class _$EquipmentImpl implements _Equipment {
   @JsonKey()
   final String notes;
   @override
-  @TimestampConverter()
   final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'Equipment(id: $id, type: $type, brand: $brand, model: $model, size: $size, status: $status, notes: $notes, updatedAt: $updatedAt)';
+    return 'Equipment(id: $id, categoryId: $categoryId, brand: $brand, model: $model, size: $size, status: $status, notes: $notes, updatedAt: $updatedAt)';
   }
 
   @override
@@ -234,7 +224,8 @@ class _$EquipmentImpl implements _Equipment {
         (other.runtimeType == runtimeType &&
             other is _$EquipmentImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.type, type) || other.type == type) &&
+            (identical(other.categoryId, categoryId) ||
+                other.categoryId == categoryId) &&
             (identical(other.brand, brand) || other.brand == brand) &&
             (identical(other.model, model) || other.model == model) &&
             (identical(other.size, size) || other.size == size) &&
@@ -244,44 +235,32 @@ class _$EquipmentImpl implements _Equipment {
                 other.updatedAt == updatedAt));
   }
 
-  @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, type, brand, model, size, status, notes, updatedAt);
+  int get hashCode => Object.hash(runtimeType, id, categoryId, brand, model,
+      size, status, notes, updatedAt);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$EquipmentImplCopyWith<_$EquipmentImpl> get copyWith =>
       __$$EquipmentImplCopyWithImpl<_$EquipmentImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$EquipmentImplToJson(
-      this,
-    );
-  }
 }
 
 abstract class _Equipment implements Equipment {
   const factory _Equipment(
-          {required final String id,
-          required final EquipmentType type,
-          required final String brand,
-          required final String model,
-          required final String size,
-          final EquipmentStatus status,
-          final String notes,
-          @TimestampConverter() required final DateTime updatedAt}) =
-      _$EquipmentImpl;
-
-  factory _Equipment.fromJson(Map<String, dynamic> json) =
-      _$EquipmentImpl.fromJson;
+      {required final String id,
+      required final String categoryId,
+      required final String brand,
+      required final String model,
+      required final String size,
+      final EquipmentStatus status,
+      final String notes,
+      required final DateTime updatedAt}) = _$EquipmentImpl;
 
   @override
   String get id;
   @override
-  EquipmentType get type;
+  String get categoryId;
   @override
   String get brand;
   @override
@@ -293,7 +272,6 @@ abstract class _Equipment implements Equipment {
   @override
   String get notes;
   @override
-  @TimestampConverter()
   DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)

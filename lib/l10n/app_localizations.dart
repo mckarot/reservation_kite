@@ -1951,6 +1951,78 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Saut avec grab'**
   String get skillJumpWithGrab;
+
+  /// No description provided for @equipmentCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégories d\'équipement'**
+  String get equipmentCategories;
+
+  /// No description provided for @addCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une catégorie'**
+  String get addCategory;
+
+  /// No description provided for @editCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier la catégorie'**
+  String get editCategory;
+
+  /// No description provided for @deleteCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer la catégorie'**
+  String get deleteCategory;
+
+  /// No description provided for @confirmDeleteCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Êtes-vous sûr de vouloir supprimer cette catégorie ?'**
+  String get confirmDeleteCategory;
+
+  /// No description provided for @cannotDeleteCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de supprimer : {count} équipement(s) associé(s)'**
+  String cannotDeleteCategory(Object count);
+
+  /// No description provided for @categoryName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom de la catégorie'**
+  String get categoryName;
+
+  /// No description provided for @selectCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sélectionner une catégorie'**
+  String get selectCategory;
+
+  /// No description provided for @noEquipmentCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune catégorie d\'équipement'**
+  String get noEquipmentCategories;
+
+  /// No description provided for @all.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous'**
+  String get all;
+
+  /// No description provided for @createCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer catégories'**
+  String get createCategories;
+
+  /// No description provided for @categoriesCreatedSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'6 catégories d\'équipement créées avec succès !'**
+  String get categoriesCreatedSuccess;
 }
 
 class _AppLocalizationsDelegate

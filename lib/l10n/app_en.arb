@@ -390,5 +390,17 @@
   "skillTransitionsJumps": "Transitions & Jumps",
   "skillBasicJump": "Basic jump",
   "skillJibe": "Jibe",
-  "skillJumpWithGrab": "Jump with grab"
+  "skillJumpWithGrab": "Jump with grab",
+  "equipmentCategories": "Equipment Categories",
+  "addCategory": "Add category",
+  "editCategory": "Edit category",
+  "deleteCategory": "Delete category",
+  "confirmDeleteCategory": "Are you sure you want to delete this category?",
+  "cannotDeleteCategory": "Cannot delete: {count} equipment(s) attached",
+  "categoryName": "Category name",
+  "selectCategory": "Select a category",
+  "noEquipmentCategories": "No equipment categories",
+  "all": "All",
+  "createCategories": "Create categories",
+  "categoriesCreatedSuccess": "6 equipment categories created successfully!"
 }

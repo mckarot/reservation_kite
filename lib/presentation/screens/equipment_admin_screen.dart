@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import '../../domain/models/equipment.dart';
 import '../providers/equipment_notifier.dart';
+import '../providers/equipment_category_notifier.dart';
+import '../widgets/equipment_category_filter.dart';
+import 'equipment_category_admin_screen.dart';
 import '../../l10n/app_localizations.dart';
 
 class EquipmentAdminScreen extends ConsumerStatefulWidget {
@@ -14,7 +17,7 @@ class EquipmentAdminScreen extends ConsumerStatefulWidget {
 }
 
 class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
-  EquipmentType _selectedType = EquipmentType.kite;
+  String? _selectedCategoryId;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +29,18 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
         title: Text(l10n.equipmentManagement),
         actions: [
           IconButton(
+            icon: const Icon(Icons.category),
+            tooltip: l10n.equipmentCategories,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const EquipmentCategoryAdminScreen(),
+                ),
+              );
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.add),
             onPressed: () => _showAddEquipmentDialog(context, ref),
           ),
@@ -33,13 +48,27 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
       ),
       body: Column(
         children: [
-          _buildFilterBar(),
+          EquipmentCategoryFilter(
+            selectedCategoryId: _selectedCategoryId,
+            onCategorySelected: (categoryId) =>
+                setState(() => _selectedCategoryId = categoryId),
+          ),
           Expanded(
             child: equipmentAsync.when(
               data: (items) {
-                final filtered = items
-                    .where((e) => e.type == _selectedType)
-                    .toList();
+                print('📋 Équipements chargés: ${items.length}');
+                print('🔍 Catégorie sélectionnée: $_selectedCategoryId');
+                
+                final filtered = _selectedCategoryId == null
+                    ? items
+                    : items
+                        .where((e) {
+                          print('   - ${e.brand}: categoryId=${e.categoryId}, match=${e.categoryId == _selectedCategoryId}');
+                          return e.categoryId == _selectedCategoryId;
+                        })
+                        .toList();
+                print('✅ Équipements filtrés: ${filtered.length}');
+                
                 if (filtered.isEmpty) {
                   return Center(child: Text(l10n.noEquipmentInCategory));
                 }
@@ -61,36 +90,12 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
     );
   }
 
-  Widget _buildFilterBar() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Row(
-        children: EquipmentType.values.map((type) {
-          final isSelected = _selectedType == type;
-          return Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: FilterChip(
-              label: Text(type.name.toUpperCase()),
-              selected: isSelected,
-              onSelected: (val) {
-                if (val) setState(() => _selectedType = type);
-              },
-              selectedColor: Colors.blue.shade100,
-              checkmarkColor: Colors.blue,
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
   void _showAddEquipmentDialog(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final brandController = TextEditingController();
     final modelController = TextEditingController();
     final sizeController = TextEditingController();
-    EquipmentType dialogType = _selectedType;
+    String? selectedCategoryId;
 
     showDialog(
       context: context,
@@ -101,18 +106,38 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                DropdownButtonFormField<EquipmentType>(
-                  initialValue: dialogType,
-                  decoration: InputDecoration(labelText: l10n.typeLabel),
-                  items: EquipmentType.values
-                      .map(
-                        (t) => DropdownMenuItem(
-                          value: t,
-                          child: Text(t.name.toUpperCase()),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (val) => setDialogState(() => dialogType = val!),
+                Consumer(
+                  builder: (context, ref, _) {
+                    final categoriesAsync =
+                        ref.watch(equipmentCategoryNotifierProvider);
+                    return categoriesAsync.when(
+                      data: (categories) {
+                        if (categories.isEmpty) {
+                          return Text(l10n.noEquipmentCategories);
+                        }
+                        return DropdownButtonFormField<String>(
+                          initialValue: selectedCategoryId,
+                          decoration: InputDecoration(
+                            labelText: l10n.categoryName,
+                          ),
+                          hint: Text(l10n.selectCategory),
+                          items: categories
+                              .where((c) => c.isActive)
+                              .map(
+                                (c) => DropdownMenuItem(
+                                  value: c.id,
+                                  child: Text(c.name),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (val) =>
+                              setDialogState(() => selectedCategoryId = val!),
+                        );
+                      },
+                      loading: () => const CircularProgressIndicator(),
+                      error: (_, s) => Text(l10n.errorLabel),
+                    );
+                  },
                 ),
                 TextField(
                   controller: brandController,
@@ -135,21 +160,22 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
               child: Text(l10n.cancelButton),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (brandController.text.isNotEmpty &&
-                    sizeController.text.isNotEmpty) {
+                    sizeController.text.isNotEmpty &&
+                    selectedCategoryId != null) {
                   final newEquip = Equipment(
                     id: const Uuid().v4(),
-                    type: dialogType,
+                    categoryId: selectedCategoryId!,
                     brand: brandController.text,
                     model: modelController.text,
                     size: sizeController.text,
                     updatedAt: DateTime.now(),
                   );
-                  ref
+                  await ref
                       .read(equipmentNotifierProvider.notifier)
                       .addEquipment(newEquip);
-                  Navigator.pop(context);
+                  if (context.mounted) Navigator.pop(context);
                 }
               },
               child: Text(l10n.addButton),

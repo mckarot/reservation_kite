@@ -964,4 +964,44 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get skillJumpWithGrab => 'Salto con grab';
+
+  @override
+  String get equipmentCategories => 'Categorías de Equipamiento';
+
+  @override
+  String get addCategory => 'Añadir categoría';
+
+  @override
+  String get editCategory => 'Editar categoría';
+
+  @override
+  String get deleteCategory => 'Eliminar categoría';
+
+  @override
+  String get confirmDeleteCategory =>
+      '¿Estás seguro de que quieres eliminar esta categoría?';
+
+  @override
+  String cannotDeleteCategory(Object count) {
+    return 'No se puede eliminar: $count equipo(s) asociado(s)';
+  }
+
+  @override
+  String get categoryName => 'Nombre de la categoría';
+
+  @override
+  String get selectCategory => 'Seleccionar una categoría';
+
+  @override
+  String get noEquipmentCategories => 'Sin categorías de equipamiento';
+
+  @override
+  String get all => 'Todos';
+
+  @override
+  String get createCategories => 'Crear categorías';
+
+  @override
+  String get categoriesCreatedSuccess =>
+      '¡6 categorías de equipamiento creadas con éxito!';
 }

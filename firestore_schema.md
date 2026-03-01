@@ -84,11 +84,21 @@
     - `images`: list<string>
     - `created_at`: serverTimestamp
 
+## COLLECTION: equipment_categories
+- **Description**: Catégories d'équipement personnalisables par l'admin.
+- **Chemin**: `/equipment_categories/{categoryId}`
+- **Champs**:
+    - `name`: string (required, unique, dans la langue de l'admin)
+    - `order`: int (pour le tri, commence à 1)
+    - `isActive`: boolean (default: true)
+    - `equipmentIds`: list<string> (liste des IDs d'équipements liés)
+    - `created_at`: serverTimestamp
+
 ## COLLECTION: equipment
 - **Description**: Matériel de l'école (ailes, planches) utilisé pour les cours.
 - **Chemin**: `/equipment/{equipmentId}`
 - **Champs**:
-    - `type`: string ['kite', 'board', 'harness', 'other']
+    - `category_id`: string (FK -> equipment_categories/{id})
     - `brand`: string
     - `model`: string
     - `size`: string

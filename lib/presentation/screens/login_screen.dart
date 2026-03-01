@@ -5,7 +5,6 @@ import 'package:reservation_kite/presentation/screens/registration_screen.dart';
 import '../../data/providers/repository_providers.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/locale_provider.dart';
-import '../widgets/language_selector.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -108,7 +107,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       // 3. Matériel de l'école (Équipement)
       final equipment = FirebaseFirestore.instance.collection('equipment');
       batch.set(equipment.doc('demo_kite'), {
-        'type': 'kite',
+        'category_id': '', // Sera mis à jour après création des catégories
         'brand': 'F-One',
         'model': 'Bandit',
         'size': '9m',
@@ -165,6 +164,94 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       setState(() {
         _errorMessage = "${l10n.initSchemaError}: $e";
       });
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  Future<void> _createEquipmentCategories() async {
+    final l10n = AppLocalizations.of(context);
+
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      // 1. Créer les 4 catégories
+      final categoriesData = [
+        {'name': 'Kites', 'order': 1},
+        {'name': 'Planches', 'order': 2},
+        {'name': 'Harnais', 'order': 3},
+        {'name': 'Accessoires', 'order': 4},
+      ];
+
+      final categoryIds = <String>[];
+      final collection = FirebaseFirestore.instance.collection('equipment_categories');
+
+      for (final category in categoriesData) {
+        final docRef = collection.doc();
+        await docRef.set({
+          'name': category['name'],
+          'order': category['order'],
+          'isActive': true,
+          'equipmentIds': [],
+          'created_at': FieldValue.serverTimestamp(),
+        });
+        categoryIds.add(docRef.id);
+        print('✅ Catégorie créée: ${category['name']} (${docRef.id})');
+      }
+
+      // 2. Créer 2 équipements par catégorie (total 8 équipements)
+      final equipmentData = [
+        // Kites
+        {'categoryId': 0, 'brand': 'F-One', 'model': 'Bandit', 'size': '9m²'},
+        {'categoryId': 0, 'brand': 'Duotone', 'model': 'Evo', 'size': '12m²'},
+        // Planches
+        {'categoryId': 1, 'brand': 'F-One', 'model': 'Surf', 'size': '5\'6"'},
+        {'categoryId': 1, 'brand': 'Duotone', 'model': 'Foxy', 'size': 'XS'},
+        // Harnais
+        {'categoryId': 2, 'brand': 'Dakine', 'model': 'Tulum', 'size': 'M'},
+        {'categoryId': 2, 'brand': 'Ion', 'model': 'Apex', 'size': 'L'},
+        // Accessoires
+        {'categoryId': 3, 'brand': 'Ion', 'model': 'Select', 'size': '4/3mm'},
+        {'categoryId': 3, 'brand': 'Prolimit', 'model': 'Blue', 'size': '3/2mm'},
+      ];
+
+      final equipmentCollection = FirebaseFirestore.instance.collection('equipment');
+
+      for (final equip in equipmentData) {
+        final categoryId = categoryIds[equip['categoryId'] as int];
+        final docRef = equipmentCollection.doc();
+        await docRef.set({
+          'category_id': categoryId,
+          'brand': equip['brand'],
+          'model': equip['model'],
+          'size': equip['size'],
+          'status': 'available',
+          'notes': '',
+          'updated_at': FieldValue.serverTimestamp(),
+        });
+        print('✅ Équipement créé: ${equip['brand']} ${equip['model']}');
+      }
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('✅ ${l10n.categoriesCreatedSuccess}'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('❌ Erreur: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -310,6 +397,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         icon: const Icon(Icons.storage, size: 14),
                         label: Text(
                           l10n.initSchema,
+                          style: const TextStyle(fontSize: 11),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      TextButton.icon(
+                        onPressed: _isLoading ? null : _createEquipmentCategories,
+                        icon: const Icon(Icons.category, size: 14),
+                        label: Text(
+                          l10n.createCategories,
                           style: const TextStyle(fontSize: 11),
                         ),
                       ),

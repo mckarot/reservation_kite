@@ -84,6 +84,20 @@ lib/
 
 ---
 
+### 4.5 GESTION DES CONFLITS & TRANSACTION
+Réservation "Optimiste" interdite : Toute création de session ou ajout d'élève doit impérativement passer par une Transaction Firestore (runTransaction).
+
+Vérification de Verrouillage : Avant d'écrire, la transaction doit :
+
+Lire le nombre actuel de students dans la session.
+
+Lire le max_capacity (dynamique ou fixe).
+
+Avorter si count >= max_capacity.
+
+Idempotence : Chaque demande de réservation doit inclure un request_id unique pour éviter les doublons en cas de micro-coupure réseau.
+
+
 ## 5. CONFORMITÉ RGPD (GDPR)
 
 ### Données Collectées

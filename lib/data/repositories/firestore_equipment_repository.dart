@@ -29,11 +29,16 @@ class FirestoreEquipmentRepository implements EquipmentRepository {
 
   @override
   Future<void> saveEquipment(Equipment equipment) async {
-    final data = equipment.toJson();
-    data['updated_at'] = FieldValue.serverTimestamp();
-
-    // Mapping manuel pour correspondre un peu mieux au schéma products si nécessaire
-    // Mais pour une migration directe on garde la structure du modèle Equipment.
+    final data = {
+      'id': equipment.id,
+      'category_id': equipment.categoryId,
+      'brand': equipment.brand,
+      'model': equipment.model,
+      'size': equipment.size,
+      'status': equipment.status.name,
+      'notes': equipment.notes,
+      'updated_at': FieldValue.serverTimestamp(),
+    };
 
     await _collection.doc(equipment.id).set(data, SetOptions(merge: true));
   }

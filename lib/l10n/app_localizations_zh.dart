@@ -953,4 +953,42 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get skillJumpWithGrab => '抓板跳跃';
+
+  @override
+  String get equipmentCategories => '装备类别';
+
+  @override
+  String get addCategory => '添加类别';
+
+  @override
+  String get editCategory => '编辑类别';
+
+  @override
+  String get deleteCategory => '删除类别';
+
+  @override
+  String get confirmDeleteCategory => '您确定要删除此类别吗？';
+
+  @override
+  String cannotDeleteCategory(Object count) {
+    return '无法删除：$count 个装备已关联';
+  }
+
+  @override
+  String get categoryName => '类别名称';
+
+  @override
+  String get selectCategory => '选择类别';
+
+  @override
+  String get noEquipmentCategories => '无装备类别';
+
+  @override
+  String get all => '全部';
+
+  @override
+  String get createCategories => '创建类别';
+
+  @override
+  String get categoriesCreatedSuccess => '6 个装备类别创建成功！';
 }

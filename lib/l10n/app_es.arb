@@ -390,5 +390,17 @@
   "skillTransitionsJumps": "Transiciones y Saltos",
   "skillBasicJump": "Salto básico",
   "skillJibe": "Jibe",
-  "skillJumpWithGrab": "Salto con grab"
+  "skillJumpWithGrab": "Salto con grab",
+  "equipmentCategories": "Categorías de Equipamiento",
+  "addCategory": "Añadir categoría",
+  "editCategory": "Editar categoría",
+  "deleteCategory": "Eliminar categoría",
+  "confirmDeleteCategory": "¿Estás seguro de que quieres eliminar esta categoría?",
+  "cannotDeleteCategory": "No se puede eliminar: {count} equipo(s) asociado(s)",
+  "categoryName": "Nombre de la categoría",
+  "selectCategory": "Seleccionar una categoría",
+  "noEquipmentCategories": "Sin categorías de equipamiento",
+  "all": "Todos",
+  "createCategories": "Crear categorías",
+  "categoriesCreatedSuccess": "¡6 categorías de equipamiento creadas con éxito!"
 }

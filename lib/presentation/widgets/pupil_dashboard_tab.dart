@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/providers/service_providers.dart';
 import '../../domain/models/user.dart';
-import '../../services/weather_service.dart';
 import '../../l10n/app_localizations.dart';
 
 class PupilDashboardTab extends ConsumerWidget {
@@ -145,7 +144,11 @@ class PupilDashboardTab extends ConsumerWidget {
             ),
             child: Row(
               children: [
-                Icon(Icons.sunny_snowing, color: Colors.orange.shade700, size: 32),
+                Icon(
+                  Icons.sunny_snowing,
+                  color: Colors.orange.shade700,
+                  size: 32,
+                ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
@@ -162,7 +165,10 @@ class PupilDashboardTab extends ConsumerWidget {
                       const SizedBox(height: 4),
                       Text(
                         l10n.sunSafetyTip,
-                        style: const TextStyle(fontSize: 12, color: Colors.orange),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.orange,
+                        ),
                       ),
                     ],
                   ),

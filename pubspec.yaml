@@ -48,6 +48,9 @@ dependencies:
   firebase_auth: ^5.4.1
   cloud_firestore: ^5.6.2
 
+  # Drag & Drop
+  reorderable_grid_view: ^2.0.0
+
   # Models & JSON
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
