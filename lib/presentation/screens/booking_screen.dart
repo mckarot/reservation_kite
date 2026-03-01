@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/reservation.dart';
 import '../providers/booking_notifier.dart';
 import '../providers/staff_notifier.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../providers/theme_notifier.dart';
 import '../../l10n/app_localizations.dart';
 
 class BookingScreen extends ConsumerStatefulWidget {
@@ -31,6 +33,11 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     final l10n = AppLocalizations.of(context);
     final bookingsAsync = ref.watch(bookingNotifierProvider);
     // staffAsync unused here, but used in dialog Consumer
+    
+    // Récupérer les couleurs du thème dynamique
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.reservations)),
@@ -98,10 +105,10 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                           if (b.notes.isNotEmpty)
                             Text(
                               '${l10n.noteLabel}: ${b.notes}',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 12,
                                 fontStyle: FontStyle.italic,
-                                color: Colors.blueGrey,
+                                color: primaryColor.withOpacity(0.7),
                               ),
                             ),
                         ],

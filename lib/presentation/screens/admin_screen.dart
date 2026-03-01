@@ -8,10 +8,12 @@ import 'package:reservation_kite/presentation/screens/equipment_admin_screen.dar
 import 'package:reservation_kite/presentation/screens/staff_admin_screen.dart';
 import 'package:reservation_kite/presentation/screens/user_directory_screen.dart';
 import '../../data/providers/repository_providers.dart';
+import '../../domain/models/app_theme_settings.dart';
 import '../../domain/models/staff.dart';
 import '../../domain/models/staff_unavailability.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/staff_notifier.dart';
+import '../providers/theme_notifier.dart';
 import '../providers/unavailability_notifier.dart';
 
 class AdminScreen extends ConsumerWidget {
@@ -20,12 +22,18 @@ class AdminScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    
+    // Récupérer les couleurs du thème dynamique
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    
     final List<_DashboardItem> items = [
       _DashboardItem(
         title: l10n.dashboardKPIs,
         icon: Icons.dashboard_customize,
         route: const AdminDashboardScreen(),
-        color: Colors.blue.shade700,
+        color: primaryColor,
       ),
       _DashboardItem(
         title: l10n.settings,
@@ -117,10 +125,15 @@ class _DashboardCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Récupérer les couleurs du thème dynamique
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    
     Widget icon = Icon(
       item.icon,
       size: 40,
-      color: item.color ?? Theme.of(context).primaryColor,
+      color: item.color ?? primaryColor,
     );
 
     if (item.hasBadge) {
@@ -136,7 +149,11 @@ class _DashboardCard extends ConsumerWidget {
 
     return Card(
       elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shadowColor: primaryColor.withOpacity(0.3),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: primaryColor.withOpacity(0.2), width: 1.5),
+      ),
       child: InkWell(
         onTap: () => Navigator.push(
           context,
@@ -182,6 +199,11 @@ class _PendingAbsencesAlert extends ConsumerWidget {
           margin: const EdgeInsets.only(bottom: 16),
           color: Colors.red.shade50,
           elevation: 2,
+          shadowColor: Colors.red.withOpacity(0.3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: Colors.red.shade200, width: 1.5),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(

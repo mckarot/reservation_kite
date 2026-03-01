@@ -14,6 +14,8 @@ import '../../domain/models/settings.dart' hide TimeSlot;
 import '../../domain/models/staff_unavailability.dart';
 import '../../domain/logic/booking_validator.dart';
 import '../providers/auth_state_provider.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../providers/theme_notifier.dart';
 import '../../l10n/app_localizations.dart';
 
 final weatherProvider = StateProvider<AsyncValue<Weather>>(
@@ -86,6 +88,12 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
     final staffAsync = ref.watch(staffNotifierProvider);
     final currentUserAsync = ref.watch(currentUserProvider);
     final unavailabilitiesAsync = ref.watch(unavailabilityNotifierProvider);
+    
+    // Récupérer les couleurs du thème dynamique
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
 
     final effectivePupilId = currentUserAsync.value?.id;
 
@@ -132,9 +140,9 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                       child: Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.blue.shade200),
+                          border: Border.all(color: secondaryColor.withOpacity(0.4), width: 1.5),
                           borderRadius: BorderRadius.circular(12),
-                          color: Colors.blue.shade50,
+                          color: secondaryColor.withOpacity(0.15),
                         ),
                         child: Row(
                           children: [
@@ -173,6 +181,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                           isSelected: _selectedSlot == TimeSlot.morning,
                           onTap: () =>
                               setState(() => _selectedSlot = TimeSlot.morning),
+                          primaryColor: primaryColor,
                         ),
                         const SizedBox(width: 16),
                         _SlotOption(
@@ -182,6 +191,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                           onTap: () => setState(
                             () => _selectedSlot = TimeSlot.afternoon,
                           ),
+                          primaryColor: primaryColor,
                         ),
                       ],
                     ),
@@ -235,6 +245,11 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
     String? pupilId,
   ) {
     final l10n = AppLocalizations.of(context);
+    
+    // Récupérer les couleurs du thème dynamique
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -313,7 +328,7 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                         ? null
                         : () => _submitRequest(context, ref, pupilId),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue.shade700,
+                      backgroundColor: primaryColor,
                       foregroundColor: Colors.white,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
@@ -405,12 +420,23 @@ class _WeatherInfo extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final weatherAsync = ref.watch(weatherProvider);
+    
+    // Récupérer les couleurs du thème dynamique
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    
     return weatherAsync.when(
       data: (weather) => Column(
         children: [
           Card(
-            color: Colors.white,
             elevation: 2,
+            shadowColor: primaryColor.withOpacity(0.3),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(color: primaryColor.withOpacity(0.2), width: 1.5),
+            ),
+            color: Colors.white,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
@@ -419,14 +445,17 @@ class _WeatherInfo extends ConsumerWidget {
                   _WeatherItem(
                     icon: _getWeatherIcon(weather.weatherCode),
                     label: '${weather.maxTemperature.round()}°C',
+                    iconColor: primaryColor,
                   ),
                   _WeatherItem(
                     icon: Icons.air,
                     label: '${(weather.windSpeed / 1.852).round()} ${l10n.knots}',
+                    iconColor: primaryColor,
                   ),
                   _WeatherItem(
                     icon: Icons.explore,
                     label: _getWindDirection(weather.windDirection),
+                    iconColor: primaryColor,
                   ),
                 ],
               ),
@@ -487,14 +516,15 @@ class _WeatherInfo extends ConsumerWidget {
 class _WeatherItem extends StatelessWidget {
   final IconData icon;
   final String label;
+  final Color? iconColor;
 
-  const _WeatherItem({required this.icon, required this.label});
+  const _WeatherItem({required this.icon, required this.label, this.iconColor});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(icon, color: Colors.blue.shade700, size: 32),
+        Icon(icon, color: iconColor ?? Colors.blue.shade700, size: 32),
         const SizedBox(height: 8),
         Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
       ],
@@ -507,12 +537,14 @@ class _SlotOption extends StatelessWidget {
   final IconData icon;
   final bool isSelected;
   final VoidCallback onTap;
+  final Color? primaryColor;
 
   const _SlotOption({
     required this.label,
     required this.icon,
     required this.isSelected,
     required this.onTap,
+    this.primaryColor,
   });
 
   @override
@@ -523,15 +555,16 @@ class _SlotOption extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 24),
           decoration: BoxDecoration(
-            color: isSelected ? Colors.blue.shade700 : Colors.white,
+            color: isSelected ? (primaryColor ?? Colors.blue.shade700) : Colors.white,
             border: Border.all(
-              color: isSelected ? Colors.blue.shade700 : Colors.grey.shade300,
+              color: isSelected ? (primaryColor ?? Colors.blue.shade700) : Colors.grey.shade300,
+              width: isSelected ? 2 : 1,
             ),
             borderRadius: BorderRadius.circular(12),
             boxShadow: isSelected
                 ? [
                     BoxShadow(
-                      color: Colors.blue.withOpacity(0.3),
+                      color: primaryColor?.withOpacity(0.3) ?? Colors.blue.withOpacity(0.3),
                       blurRadius: 8,
                       offset: const Offset(0, 4),
                     ),

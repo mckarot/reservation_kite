@@ -5,6 +5,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import '../../data/providers/repository_providers.dart';
 import '../../l10n/app_localizations.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../providers/theme_notifier.dart';
+import '../widgets/colored_input_decoration.dart';
 
 class RegistrationScreen extends ConsumerStatefulWidget {
   const RegistrationScreen({super.key});
@@ -115,15 +118,27 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    
+    // Récupérer les couleurs du thème dynamique
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    
+    // Utiliser les couleurs du thème ou les défauts
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
+    final accentColor = themeSettings?.accent ?? AppThemeSettings.defaultAccent;
+    
     return Scaffold(
-      backgroundColor: Colors.blueGrey.shade50,
+      backgroundColor: Colors.grey.shade50, // Fond clair par défaut
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Card(
             elevation: 8,
+            shadowColor: primaryColor.withOpacity(0.3),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
+              side: BorderSide(color: primaryColor.withOpacity(0.2), width: 1.5),
             ),
             child: Padding(
               padding: const EdgeInsets.all(32.0),
@@ -136,15 +151,15 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                       onTap: _pickImage,
                       child: CircleAvatar(
                         radius: 50,
-                        backgroundColor: Colors.grey.shade200,
+                        backgroundColor: secondaryColor.withOpacity(0.3),
                         backgroundImage: _image != null
                             ? FileImage(_image!)
                             : null,
                         child: _image == null
-                            ? const Icon(
+                            ? Icon(
                                 Icons.add_a_photo,
                                 size: 50,
-                                color: Colors.grey,
+                                color: primaryColor,
                               )
                             : null,
                       ),
@@ -152,11 +167,11 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _displayNameController,
-                      decoration: InputDecoration(
+                      decoration: createColoredInputDecoration(
                         labelText: l10n.fullNameLabel,
                         hintText: l10n.fullNameHint,
-                        prefixIcon: const Icon(Icons.person),
-                        border: const OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.person, color: primaryColor),
+                        primaryColor: primaryColor,
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -168,11 +183,11 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _emailController,
-                      decoration: InputDecoration(
+                      decoration: createColoredInputDecoration(
                         labelText: l10n.emailLabel,
                         hintText: l10n.emailHint,
-                        prefixIcon: const Icon(Icons.email),
-                        border: const OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.email, color: primaryColor),
+                        primaryColor: primaryColor,
                       ),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
@@ -185,11 +200,11 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _passwordController,
-                      decoration: InputDecoration(
+                      decoration: createColoredInputDecoration(
                         labelText: l10n.passwordLabel,
                         hintText: l10n.passwordHint,
-                        prefixIcon: const Icon(Icons.lock),
-                        border: const OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.lock, color: primaryColor),
+                        primaryColor: primaryColor,
                       ),
                       obscureText: true,
                       validator: (value) {
@@ -202,21 +217,21 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _confirmPasswordController,
-                      decoration: InputDecoration(
+                      decoration: createColoredInputDecoration(
                         labelText: l10n.confirmPasswordLabel,
-                        prefixIcon: const Icon(Icons.lock),
-                        border: const OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.lock, color: primaryColor),
+                        primaryColor: primaryColor,
                       ),
                       obscureText: true,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _weightController,
-                      decoration: InputDecoration(
+                      decoration: createColoredInputDecoration(
                         labelText: l10n.weightLabel,
                         hintText: l10n.weightHint,
-                        prefixIcon: const Icon(Icons.fitness_center),
-                        border: const OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.fitness_center, color: primaryColor),
+                        primaryColor: primaryColor,
                       ),
                       keyboardType: TextInputType.number,
                     ),
@@ -234,7 +249,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                       child: ElevatedButton(
                         onPressed: _isLoading ? null : _register,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blueGrey,
+                          backgroundColor: primaryColor,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),

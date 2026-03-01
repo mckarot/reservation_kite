@@ -9,6 +9,8 @@ import 'notification_center_screen.dart';
 import '../providers/notification_notifier.dart';
 import '../providers/auth_state_provider.dart';
 import '../../data/providers/repository_providers.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../providers/theme_notifier.dart';
 import '../../l10n/app_localizations.dart';
 
 class PupilMainScreen extends ConsumerStatefulWidget {
@@ -26,6 +28,11 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
     final l10n = AppLocalizations.of(context);
     final currentUserAsync = ref.watch(currentUserProvider);
     final usersAsync = ref.watch(userNotifierProvider);
+    
+    // Récupérer les couleurs du thème dynamique
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
 
     final effectiveUserId = currentUserAsync.value?.id;
 
@@ -125,7 +132,7 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
             label: Text(l10n.bookButton),
             icon: const Icon(Icons.add),
             elevation: 8,
-            backgroundColor: Colors.blue.withValues(alpha: 0.4),
+            backgroundColor: primaryColor,
           ),
         );
       },

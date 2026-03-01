@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../data/providers/repository_providers.dart';
 import '../../l10n/app_localizations.dart';
+import '../../domain/models/app_theme_settings.dart';
 import '../providers/locale_provider.dart';
+import '../providers/theme_notifier.dart';
 import 'registration_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -68,15 +70,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final currentLocale = localeAsync.value ?? const Locale('fr');
     final l10n = AppLocalizations.of(context);
 
+    // Récupérer les couleurs du thème dynamique
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    
+    // Utiliser les couleurs du thème ou les défauts
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
+    final accentColor = themeSettings?.accent ?? AppThemeSettings.defaultAccent;
+
     return Scaffold(
-      backgroundColor: Colors.blueGrey.shade50,
+      backgroundColor: Colors.grey.shade50, // Fond clair par défaut
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
           l10n.appName,
-          style: const TextStyle(
-            color: Colors.blueGrey,
+          style: TextStyle(
+            color: primaryColor,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -86,7 +97,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             child: DropdownButton<Locale>(
               value: currentLocale,
               underline: const SizedBox(),
-              icon: const Icon(Icons.language, color: Colors.blueGrey),
+              icon: Icon(Icons.language, color: primaryColor),
               items: const [
                 DropdownMenuItem(value: Locale('fr'), child: Text('🇫🇷 FR')),
                 DropdownMenuItem(value: Locale('en'), child: Text('🇬🇧 EN')),
@@ -110,22 +121,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           padding: const EdgeInsets.all(24.0),
           child: Card(
             elevation: 8,
+            shadowColor: primaryColor.withOpacity(0.3),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
+              side: BorderSide(color: primaryColor.withOpacity(0.2), width: 1.5),
             ),
             child: Padding(
               padding: const EdgeInsets.all(32.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.sailing, size: 64, color: Colors.blueGrey),
+                  Icon(Icons.sailing, size: 64, color: primaryColor),
                   const SizedBox(height: 16),
                   Text(
                     l10n.appName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: Colors.blueGrey,
+                      color: primaryColor,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -139,8 +152,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     decoration: InputDecoration(
                       labelText: l10n.emailLabel,
                       hintText: l10n.emailHint,
-                      prefixIcon: const Icon(Icons.email),
-                      border: const OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.email, color: primaryColor),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: primaryColor.withOpacity(0.3)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: primaryColor.withOpacity(0.3)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: primaryColor, width: 2),
+                      ),
                     ),
                     keyboardType: TextInputType.emailAddress,
                   ),
@@ -150,8 +174,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     decoration: InputDecoration(
                       labelText: l10n.passwordLabel,
                       hintText: l10n.passwordHint,
-                      prefixIcon: const Icon(Icons.lock),
-                      border: const OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.lock, color: primaryColor),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: primaryColor.withOpacity(0.3)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: primaryColor.withOpacity(0.3)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: primaryColor, width: 2),
+                      ),
                     ),
                     obscureText: true,
                   ),
@@ -169,7 +204,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: ElevatedButton(
                       onPressed: _isLoading ? null : _login,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueGrey,
+                        backgroundColor: primaryColor,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -192,7 +227,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: Text(l10n.noAccount),
                   ),
                   const SizedBox(height: 24),
-                  
+
                   // Bouton pour créer la config du thème (Firestore)
                   OutlinedButton.icon(
                     onPressed: _isLoading ? null : _createThemeConfig,
@@ -203,6 +238,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      foregroundColor: accentColor,
                     ),
                   ),
                 ],

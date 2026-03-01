@@ -5,11 +5,16 @@ import '../../domain/models/credit_pack.dart';
 import 'package:uuid/uuid.dart';
 import '../../l10n/app_localizations.dart';
 
-class CreditPackAdminScreen extends ConsumerWidget {
+class CreditPackAdminScreen extends ConsumerStatefulWidget {
   const CreditPackAdminScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CreditPackAdminScreen> createState() => _CreditPackAdminScreenState();
+}
+
+class _CreditPackAdminScreenState extends ConsumerState<CreditPackAdminScreen> {
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final packsAsync = ref.watch(creditPackNotifierProvider);
 
@@ -22,6 +27,12 @@ class CreditPackAdminScreen extends ConsumerWidget {
           itemBuilder: (context, index) {
             final pack = packs[index];
             return Card(
+              elevation: 2,
+              shadowColor: Colors.blue.withOpacity(0.3),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(color: Colors.blue.withOpacity(0.2), width: 1.5),
+              ),
               child: ListTile(
                 title: Text(
                   pack.name,

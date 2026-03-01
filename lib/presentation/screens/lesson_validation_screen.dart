@@ -6,6 +6,8 @@ import '../providers/auth_state_provider.dart';
 import '../providers/user_notifier.dart';
 import '../providers/equipment_notifier.dart';
 import '../../domain/models/equipment.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../providers/theme_notifier.dart';
 import '../../l10n/app_localizations.dart';
 
 class LessonValidationScreen extends ConsumerStatefulWidget {
@@ -41,6 +43,12 @@ class _LessonValidationScreenState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    
+    // Récupérer les couleurs du thème dynamique
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.validationTitle(widget.pupil.displayName)),
@@ -68,7 +76,7 @@ class _LessonValidationScreenState
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue.shade700,
+                        color: primaryColor,
                       ),
                     ),
                     const SizedBox(height: 12),

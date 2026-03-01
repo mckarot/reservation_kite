@@ -287,6 +287,11 @@ class _CategoryCard extends ConsumerWidget {
         
         return Card(
           elevation: 2,
+          shadowColor: Colors.blue.withOpacity(0.3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: Colors.blue.withOpacity(0.2), width: 1.5),
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Row(

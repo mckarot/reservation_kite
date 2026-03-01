@@ -12,6 +12,8 @@ import '../../domain/models/staff.dart';
 import '../providers/user_notifier.dart';
 import 'staff_admin_screen.dart';
 import 'package:intl/intl.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../providers/theme_notifier.dart';
 import '../../l10n/app_localizations.dart';
 
 class AdminDashboardScreen extends ConsumerWidget {
@@ -21,6 +23,12 @@ class AdminDashboardScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final stats = ref.watch(financialStatsProvider);
+    
+    // Récupérer les couleurs du thème dynamique
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.schoolDashboard)),
@@ -198,6 +206,12 @@ class _PendingAbstancesSection extends ConsumerWidget {
                 ),
               );
               return Card(
+                elevation: 2,
+                shadowColor: Colors.red.withOpacity(0.3),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: BorderSide(color: Colors.red.withOpacity(0.2), width: 1.5),
+                ),
                 color: Colors.red.shade50,
                 child: ListTile(
                   onTap: () => Navigator.push(
@@ -256,6 +270,12 @@ class _PendingRequestsSection extends ConsumerWidget {
             const SizedBox(height: 16),
             ...pending.map(
               (res) => Card(
+                elevation: 2,
+                shadowColor: Colors.orange.withOpacity(0.3),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: BorderSide(color: Colors.orange.withOpacity(0.2), width: 1.5),
+                ),
                 color: Colors.orange.shade50,
                 child: ListTile(
                   title: Text(
@@ -323,6 +343,12 @@ class _PendingRequestsSection extends ConsumerWidget {
     if (staff == null) return;
     final l10n = AppLocalizations.of(context);
     final activeStaff = staff.where((s) => s.isActive).toList();
+    
+    // Récupérer les couleurs du thème dynamique
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
 
     showDialog(
       context: context,
@@ -338,12 +364,13 @@ class _PendingRequestsSection extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.blue.shade50,
+                    color: secondaryColor.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: secondaryColor.withOpacity(0.3), width: 1),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.note, size: 16, color: Colors.blue),
+                      Icon(Icons.note, size: 16, color: primaryColor),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
@@ -398,6 +425,12 @@ class _UpcomingSessionsCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    
+    // Récupérer les couleurs du thème dynamique
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    
     if (sessions.isEmpty) {
       return Center(
         child: Padding(
@@ -416,6 +449,12 @@ class _UpcomingSessionsCard extends ConsumerWidget {
             : null;
 
         return Card(
+          elevation: 2,
+          shadowColor: primaryColor.withOpacity(0.3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: primaryColor.withOpacity(0.2), width: 1.5),
+          ),
           margin: const EdgeInsets.only(bottom: 8),
           child: ListTile(
             dense: true,
@@ -447,12 +486,18 @@ class _UpcomingSessionsCard extends ConsumerWidget {
   }
 }
 
-class _TopClientsCard extends StatelessWidget {
+class _TopClientsCard extends ConsumerWidget {
   final List<User> clients;
   const _TopClientsCard({required this.clients});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Récupérer les couleurs du thème dynamique
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
+    
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -466,12 +511,13 @@ class _TopClientsCard extends StatelessWidget {
             children: [
               ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: Colors.blue.shade50,
+                  backgroundColor: secondaryColor.withOpacity(0.15),
                   radius: 12,
                   child: Text(
                     '${entry.key + 1}',
                     style: const TextStyle(fontSize: 10),
                   ),
+                  foregroundColor: primaryColor,
                 ),
                 title: Text(
                   client.displayName,

@@ -5,6 +5,8 @@ import '../../domain/models/user.dart';
 import '../widgets/user_progress_tab.dart';
 import '../widgets/user_notes_tab.dart';
 import '../providers/credit_pack_notifier.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../providers/theme_notifier.dart';
 import '../../l10n/app_localizations.dart';
 
 class UserDetailScreen extends ConsumerWidget {
@@ -15,6 +17,12 @@ class UserDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final usersAsync = ref.watch(userNotifierProvider);
+    
+    // Récupérer les couleurs du thème dynamique
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
 
     return usersAsync.when(
       data: (users) {
@@ -61,6 +69,13 @@ class _ProfileTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    
+    // Récupérer les couleurs du thème dynamique
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
+    
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -100,7 +115,7 @@ class _ProfileTab extends ConsumerWidget {
               ),
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue.shade700,
+                  backgroundColor: primaryColor,
                   foregroundColor: Colors.white,
                 ),
                 onPressed: () => _showTopUpOptions(context, ref),
@@ -124,6 +139,12 @@ class _ProfileTab extends ConsumerWidget {
           builder: (context, ref, child) {
             final packsAsync = ref.watch(creditPackNotifierProvider);
             final customController = TextEditingController();
+            
+            // Récupérer les couleurs du thème dynamique
+            final themeSettingsAsync = ref.watch(themeNotifierProvider);
+            final themeSettings = themeSettingsAsync.value;
+            final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+            final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
 
             return SingleChildScrollView(
               child: Column(
@@ -147,17 +168,17 @@ class _ProfileTab extends ConsumerWidget {
                       return Column(
                         children: packs.map((pack) {
                           return Card(
-                            elevation: 0,
+                            elevation: 2,
                             margin: const EdgeInsets.only(bottom: 8),
-                            color: Colors.blue.shade50,
+                            color: secondaryColor.withOpacity(0.15),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
-                              side: BorderSide(color: Colors.blue.shade100),
+                              side: BorderSide(color: secondaryColor.withOpacity(0.3), width: 1),
                             ),
                             child: ListTile(
-                              leading: const Icon(
+                              leading: Icon(
                                 Icons.inventory_2,
-                                color: Colors.blue,
+                                color: primaryColor,
                               ),
                               title: Text(
                                 pack.name,

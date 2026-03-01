@@ -214,7 +214,12 @@ class _EquipmentTile extends ConsumerWidget {
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 2,
+      shadowColor: Colors.blue.withOpacity(0.3),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.blue.withOpacity(0.2), width: 1.5),
+      ),
       child: ListTile(
         title: Text(
           '${equipment.brand} ${equipment.model} - ${equipment.size}',

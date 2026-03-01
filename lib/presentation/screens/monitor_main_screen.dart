@@ -11,6 +11,8 @@ import '../../domain/models/reservation.dart';
 import '../../domain/models/staff.dart';
 import '../../domain/models/staff_unavailability.dart';
 import '../providers/unavailability_notifier.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../providers/theme_notifier.dart';
 import '../../l10n/app_localizations.dart';
 
 class MonitorMainScreen extends ConsumerStatefulWidget {
@@ -29,6 +31,12 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
     final currentUserAsync = ref.watch(currentUserProvider);
     final staffAsync = ref.watch(staffNotifierProvider);
     final bookingsAsync = ref.watch(bookingNotifierProvider);
+    
+    // Récupérer les couleurs du thème dynamique
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
 
     final effectiveStaffId = currentUserAsync.value?.id;
 
@@ -90,7 +98,7 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
                         icon: const Icon(Icons.logout),
                         label: Text(l10n.signOut),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blueGrey,
+                          backgroundColor: primaryColor,
                           foregroundColor: Colors.white,
                         ),
                       ),
@@ -505,6 +513,13 @@ class _LessonCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final users = ref.watch(userNotifierProvider).value ?? [];
+    
+    // Récupérer les couleurs du thème dynamique
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
+    
     final pupil = users.any((u) => u.id == reservation.pupilId)
         ? users.firstWhere((u) => u.id == reservation.pupilId)
         : null;
@@ -520,14 +535,15 @@ class _LessonCard extends ConsumerWidget {
               leading: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
+                  color: secondaryColor.withOpacity(0.15),
                   borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: secondaryColor.withOpacity(0.3), width: 1),
                 ),
                 child: Icon(
                   reservation.slot == TimeSlot.morning
                       ? Icons.light_mode
                       : Icons.wb_twilight,
-                  color: Colors.blue.shade700,
+                  color: primaryColor,
                 ),
               ),
               title: Text(
