@@ -39,6 +39,7 @@ class EquipmentCategoryFilter extends ConsumerWidget {
                   onSelected: (selected) => onCategorySelected(null),
                   backgroundColor: Colors.grey.shade200,
                   selectedColor: Colors.blue.shade100,
+                  showCheckmark: false,
                 ),
                 const SizedBox(width: 8),
                 ...activeCategories.map((category) => Padding(
@@ -51,6 +52,7 @@ class EquipmentCategoryFilter extends ConsumerWidget {
                     ),
                     backgroundColor: Colors.grey.shade200,
                     selectedColor: Colors.blue.shade100,
+                    showCheckmark: false,
                   ),
                 )),
               ],
@@ -58,7 +60,7 @@ class EquipmentCategoryFilter extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(child: Text('')), // Silent error to avoid UI flicker
+        error: (error, _) => Center(child: Text('')),
       ),
     );
   }
