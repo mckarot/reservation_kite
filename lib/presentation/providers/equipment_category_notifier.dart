@@ -4,6 +4,7 @@ import 'dart:async';
 import '../../domain/models/equipment_category.dart';
 import '../../data/repositories/equipment_category_repository.dart';
 import '../../data/sources/equipment_category_firestore_datasource.dart';
+import '../../data/providers/repository_providers.dart';
 
 final equipmentCategoryDataSourceProvider = Provider<EquipmentCategoryFirestoreDataSource>(
   (ref) => EquipmentCategoryFirestoreDataSource(),
@@ -18,20 +19,33 @@ final equipmentCategoryRepositoryProvider = Provider<EquipmentCategoryRepository
 final equipmentCategoryNotifierProvider = StateNotifierProvider<EquipmentCategoryNotifier, AsyncValue<List<EquipmentCategory>>>(
   (ref) {
     final repository = ref.watch(equipmentCategoryRepositoryProvider);
-    return EquipmentCategoryNotifier(repository);
+    return EquipmentCategoryNotifier(repository, ref);
   },
 );
 
 class EquipmentCategoryNotifier extends StateNotifier<AsyncValue<List<EquipmentCategory>>> {
   final EquipmentCategoryRepository _repository;
+  final Ref _ref;
   StreamSubscription<List<EquipmentCategory>>? _subscription;
   bool _isReordering = false;
 
-  EquipmentCategoryNotifier(this._repository) : super(const AsyncValue.loading()) {
+  EquipmentCategoryNotifier(this._repository, this._ref) : super(const AsyncValue.loading()) {
     _init();
   }
 
   bool get isReordering => _isReordering;
+
+  /// Compte le nombre d'équipements pour une catégorie donnée
+  Future<int> countEquipmentsForCategory(String categoryId) async {
+    try {
+      final equipmentRepo = _ref.read(equipmentRepositoryProvider);
+      final allEquipments = await equipmentRepo.getAllEquipment();
+      return allEquipments.where((e) => e.categoryId == categoryId).length;
+    } catch (e) {
+      print('❌ Error counting equipments: $e');
+      return 0;
+    }
+  }
 
   void _init() {
     _subscription = _repository.watchAll().listen(
