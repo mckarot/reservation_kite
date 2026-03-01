@@ -35,19 +35,26 @@ class UserDirectoryScreen extends ConsumerWidget {
             itemCount: users.length,
             itemBuilder: (context, index) {
               final user = users[index];
-              return ListTile(
-                leading: CircleAvatar(
-                  child: Text(user.displayName.substring(0, 1).toUpperCase()),
+              return Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.blue.withOpacity(0.3), width: 1.5),
                 ),
-                title: Text(user.displayName),
-                subtitle: Text(
-                  '${l10n.balanceLabel}: ${user.walletBalance} ${l10n.credits}',
-                ),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => UserDetailScreen(userId: user.id),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    child: Text(user.displayName.substring(0, 1).toUpperCase()),
+                  ),
+                  title: Text(user.displayName),
+                  subtitle: Text(
+                    '${l10n.balanceLabel}: ${user.walletBalance} ${l10n.credits}',
+                  ),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => UserDetailScreen(userId: user.id),
+                    ),
                   ),
                 ),
               );

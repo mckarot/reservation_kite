@@ -219,18 +219,25 @@ class _AbsenceManagementDialog extends ConsumerWidget {
                     itemCount: myAbsences.length,
                     itemBuilder: (context, index) {
                       final u = myAbsences[index];
-                      return ListTile(
-                        dense: true,
-                        title: Text(
-                          '${u.date.day}/${u.date.month} - ${u.slot == TimeSlot.fullDay ? l10n.fullDay : (u.slot == TimeSlot.morning ? l10n.morning : l10n.afternoon)}',
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.grey.withOpacity(0.3), width: 1.5),
                         ),
-                        subtitle: Text(u.reason),
-                        trailing: _StatusBadge(status: u.status, l10n: l10n),
-                        onLongPress: u.status == UnavailabilityStatus.pending
-                            ? () => ref
-                                  .read(unavailabilityNotifierProvider.notifier)
-                                  .deleteRequest(u.id)
-                            : null,
+                        child: ListTile(
+                          dense: true,
+                          title: Text(
+                            '${u.date.day}/${u.date.month} - ${u.slot == TimeSlot.fullDay ? l10n.fullDay : (u.slot == TimeSlot.morning ? l10n.morning : l10n.afternoon)}',
+                          ),
+                          subtitle: Text(u.reason),
+                          trailing: _StatusBadge(status: u.status, l10n: l10n),
+                          onLongPress: u.status == UnavailabilityStatus.pending
+                              ? () => ref
+                                    .read(unavailabilityNotifierProvider.notifier)
+                                    .deleteRequest(u.id)
+                              : null,
+                        ),
                       );
                     },
                   );
@@ -526,6 +533,12 @@ class _LessonCard extends ConsumerWidget {
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      elevation: 2,
+      shadowColor: primaryColor.withOpacity(0.3),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: primaryColor.withOpacity(0.2), width: 1.5),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

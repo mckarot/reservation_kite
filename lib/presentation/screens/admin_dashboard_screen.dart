@@ -394,18 +394,25 @@ class _PendingRequestsSection extends ConsumerWidget {
                   itemCount: activeStaff.length,
                   itemBuilder: (context, index) {
                     final s = activeStaff[index];
-                    return ListTile(
-                      title: Text(s.name),
-                      onTap: () {
-                        ref
-                            .read(bookingNotifierProvider.notifier)
-                            .updateBookingStatus(
-                              res.id,
-                              ReservationStatus.confirmed,
-                              staffId: s.id,
-                            );
-                        Navigator.pop(context);
-                      },
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.green.withOpacity(0.3), width: 1.5),
+                      ),
+                      child: ListTile(
+                        title: Text(s.name),
+                        onTap: () {
+                          ref
+                              .read(bookingNotifierProvider.notifier)
+                              .updateBookingStatus(
+                                res.id,
+                                ReservationStatus.confirmed,
+                                staffId: s.id,
+                              );
+                          Navigator.pop(context);
+                        },
+                      ),
                     );
                   },
                 ),

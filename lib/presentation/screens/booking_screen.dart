@@ -96,28 +96,35 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                   itemCount: filtered.length,
                   itemBuilder: (context, index) {
                     final b = filtered[index];
-                    return ListTile(
-                      title: Text(b.clientName),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(b.staffId ?? l10n.instructorUnassigned),
-                          if (b.notes.isNotEmpty)
-                            Text(
-                              '${l10n.noteLabel}: ${b.notes}',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontStyle: FontStyle.italic,
-                                color: primaryColor.withOpacity(0.7),
-                              ),
-                            ),
-                        ],
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: primaryColor.withOpacity(0.3), width: 1.5),
                       ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () => ref
-                            .read(bookingNotifierProvider.notifier)
-                            .deleteBooking(b.id),
+                      child: ListTile(
+                        title: Text(b.clientName),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(b.staffId ?? l10n.instructorUnassigned),
+                            if (b.notes.isNotEmpty)
+                              Text(
+                                '${l10n.noteLabel}: ${b.notes}',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontStyle: FontStyle.italic,
+                                  color: primaryColor.withOpacity(0.7),
+                                ),
+                              ),
+                          ],
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () => ref
+                              .read(bookingNotifierProvider.notifier)
+                              .deleteBooking(b.id),
+                        ),
                       ),
                     );
                   },

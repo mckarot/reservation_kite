@@ -113,6 +113,7 @@ class _LevelCard extends StatelessWidget {
             offset: const Offset(0, 8),
           ),
         ],
+        border: Border.all(color: Colors.indigo.withOpacity(0.3), width: 1.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

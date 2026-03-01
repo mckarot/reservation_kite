@@ -34,6 +34,7 @@ class PupilDashboardTab extends ConsumerWidget {
             decoration: BoxDecoration(
               color: Colors.grey.shade100,
               borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.blue.withOpacity(0.3), width: 1.5),
             ),
             child: Row(
               children: [
@@ -67,6 +68,7 @@ class PupilDashboardTab extends ConsumerWidget {
                   offset: const Offset(0, 8),
                 ),
               ],
+              border: Border.all(color: Colors.blue.withOpacity(0.3), width: 1.5),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,7 +142,7 @@ class PupilDashboardTab extends ConsumerWidget {
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.orange.shade200),
+              border: Border.all(color: Colors.orange.withOpacity(0.3), width: 1.5),
             ),
             child: Row(
               children: [
@@ -195,7 +197,7 @@ class _CurrentWeatherCard extends ConsumerWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: Colors.blue.withOpacity(0.3), width: 1.5),
         ),
         child: Column(
           children: [
@@ -350,7 +352,7 @@ class _StatItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: Colors.grey.withOpacity(0.3), width: 1.5),
         ),
         child: Column(
           children: [

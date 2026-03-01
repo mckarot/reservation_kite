@@ -43,32 +43,39 @@ class StaffAdminScreen extends ConsumerWidget {
                 itemCount: staffList.length,
                 itemBuilder: (context, index) {
                   final staff = staffList[index];
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: staff.photoUrl.isNotEmpty
-                          ? NetworkImage(staff.photoUrl)
-                          : null,
-                      child: staff.photoUrl.isEmpty
-                          ? const Icon(Icons.person)
-                          : null,
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.blue.withOpacity(0.3), width: 1.5),
                     ),
-                    title: Text(staff.name),
-                    subtitle: Text(staff.specialties.join(', ')),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () =>
-                              _showStaffDialog(context, ref, staff: staff),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () => ref
-                              .read(staffNotifierProvider.notifier)
-                              .deleteStaff(staff.id),
-                        ),
-                      ],
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: staff.photoUrl.isNotEmpty
+                            ? NetworkImage(staff.photoUrl)
+                            : null,
+                        child: staff.photoUrl.isEmpty
+                            ? const Icon(Icons.person)
+                            : null,
+                      ),
+                      title: Text(staff.name),
+                      subtitle: Text(staff.specialties.join(', ')),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit),
+                            onPressed: () =>
+                                _showStaffDialog(context, ref, staff: staff),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red),
+                            onPressed: () => ref
+                                .read(staffNotifierProvider.notifier)
+                                .deleteStaff(staff.id),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -114,28 +121,34 @@ class StaffAdminScreen extends ConsumerWidget {
                             updatedAt: DateTime.now(),
                           ),
                         );
-                        return ListTile(
-                          title: Text(
-                            '${staff.name} - ${DateFormat('dd/MM').format(u.date)} (${u.slot == TimeSlot.fullDay ? l10n.slotFullDay : (u.slot == TimeSlot.morning ? l10n.slotMorning : l10n.slotAfternoon)})',
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.orange.withOpacity(0.3), width: 1.5),
                           ),
-                          subtitle: Text('${l10n.reasonLabel}: ${u.reason}'),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.check,
-                                  color: Colors.green,
+                          child: ListTile(
+                            title: Text(
+                              '${staff.name} - ${DateFormat('dd/MM').format(u.date)} (${u.slot == TimeSlot.fullDay ? l10n.slotFullDay : (u.slot == TimeSlot.morning ? l10n.slotMorning : l10n.slotAfternoon)})',
+                            ),
+                            subtitle: Text('${l10n.reasonLabel}: ${u.reason}'),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.check,
+                                    color: Colors.green,
+                                  ),
+                                  onPressed: () => ref
+                                      .read(
+                                        unavailabilityNotifierProvider.notifier,
+                                      )
+                                      .updateStatus(
+                                        u.id,
+                                        UnavailabilityStatus.approved,
+                                      ),
                                 ),
-                                onPressed: () => ref
-                                    .read(
-                                      unavailabilityNotifierProvider.notifier,
-                                    )
-                                    .updateStatus(
-                                      u.id,
-                                      UnavailabilityStatus.approved,
-                                    ),
-                              ),
                               IconButton(
                                 icon: const Icon(
                                   Icons.close,
@@ -152,8 +165,9 @@ class StaffAdminScreen extends ConsumerWidget {
                               ),
                             ],
                           ),
-                        );
-                      }),
+                        ),
+                      );
+                    }),
                     ],
                     if (others.isNotEmpty) ...[
                       Padding(
@@ -178,12 +192,19 @@ class StaffAdminScreen extends ConsumerWidget {
                             updatedAt: DateTime.now(),
                           ),
                         );
-                        return ListTile(
-                          title: Text(
-                            '${staff.name} - ${DateFormat('dd/MM').format(u.date)} (${u.slot == TimeSlot.fullDay ? l10n.slotFullDay : (u.slot == TimeSlot.morning ? l10n.slotMorning : l10n.slotAfternoon)})',
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey.withOpacity(0.3), width: 1.5),
                           ),
-                          subtitle: Text(u.reason),
-                          trailing: _StatusBadge(status: u.status),
+                          child: ListTile(
+                            title: Text(
+                              '${staff.name} - ${DateFormat('dd/MM').format(u.date)} (${u.slot == TimeSlot.fullDay ? l10n.slotFullDay : (u.slot == TimeSlot.morning ? l10n.slotMorning : l10n.slotAfternoon)})',
+                            ),
+                            subtitle: Text(u.reason),
+                            trailing: _StatusBadge(status: u.status),
+                          ),
                         );
                       }),
                     ],

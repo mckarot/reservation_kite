@@ -45,6 +45,11 @@ class PupilHistoryTab extends ConsumerWidget {
             return Card(
               elevation: isFuture ? 4 : 1,
               margin: const EdgeInsets.only(bottom: 16),
+              shadowColor: Colors.blue.withOpacity(0.3),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(color: Colors.blue.withOpacity(0.2), width: 1.5),
+              ),
               color: isFuture ? Colors.blue.shade50 : Colors.white,
               child: ListTile(
                 leading: Icon(
@@ -110,7 +115,7 @@ class _StatusBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withValues(alpha: 0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.4), width: 1.5),
       ),
       child: Text(
         label,
