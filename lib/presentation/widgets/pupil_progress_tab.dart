@@ -281,14 +281,20 @@ class _ChecklistSection extends StatelessWidget {
   }
 }
 
-class _NoteCard extends StatelessWidget {
+class _NoteCard extends ConsumerWidget {
   final UserNote note;
   final String instructorName;
   const _NoteCard({required this.note, required this.instructorName});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    
+    // Récupérer la couleur principale du thème
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -302,18 +308,18 @@ class _NoteCard extends StatelessWidget {
               children: [
                 Text(
                   '${note.date.day}/${note.date.month}/${note.date.year}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.indigo,
+                    color: primaryColor,
                   ),
                 ),
                 Text(
                   l10n.byInstructor(instructorName),
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  style: TextStyle(fontSize: 12, color: primaryColor.withOpacity(0.7)),
                 ),
               ],
             ),
-            const Divider(height: 24),
+            Divider(height: 24, color: primaryColor.withOpacity(0.2)),
             Text(note.content, style: const TextStyle(height: 1.4)),
           ],
         ),

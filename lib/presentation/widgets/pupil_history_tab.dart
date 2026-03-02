@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/booking_notifier.dart';
 import '../../domain/models/reservation.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../providers/theme_notifier.dart';
 import '../../l10n/app_localizations.dart';
 
 class PupilHistoryTab extends ConsumerWidget {
@@ -23,6 +25,11 @@ class PupilHistoryTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final bookingsAsync = ref.watch(bookingNotifierProvider);
+    
+    // Récupérer la couleur principale du thème
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
 
     return bookingsAsync.when(
       data: (bookings) {
@@ -45,16 +52,16 @@ class PupilHistoryTab extends ConsumerWidget {
             return Card(
               elevation: isFuture ? 4 : 1,
               margin: const EdgeInsets.only(bottom: 16),
-              shadowColor: Colors.blue.withOpacity(0.3),
+              shadowColor: primaryColor.withOpacity(0.3),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
-                side: BorderSide(color: Colors.blue.withOpacity(0.2), width: 1.5),
+                side: BorderSide(color: primaryColor.withOpacity(0.2), width: 1.5),
               ),
-              color: isFuture ? Colors.blue.shade50 : Colors.white,
+              color: isFuture ? primaryColor.withOpacity(0.1) : Colors.white,
               child: ListTile(
                 leading: Icon(
                   isFuture ? Icons.upcoming : Icons.history,
-                  color: isFuture ? Colors.blue : Colors.grey,
+                  color: isFuture ? primaryColor : Colors.grey,
                 ),
                 title: Text(
                   '${l10n.lessonOn} ${b.date.day}/${b.date.month}/${b.date.year}',

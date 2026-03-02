@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../data/providers/repository_providers.dart';
 import '../../l10n/app_localizations.dart';
 import '../../domain/models/app_theme_settings.dart';
@@ -226,21 +225,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     },
                     child: Text(l10n.noAccount),
                   ),
-                  const SizedBox(height: 24),
-
-                  // Bouton pour créer la config du thème (Firestore)
-                  OutlinedButton.icon(
-                    onPressed: _isLoading ? null : _createThemeConfig,
-                    icon: const Icon(Icons.palette, size: 16),
-                    label: const Text(
-                      '🎨 Créer config thème (Firestore)',
-                      style: TextStyle(fontSize: 11),
-                    ),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      foregroundColor: accentColor,
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -248,42 +232,5 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ),
       ),
     );
-  }
-
-  /// Crée le document theme_config dans Firestore
-  Future<void> _createThemeConfig() async {
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
-
-    try {
-      await FirebaseFirestore.instance.collection('settings').doc('theme_config').set({
-        'primaryColor': 0xFF1976D2, // Bleu Kitesurf
-        'secondaryColor': 0xFF42A5F5, // Bleu clair
-        'accentColor': 0xFF00BCD4, // Cyan
-        'version': 1,
-        'updatedBy': 'system',
-        'updatedAt': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true)); // merge: true pour ne pas écraser si existe déjà
-
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('✅ Configuration du thème créée dans Firestore !'),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 3),
-        ),
-      );
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _errorMessage = 'Erreur: $e';
-      });
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
-    }
   }
 }

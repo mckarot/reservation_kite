@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/notification_notifier.dart';
 import '../../domain/models/app_notification.dart';
 import 'package:intl/intl.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../providers/theme_notifier.dart';
 import '../../l10n/app_localizations.dart';
 
 class NotificationCenterScreen extends ConsumerWidget {
@@ -12,6 +14,11 @@ class NotificationCenterScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final notificationsAsync = ref.watch(notificationNotifierProvider);
+    
+    // Récupérer la couleur principale du thème
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
 
     return Scaffold(
       appBar: AppBar(
@@ -42,12 +49,12 @@ class NotificationCenterScreen extends ConsumerWidget {
                   Icon(
                     Icons.notifications_none,
                     size: 64,
-                    color: Colors.grey.shade300,
+                    color: primaryColor.withOpacity(0.3),
                   ),
                   const SizedBox(height: 16),
                   Text(
                     l10n.noNotificationsYet,
-                    style: const TextStyle(color: Colors.grey),
+                    style: TextStyle(color: primaryColor.withOpacity(0.5)),
                   ),
                 ],
               ),
@@ -76,6 +83,11 @@ class _NotificationTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Récupérer la couleur principale du thème
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    
     IconData iconData;
     Color iconColor;
 
@@ -102,7 +114,7 @@ class _NotificationTile extends ConsumerWidget {
         borderRadius: BorderRadius.circular(16),
         side: notification.isRead
             ? BorderSide(color: Colors.grey.shade200)
-            : BorderSide(color: Colors.blue.withOpacity(0.3), width: 1.5),
+            : BorderSide(color: primaryColor.withOpacity(0.3), width: 1.5),
       ),
       child: ListTile(
         leading: CircleAvatar(
