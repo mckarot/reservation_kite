@@ -6,6 +6,8 @@ import '../providers/unavailability_notifier.dart';
 import '../../domain/models/staff_unavailability.dart';
 import '../../domain/models/reservation.dart';
 import 'package:intl/intl.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../providers/theme_notifier.dart';
 import '../../l10n/app_localizations.dart';
 
 class StaffAdminScreen extends ConsumerWidget {
@@ -17,6 +19,12 @@ class StaffAdminScreen extends ConsumerWidget {
     final staffAsync = ref.watch(staffNotifierProvider);
     final unavailabilitiesAsync = ref.watch(unavailabilityNotifierProvider);
 
+    // Récupérer les couleurs du thème dynamique
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -27,6 +35,8 @@ class StaffAdminScreen extends ConsumerWidget {
               Tab(icon: const Icon(Icons.group), text: l10n.staffTab),
               Tab(icon: const Icon(Icons.event_busy), text: l10n.absencesTab),
             ],
+            labelColor: secondaryColor,
+            unselectedLabelColor: Colors.grey.shade400,
           ),
           actions: [
             IconButton(
@@ -41,13 +51,14 @@ class StaffAdminScreen extends ConsumerWidget {
             staffAsync.when(
               data: (staffList) => ListView.builder(
                 itemCount: staffList.length,
+                padding: const EdgeInsets.all(16),
                 itemBuilder: (context, index) {
                   final staff = staffList[index];
                   return Container(
                     margin: const EdgeInsets.only(bottom: 8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.blue.withOpacity(0.3), width: 1.5),
+                      border: Border.all(color: primaryColor.withOpacity(0.3), width: 1.5),
                     ),
                     child: ListTile(
                       leading: CircleAvatar(
@@ -97,6 +108,7 @@ class StaffAdminScreen extends ConsumerWidget {
                 final allStaff = staffAsync.value ?? [];
 
                 return ListView(
+                  padding: const EdgeInsets.all(16),
                   children: [
                     if (pending.isNotEmpty) ...[
                       Padding(
@@ -125,7 +137,7 @@ class StaffAdminScreen extends ConsumerWidget {
                           margin: const EdgeInsets.only(bottom: 8),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.orange.withOpacity(0.3), width: 1.5),
+                            border: Border.all(color: primaryColor.withOpacity(0.3), width: 1.5),
                           ),
                           child: ListTile(
                             title: Text(
@@ -196,7 +208,7 @@ class StaffAdminScreen extends ConsumerWidget {
                           margin: const EdgeInsets.only(bottom: 8),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.grey.withOpacity(0.3), width: 1.5),
+                            border: Border.all(color: primaryColor.withOpacity(0.3), width: 1.5),
                           ),
                           child: ListTile(
                             title: Text(

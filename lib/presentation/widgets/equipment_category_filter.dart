@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/equipment_category_notifier.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../providers/theme_notifier.dart';
 import '../../../l10n/app_localizations.dart';
 
 class EquipmentCategoryFilter extends ConsumerWidget {
@@ -17,6 +19,11 @@ class EquipmentCategoryFilter extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final categoriesAsync = ref.watch(equipmentCategoryNotifierProvider);
+    
+    // Récupérer la couleur secondaire du thème
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
 
     return SizedBox(
       height: 60,
@@ -38,8 +45,13 @@ class EquipmentCategoryFilter extends ConsumerWidget {
                   selected: selectedCategoryId == null,
                   onSelected: (selected) => onCategorySelected(null),
                   backgroundColor: Colors.grey.shade200,
-                  selectedColor: Colors.blue.shade100,
-                  showCheckmark: false,
+                  selectedColor: secondaryColor.withOpacity(0.3),
+                  checkmarkColor: secondaryColor,
+                  labelStyle: TextStyle(
+                    color: selectedCategoryId == null ? secondaryColor : Colors.black,
+                    fontWeight: selectedCategoryId == null ? FontWeight.bold : FontWeight.normal,
+                  ),
+                  showCheckmark: true,
                 ),
                 const SizedBox(width: 8),
                 ...activeCategories.map((category) => Padding(
@@ -51,8 +63,13 @@ class EquipmentCategoryFilter extends ConsumerWidget {
                       selected ? category.id : null,
                     ),
                     backgroundColor: Colors.grey.shade200,
-                    selectedColor: Colors.blue.shade100,
-                    showCheckmark: false,
+                    selectedColor: secondaryColor.withOpacity(0.3),
+                    checkmarkColor: secondaryColor,
+                    labelStyle: TextStyle(
+                      color: selectedCategoryId == category.id ? secondaryColor : Colors.black,
+                      fontWeight: selectedCategoryId == category.id ? FontWeight.bold : FontWeight.normal,
+                    ),
+                    showCheckmark: true,
                   ),
                 )),
               ],

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/equipment_category.dart';
 import '../providers/equipment_category_notifier.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../providers/theme_notifier.dart';
 import '../../../l10n/app_localizations.dart';
 
 class EquipmentCategoryAdminScreen extends ConsumerStatefulWidget {
@@ -276,6 +278,11 @@ class _CategoryCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Récupérer la couleur principale du thème
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    
     // Compter les équipements pour cette catégorie
     final equipmentCountFuture = ref.watch(equipmentCategoryNotifierProvider.notifier)
         .countEquipmentsForCategory(category.id);
@@ -284,13 +291,13 @@ class _CategoryCard extends ConsumerWidget {
       future: equipmentCountFuture,
       builder: (context, snapshot) {
         final count = snapshot.data ?? 0;
-        
+
         return Card(
           elevation: 2,
-          shadowColor: Colors.blue.withOpacity(0.3),
+          shadowColor: primaryColor.withOpacity(0.3),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
-            side: BorderSide(color: Colors.blue.withOpacity(0.2), width: 1.5),
+            side: BorderSide(color: primaryColor.withOpacity(0.2), width: 1.5),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),

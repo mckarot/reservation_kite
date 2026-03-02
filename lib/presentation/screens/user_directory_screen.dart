@@ -4,6 +4,8 @@ import 'package:uuid/uuid.dart';
 import '../../domain/models/user.dart';
 import '../providers/user_notifier.dart';
 import 'user_detail_screen.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../providers/theme_notifier.dart';
 import '../../l10n/app_localizations.dart';
 
 class UserDirectoryScreen extends ConsumerWidget {
@@ -13,6 +15,11 @@ class UserDirectoryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final usersAsync = ref.watch(userNotifierProvider);
+    
+    // Récupérer la couleur principale du thème
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
 
     return Scaffold(
       appBar: AppBar(
@@ -32,6 +39,7 @@ class UserDirectoryScreen extends ConsumerWidget {
             return Center(child: Text(l10n.noStudentsRegistered));
           }
           return ListView.builder(
+            padding: const EdgeInsets.all(16),
             itemCount: users.length,
             itemBuilder: (context, index) {
               final user = users[index];
@@ -39,7 +47,7 @@ class UserDirectoryScreen extends ConsumerWidget {
                 margin: const EdgeInsets.only(bottom: 8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.blue.withOpacity(0.3), width: 1.5),
+                  border: Border.all(color: primaryColor.withOpacity(0.3), width: 1.5),
                 ),
                 child: ListTile(
                   leading: CircleAvatar(

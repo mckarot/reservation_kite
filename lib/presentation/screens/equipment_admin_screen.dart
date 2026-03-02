@@ -6,6 +6,8 @@ import '../providers/equipment_notifier.dart';
 import '../providers/equipment_category_notifier.dart';
 import '../widgets/equipment_category_filter.dart';
 import 'equipment_category_admin_screen.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../providers/theme_notifier.dart';
 import '../../l10n/app_localizations.dart';
 
 class EquipmentAdminScreen extends ConsumerStatefulWidget {
@@ -194,6 +196,12 @@ class _EquipmentTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    
+    // Récupérer la couleur principale du thème
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    
     Color statusColor;
     String statusLabel;
 
@@ -212,13 +220,11 @@ class _EquipmentTile extends ConsumerWidget {
         break;
     }
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      elevation: 2,
-      shadowColor: Colors.blue.withOpacity(0.3),
-      shape: RoundedRectangleBorder(
+      decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.blue.withOpacity(0.2), width: 1.5),
+        border: Border.all(color: primaryColor.withOpacity(0.3), width: 1.5),
       ),
       child: ListTile(
         title: Text(
