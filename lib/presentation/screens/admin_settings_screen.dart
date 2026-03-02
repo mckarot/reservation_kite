@@ -83,7 +83,9 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('🔄 Veuillez faire un hot restart (R) en mode développement'),
+                  content: Text(
+                    '🔄 Veuillez faire un hot restart (R) en mode développement',
+                  ),
                   duration: Duration(seconds: 5),
                 ),
               );
@@ -118,9 +120,12 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                Text(
-                  l10n.morningHours,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: Text(
+                    l10n.morningHours,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
                 Row(
                   children: [
@@ -139,10 +144,15 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 24),
-                Text(
-                  l10n.afternoonHours,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                const SizedBox(
+                  height: 48,
+                ), // Plus d'espace entre matin et après-midi
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: Text(
+                    l10n.afternoonHours,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
                 Row(
                   children: [
@@ -206,15 +216,12 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                   },
                   child: Text(l10n.saveButton),
                 ),
-                
+
                 // Section Apparence / Thème
                 const Divider(height: 48),
                 Row(
                   children: [
-                    const Text(
-                      '🎨 ',
-                      style: TextStyle(fontSize: 20),
-                    ),
+                    const Text('🎨 ', style: TextStyle(fontSize: 20)),
                     Text(
                       l10n.appearanceSection,
                       style: const TextStyle(
@@ -236,7 +243,11 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.info_outline, color: Colors.blue.shade700, size: 20),
+                      Icon(
+                        Icons.info_outline,
+                        color: Colors.blue.shade700,
+                        size: 20,
+                      ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Column(
@@ -244,11 +255,17 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                           children: [
                             const Text(
                               'Mode : Local à chaque appareil',
-                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                             Text(
                               'Couleurs : Globales (tous les utilisateurs)',
-                              style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey.shade700,
+                              ),
                             ),
                           ],
                         ),
@@ -263,11 +280,17 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                   children: [
                     Text(
                       l10n.themeMode,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.green.shade100,
                         borderRadius: BorderRadius.circular(4),
@@ -296,11 +319,17 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                   children: [
                     Text(
                       l10n.brandColors,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.orange.shade100,
                         borderRadius: BorderRadius.circular(4),
@@ -320,7 +349,11 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                 const SizedBox(height: 8),
                 Text(
                   'Ces couleurs seront appliquées à TOUS les appareils',
-                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600, fontStyle: FontStyle.italic),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey.shade600,
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Consumer(
@@ -386,7 +419,7 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                     );
                   },
                 ),
-                
+
                 const Divider(height: 48),
                 ListTile(
                   leading: const Icon(Icons.sell, color: Colors.purple),

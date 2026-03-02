@@ -148,7 +148,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     GestureDetector(
-                      onTap: _pickImage,
+                      onTap: null, // Désactivé - ne fait rien au clic
                       child: CircleAvatar(
                         radius: 50,
                         backgroundColor: secondaryColor.withOpacity(0.3),
@@ -159,7 +159,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                             ? Icon(
                                 Icons.add_a_photo,
                                 size: 50,
-                                color: primaryColor,
+                                color: primaryColor.withOpacity(0.5),
                               )
                             : null,
                       ),
