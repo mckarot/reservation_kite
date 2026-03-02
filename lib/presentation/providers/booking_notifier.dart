@@ -1,14 +1,15 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
-import '../../domain/models/reservation.dart';
-import '../../domain/logic/booking_validator.dart';
+
 import '../../data/providers/repository_providers.dart';
-import '../providers/staff_notifier.dart';
-import '../providers/user_notifier.dart';
-import '../providers/settings_notifier.dart';
-import '../providers/notification_notifier.dart';
-import '../providers/unavailability_notifier.dart';
+import '../../domain/logic/booking_validator.dart';
 import '../../domain/models/app_notification.dart';
+import '../../domain/models/reservation.dart';
+import '../providers/notification_notifier.dart';
+import '../providers/settings_notifier.dart';
+import '../providers/staff_notifier.dart';
+import '../providers/unavailability_notifier.dart';
+import '../providers/user_notifier.dart';
 
 part 'booking_notifier.g.dart';
 

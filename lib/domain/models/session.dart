@@ -11,10 +11,8 @@ class Session with _$Session {
     @TimestampConverter() required DateTime date,
     required String slot, // 'morning' or 'afternoon'
     required String instructorId,
-    @Default([]) List<String> studentIds,
-    required int maxCapacity,
+    required int maxCapacity, @TimestampConverter() required DateTime createdAt, @Default([]) List<String> studentIds,
     @Default('scheduled') String status,
-    @TimestampConverter() required DateTime createdAt,
   }) = _Session;
 
   factory Session.fromJson(Map<String, dynamic> json) =>

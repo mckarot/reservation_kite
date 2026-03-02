@@ -14,8 +14,7 @@ class Product with _$Product {
     required String category, // 'wing', 'kite', 'board', etc.
     required String condition, // 'new', 'used'
     required int stockQuantity,
-    @Default([]) List<String> imageUrls,
-    @TimestampConverter() required DateTime createdAt,
+    @TimestampConverter() required DateTime createdAt, @Default([]) List<String> imageUrls,
   }) = _Product;
 
   factory Product.fromJson(Map<String, dynamic> json) =>

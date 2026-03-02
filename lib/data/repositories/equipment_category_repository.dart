@@ -1,5 +1,5 @@
-import '../sources/equipment_category_firestore_datasource.dart';
 import '../../domain/models/equipment_category.dart';
+import '../sources/equipment_category_firestore_datasource.dart';
 
 class EquipmentCategoryRepository {
   final EquipmentCategoryFirestoreDataSource _dataSource;

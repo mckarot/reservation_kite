@@ -1,10 +1,12 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
-import '../../domain/models/equipment_category.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../data/providers/repository_providers.dart';
 import '../../data/repositories/equipment_category_repository.dart';
 import '../../data/sources/equipment_category_firestore_datasource.dart';
-import '../../data/providers/repository_providers.dart';
+import '../../domain/models/equipment_category.dart';
 
 final equipmentCategoryDataSourceProvider = Provider<EquipmentCategoryFirestoreDataSource>(
   (ref) => EquipmentCategoryFirestoreDataSource(),
@@ -27,7 +29,7 @@ class EquipmentCategoryNotifier extends StateNotifier<AsyncValue<List<EquipmentC
   final EquipmentCategoryRepository _repository;
   final Ref _ref;
   StreamSubscription<List<EquipmentCategory>>? _subscription;
-  bool _isReordering = false;
+  final bool _isReordering = false;
 
   EquipmentCategoryNotifier(this._repository, this._ref) : super(const AsyncValue.loading()) {
     _init();
@@ -57,7 +59,7 @@ class EquipmentCategoryNotifier extends StateNotifier<AsyncValue<List<EquipmentC
       },
       onError: (error, stackTrace) {
         if (!mounted) return;
-        state = AsyncValue.data([]);
+        state = const AsyncValue.data([]);
       },
     );
   }
@@ -157,7 +159,7 @@ class EquipmentCategoryNotifier extends StateNotifier<AsyncValue<List<EquipmentC
 
   Future<void> reorderCategories(List<EquipmentCategory> categories) async {
     try {
-      for (int i = 0; i < categories.length; i++) {
+      for (var i = 0; i < categories.length; i++) {
         if (categories[i].order != i + 1) {
           await _repository.reorder(categories[i].id, i + 1);
         }

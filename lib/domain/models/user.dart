@@ -10,7 +10,11 @@ class User with _$User {
     required String id,
     @JsonKey(name: 'display_name') required String displayName,
     required String email,
-    @JsonKey(name: 'photo_url') String? photoUrl,
+    @TimestampConverter()
+    @JsonKey(name: 'created_at')
+    required DateTime createdAt, @TimestampConverter()
+    @JsonKey(name: 'last_seen')
+    required DateTime lastSeen, @JsonKey(name: 'photo_url') String? photoUrl,
     @Default('student') String role,
     int? weight,
     @JsonKey(name: 'wallet_balance') @Default(0) int walletBalance,
@@ -18,12 +22,6 @@ class User with _$User {
     @Default(0)
     int totalCreditsPurchased,
     UserProgress? progress,
-    @TimestampConverter()
-    @JsonKey(name: 'created_at')
-    required DateTime createdAt,
-    @TimestampConverter()
-    @JsonKey(name: 'last_seen')
-    required DateTime lastSeen,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'lesson_validation_screen.dart';
-import '../providers/financial_notifier.dart';
-import '../../domain/models/reservation.dart';
-import '../../domain/models/user.dart';
-import '../providers/booking_notifier.dart';
-import '../providers/staff_notifier.dart';
-import '../providers/unavailability_notifier.dart';
-import '../../domain/models/staff_unavailability.dart';
-import '../../domain/models/staff.dart';
-import '../providers/user_notifier.dart';
-import 'staff_admin_screen.dart';
 import 'package:intl/intl.dart';
+
 import '../../domain/models/app_theme_settings.dart';
-import '../providers/theme_notifier.dart';
+import '../../domain/models/reservation.dart';
+import '../../domain/models/staff.dart';
+import '../../domain/models/staff_unavailability.dart';
+import '../../domain/models/user.dart';
 import '../../l10n/app_localizations.dart';
+import '../providers/booking_notifier.dart';
+import '../providers/financial_notifier.dart';
+import '../providers/staff_notifier.dart';
+import '../providers/theme_notifier.dart';
+import '../providers/unavailability_notifier.dart';
+import '../providers/user_notifier.dart';
+import 'lesson_validation_screen.dart';
+import 'staff_admin_screen.dart';
 
 class AdminDashboardScreen extends ConsumerWidget {
   const AdminDashboardScreen({super.key});
@@ -23,12 +24,9 @@ class AdminDashboardScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final stats = ref.watch(financialStatsProvider);
-    
+
     // Récupérer les couleurs du thème dynamique
-    final themeSettingsAsync = ref.watch(themeNotifierProvider);
-    final themeSettings = themeSettingsAsync.value;
-    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
-    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
+    ref.watch(themeNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.schoolDashboard)),
@@ -210,7 +208,10 @@ class _PendingAbstancesSection extends ConsumerWidget {
                 shadowColor: Colors.red.withOpacity(0.3),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
-                  side: BorderSide(color: Colors.red.withOpacity(0.2), width: 1.5),
+                  side: BorderSide(
+                    color: Colors.red.withOpacity(0.2),
+                    width: 1.5,
+                  ),
                 ),
                 color: Colors.red.shade50,
                 child: ListTile(
@@ -274,7 +275,10 @@ class _PendingRequestsSection extends ConsumerWidget {
                 shadowColor: Colors.orange.withOpacity(0.3),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
-                  side: BorderSide(color: Colors.orange.withOpacity(0.2), width: 1.5),
+                  side: BorderSide(
+                    color: Colors.orange.withOpacity(0.2),
+                    width: 1.5,
+                  ),
                 ),
                 color: Colors.orange.shade50,
                 child: ListTile(
@@ -343,12 +347,14 @@ class _PendingRequestsSection extends ConsumerWidget {
     if (staff == null) return;
     final l10n = AppLocalizations.of(context);
     final activeStaff = staff.where((s) => s.isActive).toList();
-    
+
     // Récupérer les couleurs du thème dynamique
     final themeSettingsAsync = ref.watch(themeNotifierProvider);
     final themeSettings = themeSettingsAsync.value;
-    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
-    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
+    final primaryColor =
+        themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    final secondaryColor =
+        themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
 
     showDialog(
       context: context,
@@ -366,7 +372,10 @@ class _PendingRequestsSection extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color: secondaryColor.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: secondaryColor.withOpacity(0.3), width: 1),
+                    border: Border.all(
+                      color: secondaryColor.withOpacity(0.3),
+                      width: 1,
+                    ),
                   ),
                   child: Row(
                     children: [
@@ -398,7 +407,10 @@ class _PendingRequestsSection extends ConsumerWidget {
                       margin: const EdgeInsets.only(bottom: 8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.green.withOpacity(0.3), width: 1.5),
+                        border: Border.all(
+                          color: Colors.green.withOpacity(0.3),
+                          width: 1.5,
+                        ),
                       ),
                       child: ListTile(
                         title: Text(s.name),
@@ -432,12 +444,13 @@ class _UpcomingSessionsCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    
+
     // Récupérer les couleurs du thème dynamique
     final themeSettingsAsync = ref.watch(themeNotifierProvider);
     final themeSettings = themeSettingsAsync.value;
-    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
-    
+    final primaryColor =
+        themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+
     if (sessions.isEmpty) {
       return Center(
         child: Padding(
@@ -502,9 +515,11 @@ class _TopClientsCard extends ConsumerWidget {
     // Récupérer les couleurs du thème dynamique
     final themeSettingsAsync = ref.watch(themeNotifierProvider);
     final themeSettings = themeSettingsAsync.value;
-    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
-    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
-    
+    final primaryColor =
+        themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    final secondaryColor =
+        themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -520,11 +535,11 @@ class _TopClientsCard extends ConsumerWidget {
                 leading: CircleAvatar(
                   backgroundColor: secondaryColor.withOpacity(0.15),
                   radius: 12,
+                  foregroundColor: primaryColor,
                   child: Text(
                     '${entry.key + 1}',
                     style: const TextStyle(fontSize: 10),
                   ),
-                  foregroundColor: primaryColor,
                 ),
                 title: Text(
                   client.displayName,

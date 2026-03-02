@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../domain/models/app_theme_settings.dart';
 import '../../domain/models/settings.dart';
+import '../../l10n/app_localizations.dart';
 import '../providers/settings_notifier.dart';
 import '../providers/theme_notifier.dart';
-import '../providers/auth_state_provider.dart';
-import '../widgets/theme_selector.dart';
 import '../widgets/color_picker.dart';
 import '../widgets/theme_preview.dart';
-import '../../domain/models/app_theme_settings.dart';
-import 'staff_admin_screen.dart';
+import '../widgets/theme_selector.dart';
 import 'credit_pack_admin_screen.dart';
 import 'equipment_admin_screen.dart';
-import '../../l10n/app_localizations.dart';
+import 'staff_admin_screen.dart';
 
 class AdminSettingsScreen extends ConsumerStatefulWidget {
   const AdminSettingsScreen({super.key});
@@ -208,7 +208,7 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                           .read(settingsNotifierProvider.notifier)
                           .updateSettings(newSettings);
 
-                      if (!mounted) return;
+                      if (!context.mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(l10n.settingsSaved)),
                       );

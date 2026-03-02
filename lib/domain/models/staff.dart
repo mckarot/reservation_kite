@@ -11,10 +11,9 @@ class Staff with _$Staff {
     required String name,
     required String bio,
     required String photoUrl,
-    @Default([]) List<String> specialties,
+    @TimestampConverter() required DateTime updatedAt, @Default([]) List<String> specialties,
     @Default([]) List<String> certificates,
     @Default(true) bool isActive,
-    @TimestampConverter() required DateTime updatedAt,
   }) = _Staff;
 
   factory Staff.fromJson(Map<String, dynamic> json) => _$StaffFromJson(json);

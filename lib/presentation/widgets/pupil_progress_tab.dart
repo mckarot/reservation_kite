@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/models/user.dart';
-import '../providers/staff_notifier.dart';
+
 import '../../domain/models/app_theme_settings.dart';
-import '../providers/theme_notifier.dart';
+import '../../domain/models/user.dart';
 import '../../l10n/app_localizations.dart';
+import '../providers/staff_notifier.dart';
+import '../providers/theme_notifier.dart';
 
 class PupilProgressTab extends ConsumerWidget {
   final User user;
-  const PupilProgressTab({super.key, required this.user});
+  const PupilProgressTab({required this.user, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

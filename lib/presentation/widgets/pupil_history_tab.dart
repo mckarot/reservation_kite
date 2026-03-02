@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/booking_notifier.dart';
-import '../../domain/models/reservation.dart';
+
 import '../../domain/models/app_theme_settings.dart';
-import '../providers/theme_notifier.dart';
+import '../../domain/models/reservation.dart';
 import '../../l10n/app_localizations.dart';
+import '../providers/booking_notifier.dart';
+import '../providers/theme_notifier.dart';
 
 class PupilHistoryTab extends ConsumerWidget {
   final String userId;
-  const PupilHistoryTab({super.key, required this.userId});
+  const PupilHistoryTab({required this.userId, super.key});
 
   String _translateSlot(TimeSlot slot, AppLocalizations l10n) {
     switch (slot) {

@@ -8,9 +8,8 @@ part 'settings.g.dart';
 class SchoolSettings with _$SchoolSettings {
   const factory SchoolSettings({
     required OpeningHours hours,
-    @Default([]) List<String> daysOff,
+    @TimestampConverter() required DateTime updatedAt, @Default([]) List<String> daysOff,
     @Default(4) int maxStudentsPerInstructor,
-    @TimestampConverter() required DateTime updatedAt,
   }) = _SchoolSettings;
 
   factory SchoolSettings.fromJson(Map<String, dynamic> json) =>

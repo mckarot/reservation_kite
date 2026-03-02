@@ -1,7 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
-import '../../domain/models/app_notification.dart';
+
 import '../../data/providers/repository_providers.dart';
+import '../../domain/models/app_notification.dart';
 import 'auth_state_provider.dart';
 
 part 'notification_notifier.g.dart';

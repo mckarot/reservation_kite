@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/user_notifier.dart';
-import '../../domain/models/user.dart';
-import '../widgets/user_progress_tab.dart';
-import '../widgets/user_notes_tab.dart';
-import '../providers/credit_pack_notifier.dart';
+
 import '../../domain/models/app_theme_settings.dart';
-import '../providers/theme_notifier.dart';
+import '../../domain/models/user.dart';
 import '../../l10n/app_localizations.dart';
+import '../providers/credit_pack_notifier.dart';
+import '../providers/theme_notifier.dart';
+import '../providers/user_notifier.dart';
+import '../widgets/user_notes_tab.dart';
+import '../widgets/user_progress_tab.dart';
 
 class UserDetailScreen extends ConsumerWidget {
   final String userId;
-  const UserDetailScreen({super.key, required this.userId});
+  const UserDetailScreen({required this.userId, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final usersAsync = ref.watch(userNotifierProvider);
-    
+
     // Récupérer les couleurs du thème dynamique
-    final themeSettingsAsync = ref.watch(themeNotifierProvider);
-    final themeSettings = themeSettingsAsync.value;
-    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
-    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
+    ref.watch(themeNotifierProvider);
 
     return usersAsync.when(
       data: (users) {
@@ -69,13 +67,13 @@ class _ProfileTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    
+
     // Récupérer les couleurs du thème dynamique
     final themeSettingsAsync = ref.watch(themeNotifierProvider);
     final themeSettings = themeSettingsAsync.value;
-    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
-    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
-    
+    final primaryColor =
+        themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -139,12 +137,14 @@ class _ProfileTab extends ConsumerWidget {
           builder: (context, ref, child) {
             final packsAsync = ref.watch(creditPackNotifierProvider);
             final customController = TextEditingController();
-            
+
             // Récupérer les couleurs du thème dynamique
             final themeSettingsAsync = ref.watch(themeNotifierProvider);
             final themeSettings = themeSettingsAsync.value;
-            final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
-            final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
+            final primaryColor =
+                themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+            final secondaryColor =
+                themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
 
             return SingleChildScrollView(
               child: Column(
@@ -173,7 +173,10 @@ class _ProfileTab extends ConsumerWidget {
                             color: secondaryColor.withOpacity(0.15),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
-                              side: BorderSide(color: secondaryColor.withOpacity(0.3), width: 1),
+                              side: BorderSide(
+                                color: secondaryColor.withOpacity(0.3),
+                                width: 1,
+                              ),
                             ),
                             child: ListTile(
                               leading: Icon(

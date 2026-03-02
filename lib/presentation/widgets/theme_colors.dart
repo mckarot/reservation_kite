@@ -31,7 +31,7 @@ extension ThemeColorsExtension on BuildContext {
 class ThemeColors extends ConsumerWidget {
   final Widget Function(BuildContext context, Color primary, Color secondary, Color accent) builder;
 
-  const ThemeColors({super.key, required this.builder});
+  const ThemeColors({required this.builder, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

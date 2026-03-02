@@ -15,10 +15,9 @@ class StaffUnavailability with _$StaffUnavailability {
     @TimestampConverter() required DateTime date,
     required TimeSlot slot, // morning, afternoon, or full_day?
     required String reason,
-    @Default(UnavailabilityStatus.pending) UnavailabilityStatus status,
     @TimestampConverter()
     @JsonKey(name: 'created_at')
-    required DateTime createdAt,
+    required DateTime createdAt, @Default(UnavailabilityStatus.pending) UnavailabilityStatus status,
   }) = _StaffUnavailability;
 
   factory StaffUnavailability.fromJson(Map<String, dynamic> json) =>

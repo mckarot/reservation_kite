@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../domain/models/app_theme_settings.dart';
 import '../../domain/models/equipment.dart';
-import '../providers/equipment_notifier.dart';
+import '../../l10n/app_localizations.dart';
 import '../providers/equipment_category_notifier.dart';
+import '../providers/equipment_notifier.dart';
+import '../providers/theme_notifier.dart';
 import '../widgets/equipment_category_filter.dart';
 import 'equipment_category_admin_screen.dart';
-import '../../domain/models/app_theme_settings.dart';
-import '../providers/theme_notifier.dart';
-import '../../l10n/app_localizations.dart';
 
 class EquipmentAdminScreen extends ConsumerStatefulWidget {
   const EquipmentAdminScreen({super.key});

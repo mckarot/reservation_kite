@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/equipment_category_notifier.dart';
-import '../../domain/models/app_theme_settings.dart';
-import '../providers/theme_notifier.dart';
+
 import '../../../l10n/app_localizations.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../providers/equipment_category_notifier.dart';
+import '../providers/theme_notifier.dart';
 
 class EquipmentCategoryFilter extends ConsumerWidget {
   final String? selectedCategoryId;
   final ValueChanged<String?> onCategorySelected;
 
   const EquipmentCategoryFilter({
-    super.key,
-    required this.selectedCategoryId,
-    required this.onCategorySelected,
+    required this.selectedCategoryId, required this.onCategorySelected, super.key,
   });
 
   @override
@@ -77,7 +76,7 @@ class EquipmentCategoryFilter extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(child: Text('')),
+        error: (error, _) => const Center(child: Text('')),
       ),
     );
   }

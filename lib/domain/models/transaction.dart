@@ -12,9 +12,8 @@ class Transaction with _$Transaction {
     required int amount,
     required String
     type, // 'credit_purchase', 'lesson_payment', 'boutique_purchase'
-    required String paymentMethod, // 'cash', 'card', 'transfer'
+    required String paymentMethod, @TimestampConverter() required DateTime createdAt, // 'cash', 'card', 'transfer'
     @Default({}) Map<String, dynamic> metadata,
-    @TimestampConverter() required DateTime createdAt,
   }) = _Transaction;
 
   factory Transaction.fromJson(Map<String, dynamic> json) =>

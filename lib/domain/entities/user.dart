@@ -12,10 +12,9 @@ class User {
     required this.id,
     required this.name,
     required this.email,
-    this.photoUrl,
+    required this.createdAt, this.photoUrl,
     this.role = 'client',
     this.walletBalance = 0,
-    required this.createdAt,
     this.lastSeen,
   });
 

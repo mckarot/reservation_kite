@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+
 import '../../domain/models/app_theme_settings.dart';
 import '../../domain/models/theme_preset.dart';
-import '../../domain/models/theme_config.dart';
-import '../sources/theme_local_datasource.dart';
 import '../sources/theme_global_datasource.dart';
+import '../sources/theme_local_datasource.dart';
 
 /// Repository pour la gestion des paramètres de thème
 /// Combine thème global (Firestore) et local (SharedPreferences)
@@ -19,7 +19,7 @@ class ThemeRepository {
     try {
       // 1. Lire configuration globale (couleurs de la marque)
       final globalConfig = await _globalDataSource.getConfig();
-      
+
       // 2. Lire préférences locales (mode)
       final localSettings = await _localDataSource.getSettings();
       final localMode = localSettings?.themeMode ?? ThemeMode.system;

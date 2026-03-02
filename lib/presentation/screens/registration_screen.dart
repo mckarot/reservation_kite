@@ -1,11 +1,9 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+
 import '../../data/providers/repository_providers.dart';
-import '../../l10n/app_localizations.dart';
 import '../../domain/models/app_theme_settings.dart';
+import '../../l10n/app_localizations.dart';
 import '../providers/theme_notifier.dart';
 import '../widgets/colored_input_decoration.dart';
 
@@ -25,7 +23,6 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
   final _weightController = TextEditingController();
   bool _isLoading = false;
   String? _errorMessage;
-  File? _image;
 
   @override
   void dispose() {
@@ -35,31 +32,6 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
     _displayNameController.dispose();
     _weightController.dispose();
     super.dispose();
-  }
-
-  Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-    );
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
-    }
-  }
-
-  Future<String?> _uploadProfilePicture(String userId) async {
-    if (_image == null) return null;
-    try {
-      final storageRef = FirebaseStorage.instance
-          .ref()
-          .child('user_photos')
-          .child('$userId.jpg');
-      await storageRef.putFile(_image!);
-      return await storageRef.getDownloadURL();
-    } catch (e) {
-      return null;
-    }
   }
 
   Future<void> _register() async {
@@ -87,16 +59,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
           weight: int.tryParse(_weightController.text),
         );
 
-        if (userCredential != null) {
-          final photoUrl = await _uploadProfilePicture(userCredential.id);
-          if (photoUrl != null) {
-            await authRepo.updateUserProfile(userCredential.id, {
-              'photo_url': photoUrl,
-            });
-          }
-        }
-
-        if (!mounted) return;
+        if (userCredential != null && !mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -118,16 +81,17 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    
+
     // Récupérer les couleurs du thème dynamique
     final themeSettingsAsync = ref.watch(themeNotifierProvider);
     final themeSettings = themeSettingsAsync.value;
-    
+
     // Utiliser les couleurs du thème ou les défauts
-    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
-    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
-    final accentColor = themeSettings?.accent ?? AppThemeSettings.defaultAccent;
-    
+    final primaryColor =
+        themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    final secondaryColor =
+        themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
+
     return Scaffold(
       backgroundColor: Colors.grey.shade50, // Fond clair par défaut
       body: Center(
@@ -138,7 +102,10 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
             shadowColor: primaryColor.withOpacity(0.3),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
-              side: BorderSide(color: primaryColor.withOpacity(0.2), width: 1.5),
+              side: BorderSide(
+                color: primaryColor.withOpacity(0.2),
+                width: 1.5,
+              ),
             ),
             child: Padding(
               padding: const EdgeInsets.all(32.0),
@@ -147,21 +114,14 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    GestureDetector(
-                      onTap: null, // Désactivé - ne fait rien au clic
-                      child: CircleAvatar(
-                        radius: 50,
-                        backgroundColor: secondaryColor.withOpacity(0.3),
-                        backgroundImage: _image != null
-                            ? FileImage(_image!)
-                            : null,
-                        child: _image == null
-                            ? Icon(
-                                Icons.add_a_photo,
-                                size: 50,
-                                color: primaryColor.withOpacity(0.5),
-                              )
-                            : null,
+                    // Photo de profil désactivée - avatar par défaut
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundColor: secondaryColor.withOpacity(0.3),
+                      child: Icon(
+                        Icons.person,
+                        size: 50,
+                        color: primaryColor.withOpacity(0.5),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -230,7 +190,10 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                       decoration: createColoredInputDecoration(
                         labelText: l10n.weightLabel,
                         hintText: l10n.weightHint,
-                        prefixIcon: Icon(Icons.fitness_center, color: primaryColor),
+                        prefixIcon: Icon(
+                          Icons.fitness_center,
+                          color: primaryColor,
+                        ),
                         primaryColor: primaryColor,
                       ),
                       keyboardType: TextInputType.number,

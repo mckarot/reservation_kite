@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../domain/models/credit_pack.dart';
+
 import '../../data/providers/repository_providers.dart';
+import '../../domain/models/credit_pack.dart';
 
 part 'credit_pack_notifier.g.dart';
 

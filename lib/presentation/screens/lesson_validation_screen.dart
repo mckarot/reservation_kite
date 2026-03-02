@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../domain/models/app_theme_settings.dart';
+import '../../domain/models/equipment.dart';
 import '../../domain/models/reservation.dart';
 import '../../domain/models/user.dart';
-import '../providers/auth_state_provider.dart';
-import '../providers/user_notifier.dart';
-import '../providers/equipment_notifier.dart';
-import '../../domain/models/equipment.dart';
-import '../../domain/models/app_theme_settings.dart';
-import '../providers/theme_notifier.dart';
 import '../../l10n/app_localizations.dart';
+import '../providers/auth_state_provider.dart';
+import '../providers/equipment_notifier.dart';
+import '../providers/theme_notifier.dart';
+import '../providers/user_notifier.dart';
 
 class LessonValidationScreen extends ConsumerStatefulWidget {
   final Reservation reservation;
   final User pupil;
 
   const LessonValidationScreen({
-    super.key,
-    required this.reservation,
-    required this.pupil,
+    required this.reservation, required this.pupil, super.key,
   });
 
   @override

@@ -13,15 +13,12 @@ class Reservation with _$Reservation {
   const factory Reservation({
     required String id,
     required String clientName,
-    String? pupilId,
-    @TimestampConverter() required DateTime date,
-    required TimeSlot slot,
+    @TimestampConverter() required DateTime date, required TimeSlot slot, @TimestampConverter() required DateTime createdAt, String? pupilId,
     String? staffId,
     @Default(ReservationStatus.confirmed)
     ReservationStatus
     status, // Default to confirmed for backward compatibility with manual entries
     @Default('') String notes,
-    @TimestampConverter() required DateTime createdAt,
   }) = _Reservation;
 
   factory Reservation.fromJson(Map<String, dynamic> json) =>

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../domain/models/app_theme_settings.dart';
 import '../../domain/models/reservation.dart';
+import '../../l10n/app_localizations.dart';
 import '../providers/booking_notifier.dart';
 import '../providers/staff_notifier.dart';
-import '../../domain/models/app_theme_settings.dart';
 import '../providers/theme_notifier.dart';
-import '../../l10n/app_localizations.dart';
 
 class BookingScreen extends ConsumerStatefulWidget {
   const BookingScreen({super.key});

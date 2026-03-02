@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../domain/models/app_theme_settings.dart';
 import '../../domain/models/user.dart';
+import '../../l10n/app_localizations.dart';
+import '../providers/theme_notifier.dart';
 import '../providers/user_notifier.dart';
 import 'user_detail_screen.dart';
-import '../../domain/models/app_theme_settings.dart';
-import '../providers/theme_notifier.dart';
-import '../../l10n/app_localizations.dart';
 
 class UserDirectoryScreen extends ConsumerWidget {
   const UserDirectoryScreen({super.key});

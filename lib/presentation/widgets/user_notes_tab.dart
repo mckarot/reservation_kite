@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/user_notifier.dart';
-import '../../domain/models/user.dart';
+
 import '../../domain/models/staff.dart';
-import '../providers/staff_notifier.dart';
+import '../../domain/models/user.dart';
 import '../../l10n/app_localizations.dart';
+import '../providers/staff_notifier.dart';
+import '../providers/user_notifier.dart';
 
 class UserNotesTab extends ConsumerWidget {
   final User user;
-  const UserNotesTab({super.key, required this.user});
+  const UserNotesTab({required this.user, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

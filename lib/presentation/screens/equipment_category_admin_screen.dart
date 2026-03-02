@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../l10n/app_localizations.dart';
+import '../../domain/models/app_theme_settings.dart';
 import '../../domain/models/equipment_category.dart';
 import '../providers/equipment_category_notifier.dart';
-import '../../domain/models/app_theme_settings.dart';
 import '../providers/theme_notifier.dart';
-import '../../../l10n/app_localizations.dart';
 
 class EquipmentCategoryAdminScreen extends ConsumerStatefulWidget {
   const EquipmentCategoryAdminScreen({super.key});
@@ -55,7 +56,7 @@ class _EquipmentCategoryAdminScreenState
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.category_outlined, size: 64, color: Colors.grey),
+                  const Icon(Icons.category_outlined, size: 64, color: Colors.grey),
                   const SizedBox(height: 16),
                   Text(l10n.noEquipmentCategories),
                   const SizedBox(height: 16),
@@ -110,7 +111,7 @@ class _EquipmentCategoryAdminScreenState
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.error_outline, size: 64, color: Colors.orange),
+              const Icon(Icons.error_outline, size: 64, color: Colors.orange),
               const SizedBox(height: 16),
               Text('Erreur: $error'),
               const SizedBox(height: 16),

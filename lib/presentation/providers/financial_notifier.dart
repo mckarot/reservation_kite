@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'user_notifier.dart';
+
 import 'booking_notifier.dart';
+import 'user_notifier.dart';
 
 part 'financial_notifier.g.dart';
 

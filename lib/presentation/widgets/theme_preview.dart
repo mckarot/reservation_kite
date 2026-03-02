@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/theme_notifier.dart';
+
 import '../../domain/models/app_theme_settings.dart';
+import '../providers/theme_notifier.dart';
 import '../theme/app_theme.dart';
 
 /// Widget d'aperçu du thème actuel

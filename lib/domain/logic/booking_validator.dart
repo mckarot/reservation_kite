@@ -1,6 +1,6 @@
 import '../models/reservation.dart';
-import '../models/staff.dart';
 import '../models/settings.dart' hide TimeSlot;
+import '../models/staff.dart';
 import '../models/staff_unavailability.dart';
 
 class BookingValidator {

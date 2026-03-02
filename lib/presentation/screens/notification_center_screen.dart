@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/notification_notifier.dart';
-import '../../domain/models/app_notification.dart';
 import 'package:intl/intl.dart';
+
+import '../../domain/models/app_notification.dart';
 import '../../domain/models/app_theme_settings.dart';
-import '../providers/theme_notifier.dart';
 import '../../l10n/app_localizations.dart';
+import '../providers/notification_notifier.dart';
+import '../providers/theme_notifier.dart';
 
 class NotificationCenterScreen extends ConsumerWidget {
   const NotificationCenterScreen({super.key});

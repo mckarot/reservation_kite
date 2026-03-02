@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/models/staff.dart';
-import '../providers/staff_notifier.dart';
-import '../providers/unavailability_notifier.dart';
-import '../../domain/models/staff_unavailability.dart';
-import '../../domain/models/reservation.dart';
 import 'package:intl/intl.dart';
+
 import '../../domain/models/app_theme_settings.dart';
-import '../providers/theme_notifier.dart';
+import '../../domain/models/reservation.dart';
+import '../../domain/models/staff.dart';
+import '../../domain/models/staff_unavailability.dart';
 import '../../l10n/app_localizations.dart';
+import '../providers/staff_notifier.dart';
+import '../providers/theme_notifier.dart';
+import '../providers/unavailability_notifier.dart';
 
 class StaffAdminScreen extends ConsumerWidget {
   const StaffAdminScreen({super.key});

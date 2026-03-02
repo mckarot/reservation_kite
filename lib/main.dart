@@ -1,24 +1,24 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_app_check/firebase_app_check.dart';
-import 'firebase_options.dart';
 
+import 'data/providers/repository_providers.dart';
+import 'domain/models/app_theme_settings.dart';
+import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';
-import 'services/reservation_service.dart';
-import 'presentation/screens/pupil_main_screen.dart';
-import 'presentation/screens/monitor_main_screen.dart';
 import 'presentation/providers/auth_state_provider.dart';
 import 'presentation/providers/locale_provider.dart';
 import 'presentation/providers/theme_notifier.dart';
-import 'presentation/screens/login_screen.dart';
-import 'data/providers/repository_providers.dart';
 import 'presentation/screens/admin_screen.dart';
+import 'presentation/screens/login_screen.dart';
+import 'presentation/screens/monitor_main_screen.dart';
+import 'presentation/screens/pupil_main_screen.dart';
 import 'presentation/theme/app_theme.dart';
-import 'domain/models/app_theme_settings.dart';
+import 'services/reservation_service.dart';
 
 // Provider pour le service de réservation
 final reservationServiceProvider = ChangeNotifierProvider<ReservationService>((
@@ -69,7 +69,7 @@ class MainApp extends ConsumerWidget {
       ref.read(themeNotifierProvider.notifier).setCurrentUserId(user?.id);
     });
 
-    Widget home = authState.when(
+    final home = authState.when(
       data: (user) {
         if (user == null) return const LoginScreen();
 

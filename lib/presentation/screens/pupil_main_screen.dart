@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../data/providers/repository_providers.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../../l10n/app_localizations.dart';
+import '../providers/auth_state_provider.dart';
+import '../providers/notification_notifier.dart';
+import '../providers/theme_notifier.dart';
 import '../providers/user_notifier.dart';
 import '../widgets/pupil_dashboard_tab.dart';
 import '../widgets/pupil_history_tab.dart';
 import '../widgets/pupil_progress_tab.dart';
-import 'pupil_booking_screen.dart';
 import 'notification_center_screen.dart';
-import '../providers/notification_notifier.dart';
-import '../providers/auth_state_provider.dart';
-import '../../data/providers/repository_providers.dart';
-import '../../domain/models/app_theme_settings.dart';
-import '../providers/theme_notifier.dart';
-import '../../l10n/app_localizations.dart';
+import 'pupil_booking_screen.dart';
 
 class PupilMainScreen extends ConsumerStatefulWidget {
   const PupilMainScreen({super.key});
@@ -61,7 +62,7 @@ class _PupilMainScreenState extends ConsumerState<PupilMainScreen> {
           orElse: () => users.first,
         );
 
-        final List<Widget> tabs = [
+        final tabs = <Widget>[
           PupilDashboardTab(user: user),
           PupilProgressTab(user: user),
           const NotificationCenterScreen(),

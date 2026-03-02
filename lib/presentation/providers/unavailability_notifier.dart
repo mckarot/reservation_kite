@@ -1,8 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
-import '../../domain/models/staff_unavailability.dart';
-import '../../domain/models/reservation.dart';
+
 import '../../data/providers/repository_providers.dart';
+import '../../domain/models/reservation.dart';
+import '../../domain/models/staff_unavailability.dart';
 
 part 'unavailability_notifier.g.dart';
 

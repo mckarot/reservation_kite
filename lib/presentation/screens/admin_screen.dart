@@ -28,7 +28,7 @@ class AdminScreen extends ConsumerWidget {
     final themeSettings = themeSettingsAsync.value;
     final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
     
-    final List<_DashboardItem> items = [
+    final items = <_DashboardItem>[
       _DashboardItem(
         title: l10n.dashboardKPIs,
         icon: Icons.dashboard_customize,

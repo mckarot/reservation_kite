@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../domain/models/user.dart';
+
 import '../../data/providers/repository_providers.dart';
+import '../../domain/models/user.dart';
 
 part 'user_notifier.g.dart';
 

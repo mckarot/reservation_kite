@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import '../providers/staff_notifier.dart';
-import '../providers/booking_notifier.dart';
-import '../providers/user_notifier.dart';
-import '../providers/auth_state_provider.dart';
+
 import '../../data/providers/repository_providers.dart';
-import 'lesson_validation_screen.dart';
+import '../../domain/models/app_theme_settings.dart';
 import '../../domain/models/reservation.dart';
 import '../../domain/models/staff.dart';
 import '../../domain/models/staff_unavailability.dart';
-import '../providers/unavailability_notifier.dart';
-import '../../domain/models/app_theme_settings.dart';
-import '../providers/theme_notifier.dart';
 import '../../l10n/app_localizations.dart';
+import '../providers/auth_state_provider.dart';
+import '../providers/booking_notifier.dart';
+import '../providers/staff_notifier.dart';
+import '../providers/theme_notifier.dart';
+import '../providers/unavailability_notifier.dart';
+import '../providers/user_notifier.dart';
+import 'lesson_validation_screen.dart';
 
 class MonitorMainScreen extends ConsumerStatefulWidget {
   const MonitorMainScreen({super.key});
@@ -31,12 +32,12 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
     final currentUserAsync = ref.watch(currentUserProvider);
     final staffAsync = ref.watch(staffNotifierProvider);
     final bookingsAsync = ref.watch(bookingNotifierProvider);
-    
+
     // Récupérer les couleurs du thème dynamique
     final themeSettingsAsync = ref.watch(themeNotifierProvider);
     final themeSettings = themeSettingsAsync.value;
-    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
-    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
+    final primaryColor =
+        themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
 
     final effectiveStaffId = currentUserAsync.value?.id;
 
@@ -69,16 +70,16 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
             return Scaffold(
               body: Center(
                 child: Padding(
-                  padding: EdgeInsets.all(24.0),
+                  padding: const EdgeInsets.all(24.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.person_search,
                         size: 64,
                         color: Colors.blueGrey,
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Text(
                         l10n.monitorProfileNotActive,
                         style: const TextStyle(
@@ -86,7 +87,7 @@ class _MonitorMainScreenState extends ConsumerState<MonitorMainScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         l10n.monitorProfileNotActiveDesc,
                         textAlign: TextAlign.center,
@@ -223,7 +224,10 @@ class _AbsenceManagementDialog extends ConsumerWidget {
                         margin: const EdgeInsets.only(bottom: 8),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.grey.withOpacity(0.3), width: 1.5),
+                          border: Border.all(
+                            color: Colors.grey.withOpacity(0.3),
+                            width: 1.5,
+                          ),
                         ),
                         child: ListTile(
                           dense: true,
@@ -234,7 +238,9 @@ class _AbsenceManagementDialog extends ConsumerWidget {
                           trailing: _StatusBadge(status: u.status, l10n: l10n),
                           onLongPress: u.status == UnavailabilityStatus.pending
                               ? () => ref
-                                    .read(unavailabilityNotifierProvider.notifier)
+                                    .read(
+                                      unavailabilityNotifierProvider.notifier,
+                                    )
                                     .deleteRequest(u.id)
                               : null,
                         ),
@@ -260,8 +266,8 @@ class _AbsenceManagementDialog extends ConsumerWidget {
 
   void _requestAbsence(BuildContext context, WidgetRef ref) async {
     final l10n = AppLocalizations.of(context);
-    DateTime selectedDate = DateTime.now().add(const Duration(days: 1));
-    TimeSlot selectedSlot = TimeSlot.morning;
+    var selectedDate = DateTime.now().add(const Duration(days: 1));
+    var selectedSlot = TimeSlot.morning;
     final reasonController = TextEditingController();
 
     await showDialog(
@@ -520,13 +526,15 @@ class _LessonCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final users = ref.watch(userNotifierProvider).value ?? [];
-    
+
     // Récupérer les couleurs du thème dynamique
     final themeSettingsAsync = ref.watch(themeNotifierProvider);
     final themeSettings = themeSettingsAsync.value;
-    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
-    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
-    
+    final primaryColor =
+        themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    final secondaryColor =
+        themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
+
     final pupil = users.any((u) => u.id == reservation.pupilId)
         ? users.firstWhere((u) => u.id == reservation.pupilId)
         : null;
@@ -550,7 +558,10 @@ class _LessonCard extends ConsumerWidget {
                 decoration: BoxDecoration(
                   color: secondaryColor.withOpacity(0.15),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: secondaryColor.withOpacity(0.3), width: 1),
+                  border: Border.all(
+                    color: secondaryColor.withOpacity(0.3),
+                    width: 1,
+                  ),
                 ),
                 child: Icon(
                   reservation.slot == TimeSlot.morning

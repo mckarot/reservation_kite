@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/theme_notifier.dart';
+
 import '../../l10n/app_localizations.dart';
+import '../providers/theme_notifier.dart';
 
 /// Widget de sélection du mode du thème (Clair, Sombre, Système)
 class ThemeSelector extends ConsumerWidget {
@@ -22,7 +23,7 @@ class ThemeSelector extends ConsumerWidget {
           RadioListTile<ThemeMode>(
             title: Row(
               children: [
-                Icon(Icons.wb_sunny, color: Colors.orange),
+                const Icon(Icons.wb_sunny, color: Colors.orange),
                 const SizedBox(width: 12),
                 Text(l10n.lightMode),
               ],
@@ -45,7 +46,7 @@ class ThemeSelector extends ConsumerWidget {
           RadioListTile<ThemeMode>(
             title: Row(
               children: [
-                Icon(Icons.nightlight, color: Colors.indigo),
+                const Icon(Icons.nightlight, color: Colors.indigo),
                 const SizedBox(width: 12),
                 Text(l10n.darkMode),
               ],
@@ -68,7 +69,7 @@ class ThemeSelector extends ConsumerWidget {
           RadioListTile<ThemeMode>(
             title: Row(
               children: [
-                Icon(Icons.phone_android, color: Colors.blue),
+                const Icon(Icons.phone_android, color: Colors.blue),
                 const SizedBox(width: 12),
                 Text(l10n.systemTheme),
               ],

@@ -1,5 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'equipment.freezed.dart';
 
@@ -20,9 +20,8 @@ class Equipment with _$Equipment {
     required String brand,
     required String model,
     required String size,
-    @Default(EquipmentStatus.available) EquipmentStatus status,
+    required DateTime updatedAt, @Default(EquipmentStatus.available) EquipmentStatus status,
     @Default('') String notes,
-    required DateTime updatedAt,
   }) = _Equipment;
 
   factory Equipment.fromJson(Map<String, dynamic> json) {

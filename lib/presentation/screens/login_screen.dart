@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../data/providers/repository_providers.dart';
-import '../../l10n/app_localizations.dart';
 import '../../domain/models/app_theme_settings.dart';
+import '../../l10n/app_localizations.dart';
 import '../providers/locale_provider.dart';
 import '../providers/theme_notifier.dart';
 import 'registration_screen.dart';
@@ -72,11 +73,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     // Récupérer les couleurs du thème dynamique
     final themeSettingsAsync = ref.watch(themeNotifierProvider);
     final themeSettings = themeSettingsAsync.value;
-    
+
     // Utiliser les couleurs du thème ou les défauts
     final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
-    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
-    final accentColor = themeSettings?.accent ?? AppThemeSettings.defaultAccent;
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50, // Fond clair par défaut

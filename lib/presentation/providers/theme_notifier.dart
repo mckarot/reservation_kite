@@ -1,12 +1,14 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/models/app_theme_settings.dart';
-import '../../domain/models/theme_preset.dart';
-import '../../domain/models/theme_config.dart';
+
 import '../../data/repositories/theme_repository.dart';
-import '../../data/sources/theme_local_datasource.dart';
 import '../../data/sources/theme_global_datasource.dart';
+import '../../data/sources/theme_local_datasource.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../../domain/models/theme_config.dart';
+import '../../domain/models/theme_preset.dart';
 
 /// Provider pour la DataSource locale
 final themeLocalDataSourceProvider = Provider<ThemeLocalDataSource>((ref) {
@@ -53,7 +55,7 @@ class ThemeNotifier extends StateNotifier<AsyncValue<AppThemeSettings>> {
     try {
       final settings = await _repository.getThemeSettings();
       state = AsyncValue.data(settings);
-    } catch (e, s) {
+    } catch (e) {
       debugPrint('Erreur lors du chargement du thème: $e');
       state = AsyncValue.data(AppThemeSettings.defaults());
     }

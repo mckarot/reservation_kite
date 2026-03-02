@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/user_notifier.dart';
+
 import '../../domain/models/user.dart';
 import '../../l10n/app_localizations.dart';
+import '../providers/user_notifier.dart';
 
 class UserProgressTab extends ConsumerWidget {
   final User user;
-  const UserProgressTab({super.key, required this.user});
+  const UserProgressTab({required this.user, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

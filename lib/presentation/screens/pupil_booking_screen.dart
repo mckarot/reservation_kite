@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+
 import '../../data/providers/service_providers.dart';
+import '../../domain/logic/booking_validator.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../../domain/models/reservation.dart';
+import '../../domain/models/settings.dart' hide TimeSlot;
+import '../../domain/models/staff.dart';
+import '../../domain/models/staff_unavailability.dart';
+import '../../l10n/app_localizations.dart';
 import '../../services/weather_service.dart';
+import '../providers/auth_state_provider.dart';
 import '../providers/booking_notifier.dart';
-import '../providers/user_notifier.dart';
 import '../providers/settings_notifier.dart';
 import '../providers/staff_notifier.dart';
-import '../providers/unavailability_notifier.dart';
-import '../../domain/models/reservation.dart';
-import '../../domain/models/staff.dart';
-import '../../domain/models/settings.dart' hide TimeSlot;
-import '../../domain/models/staff_unavailability.dart';
-import '../../domain/logic/booking_validator.dart';
-import '../providers/auth_state_provider.dart';
-import '../../domain/models/app_theme_settings.dart';
 import '../providers/theme_notifier.dart';
-import '../../l10n/app_localizations.dart';
+import '../providers/unavailability_notifier.dart';
+import '../providers/user_notifier.dart';
 
 final weatherProvider = StateProvider<AsyncValue<Weather>>(
   (ref) => const AsyncValue.loading(),

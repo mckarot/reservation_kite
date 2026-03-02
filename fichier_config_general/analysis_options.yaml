@@ -1,0 +1,203 @@
+# =============================================================================
+# analysis_options.yaml — Hardened Edition v2.0
+# Bras armé du Flutter Blueprint v2.1
+#
+# Principe : chaque déviation architecturale = erreur de compilation.
+# Le compilateur remplace la discipline humaine.
+#
+# Prérequis pubspec.yaml :
+#   dev_dependencies:
+#     flutter_lints: ^4.0.0
+#     riverpod_lint: ^2.0.0    # Règles Riverpod
+#     custom_lint: ^0.6.0      # Runner pour riverpod_lint
+#
+# Lancer l'analyse complète (CI + local) :
+#   flutter analyze
+#   dart run custom_lint
+# =============================================================================
+
+include: package:flutter_lints/flutter.yaml
+
+# -----------------------------------------------------------------------------
+# ANALYZER
+# -----------------------------------------------------------------------------
+analyzer:
+
+  # Fichiers générés exclus — évite les centaines de faux positifs
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "lib/generated/**"       # Fichiers i18n (AppLocalizations)
+
+  plugins:
+    - custom_lint               # Active riverpod_lint (voir section linter)
+
+  errors:
+
+    # -------------------------------------------------------------------------
+    # PERFORMANCE — Violations = erreurs bloquantes
+    # Ces règles enforced le "const everywhere" du Blueprint.
+    # -------------------------------------------------------------------------
+    prefer_const_constructors: error
+    prefer_const_literals_to_create_immutables: error
+    prefer_const_constructors_in_immutables: error
+    prefer_const_declarations: error
+
+    # -------------------------------------------------------------------------
+    # SÉCURITÉ & RÉSILIENCE — Bugs silencieux → crashes prod
+    # -------------------------------------------------------------------------
+
+    # Crash classique : utiliser un BuildContext après un await
+    # si le widget a été démonté entre-temps.
+    use_build_context_synchronously: error
+
+    # Future lancé sans await = résultat ignoré, erreur silencieuse.
+    # Utiliser unawaited() explicitement si intentionnel.
+    unawaited_futures: error
+
+    # throw dans un finally annule toute exception précédente — piège courant.
+    control_flow_in_finally: error
+
+    # Instruction vide (ex: boucle for avec ; final) = bug silencieux.
+    empty_statements: error
+
+    # Opérations I/O synchrones dans un contexte async = UI thread bloqué.
+    avoid_slow_async_io: error
+
+    # Dépendance utilisée dans le code mais non déclarée dans pubspec.yaml.
+    # Évite les cassures silencieuses lors d'un pub upgrade.
+    depend_on_referenced_packages: error
+
+    # -------------------------------------------------------------------------
+    # FUITES MÉMOIRE — Anti-patterns de subscription non fermées
+    # -------------------------------------------------------------------------
+    cancel_subscriptions: error   # StreamSubscription non annulée
+    close_sinks: error            # StreamSink / StreamController non fermé
+
+    # -------------------------------------------------------------------------
+    # PROPRETÉ DU CODE — Maintenabilité à long terme
+    # -------------------------------------------------------------------------
+
+    # print() interdit en prod — utiliser le logger structuré (section 8 Blueprint).
+    avoid_print: error
+
+    # Toute fonction/méthode publique doit avoir un type de retour explicite.
+    # Note : complémentaire à omit_local_variable_types (inférence locale OK,
+    # signature publique explicite obligatoire — voir section linter).
+    always_declare_return_types: error
+
+
+# -----------------------------------------------------------------------------
+# LINTER RULES
+# -----------------------------------------------------------------------------
+linter:
+  rules:
+
+    # =========================================================================
+    # RIGUEUR TYPAGE & ARCHITECTURE
+    # =========================================================================
+
+    # Toute fonction/méthode doit déclarer son type de retour.
+    # Complémentaire à omit_local_variable_types ci-dessous :
+    #   → Signatures publiques : explicites (always_declare_return_types)
+    #   → Variables locales   : inférées   (omit_local_variable_types)
+    - always_declare_return_types
+
+    # Les paramètres required passent en premier — lisibilité des constructeurs.
+    - always_put_required_named_parameters_first
+
+    # Interdit les appels de méthode sur dynamic — force le typage explicite.
+    # Critique pour la robustesse des DTOs et mappers.
+    - avoid_dynamic_calls
+
+    # .toString() sur un type arbitraire = comportement non garanti en prod
+    # (obfuscation renomme les classes). Utiliser des accesseurs explicites.
+    - avoid_type_to_string
+
+    # Inutile d'écrire le type d'une variable locale quand Dart peut l'inférer.
+    # Allège la lecture sans sacrifier la sécurité de typage.
+    # ⚠️ Intentionnellement en opposition avec always_declare_return_types :
+    #    l'inférence locale est OK, la signature publique doit rester explicite.
+    - omit_local_variable_types
+
+    # Force final sur les variables locales non réassignées.
+    - prefer_final_locals
+
+    # Force final sur les paramètres de fonction non réassignés.
+    # ⚠️ Surveiller les faux positifs dans certains patterns Notifier Riverpod
+    #    où un paramètre est muté intentionnellement.
+    - final_in_parameters
+
+    # Force final dans les séquences de déclarations (for, if, etc.)
+    - prefer_final_in_sequences
+
+    # Virgule finale obligatoire → dart format produit un diff minimal et lisible.
+    - require_trailing_commas
+
+    # Syntaxe Dart 3 pour les constructeurs — super.param au lieu de this.param.
+    - use_super_parameters
+
+
+    # =========================================================================
+    # PERFORMANCE — Les 3 trees (Widget, Element, RenderObject)
+    # =========================================================================
+
+    # Enforce le "const everywhere" du Blueprint section 3.
+    - prefer_const_constructors
+    - prefer_const_constructors_in_immutables
+    - prefer_const_declarations
+    - prefer_const_literals_to_create_immutables
+
+    # child: doit être la dernière propriété d'un widget — convention Flutter.
+    - sort_child_properties_last
+
+
+    # =========================================================================
+    # STYLE & MAINTENANCE
+    # =========================================================================
+
+    # Ordre des imports : dart → flutter → packages → local.
+    # Garder cohérent avec les conventions de l'IDE (isort équivalent).
+    - directives_ordering
+
+    # Docstring obligatoire sur les APIs publiques des packages.
+    - package_api_docs
+
+    # [] au lieu de List(), {} au lieu de Map() — plus idiomatique et const-friendly.
+    - prefer_collection_literals
+
+    # variable ??= value plutôt que if (variable == null) variable = value.
+    - prefer_conditional_assignment
+
+    # Utilise l'interpolation "$var" plutôt que la concaténation "a" + b.
+    - prefer_interpolation_to_compose_strings
+
+    # Évite (x) => doSomething(x) — utiliser directement doSomething.
+    # Micro-perf + lisibilité.
+    - unnecessary_lambdas
+
+    # Future non awaité = résultat ignoré (cf. unawaited_futures dans errors).
+    - unawaited_futures
+
+    # => sur les fonctions à expression unique.
+    # ⚠️ Peut dégrader la lisibilité sur les Notifiers complexes.
+    #    Désactiver ponctuellement avec // ignore: prefer_expression_function_bodies
+    #    si la lisibilité en souffre (ex: méthodes de mapping longues).
+    - prefer_expression_function_bodies
+
+
+    # =========================================================================
+    # RIVERPOD — Règles spécifiques (nécessite riverpod_lint + custom_lint)
+    # =========================================================================
+
+    # Détecte les dépendances manquantes dans les annotations @riverpod.
+    # Évite les bugs de recomputation silencieux — règle la plus critique ici.
+    # dart run custom_lint pour exécuter.
+    - provider_dependencies
+
+    # Le nom du getter doit correspondre au nom du provider généré.
+    # Évite les confusions de nommage dans les grandes features.
+    - matching_ref_usage_type
+
+    # Avertit si un provider est lu sans être observé (potentiel oubli de watch).
+    - avoid_manual_providers_as_generated_provider_dependency

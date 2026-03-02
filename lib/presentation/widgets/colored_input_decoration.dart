@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../domain/models/app_theme_settings.dart';
 
 /// Crée un InputDecoration avec des bordures colorées dynamiques
 InputDecoration createColoredInputDecoration({
   required String labelText,
-  String? hintText,
-  required Widget prefixIcon,
-  required Color primaryColor,
+  required Widget prefixIcon, required Color primaryColor, String? hintText,
 }) {
   return InputDecoration(
     labelText: labelText,

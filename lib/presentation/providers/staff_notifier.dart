@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../domain/models/staff.dart';
+
 import '../../data/providers/repository_providers.dart';
+import '../../domain/models/staff.dart';
 
 part 'staff_notifier.g.dart';
 

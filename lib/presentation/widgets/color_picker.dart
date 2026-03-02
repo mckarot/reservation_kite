@@ -10,10 +10,7 @@ class ColorPicker extends ConsumerWidget {
   final Function(Color) onColorSelected;
 
   const ColorPicker({
-    super.key,
-    required this.title,
-    required this.selectedColor,
-    required this.onColorSelected,
+    required this.title, required this.selectedColor, required this.onColorSelected, super.key,
   });
 
   @override
@@ -135,7 +132,7 @@ class ColorPicker extends ConsumerWidget {
 class ColorPickerGrid extends StatelessWidget {
   final Function(Color) onColorSelected;
 
-  const ColorPickerGrid({super.key, required this.onColorSelected});
+  const ColorPickerGrid({required this.onColorSelected, super.key});
 
   static const _colors = [
     Colors.red,
