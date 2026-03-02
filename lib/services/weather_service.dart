@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
@@ -54,13 +55,47 @@ class CurrentWeather {
 
 class WeatherService {
   static const String _baseUrl = 'https://api.open-meteo.com/v1/forecast';
-  static const double _latitude = 14.54;
-  static const double _longitude = -60.83;
+  
+  // Coordonnées par défaut (fallback)
+  static const double _defaultLatitude = 14.54;
+  static const double _defaultLongitude = -60.83;
+  
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  /// Récupère les coordonnées depuis Firestore
+  Future<Map<String, double>> _getCoordinates() async {
+    try {
+      final doc = await _firestore
+          .collection('settings')
+          .doc('school_config')
+          .get();
+
+      if (doc.exists && doc.data() != null) {
+        final data = doc.data()!;
+        final latitude = data['weather_latitude'] as double?;
+        final longitude = data['weather_longitude'] as double?;
+
+        if (latitude != null && longitude != null) {
+          return {'latitude': latitude, 'longitude': longitude};
+        }
+      }
+    } catch (e) {
+      // En cas d'erreur, utiliser les coordonnées par défaut
+      print('Erreur lecture coordonnées: $e');
+    }
+
+    // Fallback aux coordonnées par défaut
+    return {
+      'latitude': _defaultLatitude,
+      'longitude': _defaultLongitude,
+    };
+  }
 
   Future<Weather> getWeatherForDate(DateTime date) async {
+    final coords = await _getCoordinates();
     final formattedDate = DateFormat('yyyy-MM-dd').format(date);
     final url = Uri.parse(
-        '$_baseUrl?latitude=$_latitude&longitude=$_longitude&daily=weathercode,temperature_2m_max,windspeed_10m_max,winddirection_10m_dominant&start_date=$formattedDate&end_date=$formattedDate&timezone=auto');
+        '$_baseUrl?latitude=${coords['latitude']}&longitude=${coords['longitude']}&daily=weathercode,temperature_2m_max,windspeed_10m_max,winddirection_10m_dominant&start_date=$formattedDate&end_date=$formattedDate&timezone=auto');
 
     final response = await http.get(url);
 
@@ -73,8 +108,9 @@ class WeatherService {
   }
 
   Future<CurrentWeather> getCurrentWeather() async {
+    final coords = await _getCoordinates();
     final url = Uri.parse(
-        '$_baseUrl?latitude=$_latitude&longitude=$_longitude&current_weather=true&timezone=auto');
+        '$_baseUrl?latitude=${coords['latitude']}&longitude=${coords['longitude']}&current_weather=true&timezone=auto');
 
     final response = await http.get(url);
 

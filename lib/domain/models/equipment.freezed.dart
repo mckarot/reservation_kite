@@ -21,9 +21,9 @@ mixin _$Equipment {
   String get brand => throw _privateConstructorUsedError;
   String get model => throw _privateConstructorUsedError;
   String get size => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
   EquipmentStatus get status => throw _privateConstructorUsedError;
   String get notes => throw _privateConstructorUsedError;
-  DateTime get updatedAt => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $EquipmentCopyWith<Equipment> get copyWith =>
@@ -41,9 +41,9 @@ abstract class $EquipmentCopyWith<$Res> {
       String brand,
       String model,
       String size,
+      DateTime updatedAt,
       EquipmentStatus status,
-      String notes,
-      DateTime updatedAt});
+      String notes});
 }
 
 /// @nodoc
@@ -64,9 +64,9 @@ class _$EquipmentCopyWithImpl<$Res, $Val extends Equipment>
     Object? brand = null,
     Object? model = null,
     Object? size = null,
+    Object? updatedAt = null,
     Object? status = null,
     Object? notes = null,
-    Object? updatedAt = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -89,6 +89,10 @@ class _$EquipmentCopyWithImpl<$Res, $Val extends Equipment>
           ? _value.size
           : size // ignore: cast_nullable_to_non_nullable
               as String,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -97,10 +101,6 @@ class _$EquipmentCopyWithImpl<$Res, $Val extends Equipment>
           ? _value.notes
           : notes // ignore: cast_nullable_to_non_nullable
               as String,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
     ) as $Val);
   }
 }
@@ -119,9 +119,9 @@ abstract class _$$EquipmentImplCopyWith<$Res>
       String brand,
       String model,
       String size,
+      DateTime updatedAt,
       EquipmentStatus status,
-      String notes,
-      DateTime updatedAt});
+      String notes});
 }
 
 /// @nodoc
@@ -140,9 +140,9 @@ class __$$EquipmentImplCopyWithImpl<$Res>
     Object? brand = null,
     Object? model = null,
     Object? size = null,
+    Object? updatedAt = null,
     Object? status = null,
     Object? notes = null,
-    Object? updatedAt = null,
   }) {
     return _then(_$EquipmentImpl(
       id: null == id
@@ -165,6 +165,10 @@ class __$$EquipmentImplCopyWithImpl<$Res>
           ? _value.size
           : size // ignore: cast_nullable_to_non_nullable
               as String,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -173,10 +177,6 @@ class __$$EquipmentImplCopyWithImpl<$Res>
           ? _value.notes
           : notes // ignore: cast_nullable_to_non_nullable
               as String,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
     ));
   }
 }
@@ -190,9 +190,9 @@ class _$EquipmentImpl implements _Equipment {
       required this.brand,
       required this.model,
       required this.size,
+      required this.updatedAt,
       this.status = EquipmentStatus.available,
-      this.notes = '',
-      required this.updatedAt});
+      this.notes = ''});
 
   @override
   final String id;
@@ -205,17 +205,17 @@ class _$EquipmentImpl implements _Equipment {
   @override
   final String size;
   @override
+  final DateTime updatedAt;
+  @override
   @JsonKey()
   final EquipmentStatus status;
   @override
   @JsonKey()
   final String notes;
-  @override
-  final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'Equipment(id: $id, categoryId: $categoryId, brand: $brand, model: $model, size: $size, status: $status, notes: $notes, updatedAt: $updatedAt)';
+    return 'Equipment(id: $id, categoryId: $categoryId, brand: $brand, model: $model, size: $size, updatedAt: $updatedAt, status: $status, notes: $notes)';
   }
 
   @override
@@ -229,15 +229,15 @@ class _$EquipmentImpl implements _Equipment {
             (identical(other.brand, brand) || other.brand == brand) &&
             (identical(other.model, model) || other.model == model) &&
             (identical(other.size, size) || other.size == size) &&
-            (identical(other.status, status) || other.status == status) &&
-            (identical(other.notes, notes) || other.notes == notes) &&
             (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.updatedAt == updatedAt) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.notes, notes) || other.notes == notes));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, id, categoryId, brand, model,
-      size, status, notes, updatedAt);
+      size, updatedAt, status, notes);
 
   @JsonKey(ignore: true)
   @override
@@ -253,9 +253,9 @@ abstract class _Equipment implements Equipment {
       required final String brand,
       required final String model,
       required final String size,
+      required final DateTime updatedAt,
       final EquipmentStatus status,
-      final String notes,
-      required final DateTime updatedAt}) = _$EquipmentImpl;
+      final String notes}) = _$EquipmentImpl;
 
   @override
   String get id;
@@ -268,11 +268,11 @@ abstract class _Equipment implements Equipment {
   @override
   String get size;
   @override
+  DateTime get updatedAt;
+  @override
   EquipmentStatus get status;
   @override
   String get notes;
-  @override
-  DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
   _$$EquipmentImplCopyWith<_$EquipmentImpl> get copyWith =>

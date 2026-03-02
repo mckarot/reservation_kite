@@ -416,5 +416,6 @@
   "resetToDefaults": "Restablecer",
   "themeApplied": "¡Tema aplicado!",
   "colorsReset": "Colores restablecidos",
-  "schoolSettings": "Configuración de la escuela"
+  "schoolSettings": "Configuración de la escuela",
+  "weatherLocationSection": "Clima - Ubicación del spot"
 }

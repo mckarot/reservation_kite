@@ -1041,4 +1041,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get colorsReset => 'Couleurs réinitialisées';
+
+  @override
+  String get weatherLocationSection => 'Météo - Localisation du spot';
 }

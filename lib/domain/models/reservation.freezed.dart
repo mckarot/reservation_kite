@@ -22,16 +22,16 @@ Reservation _$ReservationFromJson(Map<String, dynamic> json) {
 mixin _$Reservation {
   String get id => throw _privateConstructorUsedError;
   String get clientName => throw _privateConstructorUsedError;
-  String? get pupilId => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime get date => throw _privateConstructorUsedError;
   TimeSlot get slot => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  String? get pupilId => throw _privateConstructorUsedError;
   String? get staffId => throw _privateConstructorUsedError;
   ReservationStatus get status =>
       throw _privateConstructorUsedError; // Default to confirmed for backward compatibility with manual entries
   String get notes => throw _privateConstructorUsedError;
-  @TimestampConverter()
-  DateTime get createdAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,13 +48,13 @@ abstract class $ReservationCopyWith<$Res> {
   $Res call(
       {String id,
       String clientName,
-      String? pupilId,
       @TimestampConverter() DateTime date,
       TimeSlot slot,
+      @TimestampConverter() DateTime createdAt,
+      String? pupilId,
       String? staffId,
       ReservationStatus status,
-      String notes,
-      @TimestampConverter() DateTime createdAt});
+      String notes});
 }
 
 /// @nodoc
@@ -72,13 +72,13 @@ class _$ReservationCopyWithImpl<$Res, $Val extends Reservation>
   $Res call({
     Object? id = null,
     Object? clientName = null,
-    Object? pupilId = freezed,
     Object? date = null,
     Object? slot = null,
+    Object? createdAt = null,
+    Object? pupilId = freezed,
     Object? staffId = freezed,
     Object? status = null,
     Object? notes = null,
-    Object? createdAt = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -89,10 +89,6 @@ class _$ReservationCopyWithImpl<$Res, $Val extends Reservation>
           ? _value.clientName
           : clientName // ignore: cast_nullable_to_non_nullable
               as String,
-      pupilId: freezed == pupilId
-          ? _value.pupilId
-          : pupilId // ignore: cast_nullable_to_non_nullable
-              as String?,
       date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
@@ -101,6 +97,14 @@ class _$ReservationCopyWithImpl<$Res, $Val extends Reservation>
           ? _value.slot
           : slot // ignore: cast_nullable_to_non_nullable
               as TimeSlot,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      pupilId: freezed == pupilId
+          ? _value.pupilId
+          : pupilId // ignore: cast_nullable_to_non_nullable
+              as String?,
       staffId: freezed == staffId
           ? _value.staffId
           : staffId // ignore: cast_nullable_to_non_nullable
@@ -113,10 +117,6 @@ class _$ReservationCopyWithImpl<$Res, $Val extends Reservation>
           ? _value.notes
           : notes // ignore: cast_nullable_to_non_nullable
               as String,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
     ) as $Val);
   }
 }
@@ -132,13 +132,13 @@ abstract class _$$ReservationImplCopyWith<$Res>
   $Res call(
       {String id,
       String clientName,
-      String? pupilId,
       @TimestampConverter() DateTime date,
       TimeSlot slot,
+      @TimestampConverter() DateTime createdAt,
+      String? pupilId,
       String? staffId,
       ReservationStatus status,
-      String notes,
-      @TimestampConverter() DateTime createdAt});
+      String notes});
 }
 
 /// @nodoc
@@ -154,13 +154,13 @@ class __$$ReservationImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? clientName = null,
-    Object? pupilId = freezed,
     Object? date = null,
     Object? slot = null,
+    Object? createdAt = null,
+    Object? pupilId = freezed,
     Object? staffId = freezed,
     Object? status = null,
     Object? notes = null,
-    Object? createdAt = null,
   }) {
     return _then(_$ReservationImpl(
       id: null == id
@@ -171,10 +171,6 @@ class __$$ReservationImplCopyWithImpl<$Res>
           ? _value.clientName
           : clientName // ignore: cast_nullable_to_non_nullable
               as String,
-      pupilId: freezed == pupilId
-          ? _value.pupilId
-          : pupilId // ignore: cast_nullable_to_non_nullable
-              as String?,
       date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
@@ -183,6 +179,14 @@ class __$$ReservationImplCopyWithImpl<$Res>
           ? _value.slot
           : slot // ignore: cast_nullable_to_non_nullable
               as TimeSlot,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      pupilId: freezed == pupilId
+          ? _value.pupilId
+          : pupilId // ignore: cast_nullable_to_non_nullable
+              as String?,
       staffId: freezed == staffId
           ? _value.staffId
           : staffId // ignore: cast_nullable_to_non_nullable
@@ -195,10 +199,6 @@ class __$$ReservationImplCopyWithImpl<$Res>
           ? _value.notes
           : notes // ignore: cast_nullable_to_non_nullable
               as String,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
     ));
   }
 }
@@ -209,13 +209,13 @@ class _$ReservationImpl implements _Reservation {
   const _$ReservationImpl(
       {required this.id,
       required this.clientName,
-      this.pupilId,
       @TimestampConverter() required this.date,
       required this.slot,
+      @TimestampConverter() required this.createdAt,
+      this.pupilId,
       this.staffId,
       this.status = ReservationStatus.confirmed,
-      this.notes = '',
-      @TimestampConverter() required this.createdAt});
+      this.notes = ''});
 
   factory _$ReservationImpl.fromJson(Map<String, dynamic> json) =>
       _$$ReservationImplFromJson(json);
@@ -225,12 +225,15 @@ class _$ReservationImpl implements _Reservation {
   @override
   final String clientName;
   @override
-  final String? pupilId;
-  @override
   @TimestampConverter()
   final DateTime date;
   @override
   final TimeSlot slot;
+  @override
+  @TimestampConverter()
+  final DateTime createdAt;
+  @override
+  final String? pupilId;
   @override
   final String? staffId;
   @override
@@ -240,13 +243,10 @@ class _$ReservationImpl implements _Reservation {
   @override
   @JsonKey()
   final String notes;
-  @override
-  @TimestampConverter()
-  final DateTime createdAt;
 
   @override
   String toString() {
-    return 'Reservation(id: $id, clientName: $clientName, pupilId: $pupilId, date: $date, slot: $slot, staffId: $staffId, status: $status, notes: $notes, createdAt: $createdAt)';
+    return 'Reservation(id: $id, clientName: $clientName, date: $date, slot: $slot, createdAt: $createdAt, pupilId: $pupilId, staffId: $staffId, status: $status, notes: $notes)';
   }
 
   @override
@@ -257,20 +257,20 @@ class _$ReservationImpl implements _Reservation {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.clientName, clientName) ||
                 other.clientName == clientName) &&
-            (identical(other.pupilId, pupilId) || other.pupilId == pupilId) &&
             (identical(other.date, date) || other.date == date) &&
             (identical(other.slot, slot) || other.slot == slot) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.pupilId, pupilId) || other.pupilId == pupilId) &&
             (identical(other.staffId, staffId) || other.staffId == staffId) &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.notes, notes) || other.notes == notes) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+            (identical(other.notes, notes) || other.notes == notes));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, clientName, pupilId, date,
-      slot, staffId, status, notes, createdAt);
+  int get hashCode => Object.hash(runtimeType, id, clientName, date, slot,
+      createdAt, pupilId, staffId, status, notes);
 
   @JsonKey(ignore: true)
   @override
@@ -288,16 +288,15 @@ class _$ReservationImpl implements _Reservation {
 
 abstract class _Reservation implements Reservation {
   const factory _Reservation(
-          {required final String id,
-          required final String clientName,
-          final String? pupilId,
-          @TimestampConverter() required final DateTime date,
-          required final TimeSlot slot,
-          final String? staffId,
-          final ReservationStatus status,
-          final String notes,
-          @TimestampConverter() required final DateTime createdAt}) =
-      _$ReservationImpl;
+      {required final String id,
+      required final String clientName,
+      @TimestampConverter() required final DateTime date,
+      required final TimeSlot slot,
+      @TimestampConverter() required final DateTime createdAt,
+      final String? pupilId,
+      final String? staffId,
+      final ReservationStatus status,
+      final String notes}) = _$ReservationImpl;
 
   factory _Reservation.fromJson(Map<String, dynamic> json) =
       _$ReservationImpl.fromJson;
@@ -307,21 +306,21 @@ abstract class _Reservation implements Reservation {
   @override
   String get clientName;
   @override
-  String? get pupilId;
-  @override
   @TimestampConverter()
   DateTime get date;
   @override
   TimeSlot get slot;
+  @override
+  @TimestampConverter()
+  DateTime get createdAt;
+  @override
+  String? get pupilId;
   @override
   String? get staffId;
   @override
   ReservationStatus get status;
   @override // Default to confirmed for backward compatibility with manual entries
   String get notes;
-  @override
-  @TimestampConverter()
-  DateTime get createdAt;
   @override
   @JsonKey(ignore: true)
   _$$ReservationImplCopyWith<_$ReservationImpl> get copyWith =>

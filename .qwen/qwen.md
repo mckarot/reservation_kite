@@ -1,45 +1,209 @@
-# Reservation Kite — Contexte Projet & Instructions Agent
+# 🏗️ Reservation Kite — Guidelines & Contexte Projet
 
-## 1. VISION DU PRODUIT
+**Version :** 2.0 (Lead Architect)  
+**Date :** 1 mars 2026  
+**Statut :** En attente d'implémentation
+
+---
+
+## 1. VISION & PHILOSOPHIE
+
+### Produit
 Application Flutter de gestion complète pour école de Kite Surf : réservations, abonnements, suivi pédagogique, gestion dynamique du Staff et des Horaires.
 
 **Utilisateurs cibles :**
-- **Élève** : Réserve, choisit son moniteur, consulte ses crédits et sa progression.
-- **Moniteur** : Gère son profil (bio, photo, spécialités) et ses disponibilités.
-- **Administrateur** : Pilote l'école via un Panneau de Contrôle (Horaires, Staff, Finances, Validations).
+| Rôle | Fonctionnalités |
+|------|-----------------|
+| **Élève** | Réserve, choisit son moniteur, consulte crédits et progression |
+| **Moniteur** | Gère profil (bio, photo, spécialités) et disponibilités |
+| **Administrateur** | Panneau de contrôle (Horaires, Staff, Finances, Validations) |
+
+### Principes de Développement
+| Principe | Exigence |
+|----------|----------|
+| **Zéro "Vibe Coding"** | Chaque ligne justifiée par contrainte technique/métier |
+| **Architecture Immuable** | Données immuables + flux unidirectionnels (UDF) |
+| **Performance Native** | Objectif 120 FPS constant. Tout jank = bug critique |
+| **Clean Architecture+** | Séparation stricte data/domain/presentation |
 
 ---
 
 ## 2. ARCHITECTURE TECHNIQUE
 
 ### Stack
-- **Flutter/Dart**
-- **Firebase** : Firestore, Auth, App Check (obligatoire)
+- **Flutter/Dart** (SDK ^3.10.7)
+- **Firebase** : Firestore, Auth, App Check (obligatoire), Storage
 - **Riverpod** : State management avec générateurs (`@riverpod`)
 - **Freezed** : Modèles immuables
-- **Clean Architecture** : Séparation stricte `data` / `domain` / `presentation`
+- **json_serializable** : Sérialisation JSON
 
-### Structure
+### Structure des Couches (Strict)
+
 ```
 lib/
-├── data/           # Repositories Firestore, providers
-├── domain/         # Modèles, interfaces repositories
-└── presentation/   # UI, screens, widgets, notifiers
+├── data/                     # Data Layer
+│   ├── providers/            # Riverpod providers (repositories)
+│   ├── repositories/         # Implémentations Firestore
+│   ├── sources/              # Data sources (Firestore, Local, API)
+│   └── utils/                # Converters, constants
+│
+├── domain/                   # Domain Layer
+│   ├── entities/             # Entités métier (immuables)
+│   ├── models/               # Modèles de données (Freezed)
+│   ├── repositories/         # Interfaces (contrats)
+│   └── logic/                # Logique métier pure (Use Cases)
+│
+├── presentation/             # Presentation Layer
+│   ├── screens/              # Écrans complets
+│   ├── widgets/              # Widgets réutilisables
+│   ├── providers/            # UI State (Notifiers)
+│   └── theme/                # Configuration thème
+│
+└── services/                 # Services externes
 ```
 
-### Conventions de Code
-- Fichiers générés : `.g.dart` (riverpod_generator)
-- `FieldValue.serverTimestamp()` obligatoire pour les timestamps Firestore
-- **`DateTime.now()` INTERDIT** pour Firestore
-- Toute requête Firestore doit avoir un `.limit()`
-- `if (!mounted)` obligatoire après `await` utilisant `BuildContext`
-- Toute méthode de Provider/Notifier doit retourner un `AsyncValue` ou être wrappée dans un guard pour une gestion d'erreur uniforme
-- **Thème dynamique** : L'application doit supporter les modes clair/sombre et la personnalisation des couleurs par l'admin
-- **Couleurs centralisées** : Utiliser `Theme.of(context)` et `ColorScheme` (jamais de couleurs en dur dans les widgets)
+### Flux de Données
+
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   Domain    │ ←── │    Data     │ ←── │  Firebase   │
+│  (Entities) │     │(Repositories)│    │ (Firestore) │
+└──────┬──────┘     └─────────────┘     └─────────────┘
+       │
+       ↓
+┌─────────────┐     ┌─────────────┐
+│ Presentation│ ←── │    Riverpod │
+│   (UI)      │     │  (Providers)│
+└─────────────┘     └─────────────┘
+```
 
 ---
 
-## 3. SCHÉMA FIRESTORE (SOURCE DE VÉRITÉ)
+## 3. INGÉNIERIE DE PERFORMANCE (LES 3 TREES)
+
+### 3.1 Optimisation du Rendu
+
+| Technique | Application | Exemple |
+|-----------|-------------|---------|
+| **Const Constructors** | Obligatoire sur sous-arbres statiques | `const SizedBox(height: 16)` |
+| **Keys Explicites** | `ValueKey(id)` sur listes dynamiques | `key: ValueKey(user.id)` |
+| **RepaintBoundary** | Autour animations/updates fréquentes | Weather card, progress indicators |
+| **RelayoutBoundary** | Contraintes fixes pour isoler layout | `SizedBox`, `ConstrainedBox` |
+
+### 3.2 Gestion Mémoire & Ressources
+
+| Ressource | Règle | Exemple |
+|-----------|-------|---------|
+| **Controller** | `dispose()` obligatoire | `TextEditingController.dispose()` |
+| **StreamSubscription** | `.cancel()` dans dispose | `_subscription?.cancel()` |
+| **ScrollController** | `dispose()` obligatoire | `ScrollController.dispose()` |
+| **Isolates** | `compute()` pour traitement >16ms | `await compute(heavyCalculation, data)` |
+
+### 3.3 Checklist Performance (Pré-Commit)
+
+- [ ] `const` sur tous les widgets statiques
+- [ ] `key: ValueKey(id)` sur les listes dynamiques
+- [ ] `RepaintBoundary` autour des animations/updates fréquentes
+- [ ] `select()` pour les rebuilds ciblés
+- [ ] `if (!context.mounted)` après chaque `await`
+- [ ] Aucun `print()` en production
+- [ ] Imports triés (dart: → flutter: → packages → app)
+
+---
+
+## 4. STATE MANAGEMENT (RIVERPOD)
+
+### Règles Obligatoires
+
+| Règle | Description |
+|-------|-------------|
+| **Riverpod Generator** | `@riverpod` obligatoire pour type safety |
+| **Sélecteurs Fins** | `ref.watch(provider.select(...))` systématique |
+| **AsyncValue Power** | Toute opération async → `AsyncValue` |
+| **Immuabilité** | Modèles Freezed uniquement |
+
+### Pattern Standard
+
+```dart
+// ✅ Bon pattern
+@riverpod
+class UserNotifier extends _$UserNotifier {
+  @override
+  FutureOr<List<User>> build() async {
+    return ref.watch(userRepositoryProvider).getAllUsers();
+  }
+
+  Future<String?> updateUser(User user) async {
+    final result = await AsyncValue.guard(
+      () => ref.read(userRepositoryProvider).updateUser(user),
+    );
+    return result.fold(
+      (data) => null,
+      (error) => error.toString(),
+    );
+  }
+}
+
+// ✅ Usage ciblé dans l'UI
+final primaryColor = ref.watch(themeNotifierProvider.select(
+  (value) => value.value?.primary ?? AppThemeSettings.defaultPrimary,
+));
+```
+
+---
+
+## 5. STRATÉGIE DE RÉSILIENCE (ERROR HANDLING)
+
+### Guard Clauses
+
+```dart
+// ✅ Après chaque await utilisant BuildContext
+await someAsyncOperation();
+if (!context.mounted) return;
+ScaffoldMessenger.of(context).showSnackBar(...);
+```
+
+### Pattern Result
+
+```dart
+// ✅ Pour opérations critiques
+Future<Result<User, Error>> getUser(String id) async {
+  try {
+    final user = await repository.getUser(id);
+    return Result.success(user);
+  } catch (e) {
+    return Result.failure(Error.fromException(e));
+  }
+}
+```
+
+### Transactions Firestore
+
+**Obligatoires pour :**
+- Réservations (vérification capacité)
+- Écritures dépendantes de lectures précédentes
+- Opérations multi-documents
+
+```dart
+// ✅ Pattern transactionnel
+await FirebaseFirestore.instance.runTransaction((transaction) async {
+  final sessionDoc = await transaction.get(sessionRef);
+  final currentCount = sessionDoc.data()?['students'].length ?? 0;
+  final maxCapacity = sessionDoc.data()?['max_capacity'] ?? 0;
+  
+  if (currentCount >= maxCapacity) {
+    throw Exception('Capacité maximale atteinte');
+  }
+  
+  transaction.update(sessionRef, {
+    'students': FieldValue.arrayUnion([studentId]),
+  });
+});
+```
+
+---
+
+## 6. FIRESTORE & SÉCURITÉ
 
 ### Collections Principales
 
@@ -53,154 +217,194 @@ lib/
 | `equipment/{id}` | Matériel école | `type`, `brand`, `model`, `size`, `status` |
 | `transactions/{id}` | Historique paiements | `user_id`, `amount`, `type`, `payment_method` |
 | `credit_packs/{id}` | Catalogue packs crédits | `name`, `credits`, `price`, `is_active` |
-| `products/{id}` | Boutique (neuf/occasion) | `name`, `price`, `category`, `condition`, `stock_quantity` |
+| `products/{id}` | Boutique | `name`, `price`, `category`, `condition`, `stock_quantity` |
 
-**Règles Firestore :**
-- Champs système immuables (`created_at`)
-- Index requis pour toute requête composite
-- App Check obligatoire
+### Règles d'Écriture
+
+| Règle | Application |
+|-------|-------------|
+| **FieldValue.serverTimestamp()** | Obligatoire pour timestamps |
+| **DateTime.now() INTERDIT** | Pour Firestore uniquement |
+| **.limit() obligatoire** | Toute requête doit limiter |
+| **Index composites** | Requis pour requêtes complexes |
+| **App Check** | Enforcement total |
+
+### Règles de Lecture
+
+```dart
+// ✅ Bon pattern
+final reservations = await FirebaseFirestore.instance
+    .collection('reservations')
+    .where('date', isEqualTo: date)
+    .limit(100)  // OBLIGATOIRE
+    .get();
+```
 
 ---
 
-## 4. RÈGLES MÉTIER (BUSINESS RULES)
+## 7. RÈGLES MÉTIER
 
 ### Réservations & Capacité
-- **Capacité dynamique** : `Nb moniteurs actifs × Quota` (défaut : 4 élèves/moniteur)
-- Un moniteur "indisponible" disparaît automatiquement des choix de réservation
-- Slots : Matin (08h-12h) / Après-midi (13h-18h) — ajustables via Panneau Admin
+
+| Règle | Description |
+|-------|-------------|
+| **Capacité dynamique** | `Nb moniteurs actifs × Quota` (défaut : 4 élèves/moniteur) |
+| **Moniteur indisponible** | Disparaît des choix de réservation |
+| **Slots** | Matin (08h-12h) / Après-midi (13h-18h) — ajustable via Admin |
+| **Transaction obligatoire** | Vérification capacité avant écriture |
+| **Idempotence** | `request_id` unique pour éviter doublons réseau |
 
 ### Paiements & Wallet
-- Paiement **toujours physique**, validé manuellement par l'admin
-- Saisie libre des crédits par l'admin après paiement
-- Activation manuelle des abonnements
+
+| Règle | Description |
+|-------|-------------|
+| **Paiement physique** | Validé manuellement par admin |
+| **Saisie crédits** | Libre par admin après paiement |
+| **Activation abonnement** | Manuelle par admin |
 
 ### Gestion RH (Staff)
-- Indisponibilités : Grillage des slots par admin ou staff (validation admin requise)
-- Fiche moniteur : Bio, photo, spécialités (Strapless, Freestyle, Foil), diplômes
+
+| Règle | Description |
+|-------|-------------|
+| **Indisponibilités** | Grillage slots par admin ou staff (validation admin requise) |
+| **Fiche moniteur** | Bio, photo, spécialités (Strapless, Freestyle, Foil), diplômes |
+| **Départ** | Suppression immédiate bio/photos, anonymisation sessions historiques |
 
 ### Suivi Pédagogique
-- Carnet de progression avec checklist IKO et notes après chaque cours
-- Poids de l'élève stocké pour sélection du matériel adapté (sécurité)
+
+| Règle | Description |
+|-------|-------------|
+| **Carnet de progression** | Checklist IKO + notes après chaque cours |
+| **Poids élève** | Stocké pour sélection matériel adapté (sécurité) |
+| **Durée rétention** | 5 ans pour données pédagogiques |
 
 ---
 
-### 4.5 GESTION DES CONFLITS & TRANSACTION
-Réservation "Optimiste" interdite : Toute création de session ou ajout d'élève doit impérativement passer par une Transaction Firestore (runTransaction).
+## 8. DESIGN SYSTEM & I18N
 
-Vérification de Verrouillage : Avant d'écrire, la transaction doit :
+### Thème Dynamique
 
-Lire le nombre actuel de students dans la session.
+| Mode | Description |
+|------|-------------|
+| **Clair** | Thème par défaut avec couleurs claires |
+| **Sombre** | Thème optimisé pour utilisation nocturne |
+| **Système** | Suit le thème du device (iOS/Android) |
 
-Lire le max_capacity (dynamique ou fixe).
+### Personnalisation Admin
 
-Avorter si count >= max_capacity.
+- **Couleur primaire** : Couleur principale de la marque
+- **Couleur secondaire** : Couleur d'accentuation
+- **Couleur d'accent** : Éléments importants
+- **5 thèmes prédéfinis** : Kitesurf, Sunset, Ocean, Tropical, Midnight
 
-Idempotence : Chaque demande de réservation doit inclure un request_id unique pour éviter les doublons en cas de micro-coupure réseau.
+### Règles d'Implémentation
 
+| Règle | Description |
+|-------|-------------|
+| **Jamais de couleurs en dur** | `Theme.of(context).colorScheme.*` uniquement |
+| **Contraste accessible** | WCAG AA (ratio 4.5:1 minimum) |
+| **Animation fluide** | Transition 300ms lors changement thème |
 
-## 5. CONFORMITÉ RGPD (GDPR)
+### Internationalisation (i18n)
+
+| Règle | Description |
+|-------|-------------|
+| **AppLocalizations obligatoire** | Jamais de texte en dur |
+| **5 langues** | FR (référence), EN, ES, PT, ZH |
+| **Placeholders** | `"welcomeMessage": "Bonjour, {name}"` |
+| **Génération** | `flutter gen-l10n` après ajout |
+
+---
+
+## 9. CONFORMITÉ RGPD (GDPR)
 
 ### Données Collectées
-| Type | Finalité |
-|------|----------|
-| Identité (nom, email, photo) | Auth & Profil |
-| Poids (kg) | Sélection matériel adapté (sécurité) |
-| Données Staff (bio, diplômes) | Présentation commerciale |
-| Suivi pédagogique | Continuité pédagogique |
-| Transactions | Comptabilité et gestion wallet |
 
-### Durée de Rétention
-- **Comptes utilisateurs** : 3 ans d'inactivité ou demande de suppression
-- **Données de progression** : 5 ans
-- **Données de transaction** : 10 ans (obligation légale comptable)
-- **Staff** : Suppression immédiate bio/photos en cas de départ, anonymisation des liens dans les sessions historiques
+| Type | Finalité | Rétention |
+|------|----------|-----------|
+| Identité (nom, email, photo) | Auth & Profil | 3 ans inactivité |
+| Poids (kg) | Sélection matériel (sécurité) | 5 ans |
+| Données Staff (bio, diplômes) | Présentation commerciale | Immédiate (départ) |
+| Suivi pédagogique | Continuité pédagogique | 5 ans |
+| Transactions | Comptabilité | 10 ans (légal) |
 
 ### Droits Utilisateurs
-- **Droit d'accès** : Consultation via profil et carnet de progression
-- **Droit à l'oubli** : Suppression irréversible des données d'identité, conservation anonymisée des sessions pour statistiques
-- **Droit de rectification** : Modification libre du profil (poids, photo, nom)
+
+| Droit | Application |
+|-------|-------------|
+| **Accès** | Consultation via profil et carnet |
+| **Oubli** | Suppression irréversible identité, anonymisation sessions |
+| **Rectification** | Modification libre (poids, photo, nom) |
 
 ### Sécurité
+
 - Firebase Auth + App Check
 - Règles Firestore : accès restreint (élève → ses données, staff → élèves de sa session, admin → tout)
 
 ---
 
-## 5.5 SYSTÈME DE THÈME (FEATURE COMPLÈTE)
-
-### Modes de Thème
-- **Clair** : Thème par défaut avec couleurs claires
-- **Sombre** : Thème optimisé pour une utilisation nocturne
-- **Système** : Suit le thème du device (iOS/Android)
-
-### Personnalisation Admin
-- **Couleur primaire** : Couleur principale de la marque
-- **Couleur secondaire** : Couleur d'accentuation
-- **Couleur d'accent** : Couleur pour les éléments importants
-- **5 thèmes prédéfinis** : Kitesurf (défaut), Sunset, Ocean, Tropical, Midnight
-- **Personnalisation complète** : Color picker pour chaque couleur
-
-### Architecture
-- **Modèle** : `AppThemeSettings` (Freezed) avec themeMode, primaryColor, secondaryColor, accentColor
-- **Provider** : `themeNotifierProvider` (StateNotifier) pour gérer l'état du thème
-- **Persistance** : SharedPreferences pour sauvegarder les préférences
-- **Application** : `MaterialApp.themeMode`, `theme`, `darkTheme`
-
-### Règles d'Implémentation
-- **Jamais de couleurs en dur** : Toujours utiliser `Theme.of(context).colorScheme.*`
-- **Migration progressive** : Remplacer toutes les couleurs en dur par des références au thème
-- **Contraste accessible** : Respecter WCAG AA (ratio 4.5:1 minimum)
-- **Animation fluide** : Transition de 300ms lors du changement de thème
-
-### Références
-- Voir `FEATURE_THEME_SYSTEM.md` pour les spécifications complètes (8 phases, 21 tâches)
-
----
-
-## 6. INSTRUCTIONS POUR L'AGENT (RÈGLES NON-NÉGOCIABLES)
+## 10. INSTRUCTIONS POUR L'AGENT (NON-NÉGOCIABLE)
 
 ### Avant Toute Modification
-1. **Analyser le code existant** avant toute modification non triviale
-2. **Vérifier `firestore_schema.md`** comme source de vérité pour toute structure de données
-3. Travailler par **Todo List interactive** pour les tâches complexes
+
+1. **Analyser le code existant** avant modification non triviale
+2. **Vérifier `firestore_schema.md`** comme source de vérité
+3. **Travailler par Todo List** pour tâches complexes
+
+### Protocole d'Instruction
+
+| Étape | Exigence |
+|-------|----------|
+| **1. Analyse Impact** | Expliquer impact sur `RenderObject Tree` |
+| **2. Mode Diff Uniquement** | Blocs de code précis uniquement |
+| **3. Linter First** | Code conforme au linter le plus strict |
+| **4. Refactoring Mentality** | Découpage si > 40 lignes |
 
 ### Contraintes de Développement
-- **Zéro théorie**, fournir **uniquement des diffs** (jamais de fichiers complets)
-- **Aucun effet de bord** sans validation explicite (écriture, suppression, envoi, mutation)
-- **Aucune écriture directe Firestore** pour les données critiques → passer par Cloud Function
-- **Pas de retry automatique** sur les écritures
 
-### Operations Git
-- **Jamais d'initiative git** (add, commit, push, restore, etc.) sans instruction explicite de l'utilisateur
-- L'utilisateur gère lui-même les commits et l'envoi vers le dépôt distant
-
-### Internationalisation (i18n)
-- **Toujours utiliser `AppLocalizations`** pour les textes affichés à l'utilisateur (jamais de texte en dur)
-- Les nouvelles chaînes de caractères doivent être ajoutées dans **tous les fichiers `.arb`** (`app_fr.arb`, `app_en.arb`, `app_es.arb`, `app_pt.arb`, `app_zh.arb`)
-- Le français (`app_fr.arb`) sert de template de référence
-- Après ajout de traductions : exécuter `flutter gen-l10n` pour générer le code
-- Vérifier que les textes dynamiques utilisent les placeholders : `"welcomeMessage": "Bonjour, {name}"` avec `@welcomeMessage` définissant les paramètres
+| Contrainte | Description |
+|------------|-------------|
+| **Zéro effet de bord** | Sans validation explicite (écriture, suppression, envoi) |
+| **Pas d'écriture directe Firestore** | Données critiques → Cloud Function |
+| **Pas de retry automatique** | Sur les écritures |
+| **Jamais d'initiative git** | Sans instruction explicite |
 
 ### Qualité & Validation
-- Si `flutter analyze`, un test ou une règle échoue : **STOP**, expliquer le problème, ne pas corriger en boucle
-- Toute exception doit être **justifiée, validée, explicitement mentionnée**
-- Répondre en **Français**
 
-### Revue d'Impact (Obligatoire pour Firestore/Auth/Cloud Functions)
+| Règle | Action |
+|-------|--------|
+| **flutter analyze échoue** | STOP, expliquer le problème |
+| **Test échoue** | STOP, expliquer l'échec |
+| **Exception** | Doit être justifiée et explicitement mentionnée |
+
+### Revue d'Impact (Firestore/Auth/Cloud Functions)
+
 Préciser pour toute modification :
-- **Impact coût** (requêtes Firestore, lectures/écritures)
-- **Impact sécurité** (règles Firestore, accès données)
-- **Impact UX** (messages d'erreur clairs, génériques, jamais techniques)
+- **Impact coût** : Requêtes Firestore, lectures/écritures
+- **Impact sécurité** : Règles Firestore, accès données
+- **Impact UX** : Messages d'erreur clairs, génériques, jamais techniques
 
 ### Protocole de Validation
-1. **Vérification Statique** : `flutter analyze` — corriger warnings (`prefer_const_constructors`, `use_build_context_synchronously`)
-2. **Vérification d'Architecture** : Si modèle/Provider modifié → `dart run build_runner build --delete-conflicting-outputs`
-3. **Contrôle Firebase** : Valider la présence du `.limit()` et l'existence des champs dans `firestore_schema.md`
-4. **Audit de Performance** : Aucun widget > 100 lignes (extraire sous-widgets si nécessaire)
+
+```bash
+# 1. Vérification Statique
+flutter analyze
+
+# 2. Vérification d'Architecture (si modèle/Provider modifié)
+flutter pub run build_runner build --delete-conflicting-outputs
+
+# 3. Contrôle Firebase
+# - Valider .limit()
+# - Vérifier champs dans firestore_schema.md
+
+# 4. Audit de Performance
+# - Aucun widget > 100 lignes
+# - Extraire sous-widgets si nécessaire
+```
 
 ---
 
-## 7. COMMANDES UTILES
+## 11. COMMANDES UTILES
 
 ```bash
 # Build runner pour code generation
@@ -217,10 +421,55 @@ flutter run
 
 # Clean build
 flutter clean && flutter pub get
+
+# Génération i18n
+flutter gen-l10n
+
+# Formater le code
+dart format lib/
 ```
 
 ---
 
-## 8. CONTACT & RESPONSABLE
-- **Responsable du traitement** : Administrateur de l'école (contact via l'application)
-- **Dépôt distant** : https://github.com/mckarot/reservation_kite
+## 12. LIENS & RÉFÉRENCES
+
+| Document | Description |
+|----------|-------------|
+| `firestore_schema.md` | Schéma Firestore (source de vérité) |
+| `FEATURE_THEME_SYSTEM.md` | Spécifications du système de thème |
+| `AUDIT_ACTION_PLAN.md` | Plan d'amélioration qualité |
+| `TODO_LATER.md` | TODO pour plus tard |
+| `COMPLIANCE_GDPR.md` | Conformité RGPD détaillée |
+| `README.md` | Documentation générale |
+
+---
+
+## 13. CONTACT & DÉPÔT
+
+| Information | Détail |
+|-------------|--------|
+| **Dépôt distant** | https://github.com/mckarot/reservation_kite |
+| **Responsable traitement** | Administrateur de l'école (via application) |
+| **Langue de réponse** | Français |
+
+---
+
+## 📊 STATUT D'IMPLÉMENTATION
+
+| Section | Statut | Notes |
+|---------|--------|-------|
+| 1. Vision & Philosophie | ✅ En place | |
+| 2. Architecture Technique | ✅ En place | Clean Architecture respectée |
+| 3. Ingénierie Performance | 🟡 Partiel | Const et Keys à améliorer |
+| 4. State Management | ✅ En place | Riverpod bien implémenté |
+| 5. Résilience | ✅ En place | Guard clauses implémentés |
+| 6. Firestore & Sécurité | ✅ En place | App Check activé |
+| 7. Règles Métier | ✅ En place | Transactions à renforcer |
+| 8. Design System & I18N | ✅ En place | Thème dynamique fonctionnel |
+| 9. Conformité RGPD | ✅ En place | |
+| 10. Instructions Agent | ✅ En place | |
+
+---
+
+**Dernière mise à jour :** 1 mars 2026  
+**Prochaine revue :** Après implémentation des corrections d'audit

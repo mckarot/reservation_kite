@@ -1042,4 +1042,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get colorsReset => 'Colores restablecidos';
+
+  @override
+  String get weatherLocationSection => 'Clima - Ubicación del spot';
 }

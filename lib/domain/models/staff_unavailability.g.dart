@@ -14,10 +14,10 @@ _$StaffUnavailabilityImpl _$$StaffUnavailabilityImplFromJson(
       date: const TimestampConverter().fromJson(json['date']),
       slot: $enumDecode(_$TimeSlotEnumMap, json['slot']),
       reason: json['reason'] as String,
+      createdAt: const TimestampConverter().fromJson(json['created_at']),
       status:
           $enumDecodeNullable(_$UnavailabilityStatusEnumMap, json['status']) ??
               UnavailabilityStatus.pending,
-      createdAt: const TimestampConverter().fromJson(json['created_at']),
     );
 
 Map<String, dynamic> _$$StaffUnavailabilityImplToJson(
@@ -28,8 +28,8 @@ Map<String, dynamic> _$$StaffUnavailabilityImplToJson(
       'date': const TimestampConverter().toJson(instance.date),
       'slot': _$TimeSlotEnumMap[instance.slot]!,
       'reason': instance.reason,
-      'status': _$UnavailabilityStatusEnumMap[instance.status]!,
       'created_at': const TimestampConverter().toJson(instance.createdAt),
+      'status': _$UnavailabilityStatusEnumMap[instance.status]!,
     };
 
 const _$TimeSlotEnumMap = {

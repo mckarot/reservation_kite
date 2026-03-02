@@ -416,5 +416,6 @@
   "resetToDefaults": "重置",
   "themeApplied": "主题已应用！",
   "colorsReset": "颜色已重置",
-  "schoolSettings": "学校设置"
+  "schoolSettings": "学校设置",
+  "weatherLocationSection": "天气 - 地点位置"
 }

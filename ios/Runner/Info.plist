@@ -45,5 +45,10 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- Permission pour la localisation GPS (météo) -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Nous utilisons votre position pour définir la localisation météo de votre spot de kite</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Nous utilisons votre position pour définir la localisation météo de votre spot de kite</string>
 </dict>
 </plist>

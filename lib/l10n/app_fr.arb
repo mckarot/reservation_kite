@@ -419,5 +419,6 @@
   "resetToDefaults": "Réinitialiser",
   "themeApplied": "Thème appliqué !",
   "colorsReset": "Couleurs réinitialisées",
-  "schoolSettings": "Paramètres de l'école"
+  "schoolSettings": "Paramètres de l'école",
+  "weatherLocationSection": "Météo - Localisation du spot"
 }

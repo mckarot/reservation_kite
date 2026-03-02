@@ -24,11 +24,11 @@ mixin _$Staff {
   String get name => throw _privateConstructorUsedError;
   String get bio => throw _privateConstructorUsedError;
   String get photoUrl => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  DateTime get updatedAt => throw _privateConstructorUsedError;
   List<String> get specialties => throw _privateConstructorUsedError;
   List<String> get certificates => throw _privateConstructorUsedError;
   bool get isActive => throw _privateConstructorUsedError;
-  @TimestampConverter()
-  DateTime get updatedAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,10 +45,10 @@ abstract class $StaffCopyWith<$Res> {
       String name,
       String bio,
       String photoUrl,
+      @TimestampConverter() DateTime updatedAt,
       List<String> specialties,
       List<String> certificates,
-      bool isActive,
-      @TimestampConverter() DateTime updatedAt});
+      bool isActive});
 }
 
 /// @nodoc
@@ -68,10 +68,10 @@ class _$StaffCopyWithImpl<$Res, $Val extends Staff>
     Object? name = null,
     Object? bio = null,
     Object? photoUrl = null,
+    Object? updatedAt = null,
     Object? specialties = null,
     Object? certificates = null,
     Object? isActive = null,
-    Object? updatedAt = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -90,6 +90,10 @@ class _$StaffCopyWithImpl<$Res, $Val extends Staff>
           ? _value.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       specialties: null == specialties
           ? _value.specialties
           : specialties // ignore: cast_nullable_to_non_nullable
@@ -102,10 +106,6 @@ class _$StaffCopyWithImpl<$Res, $Val extends Staff>
           ? _value.isActive
           : isActive // ignore: cast_nullable_to_non_nullable
               as bool,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
     ) as $Val);
   }
 }
@@ -122,10 +122,10 @@ abstract class _$$StaffImplCopyWith<$Res> implements $StaffCopyWith<$Res> {
       String name,
       String bio,
       String photoUrl,
+      @TimestampConverter() DateTime updatedAt,
       List<String> specialties,
       List<String> certificates,
-      bool isActive,
-      @TimestampConverter() DateTime updatedAt});
+      bool isActive});
 }
 
 /// @nodoc
@@ -143,10 +143,10 @@ class __$$StaffImplCopyWithImpl<$Res>
     Object? name = null,
     Object? bio = null,
     Object? photoUrl = null,
+    Object? updatedAt = null,
     Object? specialties = null,
     Object? certificates = null,
     Object? isActive = null,
-    Object? updatedAt = null,
   }) {
     return _then(_$StaffImpl(
       id: null == id
@@ -165,6 +165,10 @@ class __$$StaffImplCopyWithImpl<$Res>
           ? _value.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       specialties: null == specialties
           ? _value._specialties
           : specialties // ignore: cast_nullable_to_non_nullable
@@ -177,10 +181,6 @@ class __$$StaffImplCopyWithImpl<$Res>
           ? _value.isActive
           : isActive // ignore: cast_nullable_to_non_nullable
               as bool,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
     ));
   }
 }
@@ -193,10 +193,10 @@ class _$StaffImpl implements _Staff {
       required this.name,
       required this.bio,
       required this.photoUrl,
+      @TimestampConverter() required this.updatedAt,
       final List<String> specialties = const [],
       final List<String> certificates = const [],
-      this.isActive = true,
-      @TimestampConverter() required this.updatedAt})
+      this.isActive = true})
       : _specialties = specialties,
         _certificates = certificates;
 
@@ -211,6 +211,9 @@ class _$StaffImpl implements _Staff {
   final String bio;
   @override
   final String photoUrl;
+  @override
+  @TimestampConverter()
+  final DateTime updatedAt;
   final List<String> _specialties;
   @override
   @JsonKey()
@@ -232,13 +235,10 @@ class _$StaffImpl implements _Staff {
   @override
   @JsonKey()
   final bool isActive;
-  @override
-  @TimestampConverter()
-  final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'Staff(id: $id, name: $name, bio: $bio, photoUrl: $photoUrl, specialties: $specialties, certificates: $certificates, isActive: $isActive, updatedAt: $updatedAt)';
+    return 'Staff(id: $id, name: $name, bio: $bio, photoUrl: $photoUrl, updatedAt: $updatedAt, specialties: $specialties, certificates: $certificates, isActive: $isActive)';
   }
 
   @override
@@ -251,14 +251,14 @@ class _$StaffImpl implements _Staff {
             (identical(other.bio, bio) || other.bio == bio) &&
             (identical(other.photoUrl, photoUrl) ||
                 other.photoUrl == photoUrl) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
             const DeepCollectionEquality()
                 .equals(other._specialties, _specialties) &&
             const DeepCollectionEquality()
                 .equals(other._certificates, _certificates) &&
             (identical(other.isActive, isActive) ||
-                other.isActive == isActive) &&
-            (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.isActive == isActive));
   }
 
   @JsonKey(ignore: true)
@@ -269,10 +269,10 @@ class _$StaffImpl implements _Staff {
       name,
       bio,
       photoUrl,
+      updatedAt,
       const DeepCollectionEquality().hash(_specialties),
       const DeepCollectionEquality().hash(_certificates),
-      isActive,
-      updatedAt);
+      isActive);
 
   @JsonKey(ignore: true)
   @override
@@ -294,10 +294,10 @@ abstract class _Staff implements Staff {
       required final String name,
       required final String bio,
       required final String photoUrl,
+      @TimestampConverter() required final DateTime updatedAt,
       final List<String> specialties,
       final List<String> certificates,
-      final bool isActive,
-      @TimestampConverter() required final DateTime updatedAt}) = _$StaffImpl;
+      final bool isActive}) = _$StaffImpl;
 
   factory _Staff.fromJson(Map<String, dynamic> json) = _$StaffImpl.fromJson;
 
@@ -310,14 +310,14 @@ abstract class _Staff implements Staff {
   @override
   String get photoUrl;
   @override
+  @TimestampConverter()
+  DateTime get updatedAt;
+  @override
   List<String> get specialties;
   @override
   List<String> get certificates;
   @override
   bool get isActive;
-  @override
-  @TimestampConverter()
-  DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
   _$$StaffImplCopyWith<_$StaffImpl> get copyWith =>

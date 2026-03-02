@@ -416,5 +416,6 @@
   "resetToDefaults": "Reset to defaults",
   "themeApplied": "Theme applied!",
   "colorsReset": "Colors reset",
-  "schoolSettings": "School settings"
+  "schoolSettings": "School settings",
+  "weatherLocationSection": "Weather - Spot Location"
 }

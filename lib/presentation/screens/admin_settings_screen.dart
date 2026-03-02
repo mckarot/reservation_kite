@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../../domain/models/app_theme_settings.dart';
 import '../../domain/models/settings.dart';
@@ -27,7 +28,10 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
   late TextEditingController _morningEndController;
   late TextEditingController _afternoonStartController;
   late TextEditingController _afternoonEndController;
+  late TextEditingController _latitudeController;
+  late TextEditingController _longitudeController;
   late int _maxStudents;
+  bool _weatherLoading = false;
 
   @override
   void initState() {
@@ -36,6 +40,8 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
     _morningEndController = TextEditingController();
     _afternoonStartController = TextEditingController();
     _afternoonEndController = TextEditingController();
+    _latitudeController = TextEditingController();
+    _longitudeController = TextEditingController();
   }
 
   @override
@@ -44,6 +50,8 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
     _morningEndController.dispose();
     _afternoonStartController.dispose();
     _afternoonEndController.dispose();
+    _latitudeController.dispose();
+    _longitudeController.dispose();
     super.dispose();
   }
 
@@ -53,6 +61,108 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
     _afternoonStartController.text = settings.hours.afternoon.start;
     _afternoonEndController.text = settings.hours.afternoon.end;
     _maxStudents = settings.maxStudentsPerInstructor;
+    _latitudeController.text = settings.weatherLatitude?.toString() ?? '';
+    _longitudeController.text = settings.weatherLongitude?.toString() ?? '';
+  }
+
+  Future<void> _saveWeatherLocation() async {
+    final latitude = double.tryParse(_latitudeController.text);
+    final longitude = double.tryParse(_longitudeController.text);
+
+    if (latitude == null || longitude == null) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('❌ Coordonnées invalides'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    setState(() => _weatherLoading = true);
+
+    try {
+      await ref
+          .read(settingsNotifierProvider.notifier)
+          .updateWeatherLocation(latitude: latitude, longitude: longitude);
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('✅ Coordonnées enregistrées'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('❌ Erreur: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _weatherLoading = false);
+    }
+  }
+
+  Future<void> _useCurrentLocation() async {
+    setState(() => _weatherLoading = true);
+
+    try {
+      // Vérifier les permissions
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('❌ Permission GPS refusée'),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('❌ Permission GPS définitivement refusée'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
+      final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      _latitudeController.text = position.latitude.toString();
+      _longitudeController.text = position.longitude.toString();
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('📍 Position actuelle utilisée'),
+          backgroundColor: Colors.blue,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('❌ Erreur GPS: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _weatherLoading = false);
+    }
   }
 
   /// Affiche un dialog pour redémarrer l'application
@@ -215,6 +325,85 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                     }
                   },
                   child: Text(l10n.saveButton),
+                ),
+
+                // Section Météo - Localisation du spot
+                const Divider(height: 48),
+                Row(
+                  children: [
+                    const Text('🌤️ ', style: TextStyle(fontSize: 20)),
+                    Text(
+                      l10n.weatherLocationSection,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextField(
+                          controller: _latitudeController,
+                          decoration: const InputDecoration(
+                            labelText: 'Latitude',
+                            hintText: 'Ex: 45.123456',
+                            border: OutlineInputBorder(),
+                          ),
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                            signed: true,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: _longitudeController,
+                          decoration: const InputDecoration(
+                            labelText: 'Longitude',
+                            hintText: 'Ex: -1.654321',
+                            border: OutlineInputBorder(),
+                          ),
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                            signed: true,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: _weatherLoading
+                                    ? null
+                                    : _useCurrentLocation,
+                                icon: const Icon(Icons.my_location),
+                                label: const Text('📍 Ma position'),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: _weatherLoading
+                                    ? null
+                                    : _saveWeatherLocation,
+                                icon: const Icon(Icons.save),
+                                label: const Text('💾 Enregistrer'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue.shade700,
+                                  foregroundColor: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
 
                 // Section Apparence / Thème

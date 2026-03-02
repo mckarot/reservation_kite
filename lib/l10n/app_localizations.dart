@@ -2101,6 +2101,12 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Couleurs réinitialisées'**
   String get colorsReset;
+
+  /// No description provided for @weatherLocationSection.
+  ///
+  /// In fr, this message translates to:
+  /// **'Météo - Localisation du spot'**
+  String get weatherLocationSection;
 }
 
 class _AppLocalizationsDelegate

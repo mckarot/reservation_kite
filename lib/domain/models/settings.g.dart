@@ -9,22 +9,28 @@ part of 'settings.dart';
 _$SchoolSettingsImpl _$$SchoolSettingsImplFromJson(Map<String, dynamic> json) =>
     _$SchoolSettingsImpl(
       hours: OpeningHours.fromJson(json['hours'] as Map<String, dynamic>),
+      updatedAt: const TimestampConverter().fromJson(json['updated_at']),
       daysOff: (json['days_off'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const [],
       maxStudentsPerInstructor:
           (json['max_students_per_instructor'] as num?)?.toInt() ?? 4,
-      updatedAt: const TimestampConverter().fromJson(json['updated_at']),
+      weatherLatitude: (json['weather_latitude'] as num?)?.toDouble(),
+      weatherLongitude: (json['weather_longitude'] as num?)?.toDouble(),
+      weatherLocationName: json['weather_location_name'] as String?,
     );
 
 Map<String, dynamic> _$$SchoolSettingsImplToJson(
         _$SchoolSettingsImpl instance) =>
     <String, dynamic>{
       'hours': instance.hours.toJson(),
+      'updated_at': const TimestampConverter().toJson(instance.updatedAt),
       'days_off': instance.daysOff,
       'max_students_per_instructor': instance.maxStudentsPerInstructor,
-      'updated_at': const TimestampConverter().toJson(instance.updatedAt),
+      'weather_latitude': instance.weatherLatitude,
+      'weather_longitude': instance.weatherLongitude,
+      'weather_location_name': instance.weatherLocationName,
     };
 
 _$OpeningHoursImpl _$$OpeningHoursImplFromJson(Map<String, dynamic> json) =>

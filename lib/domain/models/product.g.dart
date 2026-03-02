@@ -15,11 +15,11 @@ _$ProductImpl _$$ProductImplFromJson(Map<String, dynamic> json) =>
       category: json['category'] as String,
       condition: json['condition'] as String,
       stockQuantity: (json['stock_quantity'] as num).toInt(),
+      createdAt: const TimestampConverter().fromJson(json['created_at']),
       imageUrls: (json['image_urls'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const [],
-      createdAt: const TimestampConverter().fromJson(json['created_at']),
     );
 
 Map<String, dynamic> _$$ProductImplToJson(_$ProductImpl instance) =>
@@ -31,6 +31,6 @@ Map<String, dynamic> _$$ProductImplToJson(_$ProductImpl instance) =>
       'category': instance.category,
       'condition': instance.condition,
       'stock_quantity': instance.stockQuantity,
-      'image_urls': instance.imageUrls,
       'created_at': const TimestampConverter().toJson(instance.createdAt),
+      'image_urls': instance.imageUrls,
     };

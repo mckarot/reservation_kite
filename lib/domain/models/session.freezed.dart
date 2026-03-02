@@ -26,11 +26,11 @@ mixin _$Session {
   String get slot =>
       throw _privateConstructorUsedError; // 'morning' or 'afternoon'
   String get instructorId => throw _privateConstructorUsedError;
-  List<String> get studentIds => throw _privateConstructorUsedError;
   int get maxCapacity => throw _privateConstructorUsedError;
-  String get status => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
+  List<String> get studentIds => throw _privateConstructorUsedError;
+  String get status => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,10 +47,10 @@ abstract class $SessionCopyWith<$Res> {
       @TimestampConverter() DateTime date,
       String slot,
       String instructorId,
-      List<String> studentIds,
       int maxCapacity,
-      String status,
-      @TimestampConverter() DateTime createdAt});
+      @TimestampConverter() DateTime createdAt,
+      List<String> studentIds,
+      String status});
 }
 
 /// @nodoc
@@ -70,10 +70,10 @@ class _$SessionCopyWithImpl<$Res, $Val extends Session>
     Object? date = null,
     Object? slot = null,
     Object? instructorId = null,
-    Object? studentIds = null,
     Object? maxCapacity = null,
-    Object? status = null,
     Object? createdAt = null,
+    Object? studentIds = null,
+    Object? status = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -92,22 +92,22 @@ class _$SessionCopyWithImpl<$Res, $Val extends Session>
           ? _value.instructorId
           : instructorId // ignore: cast_nullable_to_non_nullable
               as String,
-      studentIds: null == studentIds
-          ? _value.studentIds
-          : studentIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       maxCapacity: null == maxCapacity
           ? _value.maxCapacity
           : maxCapacity // ignore: cast_nullable_to_non_nullable
               as int,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      studentIds: null == studentIds
+          ? _value.studentIds
+          : studentIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -124,10 +124,10 @@ abstract class _$$SessionImplCopyWith<$Res> implements $SessionCopyWith<$Res> {
       @TimestampConverter() DateTime date,
       String slot,
       String instructorId,
-      List<String> studentIds,
       int maxCapacity,
-      String status,
-      @TimestampConverter() DateTime createdAt});
+      @TimestampConverter() DateTime createdAt,
+      List<String> studentIds,
+      String status});
 }
 
 /// @nodoc
@@ -145,10 +145,10 @@ class __$$SessionImplCopyWithImpl<$Res>
     Object? date = null,
     Object? slot = null,
     Object? instructorId = null,
-    Object? studentIds = null,
     Object? maxCapacity = null,
-    Object? status = null,
     Object? createdAt = null,
+    Object? studentIds = null,
+    Object? status = null,
   }) {
     return _then(_$SessionImpl(
       id: null == id
@@ -167,22 +167,22 @@ class __$$SessionImplCopyWithImpl<$Res>
           ? _value.instructorId
           : instructorId // ignore: cast_nullable_to_non_nullable
               as String,
-      studentIds: null == studentIds
-          ? _value._studentIds
-          : studentIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       maxCapacity: null == maxCapacity
           ? _value.maxCapacity
           : maxCapacity // ignore: cast_nullable_to_non_nullable
               as int,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      studentIds: null == studentIds
+          ? _value._studentIds
+          : studentIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -195,10 +195,10 @@ class _$SessionImpl implements _Session {
       @TimestampConverter() required this.date,
       required this.slot,
       required this.instructorId,
-      final List<String> studentIds = const [],
       required this.maxCapacity,
-      this.status = 'scheduled',
-      @TimestampConverter() required this.createdAt})
+      @TimestampConverter() required this.createdAt,
+      final List<String> studentIds = const [],
+      this.status = 'scheduled'})
       : _studentIds = studentIds;
 
   factory _$SessionImpl.fromJson(Map<String, dynamic> json) =>
@@ -214,6 +214,11 @@ class _$SessionImpl implements _Session {
 // 'morning' or 'afternoon'
   @override
   final String instructorId;
+  @override
+  final int maxCapacity;
+  @override
+  @TimestampConverter()
+  final DateTime createdAt;
   final List<String> _studentIds;
   @override
   @JsonKey()
@@ -224,17 +229,12 @@ class _$SessionImpl implements _Session {
   }
 
   @override
-  final int maxCapacity;
-  @override
   @JsonKey()
   final String status;
-  @override
-  @TimestampConverter()
-  final DateTime createdAt;
 
   @override
   String toString() {
-    return 'Session(id: $id, date: $date, slot: $slot, instructorId: $instructorId, studentIds: $studentIds, maxCapacity: $maxCapacity, status: $status, createdAt: $createdAt)';
+    return 'Session(id: $id, date: $date, slot: $slot, instructorId: $instructorId, maxCapacity: $maxCapacity, createdAt: $createdAt, studentIds: $studentIds, status: $status)';
   }
 
   @override
@@ -247,13 +247,13 @@ class _$SessionImpl implements _Session {
             (identical(other.slot, slot) || other.slot == slot) &&
             (identical(other.instructorId, instructorId) ||
                 other.instructorId == instructorId) &&
-            const DeepCollectionEquality()
-                .equals(other._studentIds, _studentIds) &&
             (identical(other.maxCapacity, maxCapacity) ||
                 other.maxCapacity == maxCapacity) &&
-            (identical(other.status, status) || other.status == status) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            const DeepCollectionEquality()
+                .equals(other._studentIds, _studentIds) &&
+            (identical(other.status, status) || other.status == status));
   }
 
   @JsonKey(ignore: true)
@@ -264,10 +264,10 @@ class _$SessionImpl implements _Session {
       date,
       slot,
       instructorId,
-      const DeepCollectionEquality().hash(_studentIds),
       maxCapacity,
-      status,
-      createdAt);
+      createdAt,
+      const DeepCollectionEquality().hash(_studentIds),
+      status);
 
   @JsonKey(ignore: true)
   @override
@@ -289,10 +289,10 @@ abstract class _Session implements Session {
       @TimestampConverter() required final DateTime date,
       required final String slot,
       required final String instructorId,
-      final List<String> studentIds,
       required final int maxCapacity,
-      final String status,
-      @TimestampConverter() required final DateTime createdAt}) = _$SessionImpl;
+      @TimestampConverter() required final DateTime createdAt,
+      final List<String> studentIds,
+      final String status}) = _$SessionImpl;
 
   factory _Session.fromJson(Map<String, dynamic> json) = _$SessionImpl.fromJson;
 
@@ -306,14 +306,14 @@ abstract class _Session implements Session {
   @override // 'morning' or 'afternoon'
   String get instructorId;
   @override
-  List<String> get studentIds;
-  @override
   int get maxCapacity;
-  @override
-  String get status;
   @override
   @TimestampConverter()
   DateTime get createdAt;
+  @override
+  List<String> get studentIds;
+  @override
+  String get status;
   @override
   @JsonKey(ignore: true)
   _$$SessionImplCopyWith<_$SessionImpl> get copyWith =>

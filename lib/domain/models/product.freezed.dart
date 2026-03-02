@@ -28,9 +28,9 @@ mixin _$Product {
       throw _privateConstructorUsedError; // 'wing', 'kite', 'board', etc.
   String get condition => throw _privateConstructorUsedError; // 'new', 'used'
   int get stockQuantity => throw _privateConstructorUsedError;
-  List<String> get imageUrls => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
+  List<String> get imageUrls => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -50,8 +50,8 @@ abstract class $ProductCopyWith<$Res> {
       String category,
       String condition,
       int stockQuantity,
-      List<String> imageUrls,
-      @TimestampConverter() DateTime createdAt});
+      @TimestampConverter() DateTime createdAt,
+      List<String> imageUrls});
 }
 
 /// @nodoc
@@ -74,8 +74,8 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
     Object? category = null,
     Object? condition = null,
     Object? stockQuantity = null,
-    Object? imageUrls = null,
     Object? createdAt = null,
+    Object? imageUrls = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -106,14 +106,14 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
           ? _value.stockQuantity
           : stockQuantity // ignore: cast_nullable_to_non_nullable
               as int,
-      imageUrls: null == imageUrls
-          ? _value.imageUrls
-          : imageUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      imageUrls: null == imageUrls
+          ? _value.imageUrls
+          : imageUrls // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
   }
 }
@@ -133,8 +133,8 @@ abstract class _$$ProductImplCopyWith<$Res> implements $ProductCopyWith<$Res> {
       String category,
       String condition,
       int stockQuantity,
-      List<String> imageUrls,
-      @TimestampConverter() DateTime createdAt});
+      @TimestampConverter() DateTime createdAt,
+      List<String> imageUrls});
 }
 
 /// @nodoc
@@ -155,8 +155,8 @@ class __$$ProductImplCopyWithImpl<$Res>
     Object? category = null,
     Object? condition = null,
     Object? stockQuantity = null,
-    Object? imageUrls = null,
     Object? createdAt = null,
+    Object? imageUrls = null,
   }) {
     return _then(_$ProductImpl(
       id: null == id
@@ -187,14 +187,14 @@ class __$$ProductImplCopyWithImpl<$Res>
           ? _value.stockQuantity
           : stockQuantity // ignore: cast_nullable_to_non_nullable
               as int,
-      imageUrls: null == imageUrls
-          ? _value._imageUrls
-          : imageUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      imageUrls: null == imageUrls
+          ? _value._imageUrls
+          : imageUrls // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -210,8 +210,8 @@ class _$ProductImpl implements _Product {
       required this.category,
       required this.condition,
       required this.stockQuantity,
-      final List<String> imageUrls = const [],
-      @TimestampConverter() required this.createdAt})
+      @TimestampConverter() required this.createdAt,
+      final List<String> imageUrls = const []})
       : _imageUrls = imageUrls;
 
   factory _$ProductImpl.fromJson(Map<String, dynamic> json) =>
@@ -233,6 +233,9 @@ class _$ProductImpl implements _Product {
 // 'new', 'used'
   @override
   final int stockQuantity;
+  @override
+  @TimestampConverter()
+  final DateTime createdAt;
   final List<String> _imageUrls;
   @override
   @JsonKey()
@@ -243,12 +246,8 @@ class _$ProductImpl implements _Product {
   }
 
   @override
-  @TimestampConverter()
-  final DateTime createdAt;
-
-  @override
   String toString() {
-    return 'Product(id: $id, name: $name, description: $description, price: $price, category: $category, condition: $condition, stockQuantity: $stockQuantity, imageUrls: $imageUrls, createdAt: $createdAt)';
+    return 'Product(id: $id, name: $name, description: $description, price: $price, category: $category, condition: $condition, stockQuantity: $stockQuantity, createdAt: $createdAt, imageUrls: $imageUrls)';
   }
 
   @override
@@ -267,10 +266,10 @@ class _$ProductImpl implements _Product {
                 other.condition == condition) &&
             (identical(other.stockQuantity, stockQuantity) ||
                 other.stockQuantity == stockQuantity) &&
-            const DeepCollectionEquality()
-                .equals(other._imageUrls, _imageUrls) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            const DeepCollectionEquality()
+                .equals(other._imageUrls, _imageUrls));
   }
 
   @JsonKey(ignore: true)
@@ -284,8 +283,8 @@ class _$ProductImpl implements _Product {
       category,
       condition,
       stockQuantity,
-      const DeepCollectionEquality().hash(_imageUrls),
-      createdAt);
+      createdAt,
+      const DeepCollectionEquality().hash(_imageUrls));
 
   @JsonKey(ignore: true)
   @override
@@ -310,8 +309,8 @@ abstract class _Product implements Product {
       required final String category,
       required final String condition,
       required final int stockQuantity,
-      final List<String> imageUrls,
-      @TimestampConverter() required final DateTime createdAt}) = _$ProductImpl;
+      @TimestampConverter() required final DateTime createdAt,
+      final List<String> imageUrls}) = _$ProductImpl;
 
   factory _Product.fromJson(Map<String, dynamic> json) = _$ProductImpl.fromJson;
 
@@ -330,10 +329,10 @@ abstract class _Product implements Product {
   @override // 'new', 'used'
   int get stockQuantity;
   @override
-  List<String> get imageUrls;
-  @override
   @TimestampConverter()
   DateTime get createdAt;
+  @override
+  List<String> get imageUrls;
   @override
   @JsonKey(ignore: true)
   _$$ProductImplCopyWith<_$ProductImpl> get copyWith =>

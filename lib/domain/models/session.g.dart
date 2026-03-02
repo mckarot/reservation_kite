@@ -12,13 +12,13 @@ _$SessionImpl _$$SessionImplFromJson(Map<String, dynamic> json) =>
       date: const TimestampConverter().fromJson(json['date']),
       slot: json['slot'] as String,
       instructorId: json['instructor_id'] as String,
+      maxCapacity: (json['max_capacity'] as num).toInt(),
+      createdAt: const TimestampConverter().fromJson(json['created_at']),
       studentIds: (json['student_ids'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const [],
-      maxCapacity: (json['max_capacity'] as num).toInt(),
       status: json['status'] as String? ?? 'scheduled',
-      createdAt: const TimestampConverter().fromJson(json['created_at']),
     );
 
 Map<String, dynamic> _$$SessionImplToJson(_$SessionImpl instance) =>
@@ -27,8 +27,8 @@ Map<String, dynamic> _$$SessionImplToJson(_$SessionImpl instance) =>
       'date': const TimestampConverter().toJson(instance.date),
       'slot': instance.slot,
       'instructor_id': instance.instructorId,
-      'student_ids': instance.studentIds,
       'max_capacity': instance.maxCapacity,
-      'status': instance.status,
       'created_at': const TimestampConverter().toJson(instance.createdAt),
+      'student_ids': instance.studentIds,
+      'status': instance.status,
     };

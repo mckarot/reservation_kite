@@ -1030,4 +1030,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get colorsReset => '颜色已重置';
+
+  @override
+  String get weatherLocationSection => '天气 - 地点位置';
 }

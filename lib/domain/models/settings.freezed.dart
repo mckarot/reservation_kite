@@ -21,10 +21,16 @@ SchoolSettings _$SchoolSettingsFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$SchoolSettings {
   OpeningHours get hours => throw _privateConstructorUsedError;
-  List<String> get daysOff => throw _privateConstructorUsedError;
-  int get maxStudentsPerInstructor => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime get updatedAt => throw _privateConstructorUsedError;
+  List<String> get daysOff => throw _privateConstructorUsedError;
+  int get maxStudentsPerInstructor => throw _privateConstructorUsedError;
+  @JsonKey(name: 'weather_latitude')
+  double? get weatherLatitude => throw _privateConstructorUsedError;
+  @JsonKey(name: 'weather_longitude')
+  double? get weatherLongitude => throw _privateConstructorUsedError;
+  @JsonKey(name: 'weather_location_name')
+  String? get weatherLocationName => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -40,9 +46,12 @@ abstract class $SchoolSettingsCopyWith<$Res> {
   @useResult
   $Res call(
       {OpeningHours hours,
+      @TimestampConverter() DateTime updatedAt,
       List<String> daysOff,
       int maxStudentsPerInstructor,
-      @TimestampConverter() DateTime updatedAt});
+      @JsonKey(name: 'weather_latitude') double? weatherLatitude,
+      @JsonKey(name: 'weather_longitude') double? weatherLongitude,
+      @JsonKey(name: 'weather_location_name') String? weatherLocationName});
 
   $OpeningHoursCopyWith<$Res> get hours;
 }
@@ -61,15 +70,22 @@ class _$SchoolSettingsCopyWithImpl<$Res, $Val extends SchoolSettings>
   @override
   $Res call({
     Object? hours = null,
+    Object? updatedAt = null,
     Object? daysOff = null,
     Object? maxStudentsPerInstructor = null,
-    Object? updatedAt = null,
+    Object? weatherLatitude = freezed,
+    Object? weatherLongitude = freezed,
+    Object? weatherLocationName = freezed,
   }) {
     return _then(_value.copyWith(
       hours: null == hours
           ? _value.hours
           : hours // ignore: cast_nullable_to_non_nullable
               as OpeningHours,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       daysOff: null == daysOff
           ? _value.daysOff
           : daysOff // ignore: cast_nullable_to_non_nullable
@@ -78,10 +94,18 @@ class _$SchoolSettingsCopyWithImpl<$Res, $Val extends SchoolSettings>
           ? _value.maxStudentsPerInstructor
           : maxStudentsPerInstructor // ignore: cast_nullable_to_non_nullable
               as int,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+      weatherLatitude: freezed == weatherLatitude
+          ? _value.weatherLatitude
+          : weatherLatitude // ignore: cast_nullable_to_non_nullable
+              as double?,
+      weatherLongitude: freezed == weatherLongitude
+          ? _value.weatherLongitude
+          : weatherLongitude // ignore: cast_nullable_to_non_nullable
+              as double?,
+      weatherLocationName: freezed == weatherLocationName
+          ? _value.weatherLocationName
+          : weatherLocationName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -104,9 +128,12 @@ abstract class _$$SchoolSettingsImplCopyWith<$Res>
   @useResult
   $Res call(
       {OpeningHours hours,
+      @TimestampConverter() DateTime updatedAt,
       List<String> daysOff,
       int maxStudentsPerInstructor,
-      @TimestampConverter() DateTime updatedAt});
+      @JsonKey(name: 'weather_latitude') double? weatherLatitude,
+      @JsonKey(name: 'weather_longitude') double? weatherLongitude,
+      @JsonKey(name: 'weather_location_name') String? weatherLocationName});
 
   @override
   $OpeningHoursCopyWith<$Res> get hours;
@@ -124,15 +151,22 @@ class __$$SchoolSettingsImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? hours = null,
+    Object? updatedAt = null,
     Object? daysOff = null,
     Object? maxStudentsPerInstructor = null,
-    Object? updatedAt = null,
+    Object? weatherLatitude = freezed,
+    Object? weatherLongitude = freezed,
+    Object? weatherLocationName = freezed,
   }) {
     return _then(_$SchoolSettingsImpl(
       hours: null == hours
           ? _value.hours
           : hours // ignore: cast_nullable_to_non_nullable
               as OpeningHours,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       daysOff: null == daysOff
           ? _value._daysOff
           : daysOff // ignore: cast_nullable_to_non_nullable
@@ -141,10 +175,18 @@ class __$$SchoolSettingsImplCopyWithImpl<$Res>
           ? _value.maxStudentsPerInstructor
           : maxStudentsPerInstructor // ignore: cast_nullable_to_non_nullable
               as int,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+      weatherLatitude: freezed == weatherLatitude
+          ? _value.weatherLatitude
+          : weatherLatitude // ignore: cast_nullable_to_non_nullable
+              as double?,
+      weatherLongitude: freezed == weatherLongitude
+          ? _value.weatherLongitude
+          : weatherLongitude // ignore: cast_nullable_to_non_nullable
+              as double?,
+      weatherLocationName: freezed == weatherLocationName
+          ? _value.weatherLocationName
+          : weatherLocationName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -154,9 +196,12 @@ class __$$SchoolSettingsImplCopyWithImpl<$Res>
 class _$SchoolSettingsImpl implements _SchoolSettings {
   const _$SchoolSettingsImpl(
       {required this.hours,
+      @TimestampConverter() required this.updatedAt,
       final List<String> daysOff = const [],
       this.maxStudentsPerInstructor = 4,
-      @TimestampConverter() required this.updatedAt})
+      @JsonKey(name: 'weather_latitude') this.weatherLatitude,
+      @JsonKey(name: 'weather_longitude') this.weatherLongitude,
+      @JsonKey(name: 'weather_location_name') this.weatherLocationName})
       : _daysOff = daysOff;
 
   factory _$SchoolSettingsImpl.fromJson(Map<String, dynamic> json) =>
@@ -164,6 +209,9 @@ class _$SchoolSettingsImpl implements _SchoolSettings {
 
   @override
   final OpeningHours hours;
+  @override
+  @TimestampConverter()
+  final DateTime updatedAt;
   final List<String> _daysOff;
   @override
   @JsonKey()
@@ -177,12 +225,18 @@ class _$SchoolSettingsImpl implements _SchoolSettings {
   @JsonKey()
   final int maxStudentsPerInstructor;
   @override
-  @TimestampConverter()
-  final DateTime updatedAt;
+  @JsonKey(name: 'weather_latitude')
+  final double? weatherLatitude;
+  @override
+  @JsonKey(name: 'weather_longitude')
+  final double? weatherLongitude;
+  @override
+  @JsonKey(name: 'weather_location_name')
+  final String? weatherLocationName;
 
   @override
   String toString() {
-    return 'SchoolSettings(hours: $hours, daysOff: $daysOff, maxStudentsPerInstructor: $maxStudentsPerInstructor, updatedAt: $updatedAt)';
+    return 'SchoolSettings(hours: $hours, updatedAt: $updatedAt, daysOff: $daysOff, maxStudentsPerInstructor: $maxStudentsPerInstructor, weatherLatitude: $weatherLatitude, weatherLongitude: $weatherLongitude, weatherLocationName: $weatherLocationName)';
   }
 
   @override
@@ -191,12 +245,18 @@ class _$SchoolSettingsImpl implements _SchoolSettings {
         (other.runtimeType == runtimeType &&
             other is _$SchoolSettingsImpl &&
             (identical(other.hours, hours) || other.hours == hours) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
             const DeepCollectionEquality().equals(other._daysOff, _daysOff) &&
             (identical(
                     other.maxStudentsPerInstructor, maxStudentsPerInstructor) ||
                 other.maxStudentsPerInstructor == maxStudentsPerInstructor) &&
-            (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+            (identical(other.weatherLatitude, weatherLatitude) ||
+                other.weatherLatitude == weatherLatitude) &&
+            (identical(other.weatherLongitude, weatherLongitude) ||
+                other.weatherLongitude == weatherLongitude) &&
+            (identical(other.weatherLocationName, weatherLocationName) ||
+                other.weatherLocationName == weatherLocationName));
   }
 
   @JsonKey(ignore: true)
@@ -204,9 +264,12 @@ class _$SchoolSettingsImpl implements _SchoolSettings {
   int get hashCode => Object.hash(
       runtimeType,
       hours,
+      updatedAt,
       const DeepCollectionEquality().hash(_daysOff),
       maxStudentsPerInstructor,
-      updatedAt);
+      weatherLatitude,
+      weatherLongitude,
+      weatherLocationName);
 
   @JsonKey(ignore: true)
   @override
@@ -225,11 +288,14 @@ class _$SchoolSettingsImpl implements _SchoolSettings {
 
 abstract class _SchoolSettings implements SchoolSettings {
   const factory _SchoolSettings(
-          {required final OpeningHours hours,
-          final List<String> daysOff,
-          final int maxStudentsPerInstructor,
-          @TimestampConverter() required final DateTime updatedAt}) =
-      _$SchoolSettingsImpl;
+      {required final OpeningHours hours,
+      @TimestampConverter() required final DateTime updatedAt,
+      final List<String> daysOff,
+      final int maxStudentsPerInstructor,
+      @JsonKey(name: 'weather_latitude') final double? weatherLatitude,
+      @JsonKey(name: 'weather_longitude') final double? weatherLongitude,
+      @JsonKey(name: 'weather_location_name')
+      final String? weatherLocationName}) = _$SchoolSettingsImpl;
 
   factory _SchoolSettings.fromJson(Map<String, dynamic> json) =
       _$SchoolSettingsImpl.fromJson;
@@ -237,12 +303,21 @@ abstract class _SchoolSettings implements SchoolSettings {
   @override
   OpeningHours get hours;
   @override
+  @TimestampConverter()
+  DateTime get updatedAt;
+  @override
   List<String> get daysOff;
   @override
   int get maxStudentsPerInstructor;
   @override
-  @TimestampConverter()
-  DateTime get updatedAt;
+  @JsonKey(name: 'weather_latitude')
+  double? get weatherLatitude;
+  @override
+  @JsonKey(name: 'weather_longitude')
+  double? get weatherLongitude;
+  @override
+  @JsonKey(name: 'weather_location_name')
+  String? get weatherLocationName;
   @override
   @JsonKey(ignore: true)
   _$$SchoolSettingsImplCopyWith<_$SchoolSettingsImpl> get copyWith =>

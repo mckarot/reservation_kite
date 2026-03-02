@@ -13,8 +13,8 @@ _$TransactionImpl _$$TransactionImplFromJson(Map<String, dynamic> json) =>
       amount: (json['amount'] as num).toInt(),
       type: json['type'] as String,
       paymentMethod: json['payment_method'] as String,
-      metadata: json['metadata'] as Map<String, dynamic>? ?? const {},
       createdAt: const TimestampConverter().fromJson(json['created_at']),
+      metadata: json['metadata'] as Map<String, dynamic>? ?? const {},
     );
 
 Map<String, dynamic> _$$TransactionImplToJson(_$TransactionImpl instance) =>
@@ -24,6 +24,6 @@ Map<String, dynamic> _$$TransactionImplToJson(_$TransactionImpl instance) =>
       'amount': instance.amount,
       'type': instance.type,
       'payment_method': instance.paymentMethod,
-      'metadata': instance.metadata,
       'created_at': const TimestampConverter().toJson(instance.createdAt),
+      'metadata': instance.metadata,
     };

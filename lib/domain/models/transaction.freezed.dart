@@ -25,11 +25,11 @@ mixin _$Transaction {
   int get amount => throw _privateConstructorUsedError;
   String get type =>
       throw _privateConstructorUsedError; // 'credit_purchase', 'lesson_payment', 'boutique_purchase'
-  String get paymentMethod =>
+  String get paymentMethod => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  DateTime get createdAt =>
       throw _privateConstructorUsedError; // 'cash', 'card', 'transfer'
   Map<String, dynamic> get metadata => throw _privateConstructorUsedError;
-  @TimestampConverter()
-  DateTime get createdAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -49,8 +49,8 @@ abstract class $TransactionCopyWith<$Res> {
       int amount,
       String type,
       String paymentMethod,
-      Map<String, dynamic> metadata,
-      @TimestampConverter() DateTime createdAt});
+      @TimestampConverter() DateTime createdAt,
+      Map<String, dynamic> metadata});
 }
 
 /// @nodoc
@@ -71,8 +71,8 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
     Object? amount = null,
     Object? type = null,
     Object? paymentMethod = null,
-    Object? metadata = null,
     Object? createdAt = null,
+    Object? metadata = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -95,14 +95,14 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
           ? _value.paymentMethod
           : paymentMethod // ignore: cast_nullable_to_non_nullable
               as String,
-      metadata: null == metadata
-          ? _value.metadata
-          : metadata // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      metadata: null == metadata
+          ? _value.metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
     ) as $Val);
   }
 }
@@ -121,8 +121,8 @@ abstract class _$$TransactionImplCopyWith<$Res>
       int amount,
       String type,
       String paymentMethod,
-      Map<String, dynamic> metadata,
-      @TimestampConverter() DateTime createdAt});
+      @TimestampConverter() DateTime createdAt,
+      Map<String, dynamic> metadata});
 }
 
 /// @nodoc
@@ -141,8 +141,8 @@ class __$$TransactionImplCopyWithImpl<$Res>
     Object? amount = null,
     Object? type = null,
     Object? paymentMethod = null,
-    Object? metadata = null,
     Object? createdAt = null,
+    Object? metadata = null,
   }) {
     return _then(_$TransactionImpl(
       id: null == id
@@ -165,14 +165,14 @@ class __$$TransactionImplCopyWithImpl<$Res>
           ? _value.paymentMethod
           : paymentMethod // ignore: cast_nullable_to_non_nullable
               as String,
-      metadata: null == metadata
-          ? _value._metadata
-          : metadata // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      metadata: null == metadata
+          ? _value._metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
     ));
   }
 }
@@ -186,8 +186,8 @@ class _$TransactionImpl implements _Transaction {
       required this.amount,
       required this.type,
       required this.paymentMethod,
-      final Map<String, dynamic> metadata = const {},
-      @TimestampConverter() required this.createdAt})
+      @TimestampConverter() required this.createdAt,
+      final Map<String, dynamic> metadata = const {}})
       : _metadata = metadata;
 
   factory _$TransactionImpl.fromJson(Map<String, dynamic> json) =>
@@ -204,6 +204,9 @@ class _$TransactionImpl implements _Transaction {
 // 'credit_purchase', 'lesson_payment', 'boutique_purchase'
   @override
   final String paymentMethod;
+  @override
+  @TimestampConverter()
+  final DateTime createdAt;
 // 'cash', 'card', 'transfer'
   final Map<String, dynamic> _metadata;
 // 'cash', 'card', 'transfer'
@@ -216,12 +219,8 @@ class _$TransactionImpl implements _Transaction {
   }
 
   @override
-  @TimestampConverter()
-  final DateTime createdAt;
-
-  @override
   String toString() {
-    return 'Transaction(id: $id, userId: $userId, amount: $amount, type: $type, paymentMethod: $paymentMethod, metadata: $metadata, createdAt: $createdAt)';
+    return 'Transaction(id: $id, userId: $userId, amount: $amount, type: $type, paymentMethod: $paymentMethod, createdAt: $createdAt, metadata: $metadata)';
   }
 
   @override
@@ -235,15 +234,15 @@ class _$TransactionImpl implements _Transaction {
             (identical(other.type, type) || other.type == type) &&
             (identical(other.paymentMethod, paymentMethod) ||
                 other.paymentMethod == paymentMethod) &&
-            const DeepCollectionEquality().equals(other._metadata, _metadata) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            const DeepCollectionEquality().equals(other._metadata, _metadata));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, userId, amount, type,
-      paymentMethod, const DeepCollectionEquality().hash(_metadata), createdAt);
+      paymentMethod, createdAt, const DeepCollectionEquality().hash(_metadata));
 
   @JsonKey(ignore: true)
   @override
@@ -261,14 +260,13 @@ class _$TransactionImpl implements _Transaction {
 
 abstract class _Transaction implements Transaction {
   const factory _Transaction(
-          {required final String id,
-          required final String userId,
-          required final int amount,
-          required final String type,
-          required final String paymentMethod,
-          final Map<String, dynamic> metadata,
-          @TimestampConverter() required final DateTime createdAt}) =
-      _$TransactionImpl;
+      {required final String id,
+      required final String userId,
+      required final int amount,
+      required final String type,
+      required final String paymentMethod,
+      @TimestampConverter() required final DateTime createdAt,
+      final Map<String, dynamic> metadata}) = _$TransactionImpl;
 
   factory _Transaction.fromJson(Map<String, dynamic> json) =
       _$TransactionImpl.fromJson;
@@ -283,11 +281,11 @@ abstract class _Transaction implements Transaction {
   String get type;
   @override // 'credit_purchase', 'lesson_payment', 'boutique_purchase'
   String get paymentMethod;
-  @override // 'cash', 'card', 'transfer'
-  Map<String, dynamic> get metadata;
   @override
   @TimestampConverter()
   DateTime get createdAt;
+  @override // 'cash', 'card', 'transfer'
+  Map<String, dynamic> get metadata;
   @override
   @JsonKey(ignore: true)
   _$$TransactionImplCopyWith<_$TransactionImpl> get copyWith =>

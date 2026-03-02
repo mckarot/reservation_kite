@@ -24,6 +24,12 @@ mixin _$User {
   @JsonKey(name: 'display_name')
   String get displayName => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  @JsonKey(name: 'created_at')
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  @JsonKey(name: 'last_seen')
+  DateTime get lastSeen => throw _privateConstructorUsedError;
   @JsonKey(name: 'photo_url')
   String? get photoUrl => throw _privateConstructorUsedError;
   String get role => throw _privateConstructorUsedError;
@@ -33,12 +39,6 @@ mixin _$User {
   @JsonKey(name: 'total_credits_purchased')
   int get totalCreditsPurchased => throw _privateConstructorUsedError;
   UserProgress? get progress => throw _privateConstructorUsedError;
-  @TimestampConverter()
-  @JsonKey(name: 'created_at')
-  DateTime get createdAt => throw _privateConstructorUsedError;
-  @TimestampConverter()
-  @JsonKey(name: 'last_seen')
-  DateTime get lastSeen => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -54,14 +54,14 @@ abstract class $UserCopyWith<$Res> {
       {String id,
       @JsonKey(name: 'display_name') String displayName,
       String email,
+      @TimestampConverter() @JsonKey(name: 'created_at') DateTime createdAt,
+      @TimestampConverter() @JsonKey(name: 'last_seen') DateTime lastSeen,
       @JsonKey(name: 'photo_url') String? photoUrl,
       String role,
       int? weight,
       @JsonKey(name: 'wallet_balance') int walletBalance,
       @JsonKey(name: 'total_credits_purchased') int totalCreditsPurchased,
-      UserProgress? progress,
-      @TimestampConverter() @JsonKey(name: 'created_at') DateTime createdAt,
-      @TimestampConverter() @JsonKey(name: 'last_seen') DateTime lastSeen});
+      UserProgress? progress});
 
   $UserProgressCopyWith<$Res>? get progress;
 }
@@ -82,14 +82,14 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? id = null,
     Object? displayName = null,
     Object? email = null,
+    Object? createdAt = null,
+    Object? lastSeen = null,
     Object? photoUrl = freezed,
     Object? role = null,
     Object? weight = freezed,
     Object? walletBalance = null,
     Object? totalCreditsPurchased = null,
     Object? progress = freezed,
-    Object? createdAt = null,
-    Object? lastSeen = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -104,6 +104,14 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      lastSeen: null == lastSeen
+          ? _value.lastSeen
+          : lastSeen // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       photoUrl: freezed == photoUrl
           ? _value.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
@@ -128,14 +136,6 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
               as UserProgress?,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      lastSeen: null == lastSeen
-          ? _value.lastSeen
-          : lastSeen // ignore: cast_nullable_to_non_nullable
-              as DateTime,
     ) as $Val);
   }
 
@@ -163,14 +163,14 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
       {String id,
       @JsonKey(name: 'display_name') String displayName,
       String email,
+      @TimestampConverter() @JsonKey(name: 'created_at') DateTime createdAt,
+      @TimestampConverter() @JsonKey(name: 'last_seen') DateTime lastSeen,
       @JsonKey(name: 'photo_url') String? photoUrl,
       String role,
       int? weight,
       @JsonKey(name: 'wallet_balance') int walletBalance,
       @JsonKey(name: 'total_credits_purchased') int totalCreditsPurchased,
-      UserProgress? progress,
-      @TimestampConverter() @JsonKey(name: 'created_at') DateTime createdAt,
-      @TimestampConverter() @JsonKey(name: 'last_seen') DateTime lastSeen});
+      UserProgress? progress});
 
   @override
   $UserProgressCopyWith<$Res>? get progress;
@@ -189,14 +189,14 @@ class __$$UserImplCopyWithImpl<$Res>
     Object? id = null,
     Object? displayName = null,
     Object? email = null,
+    Object? createdAt = null,
+    Object? lastSeen = null,
     Object? photoUrl = freezed,
     Object? role = null,
     Object? weight = freezed,
     Object? walletBalance = null,
     Object? totalCreditsPurchased = null,
     Object? progress = freezed,
-    Object? createdAt = null,
-    Object? lastSeen = null,
   }) {
     return _then(_$UserImpl(
       id: null == id
@@ -211,6 +211,14 @@ class __$$UserImplCopyWithImpl<$Res>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      lastSeen: null == lastSeen
+          ? _value.lastSeen
+          : lastSeen // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       photoUrl: freezed == photoUrl
           ? _value.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
@@ -235,14 +243,6 @@ class __$$UserImplCopyWithImpl<$Res>
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
               as UserProgress?,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      lastSeen: null == lastSeen
-          ? _value.lastSeen
-          : lastSeen // ignore: cast_nullable_to_non_nullable
-              as DateTime,
     ));
   }
 }
@@ -254,18 +254,16 @@ class _$UserImpl implements _User {
       {required this.id,
       @JsonKey(name: 'display_name') required this.displayName,
       required this.email,
+      @TimestampConverter()
+      @JsonKey(name: 'created_at')
+      required this.createdAt,
+      @TimestampConverter() @JsonKey(name: 'last_seen') required this.lastSeen,
       @JsonKey(name: 'photo_url') this.photoUrl,
       this.role = 'student',
       this.weight,
       @JsonKey(name: 'wallet_balance') this.walletBalance = 0,
       @JsonKey(name: 'total_credits_purchased') this.totalCreditsPurchased = 0,
-      this.progress,
-      @TimestampConverter()
-      @JsonKey(name: 'created_at')
-      required this.createdAt,
-      @TimestampConverter()
-      @JsonKey(name: 'last_seen')
-      required this.lastSeen});
+      this.progress});
 
   factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserImplFromJson(json);
@@ -277,6 +275,14 @@ class _$UserImpl implements _User {
   final String displayName;
   @override
   final String email;
+  @override
+  @TimestampConverter()
+  @JsonKey(name: 'created_at')
+  final DateTime createdAt;
+  @override
+  @TimestampConverter()
+  @JsonKey(name: 'last_seen')
+  final DateTime lastSeen;
   @override
   @JsonKey(name: 'photo_url')
   final String? photoUrl;
@@ -293,18 +299,10 @@ class _$UserImpl implements _User {
   final int totalCreditsPurchased;
   @override
   final UserProgress? progress;
-  @override
-  @TimestampConverter()
-  @JsonKey(name: 'created_at')
-  final DateTime createdAt;
-  @override
-  @TimestampConverter()
-  @JsonKey(name: 'last_seen')
-  final DateTime lastSeen;
 
   @override
   String toString() {
-    return 'User(id: $id, displayName: $displayName, email: $email, photoUrl: $photoUrl, role: $role, weight: $weight, walletBalance: $walletBalance, totalCreditsPurchased: $totalCreditsPurchased, progress: $progress, createdAt: $createdAt, lastSeen: $lastSeen)';
+    return 'User(id: $id, displayName: $displayName, email: $email, createdAt: $createdAt, lastSeen: $lastSeen, photoUrl: $photoUrl, role: $role, weight: $weight, walletBalance: $walletBalance, totalCreditsPurchased: $totalCreditsPurchased, progress: $progress)';
   }
 
   @override
@@ -316,6 +314,10 @@ class _$UserImpl implements _User {
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
             (identical(other.email, email) || other.email == email) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.lastSeen, lastSeen) ||
+                other.lastSeen == lastSeen) &&
             (identical(other.photoUrl, photoUrl) ||
                 other.photoUrl == photoUrl) &&
             (identical(other.role, role) || other.role == role) &&
@@ -325,11 +327,7 @@ class _$UserImpl implements _User {
             (identical(other.totalCreditsPurchased, totalCreditsPurchased) ||
                 other.totalCreditsPurchased == totalCreditsPurchased) &&
             (identical(other.progress, progress) ||
-                other.progress == progress) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.lastSeen, lastSeen) ||
-                other.lastSeen == lastSeen));
+                other.progress == progress));
   }
 
   @JsonKey(ignore: true)
@@ -339,14 +337,14 @@ class _$UserImpl implements _User {
       id,
       displayName,
       email,
+      createdAt,
+      lastSeen,
       photoUrl,
       role,
       weight,
       walletBalance,
       totalCreditsPurchased,
-      progress,
-      createdAt,
-      lastSeen);
+      progress);
 
   @JsonKey(ignore: true)
   @override
@@ -367,18 +365,18 @@ abstract class _User implements User {
       {required final String id,
       @JsonKey(name: 'display_name') required final String displayName,
       required final String email,
-      @JsonKey(name: 'photo_url') final String? photoUrl,
-      final String role,
-      final int? weight,
-      @JsonKey(name: 'wallet_balance') final int walletBalance,
-      @JsonKey(name: 'total_credits_purchased') final int totalCreditsPurchased,
-      final UserProgress? progress,
       @TimestampConverter()
       @JsonKey(name: 'created_at')
       required final DateTime createdAt,
       @TimestampConverter()
       @JsonKey(name: 'last_seen')
-      required final DateTime lastSeen}) = _$UserImpl;
+      required final DateTime lastSeen,
+      @JsonKey(name: 'photo_url') final String? photoUrl,
+      final String role,
+      final int? weight,
+      @JsonKey(name: 'wallet_balance') final int walletBalance,
+      @JsonKey(name: 'total_credits_purchased') final int totalCreditsPurchased,
+      final UserProgress? progress}) = _$UserImpl;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
 
@@ -389,6 +387,14 @@ abstract class _User implements User {
   String get displayName;
   @override
   String get email;
+  @override
+  @TimestampConverter()
+  @JsonKey(name: 'created_at')
+  DateTime get createdAt;
+  @override
+  @TimestampConverter()
+  @JsonKey(name: 'last_seen')
+  DateTime get lastSeen;
   @override
   @JsonKey(name: 'photo_url')
   String? get photoUrl;
@@ -404,14 +410,6 @@ abstract class _User implements User {
   int get totalCreditsPurchased;
   @override
   UserProgress? get progress;
-  @override
-  @TimestampConverter()
-  @JsonKey(name: 'created_at')
-  DateTime get createdAt;
-  @override
-  @TimestampConverter()
-  @JsonKey(name: 'last_seen')
-  DateTime get lastSeen;
   @override
   @JsonKey(ignore: true)
   _$$UserImplCopyWith<_$UserImpl> get copyWith =>

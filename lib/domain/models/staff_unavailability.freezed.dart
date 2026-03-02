@@ -28,10 +28,10 @@ mixin _$StaffUnavailability {
   TimeSlot get slot =>
       throw _privateConstructorUsedError; // morning, afternoon, or full_day?
   String get reason => throw _privateConstructorUsedError;
-  UnavailabilityStatus get status => throw _privateConstructorUsedError;
   @TimestampConverter()
   @JsonKey(name: 'created_at')
   DateTime get createdAt => throw _privateConstructorUsedError;
+  UnavailabilityStatus get status => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -51,8 +51,8 @@ abstract class $StaffUnavailabilityCopyWith<$Res> {
       @TimestampConverter() DateTime date,
       TimeSlot slot,
       String reason,
-      UnavailabilityStatus status,
-      @TimestampConverter() @JsonKey(name: 'created_at') DateTime createdAt});
+      @TimestampConverter() @JsonKey(name: 'created_at') DateTime createdAt,
+      UnavailabilityStatus status});
 }
 
 /// @nodoc
@@ -73,8 +73,8 @@ class _$StaffUnavailabilityCopyWithImpl<$Res, $Val extends StaffUnavailability>
     Object? date = null,
     Object? slot = null,
     Object? reason = null,
-    Object? status = null,
     Object? createdAt = null,
+    Object? status = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -97,14 +97,14 @@ class _$StaffUnavailabilityCopyWithImpl<$Res, $Val extends StaffUnavailability>
           ? _value.reason
           : reason // ignore: cast_nullable_to_non_nullable
               as String,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as UnavailabilityStatus,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as UnavailabilityStatus,
     ) as $Val);
   }
 }
@@ -123,8 +123,8 @@ abstract class _$$StaffUnavailabilityImplCopyWith<$Res>
       @TimestampConverter() DateTime date,
       TimeSlot slot,
       String reason,
-      UnavailabilityStatus status,
-      @TimestampConverter() @JsonKey(name: 'created_at') DateTime createdAt});
+      @TimestampConverter() @JsonKey(name: 'created_at') DateTime createdAt,
+      UnavailabilityStatus status});
 }
 
 /// @nodoc
@@ -143,8 +143,8 @@ class __$$StaffUnavailabilityImplCopyWithImpl<$Res>
     Object? date = null,
     Object? slot = null,
     Object? reason = null,
-    Object? status = null,
     Object? createdAt = null,
+    Object? status = null,
   }) {
     return _then(_$StaffUnavailabilityImpl(
       id: null == id
@@ -167,14 +167,14 @@ class __$$StaffUnavailabilityImplCopyWithImpl<$Res>
           ? _value.reason
           : reason // ignore: cast_nullable_to_non_nullable
               as String,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as UnavailabilityStatus,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as UnavailabilityStatus,
     ));
   }
 }
@@ -188,10 +188,10 @@ class _$StaffUnavailabilityImpl implements _StaffUnavailability {
       @TimestampConverter() required this.date,
       required this.slot,
       required this.reason,
-      this.status = UnavailabilityStatus.pending,
       @TimestampConverter()
       @JsonKey(name: 'created_at')
-      required this.createdAt});
+      required this.createdAt,
+      this.status = UnavailabilityStatus.pending});
 
   factory _$StaffUnavailabilityImpl.fromJson(Map<String, dynamic> json) =>
       _$$StaffUnavailabilityImplFromJson(json);
@@ -210,16 +210,16 @@ class _$StaffUnavailabilityImpl implements _StaffUnavailability {
   @override
   final String reason;
   @override
-  @JsonKey()
-  final UnavailabilityStatus status;
-  @override
   @TimestampConverter()
   @JsonKey(name: 'created_at')
   final DateTime createdAt;
+  @override
+  @JsonKey()
+  final UnavailabilityStatus status;
 
   @override
   String toString() {
-    return 'StaffUnavailability(id: $id, staffId: $staffId, date: $date, slot: $slot, reason: $reason, status: $status, createdAt: $createdAt)';
+    return 'StaffUnavailability(id: $id, staffId: $staffId, date: $date, slot: $slot, reason: $reason, createdAt: $createdAt, status: $status)';
   }
 
   @override
@@ -232,15 +232,15 @@ class _$StaffUnavailabilityImpl implements _StaffUnavailability {
             (identical(other.date, date) || other.date == date) &&
             (identical(other.slot, slot) || other.slot == slot) &&
             (identical(other.reason, reason) || other.reason == reason) &&
-            (identical(other.status, status) || other.status == status) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.status, status) || other.status == status));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, staffId, date, slot, reason, status, createdAt);
+      runtimeType, id, staffId, date, slot, reason, createdAt, status);
 
   @JsonKey(ignore: true)
   @override
@@ -264,10 +264,10 @@ abstract class _StaffUnavailability implements StaffUnavailability {
       @TimestampConverter() required final DateTime date,
       required final TimeSlot slot,
       required final String reason,
-      final UnavailabilityStatus status,
       @TimestampConverter()
       @JsonKey(name: 'created_at')
-      required final DateTime createdAt}) = _$StaffUnavailabilityImpl;
+      required final DateTime createdAt,
+      final UnavailabilityStatus status}) = _$StaffUnavailabilityImpl;
 
   factory _StaffUnavailability.fromJson(Map<String, dynamic> json) =
       _$StaffUnavailabilityImpl.fromJson;
@@ -285,11 +285,11 @@ abstract class _StaffUnavailability implements StaffUnavailability {
   @override // morning, afternoon, or full_day?
   String get reason;
   @override
-  UnavailabilityStatus get status;
-  @override
   @TimestampConverter()
   @JsonKey(name: 'created_at')
   DateTime get createdAt;
+  @override
+  UnavailabilityStatus get status;
   @override
   @JsonKey(ignore: true)
   _$$StaffUnavailabilityImplCopyWith<_$StaffUnavailabilityImpl> get copyWith =>

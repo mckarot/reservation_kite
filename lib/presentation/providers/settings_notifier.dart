@@ -21,4 +21,17 @@ class SettingsNotifier extends _$SettingsNotifier {
       return ref.read(settingsRepositoryProvider).getSettings();
     });
   }
+
+  Future<void> updateWeatherLocation({
+    required double latitude,
+    required double longitude,
+  }) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await ref
+          .read(settingsRepositoryProvider)
+          .updateWeatherLocation(latitude: latitude, longitude: longitude);
+      return ref.read(settingsRepositoryProvider).getSettings();
+    });
+  }
 }

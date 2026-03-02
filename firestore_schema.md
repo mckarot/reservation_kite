@@ -7,8 +7,9 @@
     - `opening_hours`: map `{ morning: { start: string, end: string }, afternoon: { start: string, end: string } }`
     - `days_off`: list<string> (ex: ["Tuesday morning"])
     - `max_students_per_instructor`: int (default: 4)
-    - `updated_at`: serverTimestamp
-
+    - `weather_latitude`: number? (Latitude du spot de kite, ex: 45.123456)
+    - `weather_longitude`: number? (Longitude du spot de kite, ex: -1.654321)
+    - `weather_location_name`: string? (Nom du spot pour affichage, ex: "Plage Principale")
     - `updated_at`: serverTimestamp
 
 ## COLLECTION: credit_packs

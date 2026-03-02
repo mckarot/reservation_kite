@@ -24,4 +24,17 @@ class FirestoreSettingsRepository implements SettingsRepository {
     data['updated_at'] = FieldValue.serverTimestamp();
     await _doc.set(data, SetOptions(merge: true));
   }
+
+  @override
+  Future<void> updateWeatherLocation({
+    required double latitude,
+    required double longitude,
+    String? locationName,
+  }) async {
+    await _doc.set({
+      'weather_latitude': latitude,
+      'weather_longitude': longitude,
+      if (locationName != null) 'weather_location_name': locationName,
+    }, SetOptions(merge: true));
+  }
 }

@@ -11,6 +11,7 @@ _$StaffImpl _$$StaffImplFromJson(Map<String, dynamic> json) => _$StaffImpl(
       name: json['name'] as String,
       bio: json['bio'] as String,
       photoUrl: json['photo_url'] as String,
+      updatedAt: const TimestampConverter().fromJson(json['updated_at']),
       specialties: (json['specialties'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -20,7 +21,6 @@ _$StaffImpl _$$StaffImplFromJson(Map<String, dynamic> json) => _$StaffImpl(
               .toList() ??
           const [],
       isActive: json['is_active'] as bool? ?? true,
-      updatedAt: const TimestampConverter().fromJson(json['updated_at']),
     );
 
 Map<String, dynamic> _$$StaffImplToJson(_$StaffImpl instance) =>
@@ -29,8 +29,8 @@ Map<String, dynamic> _$$StaffImplToJson(_$StaffImpl instance) =>
       'name': instance.name,
       'bio': instance.bio,
       'photo_url': instance.photoUrl,
+      'updated_at': const TimestampConverter().toJson(instance.updatedAt),
       'specialties': instance.specialties,
       'certificates': instance.certificates,
       'is_active': instance.isActive,
-      'updated_at': const TimestampConverter().toJson(instance.updatedAt),
     };
