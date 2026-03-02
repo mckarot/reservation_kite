@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/providers/service_providers.dart';
 import '../../domain/models/user.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../providers/theme_notifier.dart';
 import '../../l10n/app_localizations.dart';
 
 class PupilDashboardTab extends ConsumerWidget {
@@ -11,6 +13,11 @@ class PupilDashboardTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    
+    // Récupérer la couleur principale du thème
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 100),
@@ -34,11 +41,11 @@ class PupilDashboardTab extends ConsumerWidget {
             decoration: BoxDecoration(
               color: Colors.grey.shade100,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.blue.withOpacity(0.3), width: 1.5),
+              border: Border.all(color: primaryColor.withOpacity(0.3), width: 1.5),
             ),
             child: Row(
               children: [
-                const Icon(Icons.info_outline, color: Colors.blue),
+                Icon(Icons.info_outline, color: primaryColor),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Text(
@@ -56,19 +63,19 @@ class PupilDashboardTab extends ConsumerWidget {
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue.shade800, Colors.blue.shade500],
+                colors: [primaryColor, primaryColor.withOpacity(0.7)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.blue.withOpacity(0.3),
+                  color: primaryColor.withOpacity(0.3),
                   blurRadius: 15,
                   offset: const Offset(0, 8),
                 ),
               ],
-              border: Border.all(color: Colors.blue.withOpacity(0.3), width: 1.5),
+              border: Border.all(color: primaryColor.withOpacity(0.3), width: 1.5),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,13 +198,19 @@ class _CurrentWeatherCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final weatherAsync = ref.watch(currentWeatherProvider);
+    
+    // Récupérer la couleur principale du thème
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    
     return weatherAsync.when(
       data: (weather) => Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.blue.withOpacity(0.3), width: 1.5),
+          border: Border.all(color: primaryColor.withOpacity(0.3), width: 1.5),
         ),
         child: Column(
           children: [
@@ -213,7 +226,7 @@ class _CurrentWeatherCard extends ConsumerWidget {
                 ),
                 Icon(
                   _getWeatherIcon(weather.weatherCode),
-                  color: Colors.blue.shade700,
+                  color: primaryColor,
                   size: 24,
                 ),
               ],
@@ -225,14 +238,17 @@ class _CurrentWeatherCard extends ConsumerWidget {
                 _WeatherInfoItem(
                   icon: Icons.thermostat,
                   label: '${weather.temperature.round()}°C',
+                  color: primaryColor,
                 ),
                 _WeatherInfoItem(
                   icon: Icons.air,
                   label: '${(weather.windSpeed / 1.852).round()} ${l10n.knots}',
+                  color: primaryColor,
                 ),
                 _WeatherInfoItem(
                   icon: Icons.explore,
                   label: _getWindDirection(weather.windDirection),
+                  color: primaryColor,
                 ),
               ],
             ),
@@ -292,14 +308,15 @@ class _CurrentWeatherCard extends ConsumerWidget {
 class _WeatherInfoItem extends StatelessWidget {
   final IconData icon;
   final String label;
+  final Color? color;
 
-  const _WeatherInfoItem({required this.icon, required this.label});
+  const _WeatherInfoItem({required this.icon, required this.label, this.color});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(icon, color: Colors.blue.shade700, size: 28),
+        Icon(icon, color: color ?? Colors.blue.shade700, size: 28),
         const SizedBox(height: 8),
         Text(
           label,

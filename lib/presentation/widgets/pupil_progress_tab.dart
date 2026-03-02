@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/user.dart';
 import '../providers/staff_notifier.dart';
+import '../../domain/models/app_theme_settings.dart';
+import '../providers/theme_notifier.dart';
 import '../../l10n/app_localizations.dart';
 
 class PupilProgressTab extends ConsumerWidget {
@@ -69,7 +71,7 @@ class PupilProgressTab extends ConsumerWidget {
   }
 }
 
-class _LevelCard extends StatelessWidget {
+class _LevelCard extends ConsumerWidget {
   final String ikoLevel;
   final int checkedItemsCount;
   const _LevelCard({required this.ikoLevel, required this.checkedItemsCount});
@@ -95,25 +97,32 @@ class _LevelCard extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    
+    // Récupérer les couleurs du thème
+    final themeSettingsAsync = ref.watch(themeNotifierProvider);
+    final themeSettings = themeSettingsAsync.value;
+    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    final secondaryColor = themeSettings?.secondary ?? AppThemeSettings.defaultSecondary;
+    
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Colors.indigo.shade700, Colors.blue.shade900],
+          colors: [primaryColor, primaryColor.withOpacity(0.7)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.indigo.withValues(alpha: 0.3),
+            color: primaryColor.withOpacity(0.3),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
         ],
-        border: Border.all(color: Colors.indigo.withOpacity(0.3), width: 1.5),
+        border: Border.all(color: primaryColor.withOpacity(0.3), width: 1.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,9 +148,7 @@ class _LevelCard extends StatelessWidget {
                   ? 0
                   : checkedItemsCount / UserProgress.allIkoSkills.length,
               backgroundColor: Colors.white24,
-              valueColor: const AlwaysStoppedAnimation<Color>(
-                Colors.cyanAccent,
-              ),
+              valueColor: AlwaysStoppedAnimation<Color>(secondaryColor),
               minHeight: 8,
             ),
           ),
