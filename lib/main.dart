@@ -28,6 +28,9 @@ final reservationServiceProvider = ChangeNotifierProvider<ReservationService>((
   return ReservationService(repository);
 });
 
+// Clé de navigation globale pour permettre le retour arrière
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -86,7 +89,50 @@ class MainApp extends ConsumerWidget {
       },
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
-      error: (e, _) => Scaffold(body: Center(child: Text('Erreur: $e'))),
+      error: (e, _) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Erreur'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () async {
+              // Déconnecter et revenir au login
+              await ref.read(authRepositoryProvider).signOut();
+            },
+          ),
+        ),
+        body: Center(child: Text('Erreur: $e')),
+      ),
+    );
+
+    // Widget wrapper avec bouton de retour/déconnexion
+    final homeWithBackNavigation = authState.when(
+      data: (user) {
+        if (user == null) return const LoginScreen();
+
+        // Si connecté, on wrap avec un Scaffold qui permet le retour
+        return WillPopScope(
+          onWillPop: () async {
+            // Empêcher la fermeture de l'app, mais permettre la navigation
+            return false;
+          },
+          child: home,
+        );
+      },
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (e, _) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Erreur'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () async {
+              // Déconnecter et revenir au login
+              await ref.read(authRepositoryProvider).signOut();
+            },
+          ),
+        ),
+        body: Center(child: Text('Erreur: $e')),
+      ),
     );
 
     // Obtenir les paramètres de thème
@@ -98,7 +144,8 @@ class MainApp extends ConsumerWidget {
     return MaterialApp(
       title: 'Kite Reserve',
       debugShowCheckedModeBanner: false,
-      
+      navigatorKey: navigatorKey,
+
       // Thèmes dynamiques
       theme: lightTheme,
       darkTheme: darkTheme,
@@ -118,7 +165,7 @@ class MainApp extends ConsumerWidget {
         Locale('zh'),  // Chinois
       ],
       locale: localeAsync.value ?? const Locale('fr'),
-      home: home,
+      home: homeWithBackNavigation,
     );
   }
 }

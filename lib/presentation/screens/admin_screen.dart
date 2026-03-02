@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:reservation_kite/presentation/screens/admin_dashboard_screen.dart';
 import 'package:reservation_kite/presentation/screens/admin_settings_screen.dart';
 import 'package:reservation_kite/presentation/screens/booking_screen.dart';
+import 'package:reservation_kite/presentation/screens/create_admin_screen.dart';
 import 'package:reservation_kite/presentation/screens/equipment_admin_screen.dart';
 import 'package:reservation_kite/presentation/screens/staff_admin_screen.dart';
 import 'package:reservation_kite/presentation/screens/user_directory_screen.dart';
@@ -12,6 +13,7 @@ import '../../domain/models/app_theme_settings.dart';
 import '../../domain/models/staff.dart';
 import '../../domain/models/staff_unavailability.dart';
 import '../../l10n/app_localizations.dart';
+import '../../scripts/firebase_init_script.dart';
 import '../providers/staff_notifier.dart';
 import '../providers/theme_notifier.dart';
 import '../providers/unavailability_notifier.dart';
@@ -39,6 +41,12 @@ class AdminScreen extends ConsumerWidget {
         title: l10n.settings,
         icon: Icons.settings,
         route: const AdminSettingsScreen(),
+      ),
+      _DashboardItem(
+        title: 'Créer un Admin',
+        icon: Icons.admin_panel_settings,
+        route: const CreateAdminScreen(),
+        color: Colors.red,
       ),
       _DashboardItem(
         title: l10n.manageStaff,
@@ -74,29 +82,73 @@ class AdminScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              const _PendingAbsencesAlert(),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 1.2,
-                ),
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  return _DashboardCard(item: items[index]);
-                },
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  const _PendingAbsencesAlert(),
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 1.2,
+                    ),
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      return _DashboardCard(item: items[index]);
+                    },
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+          
+          // Bouton d'initialisation Firebase (DEBUG ONLY)
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+            decoration: BoxDecoration(
+              color: Colors.orange.shade50,
+              border: Border(
+                top: BorderSide(color: Colors.orange.shade200, width: 1),
+              ),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.settings_backup_restore, size: 20, color: Colors.orange.shade700),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        '🔧 Init Firebase',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      Text(
+                        'Crée admins, settings, credit_packs',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const FirebaseInitButton(),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -143,7 +195,11 @@ class _DashboardCard extends ConsumerWidget {
           .where((u) => u.status == UnavailabilityStatus.pending)
           .length;
       if (pendingCount > 0) {
-        icon = Badge(label: Text('$pendingCount'), child: icon);
+        icon = Badge(
+          label: Text('$pendingCount'),
+          backgroundColor: item.color ?? primaryColor,
+          child: icon,
+        );
       }
     }
 

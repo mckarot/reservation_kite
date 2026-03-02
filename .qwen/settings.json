@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "dart": {
+      "command": "/Users/mathieu/development/flutter/bin/dart",
+      "args": [
+        "mcp-server"
+      ],
+      "timeout": 30000
+    },
+    "firebase": {
+      "command": "npx",
+      "args": ["-y", "firebase-tools@latest", "mcp"]
+    }
+  },
+  "$version": 3
+}

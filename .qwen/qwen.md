@@ -242,6 +242,70 @@ final reservations = await FirebaseFirestore.instance
 
 ---
 
+## 6.5 SÉCURITÉ DES CLÉS API & SECRETS ⚠️
+
+### 🚫 Fichiers JAMAIS committés (CRITIQUE)
+
+| Fichier | Raison | Solution |
+|---------|--------|----------|
+| `lib/firebase_options.dart` | Contient `apiKey`, `appId`, `messagingSenderId` | Généré automatiquement par `flutterfire configure` |
+| `.env` | Contient secrets, tokens, clés API | Ajouter dans `.gitignore` |
+| `google-services.json` | Credentials Android Firebase | Ne pas committer |
+| `GoogleService-Info.plist` | Credentials iOS Firebase | Ne pas committer |
+| `keystore.properties` | Clés de signature Android | Ne pas committer |
+
+### ✅ Bonnes Pratiques
+
+| Pratique | Description |
+|----------|-------------|
+| **`.gitignore` à jour** | Vérifier avant CHAQUE commit/push |
+| **`git status` systématique** | Review des fichiers avant `git add` |
+| **Variables d'environnement** | Utiliser `flutter_dotenv` pour les secrets |
+| **Restrictions API Google Cloud** | Limiter par package, bundle ID, domaine |
+| **Rotation des clés** | Régénérer si exposition suspectée |
+
+### 🔐 Checklist Pré-Commit (Sécurité)
+
+```bash
+# 1. Vérifier les fichiers sensibles
+git status
+
+# 2. Vérifier .gitignore
+cat .gitignore | grep -E "firebase_options|\.env|google-services|GoogleService"
+
+# 3. Scanner les secrets (optionnel)
+# trufflehog . --only-verified
+# gitleaks detect
+```
+
+### 📦 `.gitignore` Minimal (Firebase/Secrets)
+
+```gitignore
+# Firebase secrets (CRITIQUE - NE JAMAIS COMMITTER)
+lib/firebase_options.dart
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Keystore/Signing
+*.keystore
+*.jks
+keystore.properties
+```
+
+### ⚠️ En Cas d'Exposition Accidentelle
+
+1. **URGENCE :** Régénérer la clé API dans Google Cloud Console
+2. **Nettoyer Git :** `git rm --cached <fichier>` + `git push --force`
+3. **Restreindre :** Ajouter restrictions dans Google Cloud Console
+4. **Auditer :** Vérifier logs Cloud Logging pour usage suspect
+
+---
+
 ## 7. RÈGLES MÉTIER
 
 ### Réservations & Capacité
@@ -368,6 +432,16 @@ final reservations = await FirebaseFirestore.instance
 | **Pas d'écriture directe Firestore** | Données critiques → Cloud Function |
 | **Pas de retry automatique** | Sur les écritures |
 | **Jamais d'initiative git** | Sans instruction explicite |
+| **🚫 Secrets JAMAIS dans Git** | `firebase_options.dart`, `.env`, clés API → `.gitignore` obligatoire |
+
+### 🔐 Sécurité des Secrets (NON-NÉGOCIABLE)
+
+| Règle | Action |
+|-------|--------|
+| **`firebase_options.dart`** | JAMAIS committer → généré par `flutterfire configure` |
+| **`.gitignore` vérifié** | Avant CHAQUE `git add` |
+| **Clés API exposées** | Alert immédiate + régénération + nettoyage historique |
+| **Variables sensibles** | Utiliser `flutter_dotenv` + `.gitignore` |
 
 ### Qualité & Validation
 
@@ -427,6 +501,11 @@ flutter gen-l10n
 
 # Formater le code
 dart format lib/
+
+# 🔐 Sécurité - Vérifier les secrets avant commit
+git status  # Review fichiers avant git add
+git rm --cached <fichier>  # Supprimer fichier de Git (garde local)
+git log --all --full-history -- <fichier>  # Historique fichier
 ```
 
 ---
@@ -441,6 +520,7 @@ dart format lib/
 | `TODO_LATER.md` | TODO pour plus tard |
 | `COMPLIANCE_GDPR.md` | Conformité RGPD détaillée |
 | `README.md` | Documentation générale |
+| **Section 6.5** | 🔐 Sécurité des Clés API & Secrets |
 
 ---
 
@@ -464,6 +544,7 @@ dart format lib/
 | 4. State Management | ✅ En place | Riverpod bien implémenté |
 | 5. Résilience | ✅ En place | Guard clauses implémentés |
 | 6. Firestore & Sécurité | ✅ En place | App Check activé |
+| 6.5 Sécurité des Clés API & Secrets | ✅ En place | Section ajoutée |
 | 7. Règles Métier | ✅ En place | Transactions à renforcer |
 | 8. Design System & I18N | ✅ En place | Thème dynamique fonctionnel |
 | 9. Conformité RGPD | ✅ En place | |
@@ -471,5 +552,5 @@ dart format lib/
 
 ---
 
-**Dernière mise à jour :** 1 mars 2026  
+**Dernière mise à jour :** 2 mars 2026
 **Prochaine revue :** Après implémentation des corrections d'audit

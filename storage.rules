@@ -1,0 +1,46 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Fonctions utilitaires
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isAdmin() {
+      // Note: On ne peut pas facilement faire un filter exists() sur Firestore depuis Storage Rules sans extension
+      // Mais on peut se baser sur les Custom Claims si dispo, ou restreindre par dossier.
+      // Ici on va utiliser une approche par structure de dossier.
+      return isAuthenticated(); // À affiner si des rôles Storage sont nécessaires
+    }
+
+    // Photos de profil utilisateurs
+    match /users/{userId}/profile.jpg {
+      allow read: if true; // Les photos de profil sont publiques pour le staff/élèves
+      allow write: if isOwner(userId) && 
+        request.resource.size < 2 * 1024 * 1024 && // Max 2MB
+        request.resource.contentType.matches('image/.*');
+    }
+
+    // Photos du staff (moniteurs)
+    match /staff/{staffId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated(); // Devrait être restreint à Admin/Propriétaire
+    }
+
+    // Matériel et Produits
+    match /equipment/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+    
+    match /products/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+  }
+}
