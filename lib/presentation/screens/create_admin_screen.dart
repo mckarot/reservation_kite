@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/providers/repository_providers.dart';
+import '../../l10n/app_localizations.dart';
 import '../providers/auth_state_provider.dart';
 
 /// Écran pour créer/nommer un nouvel administrateur
@@ -69,18 +70,19 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
     final userId = userDoc.id;
     final userEmail =
         (userDoc.data() as Map<String, dynamic>)['email'] ?? 'Inconnu';
+    final l10n = AppLocalizations.of(context);
 
-    showDialog(
+    await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Confirmer la promotion'),
+        title: Text(l10n.promoteConfirmTitle),
         content: Text(
-          'Voulez-vous vraiment faire de $userEmail un administrateur ?',
+          l10n.promoteConfirmContent(userEmail),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Annuler'),
+            child: Text(l10n.cancelButton),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -88,10 +90,10 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
               await _doPromoteToAdmin(userId, userEmail);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.white,
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
             ),
-            child: const Text('Promouvoir'),
+            child: Text(l10n.promoteButton),
           ),
         ],
       ),
@@ -99,6 +101,8 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
   }
 
   Future<void> _doPromoteToAdmin(String userId, String userEmail) async {
+    final l10n = AppLocalizations.of(context);
+
     setState(() {
       _successMessage = null;
       _errorMessage = null;
@@ -124,7 +128,7 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
       if (!mounted) return;
 
       setState(() {
-        _successMessage = '✅ $userEmail est maintenant administrateur !';
+        _successMessage = l10n.promoteSuccess(userEmail);
         _searchResults = [];
         _searchController.clear();
       });
@@ -134,8 +138,8 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
       // 3. Afficher message de succès
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('✅ $userEmail est maintenant administrateur !'),
-          backgroundColor: Colors.green,
+          content: Text(l10n.promoteSuccess(userEmail)),
+          backgroundColor: Theme.of(context).colorScheme.primary,
           duration: const Duration(seconds: 3),
         ),
       );
@@ -154,12 +158,10 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
 
       // 6. Afficher message d'info
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            '🔄 Veuillez vous reconnecter avec vos nouveaux droits',
-          ),
-          backgroundColor: Colors.blue,
-          duration: Duration(seconds: 3),
+        SnackBar(
+          content: Text(l10n.reconnectMessage),
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          duration: const Duration(seconds: 3),
         ),
       );
     } catch (e) {
@@ -174,7 +176,7 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('❌ Erreur: $e'),
-          backgroundColor: Colors.red,
+          backgroundColor: Theme.of(context).colorScheme.error,
           duration: const Duration(seconds: 5),
         ),
       );
@@ -216,13 +218,14 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
     bool isAdminInCollection,
     String userRole,
     bool roleMismatch,
+    AppLocalizations l10n,
   ) {
     if (roleMismatch) {
       // Admin dans admins/ mais pas le bon rôle dans users/
       return ElevatedButton.icon(
         onPressed: () => _forceRoleUpdate(userId, userEmail),
         icon: const Icon(Icons.sync_problem),
-        label: const Text('Corriger'),
+        label: Text(l10n.correctButton),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.orange,
           foregroundColor: Colors.white,
@@ -230,20 +233,20 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
       );
     } else if (userRole == 'admin') {
       // Déjà admin
-      return const Chip(
+      return Chip(
         label: Text(
-          'Admin',
-          style: TextStyle(fontSize: 12, color: Colors.white),
+          l10n.adminBadge,
+          style: const TextStyle(fontSize: 12, color: Colors.white),
         ),
         backgroundColor: Colors.red,
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       );
     } else {
       // Pas admin, bouton promouvoir
       return ElevatedButton.icon(
         onPressed: () => _promoteToAdmin(userDoc),
         icon: const Icon(Icons.person_add),
-        label: const Text('Promouvoir'),
+        label: Text(l10n.promoteButton),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.red,
           foregroundColor: Colors.white,
@@ -254,17 +257,21 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
 
   /// Forcer la mise à jour du rôle admin
   Future<void> _forceRoleUpdate(String userId, String userEmail) async {
+    final l10n = AppLocalizations.of(context);
+
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Correction du rôle'),
+        title: Text(l10n.roleUpdateTitle),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const CircularProgressIndicator(),
+            CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.primary,
+            ),
             const SizedBox(height: 16),
-            Text('Mise à jour du rôle de $userEmail...'),
+            Text(l10n.roleUpdateMessage(userEmail)),
           ],
         ),
       ),
@@ -284,8 +291,8 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('✅ Rôle de $userEmail corrigé !'),
-          backgroundColor: Colors.green,
+          content: Text(l10n.roleCorrected(userEmail)),
+          backgroundColor: Theme.of(context).colorScheme.primary,
           duration: const Duration(seconds: 3),
         ),
       );
@@ -301,7 +308,7 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('❌ Erreur: $e'),
-          backgroundColor: Colors.red,
+          backgroundColor: Theme.of(context).colorScheme.error,
           duration: const Duration(seconds: 5),
         ),
       );
@@ -310,35 +317,30 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Couleur primaire par défaut
-    final primaryColor = const Color(0xFF2196F3); // Bleu par défaut
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Créer un administrateur'),
-        backgroundColor: primaryColor,
-        foregroundColor: Colors.white,
-      ),
+      appBar: AppBar(title: Text(l10n.createAdmin)),
       body: Column(
         children: [
           // Barre de recherche
           Container(
             padding: const EdgeInsets.all(16.0),
-            color: Colors.grey.shade100,
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
-                      labelText: 'Email ou nom',
+                      labelText: l10n.emailLabel,
                       hintText: 'recherche@example.com',
                       prefixIcon: const Icon(Icons.search),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: Theme.of(context).colorScheme.surface,
                     ),
                     onSubmitted: (_) => _searchUsers(),
                   ),
@@ -347,21 +349,16 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
                 ElevatedButton.icon(
                   onPressed: _isSearching ? null : _searchUsers,
                   icon: _isSearching
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 20,
                           height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
                         )
                       : const Icon(Icons.search),
-                  label: const Text('Rechercher'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryColor,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
-                    ),
-                  ),
+                  label: Text(l10n.searchButton),
                 ),
               ],
             ),
@@ -373,18 +370,25 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
               padding: const EdgeInsets.all(12),
               margin: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.red.shade50,
+                color: Theme.of(context).colorScheme.errorContainer,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.red.shade200),
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.onErrorContainer,
+                ),
               ),
               child: Row(
                 children: [
-                  Icon(Icons.error_outline, color: Colors.red.shade700),
+                  Icon(
+                    Icons.error_outline,
+                    color: Theme.of(context).colorScheme.onErrorContainer,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       _errorMessage!,
-                      style: TextStyle(color: Colors.red.shade700),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onErrorContainer,
+                      ),
                     ),
                   ),
                 ],
@@ -396,21 +400,25 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
               padding: const EdgeInsets.all(12),
               margin: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.green.shade50,
+                color: Theme.of(context).colorScheme.primaryContainer,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.green.shade200),
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
               ),
               child: Row(
                 children: [
                   Icon(
                     Icons.check_circle_outline,
-                    color: Colors.green.shade700,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       _successMessage!,
-                      style: TextStyle(color: Colors.green.shade700),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      ),
                     ),
                   ),
                 ],
@@ -427,21 +435,25 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
                         Icon(
                           Icons.person_search,
                           size: 64,
-                          color: Colors.grey.shade400,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'Recherchez un utilisateur par email',
+                          l10n.searchUserHint,
                           style: TextStyle(
-                            color: Colors.grey.shade600,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                             fontSize: 16,
                           ),
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'puis cliquez sur "Promouvoir" pour en faire un admin',
+                          l10n.promoSubtext,
                           style: TextStyle(
-                            color: Colors.grey.shade500,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant.withOpacity(0.7),
                             fontSize: 14,
                           ),
                           textAlign: TextAlign.center,
@@ -454,7 +466,7 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
                     itemBuilder: (context, index) {
                       final userDoc = _searchResults[index];
                       final userData = userDoc.data() as Map<String, dynamic>;
-                      final email = userData['email'] ?? 'Inconnu';
+                      final email = userData['email'] ?? l10n.unknownUser;
                       final displayName = userData['display_name'] ?? email;
                       final userId = userDoc.id;
 
@@ -478,15 +490,23 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
                                 child: ListTile(
                                   leading: CircleAvatar(
                                     backgroundColor: isAdminInCollection
-                                        ? Colors.red.shade100
-                                        : primaryColor.withOpacity(0.1),
+                                        ? Theme.of(
+                                            context,
+                                          ).colorScheme.errorContainer
+                                        : Theme.of(
+                                            context,
+                                          ).colorScheme.primaryContainer,
                                     child: Icon(
                                       isAdminInCollection
                                           ? Icons.admin_panel_settings
                                           : Icons.person,
                                       color: isAdminInCollection
-                                          ? Colors.red.shade700
-                                          : primaryColor,
+                                          ? Theme.of(
+                                              context,
+                                            ).colorScheme.onErrorContainer
+                                          : Theme.of(
+                                              context,
+                                            ).colorScheme.onPrimaryContainer,
                                     ),
                                   ),
                                   title: Text(displayName),
@@ -495,10 +515,10 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
                                       Text(email),
                                       if (roleMismatch) ...[
                                         const SizedBox(width: 8),
-                                        const Chip(
+                                        Chip(
                                           label: Text(
-                                            'Rôle incorrect',
-                                            style: TextStyle(
+                                            l10n.roleMismatch,
+                                            style: const TextStyle(
                                               fontSize: 10,
                                               color: Colors.white,
                                             ),
@@ -518,6 +538,7 @@ class _CreateAdminScreenState extends ConsumerState<CreateAdminScreen> {
                                     isAdminInCollection,
                                     userRole,
                                     roleMismatch,
+                                    l10n,
                                   ),
                                 ),
                               );

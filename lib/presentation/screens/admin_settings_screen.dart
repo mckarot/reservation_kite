@@ -112,7 +112,7 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
 
     try {
       // Vérifier les permissions
-      LocationPermission permission = await Geolocator.checkPermission();
+      var permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {

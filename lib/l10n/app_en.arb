@@ -417,5 +417,48 @@
   "themeApplied": "Theme applied!",
   "colorsReset": "Colors reset",
   "schoolSettings": "School settings",
-  "weatherLocationSection": "Weather - Spot Location"
+  "weatherLocationSection": "Weather - Spot Location",
+  "createAdmin": "Create an administrator",
+  "searchButton": "Search",
+  "searchUserHint": "Search for a user by email",
+  "promoteButton": "Promote",
+  "correctButton": "Correct",
+  "roleMismatch": "Role mismatch",
+  "confirmAction": "Confirm action",
+  "promoteConfirmTitle": "Confirm promotion",
+  "promoteConfirmContent": "Do you really want to make {userEmail} an administrator?",
+  "@promoteConfirmContent": {
+    "placeholders": {
+      "userEmail": {"type": "String"}
+    }
+  },
+  "promoteSuccess": "✅ {userEmail} is now an administrator!",
+  "@promoteSuccess": {
+    "placeholders": {
+      "userEmail": {"type": "String"}
+    }
+  },
+  "reconnectMessage": "🔄 Please reconnect with your new rights",
+  "roleUpdateTitle": "Role correction",
+  "roleUpdateMessage": "Updating role for {userEmail}...",
+  "@roleUpdateMessage": {
+    "placeholders": {
+      "userEmail": {"type": "String"}
+    }
+  },
+  "roleCorrected": "✅ Role of {userEmail} corrected!",
+  "@roleCorrected": {
+    "placeholders": {
+      "userEmail": {"type": "String"}
+    }
+  },
+  "searchError": "Search error: {error}",
+  "@searchError": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "promoSubtext": "then click \"Promote\" to make them an admin",
+  "adminBadge": "Admin",
+  "unknownUser": "Unknown"
 }

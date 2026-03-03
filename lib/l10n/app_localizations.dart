@@ -2107,6 +2107,114 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Météo - Localisation du spot'**
   String get weatherLocationSection;
+
+  /// No description provided for @createAdmin.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer un administrateur'**
+  String get createAdmin;
+
+  /// No description provided for @searchButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher'**
+  String get searchButton;
+
+  /// No description provided for @searchUserHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recherchez un utilisateur par email'**
+  String get searchUserHint;
+
+  /// No description provided for @promoteButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Promouvoir'**
+  String get promoteButton;
+
+  /// No description provided for @correctButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Corriger'**
+  String get correctButton;
+
+  /// No description provided for @roleMismatch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rôle incorrect'**
+  String get roleMismatch;
+
+  /// No description provided for @confirmAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confirmer l\'action'**
+  String get confirmAction;
+
+  /// No description provided for @promoteConfirmTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confirmer la promotion'**
+  String get promoteConfirmTitle;
+
+  /// No description provided for @promoteConfirmContent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voulez-vous vraiment faire de {userEmail} un administrateur ?'**
+  String promoteConfirmContent(String userEmail);
+
+  /// No description provided for @promoteSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'✅ {userEmail} est maintenant administrateur !'**
+  String promoteSuccess(String userEmail);
+
+  /// No description provided for @reconnectMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'🔄 Veuillez vous reconnecter avec vos nouveaux droits'**
+  String get reconnectMessage;
+
+  /// No description provided for @roleUpdateTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Correction du rôle'**
+  String get roleUpdateTitle;
+
+  /// No description provided for @roleUpdateMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mise à jour du rôle de {userEmail}...'**
+  String roleUpdateMessage(String userEmail);
+
+  /// No description provided for @roleCorrected.
+  ///
+  /// In fr, this message translates to:
+  /// **'✅ Rôle de {userEmail} corrigé !'**
+  String roleCorrected(String userEmail);
+
+  /// No description provided for @searchError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Erreur de recherche : {error}'**
+  String searchError(String error);
+
+  /// No description provided for @promoSubtext.
+  ///
+  /// In fr, this message translates to:
+  /// **'puis cliquez sur \"Promouvoir\" pour en faire un admin'**
+  String get promoSubtext;
+
+  /// No description provided for @adminBadge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Admin'**
+  String get adminBadge;
+
+  /// No description provided for @unknownUser.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inconnu'**
+  String get unknownUser;
 }
 
 class _AppLocalizationsDelegate

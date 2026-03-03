@@ -13,7 +13,6 @@ import '../../domain/models/app_theme_settings.dart';
 import '../../domain/models/staff.dart';
 import '../../domain/models/staff_unavailability.dart';
 import '../../l10n/app_localizations.dart';
-import '../../scripts/firebase_init_script.dart';
 import '../providers/staff_notifier.dart';
 import '../providers/theme_notifier.dart';
 import '../providers/unavailability_notifier.dart';
@@ -106,46 +105,6 @@ class AdminScreen extends ConsumerWidget {
                   ),
                 ],
               ),
-            ),
-          ),
-          
-          // Bouton d'initialisation Firebase (DEBUG ONLY)
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-            decoration: BoxDecoration(
-              color: Colors.orange.shade50,
-              border: Border(
-                top: BorderSide(color: Colors.orange.shade200, width: 1),
-              ),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.settings_backup_restore, size: 20, color: Colors.orange.shade700),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        '🔧 Init Firebase',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      Text(
-                        'Crée admins, settings, credit_packs',
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const FirebaseInitButton(),
-              ],
             ),
           ),
         ],

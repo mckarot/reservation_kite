@@ -417,5 +417,48 @@
   "themeApplied": "主题已应用！",
   "colorsReset": "颜色已重置",
   "schoolSettings": "学校设置",
-  "weatherLocationSection": "天气 - 地点位置"
+  "weatherLocationSection": "天气 - 地点位置",
+  "createAdmin": "创建管理员",
+  "searchButton": "搜索",
+  "searchUserHint": "通过电子邮件搜索用户",
+  "promoteButton": "晋升",
+  "correctButton": "纠正",
+  "roleMismatch": "角色不匹配",
+  "confirmAction": "确认操作",
+  "promoteConfirmTitle": "确认晋升",
+  "promoteConfirmContent": "您确定要将 {userEmail} 设为管理员吗？",
+  "@promoteConfirmContent": {
+    "placeholders": {
+      "userEmail": {"type": "String"}
+    }
+  },
+  "promoteSuccess": "✅ {userEmail} 现在是管理员了！",
+  "@promoteSuccess": {
+    "placeholders": {
+      "userEmail": {"type": "String"}
+    }
+  },
+  "reconnectMessage": "🔄 请使用新权限重新连接",
+  "roleUpdateTitle": "角色纠正",
+  "roleUpdateMessage": "正在更新 {userEmail} 的角色...",
+  "@roleUpdateMessage": {
+    "placeholders": {
+      "userEmail": {"type": "String"}
+    }
+  },
+  "roleCorrected": "✅ {userEmail} 的角色已纠正！",
+  "@roleCorrected": {
+    "placeholders": {
+      "userEmail": {"type": "String"}
+    }
+  },
+  "searchError": "搜索错误：{error}",
+  "@searchError": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "promoSubtext": "然后点击\"晋升\"使其成为管理员",
+  "adminBadge": "管理员",
+  "unknownUser": "未知"
 }

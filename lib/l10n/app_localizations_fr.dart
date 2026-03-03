@@ -1044,4 +1044,70 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get weatherLocationSection => 'Météo - Localisation du spot';
+
+  @override
+  String get createAdmin => 'Créer un administrateur';
+
+  @override
+  String get searchButton => 'Rechercher';
+
+  @override
+  String get searchUserHint => 'Recherchez un utilisateur par email';
+
+  @override
+  String get promoteButton => 'Promouvoir';
+
+  @override
+  String get correctButton => 'Corriger';
+
+  @override
+  String get roleMismatch => 'Rôle incorrect';
+
+  @override
+  String get confirmAction => 'Confirmer l\'action';
+
+  @override
+  String get promoteConfirmTitle => 'Confirmer la promotion';
+
+  @override
+  String promoteConfirmContent(String userEmail) {
+    return 'Voulez-vous vraiment faire de $userEmail un administrateur ?';
+  }
+
+  @override
+  String promoteSuccess(String userEmail) {
+    return '✅ $userEmail est maintenant administrateur !';
+  }
+
+  @override
+  String get reconnectMessage =>
+      '🔄 Veuillez vous reconnecter avec vos nouveaux droits';
+
+  @override
+  String get roleUpdateTitle => 'Correction du rôle';
+
+  @override
+  String roleUpdateMessage(String userEmail) {
+    return 'Mise à jour du rôle de $userEmail...';
+  }
+
+  @override
+  String roleCorrected(String userEmail) {
+    return '✅ Rôle de $userEmail corrigé !';
+  }
+
+  @override
+  String searchError(String error) {
+    return 'Erreur de recherche : $error';
+  }
+
+  @override
+  String get promoSubtext =>
+      'puis cliquez sur \"Promouvoir\" pour en faire un admin';
+
+  @override
+  String get adminBadge => 'Admin';
+
+  @override
+  String get unknownUser => 'Inconnu';
 }

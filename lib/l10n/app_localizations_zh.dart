@@ -1033,4 +1033,68 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get weatherLocationSection => '天气 - 地点位置';
+
+  @override
+  String get createAdmin => '创建管理员';
+
+  @override
+  String get searchButton => '搜索';
+
+  @override
+  String get searchUserHint => '通过电子邮件搜索用户';
+
+  @override
+  String get promoteButton => '晋升';
+
+  @override
+  String get correctButton => '纠正';
+
+  @override
+  String get roleMismatch => '角色不匹配';
+
+  @override
+  String get confirmAction => '确认操作';
+
+  @override
+  String get promoteConfirmTitle => '确认晋升';
+
+  @override
+  String promoteConfirmContent(String userEmail) {
+    return '您确定要将 $userEmail 设为管理员吗？';
+  }
+
+  @override
+  String promoteSuccess(String userEmail) {
+    return '✅ $userEmail 现在是管理员了！';
+  }
+
+  @override
+  String get reconnectMessage => '🔄 请使用新权限重新连接';
+
+  @override
+  String get roleUpdateTitle => '角色纠正';
+
+  @override
+  String roleUpdateMessage(String userEmail) {
+    return '正在更新 $userEmail 的角色...';
+  }
+
+  @override
+  String roleCorrected(String userEmail) {
+    return '✅ $userEmail 的角色已纠正！';
+  }
+
+  @override
+  String searchError(String error) {
+    return '搜索错误：$error';
+  }
+
+  @override
+  String get promoSubtext => '然后点击\"晋升\"使其成为管理员';
+
+  @override
+  String get adminBadge => '管理员';
+
+  @override
+  String get unknownUser => '未知';
 }

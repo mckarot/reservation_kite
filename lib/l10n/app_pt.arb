@@ -417,5 +417,48 @@
   "themeApplied": "Tema aplicado!",
   "colorsReset": "Cores redefinidas",
   "schoolSettings": "Configurações da escola",
-  "weatherLocationSection": "Clima - Localização do spot"
+  "weatherLocationSection": "Clima - Localização do spot",
+  "createAdmin": "Criar um administrador",
+  "searchButton": "Pesquisar",
+  "searchUserHint": "Pesquisar um usuário por e-mail",
+  "promoteButton": "Promover",
+  "correctButton": "Corrigir",
+  "roleMismatch": "Função incorreta",
+  "confirmAction": "Confirmar ação",
+  "promoteConfirmTitle": "Confirmar promoção",
+  "promoteConfirmContent": "Você realmente quer tornar {userEmail} um administrador?",
+  "@promoteConfirmContent": {
+    "placeholders": {
+      "userEmail": {"type": "String"}
+    }
+  },
+  "promoteSuccess": "✅ {userEmail} agora é um administrador!",
+  "@promoteSuccess": {
+    "placeholders": {
+      "userEmail": {"type": "String"}
+    }
+  },
+  "reconnectMessage": "🔄 Reconecte-se com seus novos direitos",
+  "roleUpdateTitle": "Correção de função",
+  "roleUpdateMessage": "Atualizando função para {userEmail}...",
+  "@roleUpdateMessage": {
+    "placeholders": {
+      "userEmail": {"type": "String"}
+    }
+  },
+  "roleCorrected": "✅ Função de {userEmail} corrigida!",
+  "@roleCorrected": {
+    "placeholders": {
+      "userEmail": {"type": "String"}
+    }
+  },
+  "searchError": "Erro de pesquisa: {error}",
+  "@searchError": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "promoSubtext": "depois clique em \"Promover\" para torná-lo administrador",
+  "adminBadge": "Admin",
+  "unknownUser": "Desconhecido"
 }
