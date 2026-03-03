@@ -6,6 +6,10 @@ import 'package:reservation_kite/presentation/screens/admin_settings_screen.dart
 import 'package:reservation_kite/presentation/screens/booking_screen.dart';
 import 'package:reservation_kite/presentation/screens/create_admin_screen.dart';
 import 'package:reservation_kite/presentation/screens/equipment_admin_screen.dart';
+import 'package:reservation_kite/presentation/screens/equipment_booking_screen.dart';
+import 'package:reservation_kite/presentation/screens/equipment_init_screen.dart';
+import 'package:reservation_kite/presentation/screens/fix_equipment_data_screen.dart';
+import 'package:reservation_kite/presentation/screens/firestore_debug_screen.dart';
 import 'package:reservation_kite/presentation/screens/staff_admin_screen.dart';
 import 'package:reservation_kite/presentation/screens/user_directory_screen.dart';
 import '../../data/providers/repository_providers.dart';
@@ -64,6 +68,18 @@ class AdminScreen extends ConsumerWidget {
         route: const EquipmentAdminScreen(),
       ),
       _DashboardItem(
+        title: '🏄 Location Matériel',
+        icon: Icons.kitesurfing,
+        route: const EquipmentBookingScreen(),
+        color: Colors.blue,
+      ),
+      _DashboardItem(
+        title: '🔧 Init Matériel',
+        icon: Icons.build_circle,
+        route: const EquipmentInitScreen(),
+        color: Colors.orange,
+      ),
+      _DashboardItem(
         title: l10n.calendarBookings,
         icon: Icons.calendar_month,
         route: const BookingScreen(),
@@ -74,6 +90,26 @@ class AdminScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(l10n.adminScreenTitle),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.build),
+            tooltip: 'Corriger Equipment',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const FixEquipmentDataScreen()),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.bug_report),
+            tooltip: 'Debug Firestore',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const FirestoreDebugScreen()),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () => ref.read(authRepositoryProvider).signOut(),

@@ -601,7 +601,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get materialIncident => 'Incidente de equipamento?';
 
   @override
-  String get selectEquipmentIssue => 'Selecionar equipamento com problema';
+  String get selectEquipmentIssue => 'Selecionar problema de equipamento';
 
   @override
   String get maintenance => 'Manutenção';
@@ -670,7 +670,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get offSystem => 'Fora do Sistema';
 
   @override
-  String get fullDay => 'Dia inteiro';
+  String get fullDay => 'Dia completo';
 
   @override
   String get reservations => 'Reservas';
@@ -806,22 +806,22 @@ class AppLocalizationsPt extends AppLocalizations {
   String get sizeLabel => 'Tamanho (ex: 9m, 138cm)';
 
   @override
-  String get statusAvailable => 'DISPONÍVEL';
+  String get statusAvailable => 'Disponível';
 
   @override
-  String get statusMaintenance => 'MANUTENÇÃO';
+  String get statusMaintenance => 'Manutenção';
 
   @override
   String get statusDamaged => 'DANIFICADO';
 
   @override
-  String get makeAvailable => 'Tornar Disponível';
+  String get makeAvailable => 'Tornar disponível';
 
   @override
-  String get setMaintenance => 'Colocar em Manutenção';
+  String get setMaintenance => 'Colocar em manutenção';
 
   @override
-  String get setDamaged => 'Declarar como Danificado';
+  String get setDamaged => 'Marcar como danificado';
 
   @override
   String get deleteButton => 'Eliminar';
@@ -1109,4 +1109,22 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get unknownUser => 'Desconhecido';
+
+  @override
+  String get equipmentRental => 'Aluguel de equipamento';
+
+  @override
+  String get rentButton => 'Alugar';
+
+  @override
+  String get unavailable => 'Indisponível';
+
+  @override
+  String get noEquipmentAvailable => 'Nenhum equipamento disponível';
+
+  @override
+  String get available => 'disponível(eis)';
+
+  @override
+  String get confirmButton => 'Confirmar';
 }

@@ -166,7 +166,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'The date is too far for accurate weather forecast.';
 
   @override
-  String get confirmBooking => 'Confirm booking';
+  String get confirmBooking => 'Confirm Booking';
 
   @override
   String get cancelBooking => 'Cancel booking';
@@ -599,7 +599,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get materialIncident => 'Equipment incident?';
 
   @override
-  String get selectEquipmentIssue => 'Select equipment with issue';
+  String get selectEquipmentIssue => 'Select equipment issue';
 
   @override
   String get maintenance => 'Maintenance';
@@ -668,7 +668,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get offSystem => 'Off System';
 
   @override
-  String get fullDay => 'Full day';
+  String get fullDay => 'Full Day';
 
   @override
   String get reservations => 'Bookings';
@@ -804,22 +804,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sizeLabel => 'Size (e.g., 9m, 138cm)';
 
   @override
-  String get statusAvailable => 'AVAILABLE';
+  String get statusAvailable => 'Available';
 
   @override
-  String get statusMaintenance => 'MAINTENANCE';
+  String get statusMaintenance => 'Maintenance';
 
   @override
   String get statusDamaged => 'DAMAGED';
 
   @override
-  String get makeAvailable => 'Make Available';
+  String get makeAvailable => 'Make available';
 
   @override
-  String get setMaintenance => 'Set to Maintenance';
+  String get setMaintenance => 'Set maintenance';
 
   @override
-  String get setDamaged => 'Mark as Damaged';
+  String get setDamaged => 'Mark as damaged';
 
   @override
   String get deleteButton => 'Delete';
@@ -1106,4 +1106,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unknownUser => 'Unknown';
+
+  @override
+  String get equipmentRental => 'Equipment Rental';
+
+  @override
+  String get rentButton => 'Rent';
+
+  @override
+  String get unavailable => 'Unavailable';
+
+  @override
+  String get noEquipmentAvailable => 'No equipment available';
+
+  @override
+  String get available => 'available';
+
+  @override
+  String get confirmButton => 'Confirm';
 }

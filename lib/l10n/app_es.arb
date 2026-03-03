@@ -460,5 +460,20 @@
   },
   "promoSubtext": "luego haz clic en \"Promover\" para hacerlo administrador",
   "adminBadge": "Admin",
-  "unknownUser": "Desconocido"
+  "unknownUser": "Desconocido",
+  "equipmentRental": "Alquiler de equipo",
+  "rentButton": "Alquilar",
+  "confirmBooking": "Confirmar reserva",
+  "bookingConfirmed": "¡Reserva confirmada!",
+  "unavailable": "No disponible",
+  "noEquipmentAvailable": "No hay equipo disponible",
+  "selectEquipmentIssue": "Seleccionar problema de equipo",
+  "makeAvailable": "Hacer disponible",
+  "setMaintenance": "Poner en mantenimiento",
+  "setDamaged": "Marcar como dañado",
+  "statusAvailable": "Disponible",
+  "statusMaintenance": "Mantenimiento",
+  "fullDay": "Día completo",
+  "available": "disponible(s)",
+  "confirmButton": "Confirmar"
 }

@@ -102,10 +102,33 @@
     - `category_id`: string (FK -> equipment_categories/{id})
     - `brand`: string
     - `model`: string
-    - `size`: string
+    - `size`: string (ex: "12", "9", "10.5")
     - `status`: string ['available', 'maintenance', 'damaged']
     - `notes`: string
+    - `total_quantity`: int (default: 1) - Quantité totale pour ce matériel
     - `updated_at`: serverTimestamp
+
+## COLLECTION: equipment_bookings
+- **Description**: Réservations de matériel effectuées par les élèves.
+- **Chemin**: `/equipment_bookings/{bookingId}`
+- **Champs**:
+    - `user_id`: string (FK -> users.uid)
+    - `user_name`: string
+    - `user_email`: string
+    - `equipment_id`: string (FK -> equipment.id)
+    - `equipment_type`: string (ex: 'kite', 'foil')
+    - `equipment_brand`: string
+    - `equipment_model`: string
+    - `equipment_size`: string
+    - `date_string`: string (format 'yyyy-MM-dd')
+    - `date_timestamp`: timestamp
+    - `slot`: string ['morning', 'afternoon', 'full_day']
+    - `status`: string ['confirmed', 'cancelled', 'completed']
+    - `created_at`: serverTimestamp
+    - `updated_at`: serverTimestamp
+    - `created_by`: string
+    - `session_id`: string?
+    - `notes`: string?
 
 ## COLLECTION: transactions
 - **Description**: Historique des paiements manuels et achats.

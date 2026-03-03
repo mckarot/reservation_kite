@@ -13,7 +13,10 @@ import '../../domain/repositories/settings_repository.dart';
 import '../../domain/repositories/staff_repository.dart';
 import '../../domain/repositories/transaction_repository.dart';
 import '../../domain/repositories/user_repository.dart';
+import '../../domain/repositories/equipment_booking_repository.dart';
+
 import '../repositories/firebase_auth_repository.dart';
+import '../repositories/firebase_equipment_booking_repository.dart';
 import '../repositories/firestore_availability_repository.dart';
 import '../repositories/firestore_credit_pack_repository.dart';
 import '../repositories/firestore_equipment_repository.dart';
@@ -83,4 +86,9 @@ AvailabilityRepository availabilityRepository(AvailabilityRepositoryRef ref) {
 @riverpod
 TransactionRepository transactionRepository(TransactionRepositoryRef ref) {
   return FirestoreTransactionRepository(FirebaseFirestore.instance);
+}
+
+@riverpod
+EquipmentBookingRepository equipmentBookingRepository(EquipmentBookingRepositoryRef ref) {
+  return FirebaseEquipmentBookingRepository(FirebaseFirestore.instance);
 }

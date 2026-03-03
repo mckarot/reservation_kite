@@ -407,7 +407,7 @@ abstract class AppLocalizations {
   /// No description provided for @confirmBooking.
   ///
   /// In fr, this message translates to:
-  /// **'Confirmer la réservation'**
+  /// **'Confirmer la location'**
   String get confirmBooking;
 
   /// No description provided for @cancelBooking.
@@ -1253,7 +1253,7 @@ abstract class AppLocalizations {
   /// No description provided for @selectEquipmentIssue.
   ///
   /// In fr, this message translates to:
-  /// **'Sélectionner le matériel avec un souci'**
+  /// **'Sélectionner un problème d\'équipement'**
   String get selectEquipmentIssue;
 
   /// No description provided for @maintenance.
@@ -1385,7 +1385,7 @@ abstract class AppLocalizations {
   /// No description provided for @fullDay.
   ///
   /// In fr, this message translates to:
-  /// **'Journée entière'**
+  /// **'Journée'**
   String get fullDay;
 
   /// No description provided for @reservations.
@@ -1655,13 +1655,13 @@ abstract class AppLocalizations {
   /// No description provided for @statusAvailable.
   ///
   /// In fr, this message translates to:
-  /// **'DISPO'**
+  /// **'Disponible'**
   String get statusAvailable;
 
   /// No description provided for @statusMaintenance.
   ///
   /// In fr, this message translates to:
-  /// **'MAINTENANCE'**
+  /// **'Maintenance'**
   String get statusMaintenance;
 
   /// No description provided for @statusDamaged.
@@ -1673,19 +1673,19 @@ abstract class AppLocalizations {
   /// No description provided for @makeAvailable.
   ///
   /// In fr, this message translates to:
-  /// **'Rendre Disponible'**
+  /// **'Rendre disponible'**
   String get makeAvailable;
 
   /// No description provided for @setMaintenance.
   ///
   /// In fr, this message translates to:
-  /// **'Mettre en Maintenance'**
+  /// **'Mettre en maintenance'**
   String get setMaintenance;
 
   /// No description provided for @setDamaged.
   ///
   /// In fr, this message translates to:
-  /// **'Déclarer Hors Service'**
+  /// **'Marquer comme endommagé'**
   String get setDamaged;
 
   /// No description provided for @deleteButton.
@@ -2215,6 +2215,42 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Inconnu'**
   String get unknownUser;
+
+  /// No description provided for @equipmentRental.
+  ///
+  /// In fr, this message translates to:
+  /// **'Location de matériel'**
+  String get equipmentRental;
+
+  /// No description provided for @rentButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Louer'**
+  String get rentButton;
+
+  /// No description provided for @unavailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indisponible'**
+  String get unavailable;
+
+  /// No description provided for @noEquipmentAvailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun équipement disponible'**
+  String get noEquipmentAvailable;
+
+  /// No description provided for @available.
+  ///
+  /// In fr, this message translates to:
+  /// **'dispo(s)'**
+  String get available;
+
+  /// No description provided for @confirmButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confirmer'**
+  String get confirmButton;
 }
 
 class _AppLocalizationsDelegate

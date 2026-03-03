@@ -170,9 +170,47 @@ service cloud.firestore {
     // COLLECTION: credit_packs, equipment, products
     // ============================================================
     match /credit_packs/{id} { allow read: if true; allow write: if isAdmin(); }
-    match /equipment/{id} { allow read: if true; allow write: if isAdmin(); }
+    match /equipment/{id} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin() || isStaff();
+    }
     match /equipment_categories/{id} { allow read: if true; allow write: if isAdmin(); }
     match /products/{id} { allow read: if true; allow write: if isAdmin(); }
+
+    // ============================================================
+    // COLLECTION: equipment_bookings (AJOUTÉ POUR LOCATION MATÉRIEL)
+    // ============================================================
+    match /equipment_bookings/{bookingId} {
+      // Lecture : propriétaire, staff ou admin
+      allow read: if isAuthenticated() && (
+        isOwner(resource.data.user_id) || isStaff() || isAdmin()
+      );
+
+      // Création : élève pour lui-même, ou staff avec session_id
+      allow create: if isAuthenticated() && (
+        (isOwner(request.resource.data.user_id) &&
+          request.resource.data.keys().hasAll([
+            'user_id', 'equipment_id', 'date_string',
+            'date_timestamp', 'slot', 'status'
+          ]) &&
+          request.resource.data.status == 'confirmed'
+        ) ||
+        (isStaff() && request.resource.data.session_id != null)
+      );
+
+      // Mise à jour : élève peut seulement annuler sa propre réservation
+      allow update: if isAuthenticated() && (
+        (isOwner(resource.data.user_id) &&
+          request.resource.data.status == 'cancelled' &&
+          request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['status', 'updated_at'])
+        ) ||
+        isStaff() || isAdmin()
+      );
+
+      // Suppression : admin seulement
+      allow delete: if isAdmin();
+    }
 
     // ============================================================
     // COLLECTION: notifications

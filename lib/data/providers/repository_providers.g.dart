@@ -190,5 +190,23 @@ final transactionRepositoryProvider =
 
 typedef TransactionRepositoryRef
     = AutoDisposeProviderRef<TransactionRepository>;
+String _$equipmentBookingRepositoryHash() =>
+    r'638ef1a62fdadcb2667df9aa58c60f34766486f2';
+
+/// See also [equipmentBookingRepository].
+@ProviderFor(equipmentBookingRepository)
+final equipmentBookingRepositoryProvider =
+    AutoDisposeProvider<EquipmentBookingRepository>.internal(
+  equipmentBookingRepository,
+  name: r'equipmentBookingRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$equipmentBookingRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef EquipmentBookingRepositoryRef
+    = AutoDisposeProviderRef<EquipmentBookingRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

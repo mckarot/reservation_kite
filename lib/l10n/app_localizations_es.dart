@@ -602,7 +602,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get materialIncident => '¿Incidente de equipo?';
 
   @override
-  String get selectEquipmentIssue => 'Seleccionar equipo con problema';
+  String get selectEquipmentIssue => 'Seleccionar problema de equipo';
 
   @override
   String get maintenance => 'Mantenimiento';
@@ -807,22 +807,22 @@ class AppLocalizationsEs extends AppLocalizations {
   String get sizeLabel => 'Tamaño (ej: 9m, 138cm)';
 
   @override
-  String get statusAvailable => 'DISPONIBLE';
+  String get statusAvailable => 'Disponible';
 
   @override
-  String get statusMaintenance => 'MANTENIMIENTO';
+  String get statusMaintenance => 'Mantenimiento';
 
   @override
   String get statusDamaged => 'AVERIADO';
 
   @override
-  String get makeAvailable => 'Hacer Disponible';
+  String get makeAvailable => 'Hacer disponible';
 
   @override
-  String get setMaintenance => 'Poner en Mantenimiento';
+  String get setMaintenance => 'Poner en mantenimiento';
 
   @override
-  String get setDamaged => 'Declarar Averiado';
+  String get setDamaged => 'Marcar como dañado';
 
   @override
   String get deleteButton => 'Eliminar';
@@ -1111,4 +1111,22 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get unknownUser => 'Desconocido';
+
+  @override
+  String get equipmentRental => 'Alquiler de equipo';
+
+  @override
+  String get rentButton => 'Alquilar';
+
+  @override
+  String get unavailable => 'No disponible';
+
+  @override
+  String get noEquipmentAvailable => 'No hay equipo disponible';
+
+  @override
+  String get available => 'disponible(s)';
+
+  @override
+  String get confirmButton => 'Confirmar';
 }

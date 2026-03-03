@@ -167,7 +167,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'La date est trop lointaine pour une prévision météo précise.';
 
   @override
-  String get confirmBooking => 'Confirmer la réservation';
+  String get confirmBooking => 'Confirmer la location';
 
   @override
   String get cancelBooking => 'Annuler la réservation';
@@ -601,7 +601,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get materialIncident => 'Incident Matériel ?';
 
   @override
-  String get selectEquipmentIssue => 'Sélectionner le matériel avec un souci';
+  String get selectEquipmentIssue => 'Sélectionner un problème d\'équipement';
 
   @override
   String get maintenance => 'Maintenance';
@@ -670,7 +670,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get offSystem => 'Hors Système';
 
   @override
-  String get fullDay => 'Journée entière';
+  String get fullDay => 'Journée';
 
   @override
   String get reservations => 'Réservations';
@@ -806,22 +806,22 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sizeLabel => 'Taille (ex: 9m, 138cm)';
 
   @override
-  String get statusAvailable => 'DISPO';
+  String get statusAvailable => 'Disponible';
 
   @override
-  String get statusMaintenance => 'MAINTENANCE';
+  String get statusMaintenance => 'Maintenance';
 
   @override
   String get statusDamaged => 'HORS SERVICE';
 
   @override
-  String get makeAvailable => 'Rendre Disponible';
+  String get makeAvailable => 'Rendre disponible';
 
   @override
-  String get setMaintenance => 'Mettre en Maintenance';
+  String get setMaintenance => 'Mettre en maintenance';
 
   @override
-  String get setDamaged => 'Déclarer Hors Service';
+  String get setDamaged => 'Marquer comme endommagé';
 
   @override
   String get deleteButton => 'Supprimer';
@@ -1110,4 +1110,22 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get unknownUser => 'Inconnu';
+
+  @override
+  String get equipmentRental => 'Location de matériel';
+
+  @override
+  String get rentButton => 'Louer';
+
+  @override
+  String get unavailable => 'Indisponible';
+
+  @override
+  String get noEquipmentAvailable => 'Aucun équipement disponible';
+
+  @override
+  String get available => 'dispo(s)';
+
+  @override
+  String get confirmButton => 'Confirmer';
 }

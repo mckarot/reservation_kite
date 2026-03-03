@@ -460,5 +460,20 @@
   },
   "promoSubtext": "然后点击\"晋升\"使其成为管理员",
   "adminBadge": "管理员",
-  "unknownUser": "未知"
+  "unknownUser": "未知",
+  "equipmentRental": "设备租赁",
+  "rentButton": "租赁",
+  "confirmBooking": "确认预订",
+  "bookingConfirmed": "预订已确认！",
+  "unavailable": "不可用",
+  "noEquipmentAvailable": "无可用设备",
+  "selectEquipmentIssue": "选择设备问题",
+  "makeAvailable": "设为可用",
+  "setMaintenance": "设为维护",
+  "setDamaged": "标记为损坏",
+  "statusAvailable": "可用",
+  "statusMaintenance": "维护中",
+  "fullDay": "全天",
+  "available": "可用",
+  "confirmButton": "确认"
 }

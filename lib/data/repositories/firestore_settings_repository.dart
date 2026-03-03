@@ -34,7 +34,7 @@ class FirestoreSettingsRepository implements SettingsRepository {
     await _doc.set({
       'weather_latitude': latitude,
       'weather_longitude': longitude,
-      'weather_location_name': ?locationName,
+      if (locationName != null) 'weather_location_name': locationName,
     }, SetOptions(merge: true));
   }
 }

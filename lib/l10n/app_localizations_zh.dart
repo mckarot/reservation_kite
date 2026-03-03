@@ -594,7 +594,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get materialIncident => '设备事故？';
 
   @override
-  String get selectEquipmentIssue => '选择有问题的设备';
+  String get selectEquipmentIssue => '选择设备问题';
 
   @override
   String get maintenance => '维护';
@@ -1097,4 +1097,22 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get unknownUser => '未知';
+
+  @override
+  String get equipmentRental => '设备租赁';
+
+  @override
+  String get rentButton => '租赁';
+
+  @override
+  String get unavailable => '不可用';
+
+  @override
+  String get noEquipmentAvailable => '无可用设备';
+
+  @override
+  String get available => '可用';
+
+  @override
+  String get confirmButton => '确认';
 }

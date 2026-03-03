@@ -61,17 +61,17 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
               data: (items) {
                 print('📋 Équipements chargés: ${items.length}');
                 print('🔍 Catégorie sélectionnée: $_selectedCategoryId');
-                
+
                 final filtered = _selectedCategoryId == null
                     ? items
-                    : items
-                        .where((e) {
-                          print('   - ${e.brand}: categoryId=${e.categoryId}, match=${e.categoryId == _selectedCategoryId}');
-                          return e.categoryId == _selectedCategoryId;
-                        })
-                        .toList();
+                    : items.where((e) {
+                        print(
+                          '   - ${e.brand}: categoryId=${e.categoryId}, match=${e.categoryId == _selectedCategoryId}',
+                        );
+                        return e.categoryId == _selectedCategoryId;
+                      }).toList();
                 print('✅ Équipements filtrés: ${filtered.length}');
-                
+
                 if (filtered.isEmpty) {
                   return Center(child: Text(l10n.noEquipmentInCategory));
                 }
@@ -111,8 +111,9 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
               children: [
                 Consumer(
                   builder: (context, ref, _) {
-                    final categoriesAsync =
-                        ref.watch(equipmentCategoryNotifierProvider);
+                    final categoriesAsync = ref.watch(
+                      equipmentCategoryNotifierProvider,
+                    );
                     return categoriesAsync.when(
                       data: (categories) {
                         if (categories.isEmpty) {
@@ -173,6 +174,8 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
                     brand: brandController.text,
                     model: modelController.text,
                     size: sizeController.text,
+                    totalQuantity: 1,
+                    status: EquipmentStatus.available,
                     updatedAt: DateTime.now(),
                   );
                   await ref
@@ -197,12 +200,13 @@ class _EquipmentTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    
+
     // Récupérer la couleur principale du thème
     final themeSettingsAsync = ref.watch(themeNotifierProvider);
     final themeSettings = themeSettingsAsync.value;
-    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
-    
+    final primaryColor =
+        themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+
     Color statusColor;
     String statusLabel;
 

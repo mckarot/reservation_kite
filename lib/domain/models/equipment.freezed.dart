@@ -17,10 +17,15 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$Equipment {
   String get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'category_id')
   String get categoryId => throw _privateConstructorUsedError;
   String get brand => throw _privateConstructorUsedError;
   String get model => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _anyToString)
   String get size => throw _privateConstructorUsedError;
+  @JsonKey(name: 'total_quantity')
+  int get totalQuantity => throw _privateConstructorUsedError;
+  @JsonKey(name: 'updated_at')
   DateTime get updatedAt => throw _privateConstructorUsedError;
   EquipmentStatus get status => throw _privateConstructorUsedError;
   String get notes => throw _privateConstructorUsedError;
@@ -37,11 +42,12 @@ abstract class $EquipmentCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String categoryId,
+      @JsonKey(name: 'category_id') String categoryId,
       String brand,
       String model,
-      String size,
-      DateTime updatedAt,
+      @JsonKey(fromJson: _anyToString) String size,
+      @JsonKey(name: 'total_quantity') int totalQuantity,
+      @JsonKey(name: 'updated_at') DateTime updatedAt,
       EquipmentStatus status,
       String notes});
 }
@@ -64,6 +70,7 @@ class _$EquipmentCopyWithImpl<$Res, $Val extends Equipment>
     Object? brand = null,
     Object? model = null,
     Object? size = null,
+    Object? totalQuantity = null,
     Object? updatedAt = null,
     Object? status = null,
     Object? notes = null,
@@ -89,6 +96,10 @@ class _$EquipmentCopyWithImpl<$Res, $Val extends Equipment>
           ? _value.size
           : size // ignore: cast_nullable_to_non_nullable
               as String,
+      totalQuantity: null == totalQuantity
+          ? _value.totalQuantity
+          : totalQuantity // ignore: cast_nullable_to_non_nullable
+              as int,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
@@ -115,11 +126,12 @@ abstract class _$$EquipmentImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
-      String categoryId,
+      @JsonKey(name: 'category_id') String categoryId,
       String brand,
       String model,
-      String size,
-      DateTime updatedAt,
+      @JsonKey(fromJson: _anyToString) String size,
+      @JsonKey(name: 'total_quantity') int totalQuantity,
+      @JsonKey(name: 'updated_at') DateTime updatedAt,
       EquipmentStatus status,
       String notes});
 }
@@ -140,6 +152,7 @@ class __$$EquipmentImplCopyWithImpl<$Res>
     Object? brand = null,
     Object? model = null,
     Object? size = null,
+    Object? totalQuantity = null,
     Object? updatedAt = null,
     Object? status = null,
     Object? notes = null,
@@ -165,6 +178,10 @@ class __$$EquipmentImplCopyWithImpl<$Res>
           ? _value.size
           : size // ignore: cast_nullable_to_non_nullable
               as String,
+      totalQuantity: null == totalQuantity
+          ? _value.totalQuantity
+          : totalQuantity // ignore: cast_nullable_to_non_nullable
+              as int,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
@@ -186,25 +203,32 @@ class __$$EquipmentImplCopyWithImpl<$Res>
 class _$EquipmentImpl implements _Equipment {
   const _$EquipmentImpl(
       {required this.id,
-      required this.categoryId,
+      @JsonKey(name: 'category_id') required this.categoryId,
       required this.brand,
       required this.model,
-      required this.size,
-      required this.updatedAt,
+      @JsonKey(fromJson: _anyToString) required this.size,
+      @JsonKey(name: 'total_quantity') this.totalQuantity = 1,
+      @JsonKey(name: 'updated_at') required this.updatedAt,
       this.status = EquipmentStatus.available,
       this.notes = ''});
 
   @override
   final String id;
   @override
+  @JsonKey(name: 'category_id')
   final String categoryId;
   @override
   final String brand;
   @override
   final String model;
   @override
+  @JsonKey(fromJson: _anyToString)
   final String size;
   @override
+  @JsonKey(name: 'total_quantity')
+  final int totalQuantity;
+  @override
+  @JsonKey(name: 'updated_at')
   final DateTime updatedAt;
   @override
   @JsonKey()
@@ -215,7 +239,7 @@ class _$EquipmentImpl implements _Equipment {
 
   @override
   String toString() {
-    return 'Equipment(id: $id, categoryId: $categoryId, brand: $brand, model: $model, size: $size, updatedAt: $updatedAt, status: $status, notes: $notes)';
+    return 'Equipment(id: $id, categoryId: $categoryId, brand: $brand, model: $model, size: $size, totalQuantity: $totalQuantity, updatedAt: $updatedAt, status: $status, notes: $notes)';
   }
 
   @override
@@ -229,6 +253,8 @@ class _$EquipmentImpl implements _Equipment {
             (identical(other.brand, brand) || other.brand == brand) &&
             (identical(other.model, model) || other.model == model) &&
             (identical(other.size, size) || other.size == size) &&
+            (identical(other.totalQuantity, totalQuantity) ||
+                other.totalQuantity == totalQuantity) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
             (identical(other.status, status) || other.status == status) &&
@@ -237,7 +263,7 @@ class _$EquipmentImpl implements _Equipment {
 
   @override
   int get hashCode => Object.hash(runtimeType, id, categoryId, brand, model,
-      size, updatedAt, status, notes);
+      size, totalQuantity, updatedAt, status, notes);
 
   @JsonKey(ignore: true)
   @override
@@ -249,25 +275,32 @@ class _$EquipmentImpl implements _Equipment {
 abstract class _Equipment implements Equipment {
   const factory _Equipment(
       {required final String id,
-      required final String categoryId,
+      @JsonKey(name: 'category_id') required final String categoryId,
       required final String brand,
       required final String model,
-      required final String size,
-      required final DateTime updatedAt,
+      @JsonKey(fromJson: _anyToString) required final String size,
+      @JsonKey(name: 'total_quantity') final int totalQuantity,
+      @JsonKey(name: 'updated_at') required final DateTime updatedAt,
       final EquipmentStatus status,
       final String notes}) = _$EquipmentImpl;
 
   @override
   String get id;
   @override
+  @JsonKey(name: 'category_id')
   String get categoryId;
   @override
   String get brand;
   @override
   String get model;
   @override
+  @JsonKey(fromJson: _anyToString)
   String get size;
   @override
+  @JsonKey(name: 'total_quantity')
+  int get totalQuantity;
+  @override
+  @JsonKey(name: 'updated_at')
   DateTime get updatedAt;
   @override
   EquipmentStatus get status;
