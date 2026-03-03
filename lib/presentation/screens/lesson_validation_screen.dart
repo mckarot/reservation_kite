@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../domain/models/app_theme_settings.dart';
 import '../../domain/models/equipment.dart';
+import '../../domain/models/equipment_booking.dart';
 import '../../domain/models/reservation.dart';
 import '../../domain/models/user.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/auth_state_provider.dart';
+import '../providers/equipment_booking_notifier.dart';
 import '../providers/equipment_notifier.dart';
 import '../providers/theme_notifier.dart';
 import '../providers/user_notifier.dart';
@@ -28,15 +31,23 @@ class _LessonValidationScreenState
     extends ConsumerState<LessonValidationScreen> {
   final _noteController = TextEditingController();
   final List<String> _selectedItems = [];
-  String _selectedLevel = UserProgress.ikoSkillsByLevel.keys.first;
+  String? _selectedLevel; // ← Nullable pour éviter le doublon
+  final List<String> _selectedEquipmentIds = [];
 
   @override
   void initState() {
     super.initState();
     _selectedItems.addAll(widget.pupil.progress?.checklist ?? []);
-    _selectedLevel =
-        widget.pupil.progress?.ikoLevel ??
-        UserProgress.ikoSkillsByLevel.keys.first;
+    
+    // Utiliser la première clé UNIQUE (sans doublons)
+    final uniqueLevels = UserProgress.ikoSkillsByLevel.keys.toSet().toList();
+    _selectedLevel = widget.pupil.progress?.ikoLevel ?? uniqueLevels.first;
+  }
+
+  @override
+  void dispose() {
+    _noteController.dispose();
+    super.dispose();
   }
 
   @override
@@ -108,14 +119,20 @@ class _LessonValidationScreenState
               l10n.ikoGlobalLevel,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            DropdownButton<String>(
-              isExpanded: true,
-              value: _selectedLevel,
-              items: UserProgress.ikoSkillsByLevel.keys
-                  .map((l) => DropdownMenuItem(value: l, child: Text(l)))
-                  .toList(),
-              onChanged: (val) => setState(() => _selectedLevel = val!),
-            ),
+            const SizedBox(height: 8),
+            // Remplacer le Dropdown par des Radio pour éviter les doublons
+            ...UserProgress.ikoSkillsByLevel.keys.toSet().map((level) {
+              return RadioListTile<String>(
+                title: Text(level),
+                value: level,
+                groupValue: _selectedLevel,
+                onChanged: (val) {
+                  if (val != null) {
+                    setState(() => _selectedLevel = val);
+                  }
+                },
+              );
+            }).toList(),
             const SizedBox(height: 32),
             Text(
               l10n.pedagogicalNote,
@@ -137,6 +154,30 @@ class _LessonValidationScreenState
             ),
             const SizedBox(height: 12),
             _EquipmentIncidentSection(),
+            
+            // Section réservation de matériel pour la séance
+            const SizedBox(height: 32),
+            Text(
+              l10n.reserveEquipment,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            _EquipmentReservationSection(
+              selectedEquipmentIds: _selectedEquipmentIds,
+              onEquipmentSelected: (equipmentId) {
+                setState(() {
+                  if (!_selectedEquipmentIds.contains(equipmentId)) {
+                    _selectedEquipmentIds.add(equipmentId);
+                  }
+                });
+              },
+              onEquipmentRemoved: (equipmentId) {
+                setState(() {
+                  _selectedEquipmentIds.remove(equipmentId);
+                });
+              },
+            ),
+            
             const SizedBox(height: 40),
             SizedBox(
               width: double.infinity,
@@ -178,6 +219,54 @@ class _LessonValidationScreenState
                 )
               : null,
         );
+
+    // Réserver le matériel sélectionné pour cette séance
+    if (_selectedEquipmentIds.isNotEmpty) {
+      try {
+        final currentUserId = ref.read(currentUserProvider).value?.id;
+        if (currentUserId != null) {
+          for (final equipmentId in _selectedEquipmentIds) {
+            // Récupérer les détails de l'équipement
+            final equipment = ref
+                .read(equipmentNotifierProvider)
+                .value
+                ?.firstWhere((e) => e.id == equipmentId);
+
+            if (equipment != null) {
+              await ref
+                  .read(equipmentBookingNotifierProvider(currentUserId).notifier)
+                  .createBooking(
+                    equipmentId: equipment.id,
+                    equipmentType: equipment.categoryId,
+                    equipmentBrand: equipment.brand,
+                    equipmentModel: equipment.model,
+                    equipmentSize: equipment.size,
+                    date: widget.reservation.date,
+                    slot: EquipmentBookingSlot.morning,
+                  );
+            }
+          }
+
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(l10n.equipmentReserved),
+                backgroundColor: Theme.of(context).colorScheme.primary,
+              ),
+            );
+          }
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${l10n.equipmentReservationFailed}: $e'),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+          );
+        }
+      }
+    }
 
     if (mounted) {
       ScaffoldMessenger.of(
@@ -275,5 +364,118 @@ class __EquipmentIncidentSectionState
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text(l10n.equipmentStatusUpdated)));
+  }
+}
+
+/// Section pour réserver du matériel lors de la validation d'une séance
+class _EquipmentReservationSection extends ConsumerWidget {
+  final List<String> selectedEquipmentIds;
+  final ValueChanged<String> onEquipmentSelected;
+  final ValueChanged<String> onEquipmentRemoved;
+
+  const _EquipmentReservationSection({
+    required this.selectedEquipmentIds,
+    required this.onEquipmentSelected,
+    required this.onEquipmentRemoved,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final equipAsync = ref.watch(equipmentNotifierProvider);
+
+    return equipAsync.when(
+      data: (items) {
+        final available = items
+            .where((e) => e.status == EquipmentStatus.available)
+            .toList();
+
+        if (available.isEmpty) {
+          return Text(
+            l10n.noEquipmentAvailable,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          );
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Équipements sélectionnés
+            if (selectedEquipmentIds.isNotEmpty) ...[
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.selectedEquipment,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: selectedEquipmentIds.map((equipId) {
+                        final equipment = available.firstWhere(
+                          (e) => e.id == equipId,
+                          orElse: () => items.first,
+                        );
+                        return Chip(
+                          label: Text(
+                            '${equipment.brand} ${equipment.model}',
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                          deleteIcon: const Icon(Icons.close, size: 18),
+                          onDeleted: () => onEquipmentRemoved(equipId),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.surface,
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+
+            // Dropdown pour sélectionner du matériel
+            DropdownButtonFormField<String>(
+              value: null,
+              isExpanded: true,
+              decoration: InputDecoration(
+                hintText: l10n.selectEquipmentForSession,
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.add_circle_outline),
+              ),
+              items: available
+                  .where((e) => !selectedEquipmentIds.contains(e.id))
+                  .map(
+                    (e) => DropdownMenuItem(
+                      value: e.id,
+                      child: Text('${e.brand} ${e.model} (${e.size})'),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (val) {
+                if (val != null) {
+                  onEquipmentSelected(val);
+                }
+              },
+            ),
+          ],
+        );
+      },
+      loading: () => const CircularProgressIndicator(),
+      error: (_, __) => Text(l10n.errorLoadingEquipment),
+    );
   }
 }

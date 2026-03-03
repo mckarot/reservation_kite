@@ -1129,4 +1129,43 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get confirmButton => 'Confirmar';
+
+  @override
+  String get reserveEquipment => 'Reservar equipo';
+
+  @override
+  String get selectEquipmentForSession => 'Seleccionar equipo para esta sesión';
+
+  @override
+  String get equipmentReserved => 'Equipo reservado con éxito';
+
+  @override
+  String get equipmentReservationFailed => 'Error al reservar el equipo';
+
+  @override
+  String get validateAndReserve => 'Validar sesión y reservar equipo';
+
+  @override
+  String get validateSessionOnly => 'Validar solo la sesión';
+
+  @override
+  String get selectedEquipment => 'Equipo seleccionado';
+
+  @override
+  String get removeEquipment => 'Eliminar';
+
+  @override
+  String get chooseBookingType => '¿Qué quieres hacer?';
+
+  @override
+  String get bookLesson => 'Reservar una clase';
+
+  @override
+  String get rentEquipment => 'Alquilar equipo';
+
+  @override
+  String get lessonDescription => 'Clase con instructor';
+
+  @override
+  String get equipmentDescription => 'Solo alquiler de equipo';
 }

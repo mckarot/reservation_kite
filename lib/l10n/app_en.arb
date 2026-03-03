@@ -475,5 +475,19 @@
   "statusMaintenance": "Maintenance",
   "fullDay": "Full Day",
   "available": "available",
-  "confirmButton": "Confirm"
+  "confirmButton": "Confirm",
+  "reserveEquipment": "Reserve equipment",
+  "selectEquipmentForSession": "Select equipment for this session",
+  "noEquipmentAvailable": "No equipment available",
+  "equipmentReserved": "Equipment reserved successfully",
+  "equipmentReservationFailed": "Failed to reserve equipment",
+  "validateAndReserve": "Validate session and reserve equipment",
+  "validateSessionOnly": "Validate session only",
+  "selectedEquipment": "Selected equipment",
+  "removeEquipment": "Remove",
+  "chooseBookingType": "What do you want to do?",
+  "bookLesson": "Book a lesson",
+  "rentEquipment": "Rent equipment",
+  "lessonDescription": "Lesson with instructor",
+  "equipmentDescription": "Equipment rental only"
 }

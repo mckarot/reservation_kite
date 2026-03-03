@@ -7,6 +7,7 @@ import '../../l10n/app_localizations.dart';
 import '../providers/booking_notifier.dart';
 import '../providers/staff_notifier.dart';
 import '../providers/theme_notifier.dart';
+import 'equipment_booking_screen.dart';
 
 class BookingScreen extends ConsumerStatefulWidget {
   const BookingScreen({super.key});
@@ -16,6 +17,7 @@ class BookingScreen extends ConsumerStatefulWidget {
 }
 
 class _BookingScreenState extends ConsumerState<BookingScreen> {
+  bool _showLessonBooking = true; // true = cours, false = matériel
   DateTime _selectedDate = DateTime.now();
   TimeSlot _selectedSlot = TimeSlot.morning;
   String? _selectedStaffId;
@@ -33,17 +35,63 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final bookingsAsync = ref.watch(bookingNotifierProvider);
-    // staffAsync unused here, but used in dialog Consumer
-    
+
     // Récupérer les couleurs du thème dynamique
     final themeSettingsAsync = ref.watch(themeNotifierProvider);
     final themeSettings = themeSettingsAsync.value;
     final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.reservations)),
+      appBar: AppBar(
+        title: Text(_showLessonBooking ? l10n.reservations : l10n.equipmentRental),
+        actions: [
+          if (_showLessonBooking)
+            IconButton(
+              icon: const Icon(Icons.kitesurfing),
+              tooltip: l10n.equipmentRental,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const EquipmentBookingScreen()),
+                );
+              },
+            ),
+        ],
+      ),
       body: Column(
         children: [
+          // Sélecteur de type de réservation
+          Container(
+            padding: const EdgeInsets.all(16.0),
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+            child: Row(
+              children: [
+                Expanded(
+                  child: _BookingTypeChip(
+                    label: l10n.bookLesson,
+                    icon: Icons.school,
+                    isSelected: _showLessonBooking,
+                    onTap: () => setState(() => _showLessonBooking = true),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _BookingTypeChip(
+                    label: l10n.rentEquipment,
+                    icon: Icons.kitesurfing,
+                    isSelected: !_showLessonBooking,
+                    onTap: () {
+                      setState(() => _showLessonBooking = false);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const EquipmentBookingScreen()),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
           // Header / Calendar Placeholder
           ListTile(
             title: Text(
@@ -222,6 +270,66 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+/// Widget pour le sélecteur de type de réservation (Cours vs Matériel)
+class _BookingTypeChip extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _BookingTypeChip({
+    required this.label,
+    required this.icon,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? Theme.of(context).colorScheme.primary
+              : Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.outline,
+            width: 2,
+          ),
+        ),
+        child: Column(
+          children: [
+            Icon(
+              icon,
+              color: isSelected
+                  ? Theme.of(context).colorScheme.onPrimary
+                  : Theme.of(context).colorScheme.onSurface,
+              size: 32,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                color: isSelected
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : Theme.of(context).colorScheme.onSurface,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }

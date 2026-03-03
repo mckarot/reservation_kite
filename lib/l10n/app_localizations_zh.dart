@@ -1115,4 +1115,43 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get confirmButton => '确认';
+
+  @override
+  String get reserveEquipment => '预订设备';
+
+  @override
+  String get selectEquipmentForSession => '选择本次课程的设备';
+
+  @override
+  String get equipmentReserved => '设备预订成功';
+
+  @override
+  String get equipmentReservationFailed => '设备预订失败';
+
+  @override
+  String get validateAndReserve => '验证课程并预订设备';
+
+  @override
+  String get validateSessionOnly => '仅验证课程';
+
+  @override
+  String get selectedEquipment => '已选设备';
+
+  @override
+  String get removeEquipment => '移除';
+
+  @override
+  String get chooseBookingType => '您想做什么？';
+
+  @override
+  String get bookLesson => '预订课程';
+
+  @override
+  String get rentEquipment => '租赁设备';
+
+  @override
+  String get lessonDescription => '与教练一起的课程';
+
+  @override
+  String get equipmentDescription => '仅租赁设备';
 }

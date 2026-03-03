@@ -475,5 +475,19 @@
   "statusMaintenance": "Mantenimiento",
   "fullDay": "Día completo",
   "available": "disponible(s)",
-  "confirmButton": "Confirmar"
+  "confirmButton": "Confirmar",
+  "reserveEquipment": "Reservar equipo",
+  "selectEquipmentForSession": "Seleccionar equipo para esta sesión",
+  "noEquipmentAvailable": "No hay equipo disponible",
+  "equipmentReserved": "Equipo reservado con éxito",
+  "equipmentReservationFailed": "Error al reservar el equipo",
+  "validateAndReserve": "Validar sesión y reservar equipo",
+  "validateSessionOnly": "Validar solo la sesión",
+  "selectedEquipment": "Equipo seleccionado",
+  "removeEquipment": "Eliminar",
+  "chooseBookingType": "¿Qué quieres hacer?",
+  "bookLesson": "Reservar una clase",
+  "rentEquipment": "Alquilar equipo",
+  "lessonDescription": "Clase con instructor",
+  "equipmentDescription": "Solo alquiler de equipo"
 }

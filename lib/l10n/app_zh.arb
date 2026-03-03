@@ -475,5 +475,19 @@
   "statusMaintenance": "维护中",
   "fullDay": "全天",
   "available": "可用",
-  "confirmButton": "确认"
+  "confirmButton": "确认",
+  "reserveEquipment": "预订设备",
+  "selectEquipmentForSession": "选择本次课程的设备",
+  "noEquipmentAvailable": "无可用设备",
+  "equipmentReserved": "设备预订成功",
+  "equipmentReservationFailed": "设备预订失败",
+  "validateAndReserve": "验证课程并预订设备",
+  "validateSessionOnly": "仅验证课程",
+  "selectedEquipment": "已选设备",
+  "removeEquipment": "移除",
+  "chooseBookingType": "您想做什么？",
+  "bookLesson": "预订课程",
+  "rentEquipment": "租赁设备",
+  "lessonDescription": "与教练一起的课程",
+  "equipmentDescription": "仅租赁设备"
 }

@@ -2251,6 +2251,84 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Confirmer'**
   String get confirmButton;
+
+  /// No description provided for @reserveEquipment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réserver du matériel'**
+  String get reserveEquipment;
+
+  /// No description provided for @selectEquipmentForSession.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sélectionner le matériel pour cette séance'**
+  String get selectEquipmentForSession;
+
+  /// No description provided for @equipmentReserved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Matériel réservé avec succès'**
+  String get equipmentReserved;
+
+  /// No description provided for @equipmentReservationFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échec de la réservation du matériel'**
+  String get equipmentReservationFailed;
+
+  /// No description provided for @validateAndReserve.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valider la séance et réserver le matériel'**
+  String get validateAndReserve;
+
+  /// No description provided for @validateSessionOnly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valider la séance uniquement'**
+  String get validateSessionOnly;
+
+  /// No description provided for @selectedEquipment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Matériel sélectionné'**
+  String get selectedEquipment;
+
+  /// No description provided for @removeEquipment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer'**
+  String get removeEquipment;
+
+  /// No description provided for @chooseBookingType.
+  ///
+  /// In fr, this message translates to:
+  /// **'Que voulez-vous faire ?'**
+  String get chooseBookingType;
+
+  /// No description provided for @bookLesson.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réserver un cours'**
+  String get bookLesson;
+
+  /// No description provided for @rentEquipment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Louer du matériel'**
+  String get rentEquipment;
+
+  /// No description provided for @lessonDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cours avec moniteur'**
+  String get lessonDescription;
+
+  /// No description provided for @equipmentDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Location sans moniteur'**
+  String get equipmentDescription;
 }
 
 class _AppLocalizationsDelegate

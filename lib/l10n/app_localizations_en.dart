@@ -1124,4 +1124,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get confirmButton => 'Confirm';
+
+  @override
+  String get reserveEquipment => 'Reserve equipment';
+
+  @override
+  String get selectEquipmentForSession => 'Select equipment for this session';
+
+  @override
+  String get equipmentReserved => 'Equipment reserved successfully';
+
+  @override
+  String get equipmentReservationFailed => 'Failed to reserve equipment';
+
+  @override
+  String get validateAndReserve => 'Validate session and reserve equipment';
+
+  @override
+  String get validateSessionOnly => 'Validate session only';
+
+  @override
+  String get selectedEquipment => 'Selected equipment';
+
+  @override
+  String get removeEquipment => 'Remove';
+
+  @override
+  String get chooseBookingType => 'What do you want to do?';
+
+  @override
+  String get bookLesson => 'Book a lesson';
+
+  @override
+  String get rentEquipment => 'Rent equipment';
+
+  @override
+  String get lessonDescription => 'Lesson with instructor';
+
+  @override
+  String get equipmentDescription => 'Equipment rental only';
 }

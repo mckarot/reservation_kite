@@ -18,6 +18,7 @@ import '../providers/staff_notifier.dart';
 import '../providers/theme_notifier.dart';
 import '../providers/unavailability_notifier.dart';
 import '../providers/user_notifier.dart';
+import 'equipment_booking_screen.dart';
 
 final weatherProvider = StateProvider<AsyncValue<Weather>>(
   (ref) => const AsyncValue.loading(),
@@ -105,6 +106,18 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.kitesurfing),
+            tooltip: l10n.rentEquipment,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const EquipmentBookingScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -165,6 +178,65 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                     ),
                     const SizedBox(height: 16),
                     const _WeatherInfo(),
+                    const SizedBox(height: 32),
+                    // Bouton pour louer du matériel uniquement
+                    Card(
+                      elevation: 2,
+                      color: primaryColor.withOpacity(0.1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(color: primaryColor.withOpacity(0.3)),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const EquipmentBookingScreen()),
+                          );
+                        },
+                        borderRadius: BorderRadius.circular(12),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.kitesurfing,
+                                color: primaryColor,
+                                size: 32,
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      l10n.rentEquipment,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: primaryColor,
+                                      ),
+                                    ),
+                                    Text(
+                                      l10n.equipmentDescription,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: Colors.grey.shade600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: primaryColor,
+                                size: 18,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 32),
                     Text(
                       l10n.selectSlot,

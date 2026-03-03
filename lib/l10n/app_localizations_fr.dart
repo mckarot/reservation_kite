@@ -1128,4 +1128,45 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get confirmButton => 'Confirmer';
+
+  @override
+  String get reserveEquipment => 'Réserver du matériel';
+
+  @override
+  String get selectEquipmentForSession =>
+      'Sélectionner le matériel pour cette séance';
+
+  @override
+  String get equipmentReserved => 'Matériel réservé avec succès';
+
+  @override
+  String get equipmentReservationFailed =>
+      'Échec de la réservation du matériel';
+
+  @override
+  String get validateAndReserve => 'Valider la séance et réserver le matériel';
+
+  @override
+  String get validateSessionOnly => 'Valider la séance uniquement';
+
+  @override
+  String get selectedEquipment => 'Matériel sélectionné';
+
+  @override
+  String get removeEquipment => 'Retirer';
+
+  @override
+  String get chooseBookingType => 'Que voulez-vous faire ?';
+
+  @override
+  String get bookLesson => 'Réserver un cours';
+
+  @override
+  String get rentEquipment => 'Louer du matériel';
+
+  @override
+  String get lessonDescription => 'Cours avec moniteur';
+
+  @override
+  String get equipmentDescription => 'Location sans moniteur';
 }
