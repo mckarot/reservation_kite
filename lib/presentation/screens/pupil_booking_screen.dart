@@ -103,8 +103,8 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
         title: Text(l10n.bookingScreen),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: primaryColor,
+        foregroundColor: Colors.white,
         elevation: 0,
         actions: [
           IconButton(
