@@ -1111,6 +1111,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get noEquipmentAvailable => '无可用设备';
 
   @override
+  String get statusReserved => 'Réservé';
+
+  @override
   String get available => '可用';
 
   @override

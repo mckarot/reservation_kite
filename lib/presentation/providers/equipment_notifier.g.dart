@@ -6,7 +6,7 @@ part of 'equipment_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$equipmentNotifierHash() => r'348796a2f245acb981a973930ddfb0d9e6a6f95a';
+String _$equipmentNotifierHash() => r'66a7b3bf4b6f2d09c9f293d646ab8a15b6cb94bd';
 
 /// See also [EquipmentNotifier].
 @ProviderFor(EquipmentNotifier)

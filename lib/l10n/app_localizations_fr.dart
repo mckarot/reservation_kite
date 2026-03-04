@@ -1124,6 +1124,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get noEquipmentAvailable => 'Aucun équipement disponible';
 
   @override
+  String get statusReserved => 'Réservé';
+
+  @override
   String get available => 'dispo(s)';
 
   @override

@@ -1,32 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../domain/models/equipment.dart';
-import '../../domain/models/equipment_with_availability.dart';
-import '../../domain/models/equipment_booking.dart';
-import '../../utils/date_utils.dart';
-import '../../utils/booking_conflict_utils.dart';
+
 import '../../data/providers/repository_providers.dart';
+import '../../domain/models/equipment.dart';
+import '../../domain/models/equipment_booking.dart';
+import '../../domain/models/equipment_with_availability.dart';
 
 part 'equipment_availability_notifier.g.dart';
 
 /// State management pour la disponibilité des équipements en temps réel.
 ///
 /// Fournit un stream qui se met à jour automatiquement lorsque :
-/// - Un équipement est modifié (total_quantity, status)
+/// - Un équipement est modifié (status)
 /// - Une réservation est créée/annulée
-///
-/// Utilise Rx.combineLatest2 pour éviter les N+1 queries.
 @riverpod
 class EquipmentAvailabilityNotifier extends _$EquipmentAvailabilityNotifier {
   @override
   Stream<List<Equipment>> build() {
+    // Watch tous les équipements triés par marque
     return FirebaseFirestore.instance
         .collection('equipment')
-        .where('status', isEqualTo: 'active')
+        .orderBy('brand')
         .snapshots()
         .map(
           (snapshot) => snapshot.docs
-              .map((doc) => Equipment.fromJson(doc.data()))
+              .map((doc) => Equipment.fromJson(doc.data()..['id'] = doc.id))
               .toList(),
         );
   }
@@ -35,7 +33,7 @@ class EquipmentAvailabilityNotifier extends _$EquipmentAvailabilityNotifier {
   ///
   /// Retourne un [EquipmentWithAvailability] avec :
   /// - L'équipement complet
-  /// - La quantité disponible calculée dynamiquement
+  /// - La quantité disponible calculée dynamiquement (toujours 0 ou 1 pour un équipement individuel)
   /// - Le créneau demandé
   /// - La date demandée
   ///
@@ -62,7 +60,7 @@ class EquipmentAvailabilityNotifier extends _$EquipmentAvailabilityNotifier {
         .snapshots()
         .map(
           (doc) => doc.exists
-              ? Equipment.fromJson(doc.data() as Map<String, dynamic>)
+              ? Equipment.fromJson(doc.data() as Map<String, dynamic>..['id'] = doc.id)
               : null,
         );
   }

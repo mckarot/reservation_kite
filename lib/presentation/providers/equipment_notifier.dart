@@ -27,31 +27,7 @@ class EquipmentNotifier extends _$EquipmentNotifier {
   Future<void> updateStatus(String id, EquipmentStatus status) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      final repo = ref.read(equipmentRepositoryProvider);
-      final equip = await repo.getEquipment(id);
-      if (equip != null) {
-        final updated = equip.copyWith(
-          status: status,
-          updatedAt: DateTime.now(),
-        );
-        await repo.saveEquipment(updated);
-      }
-      return _fetchEquipment();
-    });
-  }
-
-  Future<void> updateQuantity(String id, int quantity) async {
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
-      final repo = ref.read(equipmentRepositoryProvider);
-      final equip = await repo.getEquipment(id);
-      if (equip != null) {
-        final updated = equip.copyWith(
-          totalQuantity: quantity,
-          updatedAt: DateTime.now(),
-        );
-        await repo.saveEquipment(updated);
-      }
+      await ref.read(equipmentRepositoryProvider).updateStatus(id, status);
       return _fetchEquipment();
     });
   }

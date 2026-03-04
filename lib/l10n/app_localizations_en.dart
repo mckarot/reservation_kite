@@ -1120,6 +1120,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noEquipmentAvailable => 'No equipment available';
 
   @override
+  String get statusReserved => 'Reserved';
+
+  @override
   String get available => 'available';
 
   @override

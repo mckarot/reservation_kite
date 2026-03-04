@@ -1125,6 +1125,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get noEquipmentAvailable => 'No hay equipo disponible';
 
   @override
+  String get statusReserved => 'Réservé';
+
+  @override
   String get available => 'disponible(s)';
 
   @override

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../domain/models/app_theme_settings.dart';
@@ -10,6 +11,7 @@ import '../providers/equipment_notifier.dart';
 import '../providers/theme_notifier.dart';
 import '../widgets/equipment_category_filter.dart';
 import 'equipment_category_admin_screen.dart';
+import 'equipment_migration_screen.dart';
 
 class EquipmentAdminScreen extends ConsumerStatefulWidget {
   const EquipmentAdminScreen({super.key});
@@ -31,6 +33,18 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
       appBar: AppBar(
         title: Text(l10n.equipmentManagement),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.swap_horiz),
+            tooltip: 'Migration des équipements',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const EquipmentMigrationScreen(),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.category),
             tooltip: l10n.equipmentCategories,
@@ -174,7 +188,12 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
                     brand: brandController.text,
                     model: modelController.text,
                     size: sizeController.text,
-                    totalQuantity: 1,
+                    serialNumber: _generateSerialNumber(
+                      brandController.text,
+                      modelController.text,
+                      sizeController.text,
+                      1,
+                    ),
                     status: EquipmentStatus.available,
                     updatedAt: DateTime.now(),
                   );
@@ -191,50 +210,19 @@ class _EquipmentAdminScreenState extends ConsumerState<EquipmentAdminScreen> {
       ),
     );
   }
+
+  String _generateSerialNumber(String brand, String model, String size, int index) {
+    final b = brand.replaceAll(' ', '-').toUpperCase();
+    final m = model.replaceAll(' ', '-').toUpperCase();
+    final s = size.replaceAll('.', '-');
+    final paddedIndex = index.toString().padLeft(3, '0');
+    return '$b-$m-$s-$paddedIndex';
+  }
 }
 
 class _EquipmentTile extends ConsumerWidget {
   final Equipment equipment;
   const _EquipmentTile({required this.equipment});
-
-  void _showQuantityDialog(BuildContext context, WidgetRef ref, Equipment equipment) {
-    final l10n = AppLocalizations.of(context);
-    final controller = TextEditingController(text: equipment.totalQuantity.toString());
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Modifier la quantité'),
-        content: TextField(
-          controller: controller,
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(
-            labelText: 'Quantité',
-            hintText: 'Entrez le nombre d\'unités',
-            border: OutlineInputBorder(),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.cancelButton),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final newQuantity = int.tryParse(controller.text);
-              if (newQuantity != null && newQuantity >= 1) {
-                ref
-                    .read(equipmentNotifierProvider.notifier)
-                    .updateQuantity(equipment.id, newQuantity);
-                Navigator.pop(context);
-              }
-            },
-            child: Text(l10n.confirmButton),
-          ),
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -261,6 +249,10 @@ class _EquipmentTile extends ConsumerWidget {
       case EquipmentStatus.damaged:
         statusColor = Colors.red;
         statusLabel = l10n.statusDamaged;
+        break;
+      case EquipmentStatus.reserved:
+        statusColor = Colors.blue;
+        statusLabel = l10n.statusReserved;
         break;
     }
 
@@ -297,36 +289,46 @@ class _EquipmentTile extends ConsumerWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
-                InkWell(
-                  onTap: () => _showQuantityDialog(context, ref, equipment),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                if (equipment.serialNumber != null) ...[
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
-                      color: primaryColor.withValues(alpha: 0.1),
+                      color: Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: primaryColor.withValues(alpha: 0.4)),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.inventory_2, size: 14),
-                        const SizedBox(width: 4),
-                        Text(
-                          '${equipment.totalQuantity} unité(s)',
-                          style: TextStyle(
-                            color: primaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                        ),
-                        const Icon(Icons.edit, size: 12),
-                      ],
+                    child: Text(
+                      'S/N: ${equipment.serialNumber}',
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.grey.shade700,
+                        fontFamily: 'monospace',
+                      ),
                     ),
                   ),
-                ),
+                ],
               ],
             ),
+            if (equipment.totalBookings > 0) ...[
+              const SizedBox(height: 4),
+              Text(
+                '${equipment.totalBookings} réservations',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+            ],
+            if (equipment.lastMaintenanceDate != null) ...[
+              const SizedBox(height: 4),
+              Text(
+                'Dernière maintenance: ${DateFormat('dd/MM/yyyy').format(equipment.lastMaintenanceDate!)}',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+            ],
           ],
         ),
         trailing: PopupMenuButton<EquipmentStatus>(
@@ -348,6 +350,10 @@ class _EquipmentTile extends ConsumerWidget {
             PopupMenuItem(
               value: EquipmentStatus.damaged,
               child: Text(l10n.setDamaged),
+            ),
+            PopupMenuItem(
+              value: EquipmentStatus.reserved,
+              child: Text(l10n.statusReserved),
             ),
             const PopupMenuDivider(),
             PopupMenuItem(

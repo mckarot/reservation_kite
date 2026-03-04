@@ -1123,6 +1123,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get noEquipmentAvailable => 'Nenhum equipamento disponível';
 
   @override
+  String get statusReserved => 'Réservé';
+
+  @override
   String get available => 'disponível(eis)';
 
   @override

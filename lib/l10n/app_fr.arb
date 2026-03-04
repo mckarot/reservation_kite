@@ -476,6 +476,7 @@
   "setDamaged": "Marquer comme endommagé",
   "statusAvailable": "Disponible",
   "statusMaintenance": "Maintenance",
+  "statusReserved": "Réservé",
   "fullDay": "Journée",
   "available": "dispo(s)",
   "confirmButton": "Confirmer",

@@ -535,7 +535,7 @@ class _EquipmentReservationSection extends ConsumerWidget {
                       title: Text('${eq.brand} ${eq.model}'),
                       subtitle: Text(
                         isAvailable
-                            ? '${eq.size}m² - ${availability.availableQuantity}/${eq.totalQuantity} ${l10n.available}'
+                            ? '${eq.size}m² - ${l10n.available}'
                             : '${eq.size}m² - ${l10n.unavailable}',
                         style: TextStyle(
                           color: isAvailable

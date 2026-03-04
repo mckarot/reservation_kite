@@ -1,0 +1,1 @@
+fais un git add . , un commit phrase simple pour resume les modif et un push pour envoyer sur mon depot distant

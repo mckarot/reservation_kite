@@ -473,6 +473,7 @@
   "setDamaged": "Mark as damaged",
   "statusAvailable": "Available",
   "statusMaintenance": "Maintenance",
+  "statusReserved": "Reserved",
   "fullDay": "Full Day",
   "available": "available",
   "confirmButton": "Confirm",

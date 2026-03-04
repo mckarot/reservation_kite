@@ -96,30 +96,34 @@
     - `created_at`: serverTimestamp
 
 ## COLLECTION: equipment
-- **Description**: Matériel de l'école (ailes, planches) utilisé pour les cours.
+- **Description**: Matériel de l'école (ailes, planches) utilisé pour les cours. **Chaque équipement est une entité physique unique**.
 - **Chemin**: `/equipment/{equipmentId}`
 - **Champs**:
     - `category_id`: string (FK -> equipment_categories/{id})
     - `brand`: string
     - `model`: string
     - `size`: string (ex: "12", "9", "10.5")
-    - `status`: string ['available', 'maintenance', 'damaged']
+    - `serial_number`: string? (Numéro de série unique pour identification physique, ex: "FO-2024-001")
+    - `status`: string ['available', 'maintenance', 'damaged', 'reserved']
     - `notes`: string
-    - `total_quantity`: int (default: 1) - Quantité totale pour ce matériel
+    - `purchase_date`: timestamp? (Date d'achat pour suivi usure)
+    - `last_maintenance_date`: timestamp? (Dernière maintenance)
+    - `maintenance_history`: list<map> [{ date: timestamp, type: string, notes: string, cost: number }]
+    - `total_bookings`: int (Nombre total de réservations pour statistiques)
     - `updated_at`: serverTimestamp
 
 ## COLLECTION: equipment_bookings
-- **Description**: Réservations de matériel effectuées par les élèves.
+- **Description**: Réservations de matériel effectuées par les élèves. **Une réservation = un équipement physique unique**.
 - **Chemin**: `/equipment_bookings/{bookingId}`
 - **Champs**:
     - `user_id`: string (FK -> users.uid)
     - `user_name`: string
     - `user_email`: string
-    - `equipment_id`: string (FK -> equipment.id)
-    - `equipment_type`: string (ex: 'kite', 'foil')
-    - `equipment_brand`: string
-    - `equipment_model`: string
-    - `equipment_size`: string
+    - `equipment_id`: string (FK -> equipment.id) - **L'équipement physique spécifique réservé**
+    - `equipment_type`: string (ex: 'kite', 'foil') - **Copie pour requêtes rapides**
+    - `equipment_brand`: string - **Copie pour affichage**
+    - `equipment_model`: string - **Copie pour affichage**
+    - `equipment_size`: string - **Copie pour affichage**
     - `date_string`: string (format 'yyyy-MM-dd')
     - `date_timestamp`: timestamp
     - `slot`: string ['morning', 'afternoon', 'full_day']

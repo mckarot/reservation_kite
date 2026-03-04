@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -13,8 +14,14 @@ import '../providers/equipment_booking_notifier.dart';
 import '../providers/equipment_notifier.dart';
 import '../providers/theme_notifier.dart';
 import '../widgets/equipment_category_filter.dart';
+import '../../data/providers/repository_providers.dart';
 
 /// Écran de réservation de matériel pour les élèves.
+///
+/// FLUX D'ATTRIBUTION : Attribution automatique (Option A)
+/// - L'utilisateur choisit la catégorie et la taille
+/// - Le système sélectionne automatiquement le premier équipement disponible
+/// - La réservation est atomique pour éviter les race conditions
 class EquipmentBookingScreen extends ConsumerStatefulWidget {
   const EquipmentBookingScreen({super.key});
 
@@ -191,27 +198,25 @@ class _EquipmentBookingScreenState
       );
     }
 
+    // Grouper les équipements par taille et compter les disponibles
+    final groupedBySize = <String, List<Equipment>>{};
+    for (var eq in filtered) {
+      final size = eq.size;
+      if (!groupedBySize.containsKey(size)) {
+        groupedBySize[size] = [];
+      }
+      groupedBySize[size]!.add(eq);
+    }
+
     return ListView.builder(
       padding: const EdgeInsets.all(16.0),
-      itemCount: filtered.length,
+      itemCount: groupedBySize.length,
       itemBuilder: (context, index) {
-        final eq = filtered[index];
+        final size = groupedBySize.keys.elementAt(index);
+        final equipmentList = groupedBySize[size]!;
 
-        final brand = eq.brand;
-        final model = eq.model;
-        final size = eq.size;
-        final categoryId = eq.categoryId;
-        final totalQuantity = eq.totalQuantity;
-        final docId = eq.id;
-
-        return StreamBuilder<EquipmentWithAvailability>(
-          stream: ref
-              .read(equipmentAvailabilityNotifierProvider.notifier)
-              .watchEquipmentAvailability(
-                equipmentId: docId,
-                date: _selectedDate,
-                slot: _selectedSlot,
-              ),
+        return StreamBuilder<_SizeAvailability>(
+          stream: _watchSizeAvailability(equipmentList),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const ListTile(
@@ -232,7 +237,7 @@ class _EquipmentBookingScreenState
               return const SizedBox.shrink();
             }
 
-            final isAvailable = availability.isAvailable;
+            final isAvailable = availability.availableCount > 0;
 
             return Card(
               margin: const EdgeInsets.only(bottom: 12),
@@ -242,16 +247,16 @@ class _EquipmentBookingScreenState
                       ? Theme.of(context).colorScheme.primaryContainer
                       : Theme.of(context).colorScheme.errorContainer,
                   child: Icon(
-                    _getCategoryIcon(categoryId),
+                    _getCategoryIcon(_selectedCategory ?? ''),
                     color: isAvailable
                         ? Theme.of(context).colorScheme.onPrimaryContainer
                         : Theme.of(context).colorScheme.onErrorContainer,
                   ),
                 ),
-                title: Text('$brand $model'),
+                title: Text('${equipmentList.first.brand} ${equipmentList.first.model}'),
                 subtitle: Text(
                   isAvailable
-                      ? '${size}m² - ${availability.availableQuantity}/$totalQuantity ${l10n.available}'
+                      ? '${size}m² - ${availability.availableCount}/${equipmentList.length} ${l10n.available}'
                       : '${size}m² - ${l10n.unavailable}',
                   style: TextStyle(
                     color: isAvailable
@@ -262,13 +267,9 @@ class _EquipmentBookingScreenState
                 ),
                 trailing: isAvailable
                     ? ElevatedButton(
-                        onPressed: () => _confirmBooking(
-                          docId,
-                          availability,
-                          brand,
-                          model,
+                        onPressed: () => _bookEquipmentForSize(
+                          equipmentList,
                           size,
-                          categoryId,
                         ),
                         child: Text(l10n.rentButton),
                       )
@@ -284,11 +285,36 @@ class _EquipmentBookingScreenState
     );
   }
 
-  String _parseSize(dynamic sizeValue) {
-    if (sizeValue == null) return '0';
-    if (sizeValue is String) return sizeValue;
-    if (sizeValue is double || sizeValue is int) return sizeValue.toString();
-    return sizeValue.toString();
+  /// Watch la disponibilité pour une taille donnée (plusieurs équipements).
+  Stream<_SizeAvailability> _watchSizeAvailability(List<Equipment> equipmentList) {
+    final dateString = DateFormat('yyyy-MM-dd').format(_selectedDate);
+    final slotString = _selectedSlot.name;
+
+    // Stream combiné : on écoute les réservations pour tous les équipements de cette taille
+    return FirebaseFirestore.instance
+        .collection('equipment_bookings')
+        .where('date_string', isEqualTo: dateString)
+        .where('slot', isEqualTo: slotString)
+        .where('status', whereIn: ['confirmed', 'completed'])
+        .snapshots()
+        .map((snapshot) {
+      final reservedEquipmentIds = snapshot.docs
+          .map((d) => d.data()['equipment_id'] as String)
+          .toSet();
+
+      final availableCount = equipmentList.where((eq) {
+        // Un équipement est disponible si :
+        // 1. Son statut est 'available'
+        // 2. Il n'est pas réservé sur ce créneau
+        return eq.status == EquipmentStatus.available &&
+            !reservedEquipmentIds.contains(eq.id);
+      }).length;
+
+      return _SizeAvailability(
+        availableCount: availableCount,
+        totalCount: equipmentList.length,
+      );
+    });
   }
 
   IconData _getCategoryIcon(String categoryId) {
@@ -306,16 +332,52 @@ class _EquipmentBookingScreenState
     }
   }
 
-  Future<void> _confirmBooking(
-    String docId,
-    EquipmentWithAvailability availability,
-    String brand,
-    String model,
+  /// Réserve un équipement pour une taille donnée.
+  /// Le système sélectionne automatiquement le premier équipement disponible.
+  // ignore_for_file: use_build_context_synchronously
+  Future<void> _bookEquipmentForSize(
+    List<Equipment> equipmentList,
     String size,
-    String categoryId,
   ) async {
     final l10n = AppLocalizations.of(context);
+    final currentUserId = ref.read(currentUserProvider).value?.id;
+    
+    if (currentUserId == null) {
+      _showError('Utilisateur non connecté');
+      return;
+    }
 
+    // Trouver le premier équipement disponible
+    final dateString = DateFormat('yyyy-MM-dd').format(_selectedDate);
+    final slotString = _selectedSlot.name;
+
+    // Récupérer les réservations existantes
+    final bookingsSnapshot = await FirebaseFirestore.instance
+        .collection('equipment_bookings')
+        .where('date_string', isEqualTo: dateString)
+        .where('slot', isEqualTo: slotString)
+        .where('status', whereIn: ['confirmed', 'completed'])
+        .get();
+
+    final reservedIds = bookingsSnapshot.docs
+        .map((d) => d.data()['equipment_id'] as String)
+        .toSet();
+
+    // Trouver le premier équipement non réservé et disponible
+    final availableEquipment = equipmentList.firstWhere(
+      (eq) => eq.status == EquipmentStatus.available && !reservedIds.contains(eq.id),
+      orElse: () => throw Exception('Aucun équipement disponible'),
+    );
+
+    // Stocker les données avant le showDialog pour éviter le BuildContext async gap
+    final equipmentBrand = availableEquipment.brand;
+    final equipmentModel = availableEquipment.model;
+    final equipmentSerial = availableEquipment.serialNumber;
+    final equipmentSize = size;
+    final selectedDate = _selectedDate;
+    final selectedSlot = _selectedSlot;
+
+    // ignore: use_build_context_synchronously
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -324,10 +386,15 @@ class _EquipmentBookingScreenState
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('$brand $model - ${size}m²'),
+            Text('$equipmentBrand $equipmentModel'),
+            if (equipmentSerial != null)
+              Text(
+                'S/N: $equipmentSerial',
+                style: const TextStyle(fontSize: 11, color: Colors.grey),
+              ),
             const SizedBox(height: 8),
             Text(
-              '${DateFormat('dd/MM/yyyy').format(_selectedDate)} - ${_getSlotName(l10n)}',
+              '${equipmentSize}m² - ${DateFormat('dd/MM/yyyy').format(selectedDate)} - ${_getSlotNameForSlot(selectedSlot)}',
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ],
@@ -348,20 +415,31 @@ class _EquipmentBookingScreenState
     if (confirmed != true || !mounted) return;
 
     try {
-      final userId = ref.read(currentUserProvider).value?.id;
-      if (userId == null) throw Exception('Utilisateur non connecté');
+      final user = ref.read(currentUserProvider).value;
+      final bookingData = {
+        'user_id': currentUserId,
+        'user_name': user?.displayName ?? '',
+        'user_email': user?.email ?? '',
+        'equipment_type': availableEquipment.categoryId,
+        'equipment_brand': availableEquipment.brand,
+        'equipment_model': availableEquipment.model,
+        'equipment_size': size,
+        'date_string': dateString,
+        'date_timestamp': Timestamp.fromDate(_selectedDate),
+        'slot': slotString,
+        'created_by': currentUserId,
+      };
 
-      await ref
-          .read(equipmentBookingNotifierProvider(userId).notifier)
-          .createBooking(
-            equipmentId: docId,
-            equipmentType: categoryId,
-            equipmentBrand: brand,
-            equipmentModel: model,
-            equipmentSize: size,
-            date: _selectedDate,
-            slot: _selectedSlot,
+      final success = await ref
+          .read(equipmentRepositoryProvider)
+          .bookEquipmentAtomically(
+            equipmentId: availableEquipment.id,
+            bookingData: bookingData,
           );
+
+      if (!success) {
+        throw Exception('Cet équipement vient d\'être réservé. Veuillez réessayer.');
+      }
 
       if (!mounted) return;
 
@@ -372,17 +450,22 @@ class _EquipmentBookingScreenState
         ),
       );
 
-      setState(() {});
+      // Rafraîchir la liste
+      ref.invalidate(equipmentNotifierProvider);
     } catch (e) {
       if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Erreur: $e'),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        ),
-      );
+      _showError('Erreur: $e');
     }
+  }
+
+  void _showError(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Theme.of(context).colorScheme.error,
+      ),
+    );
   }
 
   String _getSlotName(AppLocalizations l10n) {
@@ -393,6 +476,17 @@ class _EquipmentBookingScreenState
         return l10n.afternoon;
       case EquipmentBookingSlot.fullDay:
         return l10n.fullDay;
+    }
+  }
+
+  String _getSlotNameForSlot(EquipmentBookingSlot slot) {
+    switch (slot) {
+      case EquipmentBookingSlot.morning:
+        return 'Matin';
+      case EquipmentBookingSlot.afternoon:
+        return 'Après-midi';
+      case EquipmentBookingSlot.fullDay:
+        return 'Journée';
     }
   }
 }
@@ -452,4 +546,15 @@ class _SlotChip extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Modèle interne pour la disponibilité d'une taille.
+class _SizeAvailability {
+  final int availableCount;
+  final int totalCount;
+
+  _SizeAvailability({
+    required this.availableCount,
+    required this.totalCount,
+  });
 }

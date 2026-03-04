@@ -2240,6 +2240,12 @@ abstract class AppLocalizations {
   /// **'Aucun équipement disponible'**
   String get noEquipmentAvailable;
 
+  /// No description provided for @statusReserved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réservé'**
+  String get statusReserved;
+
   /// No description provided for @available.
   ///
   /// In fr, this message translates to:

@@ -7,15 +7,13 @@ part of 'equipment_availability_notifier.dart';
 // **************************************************************************
 
 String _$equipmentAvailabilityNotifierHash() =>
-    r'4ebfa767525cacf3b8eef30280e4d3f5bc16bd1b';
+    r'9e7fbef780fa45cb32b6265ca19aac1fa87f939b';
 
 /// State management pour la disponibilité des équipements en temps réel.
 ///
 /// Fournit un stream qui se met à jour automatiquement lorsque :
-/// - Un équipement est modifié (total_quantity, status)
+/// - Un équipement est modifié (status)
 /// - Une réservation est créée/annulée
-///
-/// Utilise Rx.combineLatest2 pour éviter les N+1 queries.
 ///
 /// Copied from [EquipmentAvailabilityNotifier].
 @ProviderFor(EquipmentAvailabilityNotifier)
