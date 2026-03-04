@@ -1,9 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../domain/models/equipment_booking.dart';
-import '../../domain/repositories/equipment_booking_repository.dart';
-import '../providers/auth_state_provider.dart';
+
 import '../../data/providers/repository_providers.dart';
+import '../../domain/models/equipment_booking.dart';
 import '../../utils/date_utils.dart';
+import '../providers/auth_state_provider.dart';
 
 part 'equipment_booking_notifier.g.dart';
 

@@ -24,9 +24,11 @@ class EquipmentAvailabilityNotifier extends _$EquipmentAvailabilityNotifier {
         .collection('equipment')
         .where('status', isEqualTo: 'active')
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => Equipment.fromJson(doc.data() as Map<String, dynamic>))
-            .toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => Equipment.fromJson(doc.data()))
+              .toList(),
+        );
   }
 
   /// Stream de disponibilité pour un équipement spécifique à une date/créneau.
@@ -58,8 +60,10 @@ class EquipmentAvailabilityNotifier extends _$EquipmentAvailabilityNotifier {
         .collection('equipment')
         .doc(equipmentId)
         .snapshots()
-        .map((doc) => doc.exists
-            ? Equipment.fromJson(doc.data() as Map<String, dynamic>)
-            : null);
+        .map(
+          (doc) => doc.exists
+              ? Equipment.fromJson(doc.data() as Map<String, dynamic>)
+              : null,
+        );
   }
 }

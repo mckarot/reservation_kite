@@ -197,6 +197,45 @@ class _EquipmentTile extends ConsumerWidget {
   final Equipment equipment;
   const _EquipmentTile({required this.equipment});
 
+  void _showQuantityDialog(BuildContext context, WidgetRef ref, Equipment equipment) {
+    final l10n = AppLocalizations.of(context);
+    final controller = TextEditingController(text: equipment.totalQuantity.toString());
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Modifier la quantité'),
+        content: TextField(
+          controller: controller,
+          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(
+            labelText: 'Quantité',
+            hintText: 'Entrez le nombre d\'unités',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.cancelButton),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final newQuantity = int.tryParse(controller.text);
+              if (newQuantity != null && newQuantity >= 1) {
+                ref
+                    .read(equipmentNotifierProvider.notifier)
+                    .updateQuantity(equipment.id, newQuantity);
+                Navigator.pop(context);
+              }
+            },
+            child: Text(l10n.confirmButton),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
@@ -236,23 +275,57 @@ class _EquipmentTile extends ConsumerWidget {
           '${equipment.brand} ${equipment.model} - ${equipment.size}',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: Row(
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              decoration: BoxDecoration(
-                color: statusColor.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(4),
-                border: Border.all(color: statusColor.withValues(alpha: 0.4)),
-              ),
-              child: Text(
-                statusLabel,
-                style: TextStyle(
-                  color: statusColor,
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: statusColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: statusColor.withValues(alpha: 0.4)),
+                  ),
+                  child: Text(
+                    statusLabel,
+                    style: TextStyle(
+                      color: statusColor,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(width: 8),
+                InkWell(
+                  onTap: () => _showQuantityDialog(context, ref, equipment),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: primaryColor.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(color: primaryColor.withValues(alpha: 0.4)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.inventory_2, size: 14),
+                        const SizedBox(width: 4),
+                        Text(
+                          '${equipment.totalQuantity} unité(s)',
+                          style: TextStyle(
+                            color: primaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                        const Icon(Icons.edit, size: 12),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

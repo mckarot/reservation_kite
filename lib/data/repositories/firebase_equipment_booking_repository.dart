@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
-import '../../domain/models/equipment_booking.dart';
+
 import '../../domain/models/equipment.dart';
+import '../../domain/models/equipment_booking.dart';
 import '../../domain/models/equipment_with_availability.dart';
 import '../../domain/repositories/equipment_booking_repository.dart';
-import '../../utils/date_utils.dart';
 import '../../utils/booking_conflict_utils.dart';
+import '../../utils/date_utils.dart';
 
 /// Implémentation Firebase du repository de réservations de matériel.
 ///

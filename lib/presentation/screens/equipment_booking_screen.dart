@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+
+import '../../domain/models/app_theme_settings.dart';
 import '../../domain/models/equipment.dart';
 import '../../domain/models/equipment_booking.dart';
 import '../../domain/models/equipment_with_availability.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/auth_state_provider.dart';
+import '../providers/equipment_availability_notifier.dart';
 import '../providers/equipment_booking_notifier.dart';
 import '../providers/equipment_notifier.dart';
-import '../providers/equipment_availability_notifier.dart';
 import '../providers/theme_notifier.dart';
-import '../../domain/models/app_theme_settings.dart';
 import '../widgets/equipment_category_filter.dart';
 
 /// Écran de réservation de matériel pour les élèves.
@@ -195,7 +196,7 @@ class _EquipmentBookingScreenState
       itemCount: filtered.length,
       itemBuilder: (context, index) {
         final eq = filtered[index];
-        
+
         final brand = eq.brand;
         final model = eq.model;
         final size = eq.size;
@@ -350,17 +351,17 @@ class _EquipmentBookingScreenState
       final userId = ref.read(currentUserProvider).value?.id;
       if (userId == null) throw Exception('Utilisateur non connecté');
 
-      await ref.read(
-        equipmentBookingNotifierProvider(userId).notifier,
-      ).createBooking(
-        equipmentId: docId,
-        equipmentType: categoryId,
-        equipmentBrand: brand,
-        equipmentModel: model,
-        equipmentSize: size,
-        date: _selectedDate,
-        slot: _selectedSlot,
-      );
+      await ref
+          .read(equipmentBookingNotifierProvider(userId).notifier)
+          .createBooking(
+            equipmentId: docId,
+            equipmentType: categoryId,
+            equipmentBrand: brand,
+            equipmentModel: model,
+            equipmentSize: size,
+            date: _selectedDate,
+            slot: _selectedSlot,
+          );
 
       if (!mounted) return;
 

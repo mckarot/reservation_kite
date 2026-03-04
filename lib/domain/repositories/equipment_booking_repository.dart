@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/equipment_booking.dart';
-import '../models/equipment.dart';
 import '../models/equipment_with_availability.dart';
 
 /// Repository interface pour les réservations de matériel.

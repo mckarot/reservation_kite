@@ -8,10 +8,11 @@ import 'package:reservation_kite/presentation/screens/create_admin_screen.dart';
 import 'package:reservation_kite/presentation/screens/equipment_admin_screen.dart';
 import 'package:reservation_kite/presentation/screens/equipment_booking_screen.dart';
 import 'package:reservation_kite/presentation/screens/equipment_init_screen.dart';
-import 'package:reservation_kite/presentation/screens/fix_equipment_data_screen.dart';
 import 'package:reservation_kite/presentation/screens/firestore_debug_screen.dart';
+import 'package:reservation_kite/presentation/screens/fix_equipment_data_screen.dart';
 import 'package:reservation_kite/presentation/screens/staff_admin_screen.dart';
 import 'package:reservation_kite/presentation/screens/user_directory_screen.dart';
+
 import '../../data/providers/repository_providers.dart';
 import '../../domain/models/app_theme_settings.dart';
 import '../../domain/models/staff.dart';
@@ -27,12 +28,13 @@ class AdminScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    
+
     // Récupérer les couleurs du thème dynamique
     final themeSettingsAsync = ref.watch(themeNotifierProvider);
     final themeSettings = themeSettingsAsync.value;
-    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
-    
+    final primaryColor =
+        themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+
     final items = <_DashboardItem>[
       _DashboardItem(
         title: l10n.dashboardKPIs,
@@ -96,7 +98,9 @@ class AdminScreen extends ConsumerWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const FixEquipmentDataScreen()),
+                MaterialPageRoute(
+                  builder: (_) => const FixEquipmentDataScreen(),
+                ),
               );
             },
           ),
@@ -128,12 +132,13 @@ class AdminScreen extends ConsumerWidget {
                   GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      childAspectRatio: 1.2,
-                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                          childAspectRatio: 1.2,
+                        ),
                     itemCount: items.length,
                     itemBuilder: (context, index) {
                       return _DashboardCard(item: items[index]);
@@ -175,13 +180,10 @@ class _DashboardCard extends ConsumerWidget {
     // Récupérer les couleurs du thème dynamique
     final themeSettingsAsync = ref.watch(themeNotifierProvider);
     final themeSettings = themeSettingsAsync.value;
-    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
-    
-    Widget icon = Icon(
-      item.icon,
-      size: 40,
-      color: item.color ?? primaryColor,
-    );
+    final primaryColor =
+        themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+
+    Widget icon = Icon(item.icon, size: 40, color: item.color ?? primaryColor);
 
     if (item.hasBadge) {
       final unavailabilities =

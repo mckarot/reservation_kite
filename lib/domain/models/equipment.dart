@@ -25,8 +25,8 @@ class Equipment with _$Equipment {
     required String brand,
     required String model,
     @JsonKey(fromJson: _anyToString) required String size,
-    @JsonKey(name: 'total_quantity') @Default(1) int totalQuantity,
     @JsonKey(name: 'updated_at') required DateTime updatedAt,
+    @JsonKey(name: 'total_quantity') @Default(1) int totalQuantity,
     @Default(EquipmentStatus.available) EquipmentStatus status,
     @Default('') String notes,
   }) = _Equipment;
@@ -34,7 +34,8 @@ class Equipment with _$Equipment {
   factory Equipment.fromJson(Map<String, dynamic> json) {
     return Equipment(
       id: json['id'] as String? ?? '',
-      categoryId: (json['category_id'] ?? json['categoryId']) as String? ?? 'unknown',
+      categoryId:
+          (json['category_id'] ?? json['categoryId']) as String? ?? 'unknown',
       brand: json['brand'] as String? ?? '',
       model: json['model'] as String? ?? '',
       size: json['size'] as String? ?? '0',

@@ -15,7 +15,8 @@ class EquipmentInitScreen extends ConsumerStatefulWidget {
   const EquipmentInitScreen({super.key});
 
   @override
-  ConsumerState<EquipmentInitScreen> createState() => _EquipmentInitScreenState();
+  ConsumerState<EquipmentInitScreen> createState() =>
+      _EquipmentInitScreenState();
 }
 
 class _EquipmentInitScreenState extends ConsumerState<EquipmentInitScreen> {
@@ -42,12 +43,12 @@ class _EquipmentInitScreenState extends ConsumerState<EquipmentInitScreen> {
         _totalEquipment = equipmentSnapshot.docs.length;
       });
 
-      int updated = 0;
-      int alreadyMigrated = 0;
+      var updated = 0;
+      var alreadyMigrated = 0;
 
       for (final doc in equipmentSnapshot.docs) {
         try {
-          final data = doc.data() as Map<String, dynamic>;
+          final data = doc.data();
           final updates = <String, dynamic>{};
 
           // 1. Migration de total_quantity
@@ -117,7 +118,8 @@ class _EquipmentInitScreenState extends ConsumerState<EquipmentInitScreen> {
     final l10n = AppLocalizations.of(context);
     final themeSettingsAsync = ref.watch(themeNotifierProvider);
     final themeSettings = themeSettingsAsync.value;
-    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    final primaryColor =
+        themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
 
     return Scaffold(
       appBar: AppBar(
@@ -142,7 +144,9 @@ class _EquipmentInitScreenState extends ConsumerState<EquipmentInitScreen> {
                       children: [
                         Icon(
                           Icons.info_outline,
-                          color: Theme.of(context).colorScheme.onPrimaryContainer,
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onPrimaryContainer,
                         ),
                         const SizedBox(width: 8),
                         Text(
@@ -150,7 +154,9 @@ class _EquipmentInitScreenState extends ConsumerState<EquipmentInitScreen> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onPrimaryContainer,
                           ),
                         ),
                       ],
@@ -183,7 +189,9 @@ class _EquipmentInitScreenState extends ConsumerState<EquipmentInitScreen> {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : const Icon(Icons.sync),
-              label: Text(_isMigrating ? 'Migration en cours...' : 'Lancer la migration'),
+              label: Text(
+                _isMigrating ? 'Migration en cours...' : 'Lancer la migration',
+              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: primaryColor,
                 foregroundColor: Colors.white,
@@ -204,9 +212,13 @@ class _EquipmentInitScreenState extends ConsumerState<EquipmentInitScreen> {
                       // Barre de progression
                       if (_isMigrating) ...[
                         LinearProgressIndicator(
-                          value: _totalEquipment > 0 ? _migratedCount / _totalEquipment : 0,
+                          value: _totalEquipment > 0
+                              ? _migratedCount / _totalEquipment
+                              : 0,
                           backgroundColor: Colors.grey.shade200,
-                          valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            primaryColor,
+                          ),
                         ),
                         const SizedBox(height: 8),
                       ],
@@ -277,7 +289,10 @@ class _EquipmentInitScreenState extends ConsumerState<EquipmentInitScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: [
-                    Icon(Icons.warning_amber_rounded, color: Colors.orange.shade700),
+                    Icon(
+                      Icons.warning_amber_rounded,
+                      color: Colors.orange.shade700,
+                    ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
@@ -325,10 +340,7 @@ class _StatItem extends StatelessWidget {
         ),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey.shade600,
-          ),
+          style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
         ),
       ],
     );

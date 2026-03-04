@@ -37,6 +37,7 @@ class FirestoreEquipmentRepository implements EquipmentRepository {
       'size': equipment.size,
       'status': equipment.status.name,
       'notes': equipment.notes,
+      'total_quantity': equipment.totalQuantity,
       'updated_at': FieldValue.serverTimestamp(),
     };
 

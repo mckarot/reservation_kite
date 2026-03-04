@@ -9,10 +9,12 @@ class FixEquipmentDataScreen extends ConsumerStatefulWidget {
   const FixEquipmentDataScreen({super.key});
 
   @override
-  ConsumerState<FixEquipmentDataScreen> createState() => _FixEquipmentDataScreenState();
+  ConsumerState<FixEquipmentDataScreen> createState() =>
+      _FixEquipmentDataScreenState();
 }
 
-class _FixEquipmentDataScreenState extends ConsumerState<FixEquipmentDataScreen> {
+class _FixEquipmentDataScreenState
+    extends ConsumerState<FixEquipmentDataScreen> {
   bool _isFixing = false;
   String? _result;
   int _totalFound = 0;
@@ -37,7 +39,7 @@ class _FixEquipmentDataScreenState extends ConsumerState<FixEquipmentDataScreen>
 
       for (final doc in snapshot.docs) {
         try {
-          final data = doc.data() as Map<String, dynamic>;
+          final data = doc.data();
           final updates = <String, dynamic>{};
 
           // Correction #1: status "active" → "available"
@@ -85,7 +87,8 @@ class _FixEquipmentDataScreenState extends ConsumerState<FixEquipmentDataScreen>
   Widget build(BuildContext context) {
     final themeSettingsAsync = ref.watch(themeNotifierProvider);
     final themeSettings = themeSettingsAsync.value;
-    final primaryColor = themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+    final primaryColor =
+        themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
 
     return Scaffold(
       appBar: AppBar(
@@ -118,7 +121,9 @@ class _FixEquipmentDataScreenState extends ConsumerState<FixEquipmentDataScreen>
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.onErrorContainer,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onErrorContainer,
                           ),
                         ),
                       ],
@@ -149,7 +154,9 @@ class _FixEquipmentDataScreenState extends ConsumerState<FixEquipmentDataScreen>
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : const Icon(Icons.build),
-              label: Text(_isFixing ? 'Correction en cours...' : 'Corriger les données'),
+              label: Text(
+                _isFixing ? 'Correction en cours...' : 'Corriger les données',
+              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: primaryColor,
                 foregroundColor: Colors.white,
@@ -170,9 +177,13 @@ class _FixEquipmentDataScreenState extends ConsumerState<FixEquipmentDataScreen>
                       // Barre de progression
                       if (_isFixing) ...[
                         LinearProgressIndicator(
-                          value: _totalFound > 0 ? _fixedCount / _totalFound : 0,
+                          value: _totalFound > 0
+                              ? _fixedCount / _totalFound
+                              : 0,
                           backgroundColor: Colors.grey.shade200,
-                          valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            primaryColor,
+                          ),
                         ),
                         const SizedBox(height: 8),
                       ],
@@ -269,10 +280,7 @@ class _StatItem extends StatelessWidget {
         ),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey.shade600,
-          ),
+          style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
         ),
       ],
     );

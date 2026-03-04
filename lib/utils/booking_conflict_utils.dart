@@ -29,7 +29,7 @@ int countConflictingBookings(
   List<Map<String, dynamic>> existingBookings,
   EquipmentBookingSlot requestedSlot,
 ) {
-  int count = 0;
+  var count = 0;
   for (final booking in existingBookings) {
     final slotString = booking['slot'] as String;
     final existingSlot = EquipmentBookingSlot.values.firstWhere(
