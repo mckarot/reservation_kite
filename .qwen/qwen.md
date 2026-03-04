@@ -205,19 +205,24 @@ await FirebaseFirestore.instance.runTransaction((transaction) async {
 
 ## 6. FIRESTORE & SÉCURITÉ
 
-### Collections Principales
+### ⚠️ RÈGLE CRITIQUE : MISE À JOUR DU SCHÉMA
 
-| Collection | Description | Champs Clés |
-|------------|-------------|-------------|
-| `settings/school_config` | Configuration école | `opening_hours`, `days_off`, `max_students_per_instructor` |
-| `users/{uid}` | Profils utilisateurs | `display_name`, `email`, `role`, `weight`, `wallet_balance`, `progress` |
-| `staff/{uid}` | Fiches moniteurs | `bio`, `photo_url`, `specialties`, `certificates`, `is_active` |
-| `availabilities/{id}` | Disponibilités staff | `instructor_id`, `date`, `slot`, `status`, `reason` |
-| `sessions/{id}` | Cours de Kite | `date`, `slot`, `instructor_id`, `students`, `max_capacity`, `status` |
-| `equipment/{id}` | Matériel école | `type`, `brand`, `model`, `size`, `status` |
-| `transactions/{id}` | Historique paiements | `user_id`, `amount`, `type`, `payment_method` |
-| `credit_packs/{id}` | Catalogue packs crédits | `name`, `credits`, `price`, `is_active` |
-| `products/{id}` | Boutique | `name`, `price`, `category`, `condition`, `stock_quantity` |
+| Règle | Description |
+|-------|-------------|
+| **Mise à jour obligatoire** | Après CHAQUE modification validée de collections/documents Firestore |
+| **Fichier à mettre à jour** | `firestore_schema.md` — source de vérité du projet |
+| **Quand mettre à jour** | Dès qu'une nouvelle collection, un nouveau champ, ou un nouvel index est ajouté |
+| **Pourquoi** | Garder une documentation à jour pour toute l'équipe et éviter les oublis |
+
+**Exemple :**
+```dart
+// ✅ Après avoir ajouté la collection equipment_assignments
+// → Mise à jour IMMÉDIATE de firestore_schema.md :
+## COLLECTION: equipment_assignments
+- **Description**: Assignations d'équipements...
+- **Chemin**: `/equipment_assignments/{assignmentId}`
+- **Champs**: ...
+```
 
 ### Règles d'Écriture
 

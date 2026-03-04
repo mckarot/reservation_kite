@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/models/equipment.dart';
+import '../../domain/models/equipment_booking.dart';
 import '../../domain/repositories/equipment_repository.dart';
+import '../../utils/booking_conflict_utils.dart';
 
 /// Repository Firebase pour la gestion des équipements.
 ///
@@ -104,13 +106,39 @@ class FirestoreEquipmentRepository implements EquipmentRepository {
           throw Exception('Équipement non disponible : statut actuel = $currentStatus');
         }
 
-        // 2. Mise à jour atomique du statut de l'équipement
+        // 2. NOUVEAU : Vérifier les conflits de créneau
+        final dateString = bookingData['date_string'] as String;
+        final slotString = bookingData['slot'] as String;
+        final requestedSlot = EquipmentBookingSlot.values.firstWhere(
+          (e) => e.name == slotString,
+          orElse: () => EquipmentBookingSlot.morning,
+        );
+
+        final existingBookings = await _firestore
+            .collection(_bookingsCollectionPath)
+            .where('equipment_id', isEqualTo: equipmentId)
+            .where('date_string', isEqualTo: dateString)
+            .where('status', whereIn: ['confirmed', 'completed'])
+            .get();
+
+        if (existingBookings.docs.isNotEmpty) {
+          final conflicts = countConflictingBookings(
+            existingBookings.docs.map((d) => d.data() as Map<String, dynamic>).toList(),
+            requestedSlot,
+          );
+
+          if (conflicts > 0) {
+            throw Exception('Créneau déjà réservé ($conflicts conflit(s))');
+          }
+        }
+
+        // 3. Mise à jour atomique du statut de l'équipement
         transaction.update(equipmentRef, {
           'status': 'reserved',
           'updated_at': FieldValue.serverTimestamp(),
         });
 
-        // 3. Création de la réservation dans la même transaction
+        // 4. Création de la réservation dans la même transaction
         transaction.set(bookingRef, {
           ...bookingData,
           'equipment_id': equipmentId,

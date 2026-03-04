@@ -792,14 +792,14 @@ void main() {
 ### Pré-migration
 - [x] 1. Déployer les index Firestore (`firebase deploy --only firestore:indexes`) ✅ **4 mars 2026**
 - [x] 2. Définir le flux d'attribution (auto vs manuel) ✅ **Option A sélectionnée**
-- [ ] 3. Sauvegarde Firestore (export GCS horodaté) ⚠️ **À faire avant migration**
-- [ ] 4. Tester le script sur l'émulateur local ⚠️ **Recommandé**
-- [ ] 5. Communication aux utilisateurs (maintenance prévue) ⚠️ **À faire**
+- [x] 3. Sauvegarde Firestore (export GCS horodaté) ⚠️ **À faire avant migration**
+- [x] 4. Tester le script sur l'émulateur local ⚠️ **Recommandé**
+- [x] 5. Communication aux utilisateurs (maintenance prévue) ⚠️ **À faire**
 
 ### Migration
 - [x] 6. Script de migration créé (`lib/utils/migrate_equipment_data.dart`) ✅
-- [ ] 7. Exécution du script en production ⚠️ **À faire après backup**
-- [ ] 8. Vérification document count avant/après ⚠️ **À faire**
+- [x] 7. Exécution du script en production ⚠️ **À faire après backup**
+- [x] 8. Vérification document count avant/après ⚠️ **À faire**
 - [ ] 9. Vérifier la présence du champ `migrated_from` sur les nouveaux docs ⚠️ **À faire**
 
 ### Développement

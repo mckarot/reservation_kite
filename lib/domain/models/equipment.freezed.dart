@@ -228,6 +228,8 @@ mixin _$Equipment {
       throw _privateConstructorUsedError;
   @JsonKey(name: 'total_bookings')
   int get totalBookings => throw _privateConstructorUsedError;
+  @JsonKey(name: 'total_quantity')
+  int get totalQuantity => throw _privateConstructorUsedError;
   @JsonKey(name: 'updated_at')
   DateTime get updatedAt =>
       throw _privateConstructorUsedError; // Champs de migration (optionnels)
@@ -260,6 +262,7 @@ abstract class $EquipmentCopyWith<$Res> {
       @JsonKey(name: 'maintenance_history')
       List<MaintenanceHistory> maintenanceHistory,
       @JsonKey(name: 'total_bookings') int totalBookings,
+      @JsonKey(name: 'total_quantity') int totalQuantity,
       @JsonKey(name: 'updated_at') DateTime updatedAt,
       @JsonKey(name: 'migrated_from') String? migratedFrom,
       @JsonKey(name: 'migration_date') DateTime? migrationDate});
@@ -290,6 +293,7 @@ class _$EquipmentCopyWithImpl<$Res, $Val extends Equipment>
     Object? lastMaintenanceDate = freezed,
     Object? maintenanceHistory = null,
     Object? totalBookings = null,
+    Object? totalQuantity = null,
     Object? updatedAt = null,
     Object? migratedFrom = freezed,
     Object? migrationDate = freezed,
@@ -343,6 +347,10 @@ class _$EquipmentCopyWithImpl<$Res, $Val extends Equipment>
           ? _value.totalBookings
           : totalBookings // ignore: cast_nullable_to_non_nullable
               as int,
+      totalQuantity: null == totalQuantity
+          ? _value.totalQuantity
+          : totalQuantity // ignore: cast_nullable_to_non_nullable
+              as int,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
@@ -381,6 +389,7 @@ abstract class _$$EquipmentImplCopyWith<$Res>
       @JsonKey(name: 'maintenance_history')
       List<MaintenanceHistory> maintenanceHistory,
       @JsonKey(name: 'total_bookings') int totalBookings,
+      @JsonKey(name: 'total_quantity') int totalQuantity,
       @JsonKey(name: 'updated_at') DateTime updatedAt,
       @JsonKey(name: 'migrated_from') String? migratedFrom,
       @JsonKey(name: 'migration_date') DateTime? migrationDate});
@@ -409,6 +418,7 @@ class __$$EquipmentImplCopyWithImpl<$Res>
     Object? lastMaintenanceDate = freezed,
     Object? maintenanceHistory = null,
     Object? totalBookings = null,
+    Object? totalQuantity = null,
     Object? updatedAt = null,
     Object? migratedFrom = freezed,
     Object? migrationDate = freezed,
@@ -462,6 +472,10 @@ class __$$EquipmentImplCopyWithImpl<$Res>
           ? _value.totalBookings
           : totalBookings // ignore: cast_nullable_to_non_nullable
               as int,
+      totalQuantity: null == totalQuantity
+          ? _value.totalQuantity
+          : totalQuantity // ignore: cast_nullable_to_non_nullable
+              as int,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
@@ -495,6 +509,7 @@ class _$EquipmentImpl implements _Equipment {
       @JsonKey(name: 'maintenance_history')
       final List<MaintenanceHistory> maintenanceHistory = const [],
       @JsonKey(name: 'total_bookings') this.totalBookings = 0,
+      @JsonKey(name: 'total_quantity') this.totalQuantity = 1,
       @JsonKey(name: 'updated_at') required this.updatedAt,
       @JsonKey(name: 'migrated_from') this.migratedFrom,
       @JsonKey(name: 'migration_date') this.migrationDate})
@@ -540,6 +555,9 @@ class _$EquipmentImpl implements _Equipment {
   @JsonKey(name: 'total_bookings')
   final int totalBookings;
   @override
+  @JsonKey(name: 'total_quantity')
+  final int totalQuantity;
+  @override
   @JsonKey(name: 'updated_at')
   final DateTime updatedAt;
 // Champs de migration (optionnels)
@@ -552,7 +570,7 @@ class _$EquipmentImpl implements _Equipment {
 
   @override
   String toString() {
-    return 'Equipment(id: $id, categoryId: $categoryId, brand: $brand, model: $model, size: $size, serialNumber: $serialNumber, status: $status, notes: $notes, purchaseDate: $purchaseDate, lastMaintenanceDate: $lastMaintenanceDate, maintenanceHistory: $maintenanceHistory, totalBookings: $totalBookings, updatedAt: $updatedAt, migratedFrom: $migratedFrom, migrationDate: $migrationDate)';
+    return 'Equipment(id: $id, categoryId: $categoryId, brand: $brand, model: $model, size: $size, serialNumber: $serialNumber, status: $status, notes: $notes, purchaseDate: $purchaseDate, lastMaintenanceDate: $lastMaintenanceDate, maintenanceHistory: $maintenanceHistory, totalBookings: $totalBookings, totalQuantity: $totalQuantity, updatedAt: $updatedAt, migratedFrom: $migratedFrom, migrationDate: $migrationDate)';
   }
 
   @override
@@ -578,6 +596,8 @@ class _$EquipmentImpl implements _Equipment {
                 .equals(other._maintenanceHistory, _maintenanceHistory) &&
             (identical(other.totalBookings, totalBookings) ||
                 other.totalBookings == totalBookings) &&
+            (identical(other.totalQuantity, totalQuantity) ||
+                other.totalQuantity == totalQuantity) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
             (identical(other.migratedFrom, migratedFrom) ||
@@ -601,6 +621,7 @@ class _$EquipmentImpl implements _Equipment {
       lastMaintenanceDate,
       const DeepCollectionEquality().hash(_maintenanceHistory),
       totalBookings,
+      totalQuantity,
       updatedAt,
       migratedFrom,
       migrationDate);
@@ -628,6 +649,7 @@ abstract class _Equipment implements Equipment {
           @JsonKey(name: 'maintenance_history')
           final List<MaintenanceHistory> maintenanceHistory,
           @JsonKey(name: 'total_bookings') final int totalBookings,
+          @JsonKey(name: 'total_quantity') final int totalQuantity,
           @JsonKey(name: 'updated_at') required final DateTime updatedAt,
           @JsonKey(name: 'migrated_from') final String? migratedFrom,
           @JsonKey(name: 'migration_date') final DateTime? migrationDate}) =
@@ -664,6 +686,9 @@ abstract class _Equipment implements Equipment {
   @override
   @JsonKey(name: 'total_bookings')
   int get totalBookings;
+  @override
+  @JsonKey(name: 'total_quantity')
+  int get totalQuantity;
   @override
   @JsonKey(name: 'updated_at')
   DateTime get updatedAt;

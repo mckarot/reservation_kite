@@ -6,6 +6,7 @@ import 'package:reservation_kite/presentation/screens/admin_settings_screen.dart
 import 'package:reservation_kite/presentation/screens/booking_screen.dart';
 import 'package:reservation_kite/presentation/screens/create_admin_screen.dart';
 import 'package:reservation_kite/presentation/screens/equipment_admin_screen.dart';
+import 'package:reservation_kite/presentation/screens/equipment_assignment_screen.dart';
 import 'package:reservation_kite/presentation/screens/equipment_booking_screen.dart';
 import 'package:reservation_kite/presentation/screens/firestore_debug_screen.dart';
 import 'package:reservation_kite/presentation/screens/fix_equipment_data_screen.dart';
@@ -73,6 +74,12 @@ class AdminScreen extends ConsumerWidget {
         icon: Icons.kitesurfing,
         route: const EquipmentBookingScreen(),
         color: Colors.blue,
+      ),
+      _DashboardItem(
+        title: '📋 Assignment Matériel',
+        icon: Icons.assignment,
+        route: const EquipmentAssignmentScreen(),
+        color: Colors.purple,
       ),
       _DashboardItem(
         title: l10n.calendarBookings,

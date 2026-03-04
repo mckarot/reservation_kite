@@ -4,12 +4,14 @@ import 'package:intl/intl.dart';
 
 import '../../domain/models/app_theme_settings.dart';
 import '../../domain/models/equipment.dart';
+import '../../domain/models/equipment_assignment.dart';
 import '../../domain/models/equipment_booking.dart';
 import '../../domain/models/equipment_with_availability.dart';
 import '../../domain/models/reservation.dart';
 import '../../domain/models/user.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/auth_state_provider.dart';
+import '../providers/equipment_assignment_notifier.dart';
 import '../providers/equipment_availability_notifier.dart';
 import '../providers/equipment_booking_notifier.dart';
 import '../providers/equipment_notifier.dart';
@@ -39,6 +41,7 @@ class _LessonValidationScreenState
   String? _selectedLevel;
   final List<String> _selectedEquipmentIds = [];
   String? _selectedCategory;
+  AsyncValue<List<EquipmentAssignment>>? _assignmentsAsync;
 
   @override
   void initState() {
@@ -55,6 +58,149 @@ class _LessonValidationScreenState
     super.dispose();
   }
 
+  // Affiche l'équipement assigné dans un dialog
+  void _showAssignedEquipment() {
+    final l10n = AppLocalizations.of(context);
+
+    _assignmentsAsync?.whenData((assignments) {
+      final studentAssignments = assignments
+          .where((a) => a.studentId == widget.pupil.id)
+          .toList();
+
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Row(
+            children: [
+              Icon(Icons.inventory_2),
+              SizedBox(width: 8),
+              Text('Matériel assigné'),
+            ],
+          ),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: studentAssignments.isEmpty
+                ? const Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.info_outline, size: 48, color: Colors.grey),
+                      SizedBox(height: 16),
+                      Text('Aucun matériel assigné pour cet élève'),
+                    ],
+                  )
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ...studentAssignments.map((assignment) => Card(
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            child: Icon(_getCategoryIcon(assignment.equipmentType)),
+                          ),
+                          title: Text('${assignment.equipmentBrand} ${assignment.equipmentModel}'),
+                          subtitle: Text('${assignment.equipmentSize}m²'),
+                          trailing: Chip(
+                            label: Text(
+                              assignment.status.name,
+                              style: const TextStyle(fontSize: 10, color: Colors.white),
+                            ),
+                            backgroundColor: _getStatusColor(assignment.status),
+                          ),
+                        ),
+                      )),
+                    ],
+                  ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(l10n.cancelButton),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  // Libère le matériel après la séance
+  void _releaseEquipment(EquipmentAssignment assignment) async {
+    final l10n = AppLocalizations.of(context);
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Libérer le matériel'),
+        content: Text(
+          'Confirmer la libération de :\n${assignment.equipmentBrand} ${assignment.equipmentModel} - ${assignment.equipmentSize}m² ?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.cancelButton),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Libérer'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    try {
+      await ref
+          .read(equipmentAssignmentNotifierProvider(widget.reservation.id).notifier)
+          .completeAssignment(assignment.id, widget.reservation.id);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Matériel libéré avec succès'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erreur: $e'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
+  }
+
+  Color _getStatusColor(EquipmentAssignmentStatus status) {
+    switch (status) {
+      case EquipmentAssignmentStatus.pending:
+        return Colors.orange;
+      case EquipmentAssignmentStatus.confirmed:
+        return Colors.green;
+      case EquipmentAssignmentStatus.cancelled:
+        return Colors.grey;
+      case EquipmentAssignmentStatus.completed:
+        return Colors.blue;
+    }
+  }
+
+  IconData _getCategoryIcon(String categoryId) {
+    switch (categoryId.toLowerCase()) {
+      case 'kite':
+        return Icons.kitesurfing;
+      case 'foil':
+        return Icons.surfing;
+      case 'board':
+        return Icons.directions_bike;
+      case 'harness':
+        return Icons.security;
+      default:
+        return Icons.inventory_2;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -64,15 +210,92 @@ class _LessonValidationScreenState
     final primaryColor =
         themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
 
+    // Watch equipment assignments for this session
+    _assignmentsAsync = ref.watch(
+      equipmentAssignmentNotifierProvider(widget.reservation.id),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.validationTitle(widget.pupil.displayName)),
+        actions: [
+          // Bouton pour voir/modifier l'équipement assigné
+          IconButton(
+            icon: const Icon(Icons.inventory_2),
+            tooltip: 'Équipement assigné',
+            onPressed: () => _showAssignedEquipment(),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Section: Équipement assigné (visible directement)
+            _assignmentsAsync!.when(
+              data: (assignments) {
+                if (assignments.isEmpty) return const SizedBox.shrink();
+                
+                final studentAssignments = assignments
+                    .where((a) => a.studentId == widget.pupil.id)
+                    .toList();
+                
+                if (studentAssignments.isEmpty) return const SizedBox.shrink();
+
+                return Card(
+                  color: primaryColor.withOpacity(0.1),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.inventory_2, color: primaryColor),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Matériel assigné',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: primaryColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        ...studentAssignments.map((assignment) => Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.check_circle, size: 16, color: Colors.green),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  '${assignment.equipmentBrand} ${assignment.equipmentModel} - ${assignment.equipmentSize}m²',
+                                  style: const TextStyle(fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                              if (assignment.status == EquipmentAssignmentStatus.confirmed)
+                                IconButton(
+                                  icon: const Icon(Icons.clear, size: 20),
+                                  tooltip: 'Libérer le matériel',
+                                  onPressed: () => _releaseEquipment(assignment),
+                                ),
+                            ],
+                          ),
+                        )),
+                      ],
+                    ),
+                  ),
+                );
+              },
+              loading: () => const CircularProgressIndicator(),
+              error: (e, _) => const SizedBox.shrink(),
+            ),
+            const SizedBox(height: 16),
+
             Text(
               l10n.skillsValidatedToday,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -496,6 +719,16 @@ class _EquipmentReservationSection extends ConsumerWidget {
                       slot: selectedSlot,
                     ),
                 builder: (context, snapshot) {
+                  IconData categoryIcon(String categoryId) {
+                    switch (categoryId.toLowerCase()) {
+                      case 'kite': return Icons.kitesurfing;
+                      case 'foil': return Icons.surfing;
+                      case 'board': return Icons.directions_bike;
+                      case 'harness': return Icons.security;
+                      default: return Icons.inventory_2;
+                    }
+                  }
+
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const ListTile(
                       leading: CircularProgressIndicator(),
@@ -526,7 +759,7 @@ class _EquipmentReservationSection extends ConsumerWidget {
                             ? Theme.of(context).colorScheme.primaryContainer
                             : Theme.of(context).colorScheme.errorContainer,
                         child: Icon(
-                          _getCategoryIcon(eq.categoryId),
+                          categoryIcon(eq.categoryId),
                           color: isAvailable
                               ? Theme.of(context).colorScheme.onPrimaryContainer
                               : Theme.of(context).colorScheme.onErrorContainer,
@@ -567,20 +800,5 @@ class _EquipmentReservationSection extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (_, __) => Text(l10n.errorLoadingEquipment),
     );
-  }
-
-  IconData _getCategoryIcon(String categoryId) {
-    switch (categoryId.toLowerCase()) {
-      case 'kite':
-        return Icons.kitesurfing;
-      case 'foil':
-        return Icons.surfing;
-      case 'board':
-        return Icons.directions_bike;
-      case 'harness':
-        return Icons.security;
-      default:
-        return Icons.inventory_2;
-    }
   }
 }

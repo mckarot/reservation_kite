@@ -134,6 +134,28 @@
     - `session_id`: string?
     - `notes`: string?
 
+## COLLECTION: equipment_assignments
+- **Description**: Assignations d'équipements spécifiques aux élèves pour les séances de cours (par admin/moniteur).
+- **Chemin**: `/equipment_assignments/{assignmentId}`
+- **Champs**:
+    - `session_id`: string (FK -> sessions/{sessionId})
+    - `student_id`: string (FK -> users.uid)
+    - `student_name`: string (Nom de l'élève, dénormalisé)
+    - `student_email`: string (Email de l'élève, dénormalisé)
+    - `equipment_id`: string (FK -> equipment/{equipmentId})
+    - `equipment_type`: string (Type d'équipement, ex: 'kite', 'foil')
+    - `equipment_brand`: string (Marque)
+    - `equipment_model`: string (Modèle)
+    - `equipment_size`: string (Taille)
+    - `date_string`: string (Format 'yyyy-MM-dd')
+    - `date_timestamp`: timestamp (Pour requêtes de plage)
+    - `slot`: string ('morning', 'afternoon')
+    - `status`: string ['pending', 'confirmed', 'cancelled', 'completed']
+    - `created_at`: serverTimestamp
+    - `updated_at`: serverTimestamp
+    - `created_by`: string (UID de la personne qui a fait l'assignment - admin/moniteur)
+    - `notes`: string? (Notes optionnelles)
+
 ## COLLECTION: transactions
 - **Description**: Historique des paiements manuels et achats.
 - **Chemin**: `/transactions/{transactionId}`

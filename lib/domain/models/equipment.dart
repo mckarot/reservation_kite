@@ -51,6 +51,7 @@ class Equipment with _$Equipment {
     @Default([])
     List<MaintenanceHistory> maintenanceHistory,
     @JsonKey(name: 'total_bookings') @Default(0) int totalBookings,
+    @JsonKey(name: 'total_quantity') @Default(1) int totalQuantity,
     @JsonKey(name: 'updated_at') required DateTime updatedAt,
     // Champs de migration (optionnels)
     @JsonKey(name: 'migrated_from') String? migratedFrom,
@@ -119,6 +120,7 @@ extension EquipmentFirestore on Equipment {
               })
           .toList(),
       'total_bookings': totalBookings,
+      'total_quantity': totalQuantity,
       'updated_at': FieldValue.serverTimestamp(),
       if (migratedFrom != null) 'migrated_from': migratedFrom,
       if (migrationDate != null) 'migration_date': Timestamp.fromDate(migrationDate!),

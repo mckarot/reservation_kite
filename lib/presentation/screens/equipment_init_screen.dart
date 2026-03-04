@@ -59,15 +59,10 @@ class _EquipmentInitScreenState extends ConsumerState<EquipmentInitScreen> {
             continue; // Déjà migré
           }
 
-          // 2. Migration du status
-          if (data.containsKey('status')) {
-            final oldStatus = data['status'] as String;
-            if (oldStatus == 'available') {
-              updates['status'] = 'active';
-            } else if (oldStatus == 'damaged') {
-              updates['status'] = 'retired';
-            }
-          }
+          // 2. Migration du status - SUPPRIMÉ
+          // Ne pas migrer les statuts pour éviter de casser la vérification de disponibilité
+          // Les statuts restent : 'available', 'maintenance', 'damaged', 'reserved'
+          // Voir: lib/domain/models/equipment.dart - enum EquipmentStatus
 
           // 3. Conversion de size String → double
           if (data.containsKey('size')) {

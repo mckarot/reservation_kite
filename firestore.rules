@@ -1,231 +1,80 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // ============================================================
-    // FONCTIONS UTILITAIRES DE SÉCURITÉ
-    // ============================================================
-
-    // Vérifie si l'utilisateur est authentifié
+    
+    // Helper functions
     function isAuthenticated() {
       return request.auth != null;
     }
-
-    // Récupère l'UID de l'utilisateur connecté
-    function currentUserId() {
-      return request.auth.uid;
-    }
-
-    // Vérifie si l'utilisateur est propriétaire de la ressource (basé sur l'ID du document)
-    function isOwner(userId) {
-      return isAuthenticated() && currentUserId() == userId;
-    }
-
-    // Vérifie si l'utilisateur est un Administrateur (Source de vérité: collection /admins)
+    
     function isAdmin() {
-      return isAuthenticated() && exists(/databases/$(database)/documents/admins/$(currentUserId()));
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
-
-    // Vérifie si l'utilisateur est un Staff/Instructeur (Source de vérité: collection /staff)
-    function isStaff() {
-      return isAuthenticated() && exists(/databases/$(database)/documents/staff/$(currentUserId()));
+    
+    function isInstructor() {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'instructor'];
     }
-
-    // Vérifie la validité d'un champ requis
-    function hasField(data, field) {
-      return data.keys().hasAll([field]) && data[field] != null;
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
     }
-
-    // Vérifie que les champs système immuables ne sont pas modifiés
-    function isUnchanged(field) {
-      return request.resource.data[field] == resource.data[field];
-    }
-
-    // ============================================================
-    // COLLECTION: admins
-    // ============================================================
-    match /admins/{adminId} {
-      allow read: if isAuthenticated();
-      allow create: if isAdmin(); // Seul un admin existant peut en créer un nouveau
-      allow update, delete: if isAdmin();
-    }
-
-    // ============================================================
-    // COLLECTION: users
-    // ============================================================
+    
+    // Users collection
     match /users/{userId} {
-      // Lecture: Propriétaire, Staff (pour voir ses élèves) ou Admin
-      allow read: if isAuthenticated() && (
-        isOwner(userId) || 
-        isAdmin() || 
-        isStaff() ||
-        resource.data.role == 'instructor' // Les fiches instructeurs sont publiques pour le choix des élèves
-      );
-
-      // Création: Son propre profil, rôle par défaut 'student', wallet à 0
-      allow create: if isAuthenticated() && isOwner(userId) &&
-        request.resource.data.role == 'student' &&
-        request.resource.data.wallet_balance == 0 &&
-        request.resource.data.created_at == request.time;
-
-      // Mise à jour: 
-      // - Admin: tout sauf created_at
-      // - Propriétaire: champs limités (pas de rôle, pas de wallet, pas de progression)
-      allow update: if isAuthenticated() && (
-        (isAdmin() && isUnchanged('created_at')) ||
-        (isOwner(userId) && 
-         isUnchanged('role') && 
-         isUnchanged('wallet_balance') && 
-         isUnchanged('created_at') && 
-         isUnchanged('progress') &&
-         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['display_name', 'photo_url', 'weight', 'last_seen']))
-      );
-
-      allow delete: if isAdmin();
-    }
-
-    // ============================================================
-    // COLLECTION: settings (school_config, theme_config)
-    // ============================================================
-    match /settings/{settingId} {
-      allow read: if true; // Configuration publique
-      allow write: if isAdmin();
-
-      match /{allPaths=**} {
-        allow read: if true;
-        allow write: if isAdmin();
-      }
-    }
-
-    // ============================================================
-    // COLLECTION: staff
-    // ============================================================
-    match /staff/{staffId} {
-      allow read: if true; // Visible par les élèves pour le choix du moniteur
-      allow create: if isAdmin();
-      allow update: if isAuthenticated() && (isAdmin() || isOwner(staffId));
-      allow delete: if isAdmin();
-    }
-
-    // ============================================================
-    // COLLECTION: availabilities
-    // ============================================================
-    match /availabilities/{availabilityId} {
-      allow read: if true;
-      allow create: if isAuthenticated() && (isAdmin() || (isStaff() && request.resource.data.instructor_id == currentUserId()));
-      allow update: if isAuthenticated() && (
-        isAdmin() || 
-        (isStaff() && resource.data.instructor_id == currentUserId() && resource.data.status != 'booked')
-      );
-      allow delete: if isAdmin() || (isStaff() && resource.data.instructor_id == currentUserId() && resource.data.status != 'booked');
-    }
-
-    // ============================================================
-    // COLLECTION: sessions
-    // ============================================================
-    match /sessions/{sessionId} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    // ============================================================
-    // COLLECTION: reservations
-    // ============================================================
-    match /reservations/{reservationId} {
-      allow read: if isAuthenticated() && (
-        isOwner(resource.data.pupilId) || 
-        isAdmin() || 
-        isStaff()
-      );
-      
-      allow create: if isAuthenticated() && (
-        (request.resource.data.pupilId == currentUserId()) || 
-        isAdmin()
-      ) && request.resource.data.status == 'pending';
-
-      allow update: if isAuthenticated() && (
-        isAdmin() || 
-        (isStaff() && isUnchanged('pupilId')) ||
-        (isOwner(resource.data.pupilId) && resource.data.status == 'pending' && request.resource.data.status == 'pending')
-      );
-
-      allow delete: if isAdmin() || (isOwner(resource.data.pupilId) && resource.data.status == 'pending');
-    }
-
-    // ============================================================
-    // COLLECTION: transactions (CONTRÔLE CRITIQUE)
-    // ============================================================
-    match /transactions/{transactionId} {
-      // Lecture: Propriétaire ou Admin
-      allow read: if isAuthenticated() && (isOwner(resource.data.user_id) || isAdmin());
-      // Écriture: UNIQUEMENT Admin (validations manuelles des paiements physiques)
-      allow create: if isAdmin() && 
-        request.resource.data.created_at == request.time &&
-        request.resource.data.amount > 0;
-      allow update, delete: if false; // Historique immuable
-    }
-
-    // ============================================================
-    // COLLECTION: credit_packs, equipment, products
-    // ============================================================
-    match /credit_packs/{id} { allow read: if true; allow write: if isAdmin(); }
-    match /equipment/{id} {
       allow read: if isAuthenticated();
-      allow write: if isAdmin() || isStaff();
-    }
-    match /equipment_categories/{id} { allow read: if true; allow write: if isAdmin(); }
-    match /products/{id} { allow read: if true; allow write: if isAdmin(); }
-
-    // ============================================================
-    // COLLECTION: equipment_bookings (AJOUTÉ POUR LOCATION MATÉRIEL)
-    // ============================================================
-    match /equipment_bookings/{bookingId} {
-      // Lecture : propriétaire, staff ou admin
-      allow read: if isAuthenticated() && (
-        isOwner(resource.data.user_id) || isStaff() || isAdmin()
-      );
-
-      // Création : élève pour lui-même, ou staff avec session_id
-      allow create: if isAuthenticated() && (
-        (isOwner(request.resource.data.user_id) &&
-          request.resource.data.keys().hasAll([
-            'user_id', 'equipment_id', 'date_string',
-            'date_timestamp', 'slot', 'status'
-          ]) &&
-          request.resource.data.status == 'confirmed'
-        ) ||
-        (isStaff() && request.resource.data.session_id != null)
-      );
-
-      // Mise à jour : élève peut seulement annuler sa propre réservation
-      allow update: if isAuthenticated() && (
-        (isOwner(resource.data.user_id) &&
-          request.resource.data.status == 'cancelled' &&
-          request.resource.data.diff(resource.data).affectedKeys()
-            .hasOnly(['status', 'updated_at'])
-        ) ||
-        isStaff() || isAdmin()
-      );
-
-      // Suppression : admin seulement
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) || isInstructor();
       allow delete: if isAdmin();
     }
-
-    // ============================================================
-    // COLLECTION: notifications
-    // ============================================================
-    match /notifications/{notificationId} {
-      allow read: if isAuthenticated() && isOwner(resource.data.userId);
-      allow create: if isAdmin(); // Le système (via Cloud Functions ou Admin) crée les notifications
-      allow update: if isAuthenticated() && isOwner(resource.data.userId) && 
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead', 'readAt']);
-      allow delete: if isAuthenticated() && isOwner(resource.data.userId);
+    
+    // Sessions collection
+    match /sessions/{sessionId} {
+      allow read: if isAuthenticated();
+      allow create: if isInstructor();
+      allow update: if isInstructor();
+      allow delete: if isAdmin();
     }
-
-    // Par défaut: Refus total
-    match /{document=**} {
-      allow read, write: if false;
+    
+    // Equipment collection
+    match /equipment/{equipmentId} {
+      allow read: if isAuthenticated();
+      allow create, update, delete: if isAdmin();
+    }
+    
+    // Equipment assignments collection
+    match /equipment_assignments/{assignmentId} {
+      allow read: if isAuthenticated();
+      allow create: if isInstructor();
+      allow update: if isInstructor();
+      allow delete: if isAdmin();
+    }
+    
+    // Equipment bookings collection (for student equipment rental)
+    match /equipment_bookings/{bookingId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isOwner(resource.data.user_id) || isInstructor();
+      allow delete: if isOwner(resource.data.user_id) || isInstructor();
+    }
+    
+    // Settings collection
+    match /settings/{settingId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+    
+    // Staff collection
+    match /staff/{staffId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Availabilities collection
+    match /availabilities/{availabilityId} {
+      allow read: if isAuthenticated();
+      allow write: if isInstructor();
     }
   }
 }

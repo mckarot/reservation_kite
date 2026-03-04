@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/repositories/availability_repository.dart';
 import '../../domain/repositories/credit_pack_repository.dart';
+import '../../domain/repositories/equipment_assignment_repository.dart';
 import '../../domain/repositories/equipment_booking_repository.dart';
 import '../../domain/repositories/equipment_repository.dart';
 import '../../domain/repositories/notification_repository.dart';
@@ -15,6 +16,7 @@ import '../../domain/repositories/staff_repository.dart';
 import '../../domain/repositories/transaction_repository.dart';
 import '../../domain/repositories/user_repository.dart';
 import '../repositories/firebase_auth_repository.dart';
+import '../repositories/firebase_equipment_assignment_repository.dart';
 import '../repositories/firebase_equipment_booking_repository.dart';
 import '../repositories/firestore_availability_repository.dart';
 import '../repositories/firestore_credit_pack_repository.dart';
@@ -92,4 +94,11 @@ EquipmentBookingRepository equipmentBookingRepository(
   EquipmentBookingRepositoryRef ref,
 ) {
   return FirebaseEquipmentBookingRepository(FirebaseFirestore.instance);
+}
+
+@riverpod
+EquipmentAssignmentRepository equipmentAssignmentRepository(
+  EquipmentAssignmentRepositoryRef ref,
+) {
+  return FirebaseEquipmentAssignmentRepository(FirebaseFirestore.instance);
 }

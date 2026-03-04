@@ -457,14 +457,13 @@ class _DateSelector extends StatelessWidget {
     );
   }
 
-  String _getWeekdayShort(AppLocalizations l10n, int day) {
+  String _getWeekdayShort(AppLocalizations l10n, int weekday) {
     // Utiliser DateFormat avec la locale de l'application pour une localisation automatique
+    // weekday est déjà correct (1 = Monday, 2 = Tuesday, etc.)
     final now = DateTime.now();
-    final date = DateTime(
-      now.year,
-      now.month,
-      now.day,
-    ).add(Duration(days: day - 1));
+    // Trouver le prochain occurrence de ce weekday
+    final daysToAdd = (weekday - now.weekday + 7) % 7;
+    final date = now.add(Duration(days: daysToAdd));
     return DateFormat('EEE', l10n.localeName).format(date);
   }
 }

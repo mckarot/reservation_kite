@@ -8,6 +8,7 @@ import '../../domain/models/equipment.dart';
 import '../../domain/models/equipment_booking.dart';
 import '../../domain/models/equipment_with_availability.dart';
 import '../../l10n/app_localizations.dart';
+import '../../utils/booking_conflict_utils.dart';
 import '../providers/auth_state_provider.dart';
 import '../providers/equipment_availability_notifier.dart';
 import '../providers/equipment_booking_notifier.dart';
@@ -286,28 +287,41 @@ class _EquipmentBookingScreenState
   }
 
   /// Watch la disponibilité pour une taille donnée (plusieurs équipements).
+  ///
+  /// CORRECTION AUDIT (5.1.3) : Récupère TOUTES les réservations de la date
+  /// et utilise countConflictingBookings pour gérer les full_day correctement.
   Stream<_SizeAvailability> _watchSizeAvailability(List<Equipment> equipmentList) {
     final dateString = DateFormat('yyyy-MM-dd').format(_selectedDate);
-    final slotString = _selectedSlot.name;
 
-    // Stream combiné : on écoute les réservations pour tous les équipements de cette taille
+    // Stream combiné : on écoute TOUTES les réservations pour cette date
+    // (pas de filtre par slot pour voir les full_day)
     return FirebaseFirestore.instance
         .collection('equipment_bookings')
         .where('date_string', isEqualTo: dateString)
-        .where('slot', isEqualTo: slotString)
         .where('status', whereIn: ['confirmed', 'completed'])
         .snapshots()
         .map((snapshot) {
-      final reservedEquipmentIds = snapshot.docs
-          .map((d) => d.data()['equipment_id'] as String)
-          .toSet();
+      // Récupérer toutes les réservations groupées par équipement
+      final bookingsByEquipment = <String, List<Map<String, dynamic>>>{};
+      for (final doc in snapshot.docs) {
+        final data = doc.data();
+        final equipmentId = data['equipment_id'] as String;
+        bookingsByEquipment.putIfAbsent(equipmentId, () => []).add(data);
+      }
 
+      // Compter les équipements disponibles
       final availableCount = equipmentList.where((eq) {
         // Un équipement est disponible si :
         // 1. Son statut est 'available'
-        // 2. Il n'est pas réservé sur ce créneau
-        return eq.status == EquipmentStatus.available &&
-            !reservedEquipmentIds.contains(eq.id);
+        // 2. Pas de conflit de créneau avec les réservations existantes
+        if (eq.status != EquipmentStatus.available) return false;
+
+        final eqBookings = bookingsByEquipment[eq.id] ?? [];
+        if (eqBookings.isEmpty) return true; // Pas de réservations → disponible
+
+        // Vérifier les conflits avec le créneau demandé
+        final conflicts = countConflictingBookings(eqBookings, _selectedSlot);
+        return conflicts == 0; // Disponible si aucun conflit
       }).length;
 
       return _SizeAvailability(

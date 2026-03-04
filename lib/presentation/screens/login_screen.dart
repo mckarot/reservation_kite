@@ -64,6 +64,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
+  // Connexion rapide pour les tests
+  Future<void> _quickLogin(String email, String password) async {
+    _emailController.text = email;
+    _passwordController.text = password;
+    await _login();
+  }
+
   @override
   Widget build(BuildContext context) {
     final localeAsync = ref.watch(localeNotifierProvider);
@@ -223,6 +230,55 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       );
                     },
                     child: Text(l10n.noAccount),
+                  ),
+                  const SizedBox(height: 24),
+                  const Divider(),
+                  const SizedBox(height: 16),
+                  const Text(
+                    '🧪 Tests rapides',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 8),
+                  // Bouton Élève
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: _isLoading ? null : () => _quickLogin('mat@mail.com', '123456'),
+                      icon: const Icon(Icons.person, size: 18),
+                      label: const Text('👤 Élève (mat@mail.com)'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.blue,
+                        side: const BorderSide(color: Colors.blue),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // Bouton Moniteur
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: _isLoading ? null : () => _quickLogin('mono3@mail.com', '123456'),
+                      icon: const Icon(Icons.school, size: 18),
+                      label: const Text('🎓 Moniteur (mono3@mail.com)'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.orange,
+                        side: const BorderSide(color: Colors.orange),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // Bouton Admin
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: _isLoading ? null : () => _quickLogin('admin@mail.com', '123456'),
+                      icon: const Icon(Icons.admin_panel_settings, size: 18),
+                      label: const Text('👑 Admin (admin@mail.com)'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.purple,
+                        side: const BorderSide(color: Colors.purple),
+                      ),
+                    ),
                   ),
                 ],
               ),
