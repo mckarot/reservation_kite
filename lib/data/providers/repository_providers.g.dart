@@ -56,23 +56,6 @@ final reservationRepositoryProvider =
 
 typedef ReservationRepositoryRef
     = AutoDisposeProviderRef<ReservationRepository>;
-String _$equipmentRepositoryHash() =>
-    r'0c4476c2065fcaafb5bc568216a339d4fc307c39';
-
-/// See also [equipmentRepository].
-@ProviderFor(equipmentRepository)
-final equipmentRepositoryProvider =
-    AutoDisposeProvider<EquipmentRepository>.internal(
-  equipmentRepository,
-  name: r'equipmentRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$equipmentRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef EquipmentRepositoryRef = AutoDisposeProviderRef<EquipmentRepository>;
 String _$staffRepositoryHash() => r'b691e058787f3aa711f9df72b764723b7f8d5d4f';
 
 /// See also [staffRepository].
@@ -190,23 +173,5 @@ final transactionRepositoryProvider =
 
 typedef TransactionRepositoryRef
     = AutoDisposeProviderRef<TransactionRepository>;
-String _$equipmentBookingRepositoryHash() =>
-    r'638ef1a62fdadcb2667df9aa58c60f34766486f2';
-
-/// See also [equipmentBookingRepository].
-@ProviderFor(equipmentBookingRepository)
-final equipmentBookingRepositoryProvider =
-    AutoDisposeProvider<EquipmentBookingRepository>.internal(
-  equipmentBookingRepository,
-  name: r'equipmentBookingRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$equipmentBookingRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef EquipmentBookingRepositoryRef
-    = AutoDisposeProviderRef<EquipmentBookingRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

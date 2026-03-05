@@ -11,7 +11,6 @@ import '../widgets/color_picker.dart';
 import '../widgets/theme_preview.dart';
 import '../widgets/theme_selector.dart';
 import 'credit_pack_admin_screen.dart';
-import 'equipment_admin_screen.dart';
 import 'staff_admin_screen.dart';
 
 class AdminSettingsScreen extends ConsumerStatefulWidget {
@@ -630,18 +629,6 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const StaffAdminScreen()),
-                  ),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.inventory, color: Colors.orange),
-                  title: Text(l10n.equipmentManagement),
-                  subtitle: Text(l10n.equipmentManagementSubtitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const EquipmentAdminScreen(),
-                    ),
                   ),
                 ),
               ],

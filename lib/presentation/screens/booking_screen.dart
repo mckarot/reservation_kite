@@ -7,7 +7,6 @@ import '../../l10n/app_localizations.dart';
 import '../providers/booking_notifier.dart';
 import '../providers/staff_notifier.dart';
 import '../providers/theme_notifier.dart';
-import 'equipment_booking_screen.dart';
 
 class BookingScreen extends ConsumerStatefulWidget {
   const BookingScreen({super.key});
@@ -43,55 +42,10 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_showLessonBooking ? l10n.reservations : l10n.equipmentRental),
-        actions: [
-          if (_showLessonBooking)
-            IconButton(
-              icon: const Icon(Icons.kitesurfing),
-              tooltip: l10n.equipmentRental,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const EquipmentBookingScreen()),
-                );
-              },
-            ),
-        ],
+        title: Text(l10n.reservations),
       ),
       body: Column(
         children: [
-          // Sélecteur de type de réservation
-          Container(
-            padding: const EdgeInsets.all(16.0),
-            color: Theme.of(context).colorScheme.surfaceContainerHighest,
-            child: Row(
-              children: [
-                Expanded(
-                  child: _BookingTypeChip(
-                    label: l10n.bookLesson,
-                    icon: Icons.school,
-                    isSelected: _showLessonBooking,
-                    onTap: () => setState(() => _showLessonBooking = true),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _BookingTypeChip(
-                    label: l10n.rentEquipment,
-                    icon: Icons.kitesurfing,
-                    isSelected: !_showLessonBooking,
-                    onTap: () {
-                      setState(() => _showLessonBooking = false);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const EquipmentBookingScreen()),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
           // Header / Calendar Placeholder
           ListTile(
             title: Text(
