@@ -1,4 +1,7 @@
-# SCHÉMA FIRESTORE — RESERVATION KITE (v2)
+# SCHÉMA FIRESTORE — RESERVATION KITE (v3 - SANS MATÉRIEL)
+
+> **Note:** Cette version ne inclut plus la gestion du matériel (location, assignment, etc.).
+> Toutes les collections liées au matériel ont été supprimées.
 
 ## COLLECTION: settings
 - **Description**: Configuration globale de l'école et du thème.
@@ -102,60 +105,6 @@
     - `images`: list<string>
     - `created_at`: serverTimestamp
 
-## COLLECTION: equipment_categories
-- **Description**: Catégories d'équipement personnalisables par l'admin.
-- **Chemin**: `/equipment_categories/{categoryId}`
-- **Champs**:
-    - `name`: string (required, unique)
-    - `order`: int (pour le tri)
-    - `isActive`: boolean (default: true)
-    - `equipmentIds`: list<string>
-    - `created_at`: serverTimestamp
-
-## COLLECTION: equipment
-- **Description**: Matériel de l'école (ailes, planches).
-- **Chemin**: `/equipment/{equipmentId}`
-- **Champs**:
-    - `category_id`: string (FK -> equipment_categories/{id})
-    - `brand`: string
-    - `model`: string
-    - `size`: string (ex: "12", "9")
-    - `serial_number`: string?
-    - `status`: string ['available', 'maintenance', 'damaged', 'reserved']
-    - `total_quantity`: int (Défaut: 1, permet de gérer du stock identique)
-    - `notes`: string
-    - `purchase_date`: timestamp?
-    - `last_maintenance_date`: timestamp?
-    - `maintenance_history`: list<map> [{ date: timestamp, type: string, notes: string, cost: number }]
-    - `total_bookings`: int
-    - `migrated_from`: string? (Information de provenance si migration)
-    - `migration_date`: timestamp?
-    - `updated_at`: serverTimestamp
-
-## COLLECTION: equipment_bookings
-- **Description**: Réservations de matériel (unifié : élève, staff et assignations).
-- **Chemin**: `/equipment_bookings/{bookingId}`
-- **Champs**:
-    - `user_id`: string (FK -> users.uid)
-    - `user_name`: string
-    - `user_email`: string
-    - `equipment_id`: string (FK -> equipment.id)
-    - `equipment_type`: string
-    - `equipment_brand`: string
-    - `equipment_model`: string
-    - `equipment_size`: string
-    - `date_string`: string (format 'yyyy-MM-dd')
-    - `date_timestamp`: timestamp
-    - `slot`: string ['morning', 'afternoon', 'full_day']
-    - `type`: string ['student', 'assignment', 'staff'] (Identifie l'origine de la réservation)
-    - `status`: string ['confirmed', 'cancelled', 'completed']
-    - `assigned_by`: string? (UID de l'admin/moniteur si type='assignment')
-    - `session_id`: string?
-    - `notes`: string?
-    - `created_at`: serverTimestamp
-    - `updated_at`: serverTimestamp
-    - `created_by`: string
-
 ## COLLECTION: transactions
 - **Description**: Historique des paiements manuels et achats.
 - **Chemin**: `/transactions/{transactionId}`
@@ -166,3 +115,40 @@
     - `payment_method`: string ['cash', 'card', 'transfer']
     - `metadata`: map
     - `created_at`: serverTimestamp
+
+---
+
+## 🗑️ COLLECTIONS SUPPRIMÉES (v3)
+
+Les collections suivantes ont été **supprimées** car la gestion du matériel a été retirée de l'application :
+
+### ❌ `equipment` (SUPPRIMÉE)
+Anciennement : Gestion du parc matériel (ailes, planches, etc.)
+
+### ❌ `equipment_bookings` (SUPPRIMÉE)
+Anciennement : Réservations de matériel par les élèves
+
+### ❌ `equipment_assignments` (SUPPRIMÉE)
+Anciennement : Assignations de matériel par les moniteurs
+
+### ❌ `equipment_categories` (SUPPRIMÉE)
+Anciennement : Catégories d'équipement personnalisables
+
+---
+
+## 📋 RÉCAPITULATIF DES COLLECTIONS ACTUELLES
+
+| Collection | Statut | Description |
+|------------|--------|-------------|
+| `settings` | ✅ | Configuration école + thème |
+| `credit_packs` | ✅ | Packs de crédits |
+| `users` | ✅ | Utilisateurs (students, instructors, admins) |
+| `staff` | ✅ | Fiches moniteurs |
+| `availabilities` | ✅ | Disponibilités staff |
+| `sessions` | ✅ | Cours de Kite Surf |
+| `products` | ✅ | Boutique (wing, kite, board, etc.) |
+| `transactions` | ✅ | Historique paiements |
+| `equipment*` | ❌ | **SUPPRIMÉ** |
+| `equipment_bookings` | ❌ | **SUPPRIMÉ** |
+| `equipment_assignments` | ❌ | **SUPPRIMÉ** |
+| `equipment_categories` | ❌ | **SUPPRIMÉ** |
