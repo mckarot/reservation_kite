@@ -483,8 +483,18 @@ class _UpcomingSessionsCard extends ConsumerWidget {
             subtitle: Text(
               '${s.date.day}/${s.date.month} - ${s.slot.name.toUpperCase()}',
             ),
-            trailing: pupil != null
-                ? TextButton(
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Bouton pour supprimer/annuler la séance
+                IconButton(
+                  icon: const Icon(Icons.delete_outline, color: Colors.red),
+                  tooltip: 'Annuler la séance',
+                  onPressed: () => _showCancelDialog(context, ref, s),
+                ),
+                // Bouton pour valider la progression
+                if (pupil != null)
+                  TextButton(
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -497,11 +507,63 @@ class _UpcomingSessionsCard extends ConsumerWidget {
                       );
                     },
                     child: Text(l10n.validate),
-                  )
-                : const Icon(Icons.chevron_right, size: 16),
+                  ),
+                if (pupil == null)
+                  const Icon(Icons.chevron_right, size: 16),
+              ],
+            ),
           ),
         );
       }).toList(),
+    );
+  }
+
+  void _showCancelDialog(
+    BuildContext context,
+    WidgetRef ref,
+    Reservation session,
+  ) {
+    final l10n = AppLocalizations.of(context);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Annuler la séance'),
+        content: Text(
+          'Confirmer l\'annulation de la séance de ${session.clientName} le ${session.date.day}/${session.date.month} - ${session.slot.name.toUpperCase()} ?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.cancelButton),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              // Annuler la séance
+              await ref
+                  .read(bookingNotifierProvider.notifier)
+                  .updateBookingStatus(
+                    session.id,
+                    ReservationStatus.cancelled,
+                  );
+              if (context.mounted) {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Séance annulée'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Annuler'),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -37,26 +37,20 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
     
-    // Equipment collection
-    match /equipment/{equipmentId} {
-      allow read: if isAuthenticated();
-      allow create, update, delete: if isAdmin();
-    }
-    
-    // Equipment assignments collection
-    match /equipment_assignments/{assignmentId} {
+    // Reservations collection
+    match /reservations/{reservationId} {
       allow read: if isAuthenticated();
       allow create: if isInstructor();
       allow update: if isInstructor();
       allow delete: if isAdmin();
     }
     
-    // Equipment bookings collection (for student equipment rental)
-    match /equipment_bookings/{bookingId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update: if isOwner(resource.data.user_id) || isInstructor();
-      allow delete: if isOwner(resource.data.user_id) || isInstructor();
+    // Notifications collection
+    match /notifications/{notificationId} {
+      allow read: if isOwner(resource.data.userId);
+      allow create: if isInstructor();
+      allow update: if isOwner(resource.data.userId);
+      allow delete: if isOwner(resource.data.userId) || isAdmin();
     }
     
     // Settings collection

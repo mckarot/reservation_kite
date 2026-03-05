@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'booking_notifier.dart';
+import '../../domain/models/reservation.dart';
 import 'user_notifier.dart';
 
 part 'financial_notifier.g.dart';
@@ -28,7 +29,13 @@ class FinancialStats extends _$FinancialStats {
 
     // Futur Planning (Prochaines 5 sessions)
     final upcomingSessions =
-        bookings.where((b) => b.date.isAfter(DateTime.now())).toList()
+        bookings
+            .where(
+              (b) =>
+                  b.date.isAfter(DateTime.now()) &&
+                  b.status != ReservationStatus.cancelled,
+            )
+            .toList()
           ..sort((a, b) => a.date.compareTo(b.date));
 
     // Top Clients (Achat cumulé)

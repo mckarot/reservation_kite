@@ -44,16 +44,29 @@
     - `email`: string (required, unique)
     - `photo_url`: string?
     - `role`: string ['admin', 'instructor', 'student'] (default: 'student')
-    - `weight`: int? (in kg, useful for gear selection)
+    - `weight`: int? (in kg)
     - `wallet_balance`: int (en centimes)
-    - `total_credits_purchased`: int (Cumul historique des crédits achetés)
+    - `total_credits_purchased`: int
     - `progress`: map { 
         `iko_level`: string?,
-        `checklist`: list<string> (ID des compétences validées),
+        `checklist`: list<string>,
         `notes`: list<map> [{ date: timestamp, content: string, instructor_id: string }]
       }
     - `created_at`: serverTimestamp (immutable)
     - `last_seen`: serverTimestamp
+
+## COLLECTION: reservations
+- **Description**: Réservations manuelles ou directes (historique/back-office).
+- **Chemin**: `/reservations/{reservationId}`
+- **Champs**:
+    - `clientName`: string
+    - `date`: timestamp
+    - `slot`: string ['morning', 'afternoon', 'fullDay']
+    - `status`: string ['pending', 'confirmed', 'cancelled']
+    - `pupilId`: string? (FK -> users.uid)
+    - `staffId`: string? (FK -> users.uid)
+    - `notes`: string
+    - `createdAt`: timestamp
 
 ## COLLECTION: staff
 - **Description**: Fiches de présentation des moniteurs.
@@ -92,8 +105,19 @@
     - `status`: string ['scheduled', 'cancelled', 'completed']
     - `created_at`: serverTimestamp
 
+## COLLECTION: notifications
+- **Description**: Centre de notifications pour les utilisateurs.
+- **Chemin**: `/notifications/{notificationId}`
+- **Champs**:
+    - `userId`: string (FK -> users.uid)
+    - `title`: string
+    - `message`: string
+    - `type`: string ['info', 'success', 'alert']
+    - `timestamp`: timestamp
+    - `isRead`: boolean
+
 ## COLLECTION: products
-- **Description**: Inventaire boutique (neuf et occasion).
+- **Description**: Inventaire boutique (neuf et occasion). **[NON IMPLÉMENTÉ dans le code v3]**
 - **Chemin**: `/products/{productId}`
 - **Champs**:
     - `name`: string (required)
@@ -146,7 +170,9 @@ Anciennement : Catégories d'équipement personnalisables
 | `staff` | ✅ | Fiches moniteurs |
 | `availabilities` | ✅ | Disponibilités staff |
 | `sessions` | ✅ | Cours de Kite Surf |
-| `products` | ✅ | Boutique (wing, kite, board, etc.) |
+| `reservations` | ✅ | Réservations (back-office) |
+| `notifications` | ✅ | Centre de notifications |
+| `products` | ⚠️ | Boutique (Non implémenté) |
 | `transactions` | ✅ | Historique paiements |
 | `equipment*` | ❌ | **SUPPRIMÉ** |
 | `equipment_bookings` | ❌ | **SUPPRIMÉ** |
