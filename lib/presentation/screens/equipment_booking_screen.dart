@@ -288,8 +288,10 @@ class _EquipmentBookingScreenState
 
   /// Watch la disponibilité pour une taille donnée (plusieurs équipements).
   ///
-  /// CORRECTION AUDIT (5.1.3) : Récupère TOUTES les réservations de la date
-  /// et utilise countConflictingBookings pour gérer les full_day correctement.
+  /// GESTION DES CRÉNEAUX (Option A - Raffinée) :
+  /// - La disponibilité est calculée UNIQUEMENT via les conflits de réservation
+  /// - Le statut de l'équipement (available/reserved) n'est PAS utilisé
+  /// - Seuls 'maintenance' et 'damaged' bloquent les réservations
   Stream<_SizeAvailability> _watchSizeAvailability(List<Equipment> equipmentList) {
     final dateString = DateFormat('yyyy-MM-dd').format(_selectedDate);
 
@@ -312,9 +314,12 @@ class _EquipmentBookingScreenState
       // Compter les équipements disponibles
       final availableCount = equipmentList.where((eq) {
         // Un équipement est disponible si :
-        // 1. Son statut est 'available'
+        // 1. Son statut n'est PAS 'maintenance' ou 'damaged'
         // 2. Pas de conflit de créneau avec les réservations existantes
-        if (eq.status != EquipmentStatus.available) return false;
+        if (eq.status == EquipmentStatus.maintenance || 
+            eq.status == EquipmentStatus.damaged) {
+          return false; // Toujours indisponible
+        }
 
         final eqBookings = bookingsByEquipment[eq.id] ?? [];
         if (eqBookings.isEmpty) return true; // Pas de réservations → disponible

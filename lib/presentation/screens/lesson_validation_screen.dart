@@ -5,19 +5,14 @@ import 'package:intl/intl.dart';
 import '../../domain/models/app_theme_settings.dart';
 import '../../domain/models/equipment.dart';
 import '../../domain/models/equipment_assignment.dart';
-import '../../domain/models/equipment_booking.dart';
-import '../../domain/models/equipment_with_availability.dart';
 import '../../domain/models/reservation.dart';
 import '../../domain/models/user.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/auth_state_provider.dart';
 import '../providers/equipment_assignment_notifier.dart';
-import '../providers/equipment_availability_notifier.dart';
-import '../providers/equipment_booking_notifier.dart';
 import '../providers/equipment_notifier.dart';
 import '../providers/theme_notifier.dart';
 import '../providers/user_notifier.dart';
-import '../widgets/equipment_category_filter.dart';
 
 class LessonValidationScreen extends ConsumerStatefulWidget {
   final Reservation reservation;
@@ -39,8 +34,6 @@ class _LessonValidationScreenState
   final _noteController = TextEditingController();
   final List<String> _selectedItems = [];
   String? _selectedLevel;
-  final List<String> _selectedEquipmentIds = [];
-  String? _selectedCategory;
   AsyncValue<List<EquipmentAssignment>>? _assignmentsAsync;
 
   @override
@@ -382,40 +375,6 @@ class _LessonValidationScreenState
             const SizedBox(height: 12),
             _EquipmentIncidentSection(),
 
-            // Section réservation de matériel pour la séance
-            const SizedBox(height: 32),
-            Text(
-              l10n.reserveEquipment,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
-            // Filtre par catégorie
-            EquipmentCategoryFilter(
-              selectedCategoryId: _selectedCategory,
-              onCategorySelected: (categoryId) {
-                setState(() => _selectedCategory = categoryId);
-              },
-            ),
-            const SizedBox(height: 16),
-            _EquipmentReservationSection(
-              selectedEquipmentIds: _selectedEquipmentIds,
-              onEquipmentSelected: (equipmentId) {
-                setState(() {
-                  if (!_selectedEquipmentIds.contains(equipmentId)) {
-                    _selectedEquipmentIds.add(equipmentId);
-                  }
-                });
-              },
-              onEquipmentRemoved: (equipmentId) {
-                setState(() {
-                  _selectedEquipmentIds.remove(equipmentId);
-                });
-              },
-              selectedCategory: _selectedCategory,
-              selectedDate: widget.reservation.date,
-              selectedSlot: EquipmentBookingSlot.morning,
-            ),
-
             const SizedBox(height: 40),
             SizedBox(
               width: double.infinity,
@@ -456,54 +415,6 @@ class _LessonValidationScreenState
                 )
               : null,
         );
-
-    if (_selectedEquipmentIds.isNotEmpty) {
-      try {
-        final currentUserId = ref.read(currentUserProvider).value?.id;
-        if (currentUserId != null) {
-          for (final equipmentId in _selectedEquipmentIds) {
-            final equipment = ref
-                .read(equipmentNotifierProvider)
-                .value
-                ?.firstWhere((e) => e.id == equipmentId);
-
-            if (equipment != null) {
-              await ref
-                  .read(
-                    equipmentBookingNotifierProvider(currentUserId).notifier,
-                  )
-                  .createBooking(
-                    equipmentId: equipment.id,
-                    equipmentType: equipment.categoryId,
-                    equipmentBrand: equipment.brand,
-                    equipmentModel: equipment.model,
-                    equipmentSize: equipment.size,
-                    date: widget.reservation.date,
-                    slot: EquipmentBookingSlot.morning,
-                  );
-            }
-          }
-
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(l10n.equipmentReserved),
-                backgroundColor: Theme.of(context).colorScheme.primary,
-              ),
-            );
-          }
-        }
-      } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${l10n.equipmentReservationFailed}: $e'),
-              backgroundColor: Theme.of(context).colorScheme.error,
-            ),
-          );
-        }
-      }
-    }
 
     if (mounted) {
       ScaffoldMessenger.of(
@@ -611,194 +522,5 @@ class __EquipmentIncidentSectionState
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text(l10n.equipmentStatusUpdated)));
-  }
-}
-
-/// Section pour réserver du matériel lors de la validation d'une séance
-/// Module similaire à EquipmentBookingScreen (ligne ~194)
-class _EquipmentReservationSection extends ConsumerWidget {
-  final List<String> selectedEquipmentIds;
-  final ValueChanged<String> onEquipmentSelected;
-  final ValueChanged<String> onEquipmentRemoved;
-  final String? selectedCategory;
-  final DateTime selectedDate;
-  final EquipmentBookingSlot selectedSlot;
-
-  const _EquipmentReservationSection({
-    required this.selectedEquipmentIds,
-    required this.onEquipmentSelected,
-    required this.onEquipmentRemoved,
-    this.selectedCategory,
-    required this.selectedDate,
-    required this.selectedSlot,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
-    final themeSettingsAsync = ref.watch(themeNotifierProvider);
-    final themeSettings = themeSettingsAsync.value;
-    final primaryColor =
-        themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
-
-    final equipmentAsync = ref.watch(equipmentNotifierProvider);
-
-    return equipmentAsync.when(
-      data: (equipment) {
-        // Filtrer par catégorie si sélectionnée
-        final filtered = selectedCategory != null
-            ? equipment.where((e) => e.categoryId == selectedCategory).toList()
-            : equipment;
-
-        final available = filtered
-            .where((e) => e.status == EquipmentStatus.available)
-            .toList();
-
-        if (available.isEmpty) {
-          return Text(
-            l10n.noEquipmentAvailable,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-          );
-        }
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (selectedEquipmentIds.isNotEmpty) ...[
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.selectedEquipment,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: selectedEquipmentIds.map((equipId) {
-                        final eq = available.firstWhere(
-                          (e) => e.id == equipId,
-                          orElse: () => equipment.first,
-                        );
-                        return Chip(
-                          label: Text(
-                            '${eq.brand} ${eq.model}',
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                          deleteIcon: const Icon(Icons.close, size: 18),
-                          onDeleted: () => onEquipmentRemoved(equipId),
-                          backgroundColor:
-                              Theme.of(context).colorScheme.surface,
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-            ],
-            ...available.map((eq) {
-              return StreamBuilder<EquipmentWithAvailability>(
-                stream: ref
-                    .read(equipmentAvailabilityNotifierProvider.notifier)
-                    .watchEquipmentAvailability(
-                      equipmentId: eq.id,
-                      date: selectedDate,
-                      slot: selectedSlot,
-                    ),
-                builder: (context, snapshot) {
-                  IconData categoryIcon(String categoryId) {
-                    switch (categoryId.toLowerCase()) {
-                      case 'kite': return Icons.kitesurfing;
-                      case 'foil': return Icons.surfing;
-                      case 'board': return Icons.directions_bike;
-                      case 'harness': return Icons.security;
-                      default: return Icons.inventory_2;
-                    }
-                  }
-
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const ListTile(
-                      leading: CircularProgressIndicator(),
-                      title: Text('Chargement...'),
-                    );
-                  }
-
-                  if (snapshot.hasError) {
-                    return ListTile(
-                      leading: const Icon(Icons.error, color: Colors.red),
-                      title: Text('Erreur: ${snapshot.error}'),
-                    );
-                  }
-
-                  final availability = snapshot.data;
-                  if (availability == null) {
-                    return const SizedBox.shrink();
-                  }
-
-                  final isAvailable = availability.isAvailable;
-                  final alreadySelected = selectedEquipmentIds.contains(eq.id);
-
-                  return Card(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: isAvailable
-                            ? Theme.of(context).colorScheme.primaryContainer
-                            : Theme.of(context).colorScheme.errorContainer,
-                        child: Icon(
-                          categoryIcon(eq.categoryId),
-                          color: isAvailable
-                              ? Theme.of(context).colorScheme.onPrimaryContainer
-                              : Theme.of(context).colorScheme.onErrorContainer,
-                        ),
-                      ),
-                      title: Text('${eq.brand} ${eq.model}'),
-                      subtitle: Text(
-                        isAvailable
-                            ? '${eq.size}m² - ${l10n.available}'
-                            : '${eq.size}m² - ${l10n.unavailable}',
-                        style: TextStyle(
-                          color: isAvailable
-                              ? Theme.of(context).colorScheme.primary
-                              : Theme.of(context).colorScheme.error,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      trailing: isAvailable && !alreadySelected
-                          ? IconButton(
-                              icon: const Icon(Icons.add_circle_outline),
-                              color: primaryColor,
-                              onPressed: () => onEquipmentSelected(eq.id),
-                            )
-                          : alreadySelected
-                              ? const Icon(
-                                  Icons.check_circle,
-                                  color: Colors.green,
-                                )
-                              : null,
-                    ),
-                  );
-                },
-              );
-            }),
-          ],
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (_, __) => Text(l10n.errorLoadingEquipment),
-    );
   }
 }

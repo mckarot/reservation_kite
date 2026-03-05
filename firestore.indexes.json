@@ -65,6 +65,24 @@
         { "fieldPath": "status", "order": "ASCENDING" },
         { "fieldPath": "date_timestamp", "order": "ASCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "equipment_bookings",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "date_string", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "date_timestamp", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "equipment_bookings",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "date_string", "order": "ASCENDING" },
+        { "fieldPath": "equipment_type", "order": "ASCENDING" },
+        { "fieldPath": "date_timestamp", "order": "ASCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

@@ -79,8 +79,14 @@ class FirestoreEquipmentRepository implements EquipmentRepository {
   ///
   /// Utilise une transaction Firestore pour garantir que :
   /// - L'équipement existe
-  /// - L'équipement est disponible (status = 'available')
+  /// - L'équipement n'est pas en maintenance ou endommagé
   /// - La réservation est créée dans la même transaction
+  ///
+  /// GESTION DES CRÉNEAUX (Option A - Raffinée) :
+  /// - Le statut de l'équipement NE CHANGE JAMAIS automatiquement
+  /// - La disponibilité est TOUJOURS calculée par créneau via les conflits
+  /// - Le statut 'reserved' est uniquement défini manuellement par l'admin
+  /// - Cela permet les réservations futures sans bloquer l'équipement avant
   ///
   /// Retourne `true` si la réservation a réussi, `false` si l'équipement
   /// n'était plus disponible (race condition).
@@ -102,11 +108,16 @@ class FirestoreEquipmentRepository implements EquipmentRepository {
         }
 
         final currentStatus = equipmentDoc.data()?['status'] as String?;
-        if (currentStatus != 'available') {
+
+        // Vérifier que l'équipement n'est pas en maintenance ou endommagé
+        // Le statut 'reserved' (défini manuellement) bloque aussi les réservations
+        if (currentStatus == 'maintenance' || 
+            currentStatus == 'damaged' ||
+            currentStatus == 'reserved') {
           throw Exception('Équipement non disponible : statut actuel = $currentStatus');
         }
 
-        // 2. NOUVEAU : Vérifier les conflits de créneau
+        // 2. Vérifier les conflits de créneau
         final dateString = bookingData['date_string'] as String;
         final slotString = bookingData['slot'] as String;
         final requestedSlot = EquipmentBookingSlot.values.firstWhere(
@@ -132,11 +143,9 @@ class FirestoreEquipmentRepository implements EquipmentRepository {
           }
         }
 
-        // 3. Mise à jour atomique du statut de l'équipement
-        transaction.update(equipmentRef, {
-          'status': 'reserved',
-          'updated_at': FieldValue.serverTimestamp(),
-        });
+        // 3. AUCUNE MISE À JOUR DU STATUT
+        // Le statut reste tel quel (available, reserved manuel, etc.)
+        // La disponibilité est gérée uniquement par les conflits de réservation
 
         // 4. Création de la réservation dans la même transaction
         transaction.set(bookingRef, {
@@ -156,8 +165,12 @@ class FirestoreEquipmentRepository implements EquipmentRepository {
 
   /// Libère un équipement (annulation ou fin de session) — ATOMIQUE.
   ///
-  /// Met à jour le statut de l'équipement à 'available' et change
-  /// le statut de la réservation en une opération atomique.
+  /// GESTION DES CRÉNEAUX (Option A - Raffinée) :
+  /// - Le statut de l'équipement NE CHANGE PAS automatiquement
+  /// - Seul le statut de la réservation est mis à jour (cancelled/completed)
+  /// - L'admin peut changer le statut manuellement si nécessaire
+  ///
+  /// Utilise une transaction pour garantir la cohérence.
   @override
   Future<void> releaseEquipment({
     required String equipmentId,
@@ -169,24 +182,31 @@ class FirestoreEquipmentRepository implements EquipmentRepository {
       'newBookingStatus doit être "cancelled" ou "completed"',
     );
 
-    final batch = _firestore.batch();
+    final equipmentRef = _collection.doc(equipmentId);
+    final bookingRef = _firestore.collection(_bookingsCollectionPath).doc(bookingId);
 
-    // Mise à jour de l'équipement
-    batch.update(_collection.doc(equipmentId), {
-      'status': 'available',
-      'updated_at': FieldValue.serverTimestamp(),
-    });
+    try {
+      await _firestore.runTransaction((transaction) async {
+        // 1. Lire la réservation pour connaître la date
+        final bookingDoc = await transaction.get(bookingRef);
+        if (!bookingDoc.exists) {
+          throw Exception('Réservation introuvable');
+        }
 
-    // Mise à jour de la réservation
-    batch.update(
-      _firestore.collection(_bookingsCollectionPath).doc(bookingId),
-      {
-        'status': newBookingStatus,
-        'updated_at': FieldValue.serverTimestamp(),
-      },
-    );
+        // 2. Mettre à jour le statut de la réservation
+        transaction.update(bookingRef, {
+          'status': newBookingStatus,
+          'updated_at': FieldValue.serverTimestamp(),
+        });
 
-    await batch.commit();
+        // 3. AUCUNE MISE À JOUR DU STATUT DE L'ÉQUIPEMENT
+        // Le statut reste tel quel
+        // La disponibilité est gérée uniquement par les conflits de réservation
+      });
+    } on Exception catch (e) {
+      print('⚠️ Erreur lors de la libération : $e');
+      rethrow;
+    }
   }
 
   /// Compte les équipements disponibles pour une catégorie, date et créneau.
