@@ -22,9 +22,12 @@ _$EquipmentBookingImpl _$$EquipmentBookingImplFromJson(
       dateTimestamp: DateTime.parse(json['date_timestamp'] as String),
       slot: $enumDecode(_$EquipmentBookingSlotEnumMap, json['slot']),
       status: $enumDecode(_$EquipmentBookingStatusEnumMap, json['status']),
+      type: $enumDecodeNullable(_$EquipmentBookingTypeEnumMap, json['type']) ??
+          EquipmentBookingType.student,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
       createdBy: json['created_by'] as String,
+      assignedBy: json['assigned_by'] as String?,
       sessionId: json['session_id'] as String?,
       notes: json['notes'] as String?,
     );
@@ -45,9 +48,11 @@ Map<String, dynamic> _$$EquipmentBookingImplToJson(
       'date_timestamp': instance.dateTimestamp.toIso8601String(),
       'slot': _$EquipmentBookingSlotEnumMap[instance.slot]!,
       'status': _$EquipmentBookingStatusEnumMap[instance.status]!,
+      'type': _$EquipmentBookingTypeEnumMap[instance.type]!,
       'created_at': instance.createdAt.toIso8601String(),
       'updated_at': instance.updatedAt.toIso8601String(),
       'created_by': instance.createdBy,
+      'assigned_by': instance.assignedBy,
       'session_id': instance.sessionId,
       'notes': instance.notes,
     };
@@ -62,4 +67,10 @@ const _$EquipmentBookingStatusEnumMap = {
   EquipmentBookingStatus.confirmed: 'confirmed',
   EquipmentBookingStatus.cancelled: 'cancelled',
   EquipmentBookingStatus.completed: 'completed',
+};
+
+const _$EquipmentBookingTypeEnumMap = {
+  EquipmentBookingType.student: 'student',
+  EquipmentBookingType.assignment: 'assignment',
+  EquipmentBookingType.staff: 'staff',
 };

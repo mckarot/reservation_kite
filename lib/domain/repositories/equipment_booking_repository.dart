@@ -43,6 +43,9 @@ abstract class EquipmentBookingRepository {
   /// Utile pour la gestion du matériel (maintenance, planning).
   Future<List<EquipmentBooking>> getEquipmentBookings(String equipmentId);
 
+  /// Récupère toutes les réservations liées à une séance (sessionId).
+  Future<List<EquipmentBooking>> getSessionBookings(String sessionId);
+
   /// Stream en temps réel des réservations d'un utilisateur.
   ///
   /// Se met à jour automatiquement lors des ajouts/suppressions.

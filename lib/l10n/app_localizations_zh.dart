@@ -1157,4 +1157,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get equipmentDescription => '仅租赁设备';
+
+  @override
+  String get allocateEquipment => 'Allouer du matériel';
+
+  @override
+  String get assignedEquipment => 'Matériel assigné';
 }

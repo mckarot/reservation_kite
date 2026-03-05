@@ -21,6 +21,15 @@ enum EquipmentBookingStatus {
   completed,
 }
 
+enum EquipmentBookingType {
+  @JsonValue('student')
+  student,
+  @JsonValue('assignment')
+  assignment,
+  @JsonValue('staff')
+  staff,
+}
+
 String _anyToString(dynamic value) {
   if (value == null) return '';
   return value.toString();
@@ -42,9 +51,8 @@ class EquipmentBooking with _$EquipmentBooking {
     required DateTime dateTimestamp,
     required EquipmentBookingSlot slot,
     required EquipmentBookingStatus status,
-    required DateTime createdAt,
-    required DateTime updatedAt,
-    required String createdBy,
+    required DateTime createdAt, required DateTime updatedAt, required String createdBy, @Default(EquipmentBookingType.student) EquipmentBookingType type,
+    String? assignedBy,
     String? sessionId,
     String? notes,
   }) = _EquipmentBooking;

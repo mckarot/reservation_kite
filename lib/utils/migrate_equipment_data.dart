@@ -58,16 +58,16 @@ Future<MigrationResult> migrateEquipmentData({
   final fs = firestore ?? FirebaseFirestore.instance;
   final equipmentSnapshot = await fs.collection('equipment').get();
 
-  int migratedCount = 0;
-  int skippedCount = 0;
-  int errorCount = 0;
-  final List<String> errors = [];
+  var migratedCount = 0;
+  var skippedCount = 0;
+  var errorCount = 0;
+  final errors = <String>[];
 
   print('🔄 Début de la migration - ${equipmentSnapshot.docs.length} groupes d\'équipements');
 
   for (var doc in equipmentSnapshot.docs) {
     try {
-      final data = doc.data() as Map<String, dynamic>;
+      final data = doc.data();
       final totalQuantity = data['total_quantity'] as int? ?? 0;
 
       // Déjà migré (pas de total_quantity ou total_quantity <= 0) → skip
@@ -88,7 +88,7 @@ Future<MigrationResult> migrateEquipmentData({
       // en une seule batch pour éviter les états intermédiaires
       final batch = fs.batch();
 
-      for (int i = 1; i <= totalQuantity; i++) {
+      for (var i = 1; i <= totalQuantity; i++) {
         final newRef = fs.collection('equipment').doc();
         final serialNumber = _generateSerialNumber(data, i);
 
@@ -155,13 +155,13 @@ Future<MigrationEstimate> estimateMigration({
   final fs = firestore ?? FirebaseFirestore.instance;
   final equipmentSnapshot = await fs.collection('equipment').get();
 
-  int totalGroups = equipmentSnapshot.docs.length;
-  int toMigrate = 0;
-  int alreadyMigrated = 0;
-  int totalIndividualItems = 0;
+  final totalGroups = equipmentSnapshot.docs.length;
+  var toMigrate = 0;
+  var alreadyMigrated = 0;
+  var totalIndividualItems = 0;
 
   for (var doc in equipmentSnapshot.docs) {
-    final data = doc.data() as Map<String, dynamic>;
+    final data = doc.data();
     final totalQuantity = data['total_quantity'] as int? ?? 0;
 
     if (totalQuantity > 0) {

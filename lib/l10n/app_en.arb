@@ -490,5 +490,8 @@
   "bookLesson": "Book a lesson",
   "rentEquipment": "Rent equipment",
   "lessonDescription": "Lesson with instructor",
-  "equipmentDescription": "Equipment rental only"
+  "equipmentDescription": "Equipment rental only",
+  "allocateEquipment": "Allocate equipment",
+  "assignedEquipment": "Assigned equipment",
+  "noEquipmentCategories": "No equipment categories"
 }

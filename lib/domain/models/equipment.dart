@@ -42,8 +42,7 @@ class Equipment with _$Equipment {
     required String brand,
     required String model,
     @JsonKey(fromJson: _anyToString) required String size,
-    @JsonKey(name: 'serial_number') String? serialNumber,
-    required EquipmentStatus status,
+    required EquipmentStatus status, @JsonKey(name: 'updated_at') required DateTime updatedAt, @JsonKey(name: 'serial_number') String? serialNumber,
     @Default('') String notes,
     @JsonKey(name: 'purchase_date') DateTime? purchaseDate,
     @JsonKey(name: 'last_maintenance_date') DateTime? lastMaintenanceDate,
@@ -52,7 +51,6 @@ class Equipment with _$Equipment {
     List<MaintenanceHistory> maintenanceHistory,
     @JsonKey(name: 'total_bookings') @Default(0) int totalBookings,
     @JsonKey(name: 'total_quantity') @Default(1) int totalQuantity,
-    @JsonKey(name: 'updated_at') required DateTime updatedAt,
     // Champs de migration (optionnels)
     @JsonKey(name: 'migrated_from') String? migratedFrom,
     @JsonKey(name: 'migration_date') DateTime? migrationDate,

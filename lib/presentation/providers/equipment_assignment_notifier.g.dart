@@ -7,7 +7,7 @@ part of 'equipment_assignment_notifier.dart';
 // **************************************************************************
 
 String _$equipmentAssignmentNotifierHash() =>
-    r'9144798c327532f9b0d5bc53f5ce3be54079ab93';
+    r'3aecf635cd5db7a2a6e5e7e1d597bd50f7e24902';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,10 +31,10 @@ class _SystemHash {
 }
 
 abstract class _$EquipmentAssignmentNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<List<EquipmentAssignment>> {
+    extends BuildlessAutoDisposeAsyncNotifier<List<EquipmentBooking>> {
   late final String sessionId;
 
-  FutureOr<List<EquipmentAssignment>> build(
+  FutureOr<List<EquipmentBooking>> build(
     String sessionId,
   );
 }
@@ -45,7 +45,7 @@ const equipmentAssignmentNotifierProvider = EquipmentAssignmentNotifierFamily();
 
 /// See also [EquipmentAssignmentNotifier].
 class EquipmentAssignmentNotifierFamily
-    extends Family<AsyncValue<List<EquipmentAssignment>>> {
+    extends Family<AsyncValue<List<EquipmentBooking>>> {
   /// See also [EquipmentAssignmentNotifier].
   const EquipmentAssignmentNotifierFamily();
 
@@ -85,7 +85,7 @@ class EquipmentAssignmentNotifierFamily
 /// See also [EquipmentAssignmentNotifier].
 class EquipmentAssignmentNotifierProvider
     extends AutoDisposeAsyncNotifierProviderImpl<EquipmentAssignmentNotifier,
-        List<EquipmentAssignment>> {
+        List<EquipmentBooking>> {
   /// See also [EquipmentAssignmentNotifier].
   EquipmentAssignmentNotifierProvider(
     String sessionId,
@@ -116,7 +116,7 @@ class EquipmentAssignmentNotifierProvider
   final String sessionId;
 
   @override
-  FutureOr<List<EquipmentAssignment>> runNotifierBuild(
+  FutureOr<List<EquipmentBooking>> runNotifierBuild(
     covariant EquipmentAssignmentNotifier notifier,
   ) {
     return notifier.build(
@@ -142,7 +142,7 @@ class EquipmentAssignmentNotifierProvider
 
   @override
   AutoDisposeAsyncNotifierProviderElement<EquipmentAssignmentNotifier,
-      List<EquipmentAssignment>> createElement() {
+      List<EquipmentBooking>> createElement() {
     return _EquipmentAssignmentNotifierProviderElement(this);
   }
 
@@ -162,14 +162,14 @@ class EquipmentAssignmentNotifierProvider
 }
 
 mixin EquipmentAssignmentNotifierRef
-    on AutoDisposeAsyncNotifierProviderRef<List<EquipmentAssignment>> {
+    on AutoDisposeAsyncNotifierProviderRef<List<EquipmentBooking>> {
   /// The parameter `sessionId` of this provider.
   String get sessionId;
 }
 
 class _EquipmentAssignmentNotifierProviderElement
     extends AutoDisposeAsyncNotifierProviderElement<EquipmentAssignmentNotifier,
-        List<EquipmentAssignment>> with EquipmentAssignmentNotifierRef {
+        List<EquipmentBooking>> with EquipmentAssignmentNotifierRef {
   _EquipmentAssignmentNotifierProviderElement(super.provider);
 
   @override

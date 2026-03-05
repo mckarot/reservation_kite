@@ -1170,4 +1170,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get equipmentDescription => 'Apenas aluguel de equipamento';
+
+  @override
+  String get allocateEquipment => 'Allouer du matériel';
+
+  @override
+  String get assignedEquipment => 'Matériel assigné';
 }

@@ -70,9 +70,11 @@ class FirestoreEquipmentRepository implements EquipmentRepository {
         .where('category_id', isEqualTo: categoryId)
         .orderBy('brand')
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => Equipment.fromJson(doc.data()..['id'] = doc.id))
-            .toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => Equipment.fromJson(doc.data()..['id'] = doc.id))
+              .toList(),
+        );
   }
 
   /// Réserve un équipement spécifique de manière ATOMIQUE.
@@ -110,11 +112,10 @@ class FirestoreEquipmentRepository implements EquipmentRepository {
         final currentStatus = equipmentDoc.data()?['status'] as String?;
 
         // Vérifier que l'équipement n'est pas en maintenance ou endommagé
-        // Le statut 'reserved' (défini manuellement) bloque aussi les réservations
-        if (currentStatus == 'maintenance' || 
-            currentStatus == 'damaged' ||
-            currentStatus == 'reserved') {
-          throw Exception('Équipement non disponible : statut actuel = $currentStatus');
+        if (currentStatus == 'maintenance' || currentStatus == 'damaged') {
+          throw Exception(
+            'Équipement non disponible : statut actuel = $currentStatus',
+          );
         }
 
         // 2. Vérifier les conflits de créneau
@@ -134,7 +135,9 @@ class FirestoreEquipmentRepository implements EquipmentRepository {
 
         if (existingBookings.docs.isNotEmpty) {
           final conflicts = countConflictingBookings(
-            existingBookings.docs.map((d) => d.data() as Map<String, dynamic>).toList(),
+            existingBookings.docs
+                .map((d) => d.data())
+                .toList(),
             requestedSlot,
           );
 
@@ -183,7 +186,9 @@ class FirestoreEquipmentRepository implements EquipmentRepository {
     );
 
     final equipmentRef = _collection.doc(equipmentId);
-    final bookingRef = _firestore.collection(_bookingsCollectionPath).doc(bookingId);
+    final bookingRef = _firestore
+        .collection(_bookingsCollectionPath)
+        .doc(bookingId);
 
     try {
       await _firestore.runTransaction((transaction) async {
@@ -239,8 +244,6 @@ class FirestoreEquipmentRepository implements EquipmentRepository {
         .get();
 
     // 3. Filtrer ceux qui ne sont pas réservés
-    return equipSnap.docs
-        .where((d) => !reservedIds.contains(d.id))
-        .length;
+    return equipSnap.docs.where((d) => !reservedIds.contains(d.id)).length;
   }
 }

@@ -1172,4 +1172,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get equipmentDescription => 'Location sans moniteur';
+
+  @override
+  String get allocateEquipment => 'Allouer du matériel';
+
+  @override
+  String get assignedEquipment => 'Matériel assigné';
 }

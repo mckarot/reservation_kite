@@ -39,15 +39,21 @@ class FirebaseEquipmentBookingRepository implements EquipmentBookingRepository {
       final totalQty = (equipmentSnap.data()?['total_quantity'] ?? 0) as int;
 
       // 2. Vérifier limite de réservations actives (CORRECTION #8)
-      final userActiveBookings = await _firestore
-          .collection('equipment_bookings')
-          .where('user_id', isEqualTo: booking.userId)
-          .where('status', isEqualTo: 'confirmed')
-          .get();
-      if (userActiveBookings.docs.length >= _maxActiveBookingsPerUser) {
-        throw Exception(
-          'Limite de $_maxActiveBookingsPerUser réservations actives atteinte',
-        );
+      // Appliqué uniquement aux réservations de type 'student'
+      if (booking.type == EquipmentBookingType.student) {
+        final userActiveBookings = await _firestore
+            .collection('equipment_bookings')
+            .where('user_id', isEqualTo: booking.userId)
+            .where('status', isEqualTo: 'confirmed')
+            .get();
+
+        // Filtrer manuellement ou via query si on veut être strict sur le type
+        // Ici on compte toutes les réservations 'confirmed' pour cet utilisateur
+        if (userActiveBookings.docs.length >= _maxActiveBookingsPerUser) {
+          throw Exception(
+            'Limite de $_maxActiveBookingsPerUser réservations actives atteinte',
+          );
+        }
       }
 
       // 3. Lire les réservations existantes pour cette date/équipement
@@ -132,6 +138,17 @@ class FirebaseEquipmentBookingRepository implements EquipmentBookingRepository {
         .where('equipment_id', isEqualTo: equipmentId)
         .orderBy('date_timestamp', descending: true)
         .limit(100)
+        .get();
+    return snapshot.docs
+        .map((doc) => EquipmentBooking.fromJson(doc.data()))
+        .toList();
+  }
+
+  @override
+  Future<List<EquipmentBooking>> getSessionBookings(String sessionId) async {
+    final snapshot = await _firestore
+        .collection('equipment_bookings')
+        .where('sessionId', isEqualTo: sessionId)
         .get();
     return snapshot.docs
         .map((doc) => EquipmentBooking.fromJson(doc.data()))

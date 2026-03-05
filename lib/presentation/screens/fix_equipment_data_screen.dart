@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/theme_notifier.dart';
+
 import '../../domain/models/app_theme_settings.dart';
+import '../providers/theme_notifier.dart';
 
 /// Écran pour corriger les données equipment obsolètes
 class FixEquipmentDataScreen extends ConsumerStatefulWidget {

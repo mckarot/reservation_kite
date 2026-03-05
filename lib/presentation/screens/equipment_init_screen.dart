@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../domain/models/app_theme_settings.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/theme_notifier.dart';
-import '../../domain/models/app_theme_settings.dart';
 
 /// Écran d'initialisation des données Firebase pour la location de matériel.
 ///

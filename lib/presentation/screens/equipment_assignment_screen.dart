@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../data/providers/repository_providers.dart';
 import '../../domain/models/equipment.dart';
-import '../../domain/models/equipment_assignment.dart';
+import '../../domain/models/equipment_booking.dart';
 import '../../domain/models/reservation.dart';
 import '../../l10n/app_localizations.dart';
+import '../../utils/equipment_slot_availability_service.dart';
 import '../providers/auth_state_provider.dart';
 import '../providers/booking_notifier.dart';
 import '../providers/equipment_assignment_notifier.dart';
@@ -31,7 +31,7 @@ class EquipmentAssignmentScreen extends ConsumerStatefulWidget {
 class _EquipmentAssignmentScreenState
     extends ConsumerState<EquipmentAssignmentScreen> {
   Reservation? _selectedSession;
-  String? _selectedStudentId;
+  String? _selectedUserId;
   String? _selectedCategory;
 
   @override
@@ -60,8 +60,7 @@ class _EquipmentAssignmentScreenState
           ),
           if (_selectedSession != null) ...[
             _buildStudentSelector(),
-            if (_selectedStudentId != null)
-              Expanded(child: _buildEquipmentList()),
+            if (_selectedUserId != null) Expanded(child: _buildEquipmentList()),
           ],
         ],
       ),
@@ -106,7 +105,7 @@ class _EquipmentAssignmentScreenState
             )
           else
             DropdownButtonFormField<Reservation>(
-              value: _selectedSession,
+              initialValue: _selectedSession,
               decoration: const InputDecoration(
                 labelText: 'Séance',
                 border: OutlineInputBorder(),
@@ -123,7 +122,7 @@ class _EquipmentAssignmentScreenState
               onChanged: (session) {
                 setState(() {
                   _selectedSession = session;
-                  _selectedStudentId = null;
+                  _selectedUserId = null;
                   _selectedCategory = null;
                 });
               },
@@ -159,7 +158,7 @@ class _EquipmentAssignmentScreenState
             child: ElevatedButton(
               onPressed: () {
                 setState(() {
-                  _selectedStudentId = _selectedSession!.pupilId ?? '';
+                  _selectedUserId = _selectedSession!.pupilId ?? '';
                   _selectedCategory = null;
                 });
               },
@@ -221,7 +220,9 @@ class _EquipmentAssignmentScreenState
                   return _EquipmentTile(
                     equipment: eq,
                     sessionId: _selectedSession!.id,
-                    studentId: _selectedStudentId!,
+                    userId: _selectedUserId!,
+                    sessionDate: _selectedSession!.date,
+                    sessionSlot: _selectedSession!.slot,
                     onAssign: () => _assignEquipment(eq),
                   );
                 },
@@ -279,12 +280,11 @@ class _EquipmentAssignmentScreenState
     if (confirmed != true || !mounted) return;
 
     try {
-      final assignment = EquipmentAssignment(
+      final booking = EquipmentBooking(
         id: const Uuid().v4(),
-        sessionId: _selectedSession!.id,
-        studentId: _selectedSession!.pupilId ?? '',
-        studentName: _selectedSession!.clientName,
-        studentEmail: '',
+        userId: _selectedSession!.pupilId ?? '',
+        userName: _selectedSession!.clientName,
+        userEmail: '',
         equipmentId: eq.id,
         equipmentType: eq.categoryId,
         equipmentBrand: eq.brand,
@@ -292,31 +292,38 @@ class _EquipmentAssignmentScreenState
         equipmentSize: eq.size,
         dateString: DateFormat('yyyy-MM-dd').format(_selectedSession!.date),
         dateTimestamp: _selectedSession!.date,
-        slot: _selectedSession!.slot.name,
-        status: EquipmentAssignmentStatus.confirmed,
+        slot: _selectedSession!.slot == TimeSlot.morning
+            ? EquipmentBookingSlot.morning
+            : _selectedSession!.slot == TimeSlot.afternoon
+            ? EquipmentBookingSlot.afternoon
+            : EquipmentBookingSlot.fullDay,
+        status: EquipmentBookingStatus.confirmed,
+        type: EquipmentBookingType.assignment,
+        assignedBy: currentUser.id,
+        createdBy: currentUser.id,
+        sessionId: _selectedSession!.id,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
-        createdBy: currentUser.id,
       );
 
       await ref
           .read(
             equipmentAssignmentNotifierProvider(_selectedSession!.id).notifier,
           )
-          .assignEquipment(assignment);
+          .assignEquipment(booking);
 
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Équipement assigné avec succès'),
-          backgroundColor: Theme.of(context).colorScheme.primary,
+        const SnackBar(
+          content: Text('Équipement assigné et réservé avec succès'),
+          backgroundColor: Colors.green,
         ),
       );
 
       setState(() {
         _selectedSession = null;
-        _selectedStudentId = null;
+        _selectedUserId = null;
         _selectedCategory = null;
       });
     } catch (e) {
@@ -332,52 +339,89 @@ class _EquipmentAssignmentScreenState
   }
 }
 
-class _EquipmentTile extends StatelessWidget {
+class _EquipmentTile extends ConsumerWidget {
   final Equipment equipment;
   final String sessionId;
-  final String studentId;
+  final String userId;
   final VoidCallback onAssign;
+  final DateTime? sessionDate;
+  final TimeSlot? sessionSlot;
 
   const _EquipmentTile({
     required this.equipment,
     required this.sessionId,
-    required this.studentId,
+    required this.userId,
     required this.onAssign,
+    this.sessionDate,
+    this.sessionSlot,
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: equipment.status == EquipmentStatus.available
-              ? Colors.green
-              : Colors.grey,
-          child: Icon(
-            _getCategoryIcon(equipment.categoryId),
-            color: Colors.white,
-          ),
-        ),
-        title: Text('${equipment.brand} ${equipment.model}'),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('${equipment.size}m²'),
-            if (equipment.serialNumber != null)
-              Text(
-                'S/N: ${equipment.serialNumber}',
-                style: const TextStyle(fontSize: 11, color: Colors.grey),
-              ),
-          ],
-        ),
-        trailing: equipment.status == EquipmentStatus.available
-            ? ElevatedButton(onPressed: onAssign, child: const Text('Assigner'))
-            : Chip(
-                label: Text(_getStatusText(equipment.status)),
-                backgroundColor: Colors.grey.shade300,
-              ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Utiliser le service utilitaire pour vérifier la disponibilité
+    // HARMONISATION : La disponibilité est calculée via les conflits, pas le statut
+    // IMPORTANT : Utiliser la date et le créneau de la séance, pas DateTime.now()
+    final slot = sessionSlot == TimeSlot.morning
+        ? EquipmentBookingSlot.morning
+        : sessionSlot == TimeSlot.afternoon
+        ? EquipmentBookingSlot.afternoon
+        : EquipmentBookingSlot.fullDay;
+
+    return FutureBuilder<bool>(
+      future: EquipmentSlotAvailabilityService.isEquipmentAvailable(
+        equipmentId: equipment.id,
+        date: sessionDate ?? DateTime.now(),
+        slot: slot,
       ),
+      builder: (context, snapshot) {
+        final isAvailable = snapshot.data ?? false;
+        final isLoading = snapshot.connectionState == ConnectionState.waiting;
+
+        return Card(
+          margin: const EdgeInsets.only(bottom: 12),
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: isAvailable ? Colors.green : Colors.grey,
+              child: Icon(
+                _getCategoryIcon(equipment.categoryId),
+                color: Colors.white,
+              ),
+            ),
+            title: Text('${equipment.brand} ${equipment.model}'),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${equipment.size}m²'),
+                if (equipment.serialNumber != null)
+                  Text(
+                    'S/N: ${equipment.serialNumber}',
+                    style: const TextStyle(fontSize: 11, color: Colors.grey),
+                  ),
+                if (!isAvailable && !isLoading)
+                  const Text(
+                    'Indisponible (déjà réservé)',
+                    style: TextStyle(fontSize: 11, color: Colors.red),
+                  ),
+              ],
+            ),
+            trailing: isLoading
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : isAvailable
+                ? ElevatedButton(
+                    onPressed: onAssign,
+                    child: const Text('Assigner'),
+                  )
+                : const Chip(
+                    label: Text('Indisponible'),
+                    backgroundColor: Colors.grey,
+                  ),
+          ),
+        );
+      },
     );
   }
 
@@ -393,19 +437,6 @@ class _EquipmentTile extends StatelessWidget {
         return Icons.security;
       default:
         return Icons.inventory_2;
-    }
-  }
-
-  String _getStatusText(EquipmentStatus status) {
-    switch (status) {
-      case EquipmentStatus.available:
-        return 'Dispo';
-      case EquipmentStatus.maintenance:
-        return 'Maintenance';
-      case EquipmentStatus.damaged:
-        return 'Endommagé';
-      case EquipmentStatus.reserved:
-        return 'Réservé';
     }
   }
 }

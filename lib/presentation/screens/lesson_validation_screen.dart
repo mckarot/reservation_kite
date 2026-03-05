@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../domain/models/app_theme_settings.dart';
 import '../../domain/models/equipment.dart';
-import '../../domain/models/equipment_assignment.dart';
+import '../../domain/models/equipment_booking.dart';
 import '../../domain/models/reservation.dart';
 import '../../domain/models/user.dart';
 import '../../l10n/app_localizations.dart';
@@ -13,6 +12,7 @@ import '../providers/equipment_assignment_notifier.dart';
 import '../providers/equipment_notifier.dart';
 import '../providers/theme_notifier.dart';
 import '../providers/user_notifier.dart';
+import '../screens/equipment_allocation_screen.dart';
 
 class LessonValidationScreen extends ConsumerStatefulWidget {
   final Reservation reservation;
@@ -34,7 +34,12 @@ class _LessonValidationScreenState
   final _noteController = TextEditingController();
   final List<String> _selectedItems = [];
   String? _selectedLevel;
-  AsyncValue<List<EquipmentAssignment>>? _assignmentsAsync;
+  AsyncValue<List<EquipmentBooking>>? _assignmentsAsync;
+
+  Color get primaryColor {
+    final themeSettings = ref.read(themeNotifierProvider).value;
+    return themeSettings?.primary ?? AppThemeSettings.defaultPrimary;
+  }
 
   @override
   void initState() {
@@ -55,19 +60,24 @@ class _LessonValidationScreenState
   void _showAssignedEquipment() {
     final l10n = AppLocalizations.of(context);
 
-    _assignmentsAsync?.whenData((assignments) {
+    // Utiliser directement le provider pour avoir les données à jour
+    final assignmentsAsync = ref.read(
+      equipmentAssignmentNotifierProvider(widget.reservation.id),
+    );
+
+    assignmentsAsync.whenData((assignments) {
       final studentAssignments = assignments
-          .where((a) => a.studentId == widget.pupil.id)
+          .where((a) => a.userId == widget.pupil.id)
           .toList();
 
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Row(
+          title: Row(
             children: [
-              Icon(Icons.inventory_2),
-              SizedBox(width: 8),
-              Text('Matériel assigné'),
+              Icon(Icons.inventory_2, color: primaryColor),
+              const SizedBox(width: 8),
+              Text(l10n.assignedEquipment),
             ],
           ),
           content: SizedBox(
@@ -81,27 +91,37 @@ class _LessonValidationScreenState
                       Text('Aucun matériel assigné pour cet élève'),
                     ],
                   )
-                : Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ...studentAssignments.map((assignment) => Card(
+                : ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: studentAssignments.length,
+                    itemBuilder: (context, index) {
+                      final assignment = studentAssignments[index];
+                      return Card(
                         child: ListTile(
                           leading: CircleAvatar(
-                            child: Icon(_getCategoryIcon(assignment.equipmentType)),
+                            child: Icon(
+                              _getCategoryIcon(assignment.equipmentType),
+                            ),
                           ),
-                          title: Text('${assignment.equipmentBrand} ${assignment.equipmentModel}'),
+                          title: Text(
+                            '${assignment.equipmentBrand} ${assignment.equipmentModel}',
+                          ),
                           subtitle: Text('${assignment.equipmentSize}m²'),
                           trailing: Chip(
                             label: Text(
                               assignment.status.name,
-                              style: const TextStyle(fontSize: 10, color: Colors.white),
+                              style: const TextStyle(
+                                fontSize: 10,
+                                color: Colors.white,
+                              ),
                             ),
-                            backgroundColor: _getStatusColor(assignment.status),
+                            backgroundColor: _getStatusColor(
+                              assignment.status,
+                            ),
                           ),
                         ),
-                      )),
-                    ],
+                      );
+                    },
                   ),
           ),
           actions: [
@@ -116,7 +136,7 @@ class _LessonValidationScreenState
   }
 
   // Libère le matériel après la séance
-  void _releaseEquipment(EquipmentAssignment assignment) async {
+  void _releaseEquipment(EquipmentBooking assignment) async {
     final l10n = AppLocalizations.of(context);
 
     final confirmed = await showDialog<bool>(
@@ -143,7 +163,9 @@ class _LessonValidationScreenState
 
     try {
       await ref
-          .read(equipmentAssignmentNotifierProvider(widget.reservation.id).notifier)
+          .read(
+            equipmentAssignmentNotifierProvider(widget.reservation.id).notifier,
+          )
           .completeAssignment(assignment.id, widget.reservation.id);
 
       if (!mounted) return;
@@ -166,15 +188,33 @@ class _LessonValidationScreenState
     }
   }
 
-  Color _getStatusColor(EquipmentAssignmentStatus status) {
+  // Navigue vers l'écran d'allocation de matériel
+  Future<void> _navigateToEquipmentAllocation() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EquipmentAllocationScreen(
+          sessionId: widget.reservation.id,
+          studentId: widget.pupil.id,
+          studentName: widget.pupil.displayName,
+          date: widget.reservation.date,
+          slot: widget.reservation.slot,
+        ),
+      ),
+    );
+    // Rafraîchir manuellement le provider après le retour
+    ref.invalidate(
+      equipmentAssignmentNotifierProvider(widget.reservation.id),
+    );
+  }
+
+  Color _getStatusColor(EquipmentBookingStatus status) {
     switch (status) {
-      case EquipmentAssignmentStatus.pending:
-        return Colors.orange;
-      case EquipmentAssignmentStatus.confirmed:
+      case EquipmentBookingStatus.confirmed:
         return Colors.green;
-      case EquipmentAssignmentStatus.cancelled:
+      case EquipmentBookingStatus.cancelled:
         return Colors.grey;
-      case EquipmentAssignmentStatus.completed:
+      case EquipmentBookingStatus.completed:
         return Colors.blue;
     }
   }
@@ -212,10 +252,17 @@ class _LessonValidationScreenState
       appBar: AppBar(
         title: Text(l10n.validationTitle(widget.pupil.displayName)),
         actions: [
+          // Bouton pour allouer du matériel
+          IconButton(
+            icon: const Icon(Icons.add_shopping_cart),
+            tooltip: l10n.allocateEquipment,
+            onPressed: () => _navigateToEquipmentAllocation(),
+          ),
+          const SizedBox(width: 8),
           // Bouton pour voir/modifier l'équipement assigné
           IconButton(
             icon: const Icon(Icons.inventory_2),
-            tooltip: 'Équipement assigné',
+            tooltip: l10n.assignedEquipment,
             onPressed: () => _showAssignedEquipment(),
           ),
         ],
@@ -229,11 +276,11 @@ class _LessonValidationScreenState
             _assignmentsAsync!.when(
               data: (assignments) {
                 if (assignments.isEmpty) return const SizedBox.shrink();
-                
+
                 final studentAssignments = assignments
-                    .where((a) => a.studentId == widget.pupil.id)
+                    .where((a) => a.userId == widget.pupil.id)
                     .toList();
-                
+
                 if (studentAssignments.isEmpty) return const SizedBox.shrink();
 
                 return Card(
@@ -258,27 +305,37 @@ class _LessonValidationScreenState
                           ],
                         ),
                         const SizedBox(height: 12),
-                        ...studentAssignments.map((assignment) => Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Row(
-                            children: [
-                              const Icon(Icons.check_circle, size: 16, color: Colors.green),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  '${assignment.equipmentBrand} ${assignment.equipmentModel} - ${assignment.equipmentSize}m²',
-                                  style: const TextStyle(fontWeight: FontWeight.w500),
+                        ...studentAssignments.map(
+                          (assignment) => Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.check_circle,
+                                  size: 16,
+                                  color: Colors.green,
                                 ),
-                              ),
-                              if (assignment.status == EquipmentAssignmentStatus.confirmed)
-                                IconButton(
-                                  icon: const Icon(Icons.clear, size: 20),
-                                  tooltip: 'Libérer le matériel',
-                                  onPressed: () => _releaseEquipment(assignment),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    '${assignment.equipmentBrand} ${assignment.equipmentModel} - ${assignment.equipmentSize}m²',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                                 ),
-                            ],
+                                if (assignment.status ==
+                                    EquipmentBookingStatus.confirmed)
+                                  IconButton(
+                                    icon: const Icon(Icons.clear, size: 20),
+                                    tooltip: 'Libérer le matériel',
+                                    onPressed: () =>
+                                        _releaseEquipment(assignment),
+                                  ),
+                              ],
+                            ),
                           ),
-                        )),
+                        ),
                       ],
                     ),
                   ),
@@ -444,20 +501,19 @@ class __EquipmentIncidentSectionState
       data: (items) {
         final uniqueAvailable = items
             .where((e) => e.status == EquipmentStatus.available)
-            .fold<Map<String, Equipment>>(
-              {},
-              (map, equipment) {
-                map[equipment.id] = equipment;
-                return map;
-              },
-            ).values.toList();
+            .fold<Map<String, Equipment>>({}, (map, equipment) {
+              map[equipment.id] = equipment;
+              return map;
+            })
+            .values
+            .toList();
 
         return Column(
           children: [
             Builder(
               builder: (context) {
                 return DropdownButtonFormField<String>(
-                  value: _selectedEquipId,
+                  initialValue: _selectedEquipId,
                   isExpanded: true,
                   decoration: InputDecoration(
                     hintText: l10n.selectEquipmentIssue,

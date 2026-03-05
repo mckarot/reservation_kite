@@ -2335,6 +2335,18 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Location sans moniteur'**
   String get equipmentDescription;
+
+  /// No description provided for @allocateEquipment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Allouer du matériel'**
+  String get allocateEquipment;
+
+  /// No description provided for @assignedEquipment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Matériel assigné'**
+  String get assignedEquipment;
 }
 
 class _AppLocalizationsDelegate

@@ -34,9 +34,11 @@ mixin _$EquipmentBooking {
   DateTime get dateTimestamp => throw _privateConstructorUsedError;
   EquipmentBookingSlot get slot => throw _privateConstructorUsedError;
   EquipmentBookingStatus get status => throw _privateConstructorUsedError;
+  EquipmentBookingType get type => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
   String get createdBy => throw _privateConstructorUsedError;
+  String? get assignedBy => throw _privateConstructorUsedError;
   String? get sessionId => throw _privateConstructorUsedError;
   String? get notes => throw _privateConstructorUsedError;
 
@@ -66,9 +68,11 @@ abstract class $EquipmentBookingCopyWith<$Res> {
       DateTime dateTimestamp,
       EquipmentBookingSlot slot,
       EquipmentBookingStatus status,
+      EquipmentBookingType type,
       DateTime createdAt,
       DateTime updatedAt,
       String createdBy,
+      String? assignedBy,
       String? sessionId,
       String? notes});
 }
@@ -99,9 +103,11 @@ class _$EquipmentBookingCopyWithImpl<$Res, $Val extends EquipmentBooking>
     Object? dateTimestamp = null,
     Object? slot = null,
     Object? status = null,
+    Object? type = null,
     Object? createdAt = null,
     Object? updatedAt = null,
     Object? createdBy = null,
+    Object? assignedBy = freezed,
     Object? sessionId = freezed,
     Object? notes = freezed,
   }) {
@@ -158,6 +164,10 @@ class _$EquipmentBookingCopyWithImpl<$Res, $Val extends EquipmentBooking>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as EquipmentBookingStatus,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as EquipmentBookingType,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -170,6 +180,10 @@ class _$EquipmentBookingCopyWithImpl<$Res, $Val extends EquipmentBooking>
           ? _value.createdBy
           : createdBy // ignore: cast_nullable_to_non_nullable
               as String,
+      assignedBy: freezed == assignedBy
+          ? _value.assignedBy
+          : assignedBy // ignore: cast_nullable_to_non_nullable
+              as String?,
       sessionId: freezed == sessionId
           ? _value.sessionId
           : sessionId // ignore: cast_nullable_to_non_nullable
@@ -204,9 +218,11 @@ abstract class _$$EquipmentBookingImplCopyWith<$Res>
       DateTime dateTimestamp,
       EquipmentBookingSlot slot,
       EquipmentBookingStatus status,
+      EquipmentBookingType type,
       DateTime createdAt,
       DateTime updatedAt,
       String createdBy,
+      String? assignedBy,
       String? sessionId,
       String? notes});
 }
@@ -235,9 +251,11 @@ class __$$EquipmentBookingImplCopyWithImpl<$Res>
     Object? dateTimestamp = null,
     Object? slot = null,
     Object? status = null,
+    Object? type = null,
     Object? createdAt = null,
     Object? updatedAt = null,
     Object? createdBy = null,
+    Object? assignedBy = freezed,
     Object? sessionId = freezed,
     Object? notes = freezed,
   }) {
@@ -294,6 +312,10 @@ class __$$EquipmentBookingImplCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as EquipmentBookingStatus,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as EquipmentBookingType,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -306,6 +328,10 @@ class __$$EquipmentBookingImplCopyWithImpl<$Res>
           ? _value.createdBy
           : createdBy // ignore: cast_nullable_to_non_nullable
               as String,
+      assignedBy: freezed == assignedBy
+          ? _value.assignedBy
+          : assignedBy // ignore: cast_nullable_to_non_nullable
+              as String?,
       sessionId: freezed == sessionId
           ? _value.sessionId
           : sessionId // ignore: cast_nullable_to_non_nullable
@@ -335,9 +361,11 @@ class _$EquipmentBookingImpl implements _EquipmentBooking {
       required this.dateTimestamp,
       required this.slot,
       required this.status,
+      this.type = EquipmentBookingType.student,
       required this.createdAt,
       required this.updatedAt,
       required this.createdBy,
+      this.assignedBy,
       this.sessionId,
       this.notes});
 
@@ -372,11 +400,16 @@ class _$EquipmentBookingImpl implements _EquipmentBooking {
   @override
   final EquipmentBookingStatus status;
   @override
+  @JsonKey()
+  final EquipmentBookingType type;
+  @override
   final DateTime createdAt;
   @override
   final DateTime updatedAt;
   @override
   final String createdBy;
+  @override
+  final String? assignedBy;
   @override
   final String? sessionId;
   @override
@@ -384,7 +417,7 @@ class _$EquipmentBookingImpl implements _EquipmentBooking {
 
   @override
   String toString() {
-    return 'EquipmentBooking(id: $id, userId: $userId, userName: $userName, userEmail: $userEmail, equipmentId: $equipmentId, equipmentType: $equipmentType, equipmentBrand: $equipmentBrand, equipmentModel: $equipmentModel, equipmentSize: $equipmentSize, dateString: $dateString, dateTimestamp: $dateTimestamp, slot: $slot, status: $status, createdAt: $createdAt, updatedAt: $updatedAt, createdBy: $createdBy, sessionId: $sessionId, notes: $notes)';
+    return 'EquipmentBooking(id: $id, userId: $userId, userName: $userName, userEmail: $userEmail, equipmentId: $equipmentId, equipmentType: $equipmentType, equipmentBrand: $equipmentBrand, equipmentModel: $equipmentModel, equipmentSize: $equipmentSize, dateString: $dateString, dateTimestamp: $dateTimestamp, slot: $slot, status: $status, type: $type, createdAt: $createdAt, updatedAt: $updatedAt, createdBy: $createdBy, assignedBy: $assignedBy, sessionId: $sessionId, notes: $notes)';
   }
 
   @override
@@ -414,12 +447,15 @@ class _$EquipmentBookingImpl implements _EquipmentBooking {
                 other.dateTimestamp == dateTimestamp) &&
             (identical(other.slot, slot) || other.slot == slot) &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.type, type) || other.type == type) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
             (identical(other.createdBy, createdBy) ||
                 other.createdBy == createdBy) &&
+            (identical(other.assignedBy, assignedBy) ||
+                other.assignedBy == assignedBy) &&
             (identical(other.sessionId, sessionId) ||
                 other.sessionId == sessionId) &&
             (identical(other.notes, notes) || other.notes == notes));
@@ -427,26 +463,29 @@ class _$EquipmentBookingImpl implements _EquipmentBooking {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      userId,
-      userName,
-      userEmail,
-      equipmentId,
-      equipmentType,
-      equipmentBrand,
-      equipmentModel,
-      equipmentSize,
-      dateString,
-      dateTimestamp,
-      slot,
-      status,
-      createdAt,
-      updatedAt,
-      createdBy,
-      sessionId,
-      notes);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        userId,
+        userName,
+        userEmail,
+        equipmentId,
+        equipmentType,
+        equipmentBrand,
+        equipmentModel,
+        equipmentSize,
+        dateString,
+        dateTimestamp,
+        slot,
+        status,
+        type,
+        createdAt,
+        updatedAt,
+        createdBy,
+        assignedBy,
+        sessionId,
+        notes
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -478,9 +517,11 @@ abstract class _EquipmentBooking implements EquipmentBooking {
       required final DateTime dateTimestamp,
       required final EquipmentBookingSlot slot,
       required final EquipmentBookingStatus status,
+      final EquipmentBookingType type,
       required final DateTime createdAt,
       required final DateTime updatedAt,
       required final String createdBy,
+      final String? assignedBy,
       final String? sessionId,
       final String? notes}) = _$EquipmentBookingImpl;
 
@@ -515,11 +556,15 @@ abstract class _EquipmentBooking implements EquipmentBooking {
   @override
   EquipmentBookingStatus get status;
   @override
+  EquipmentBookingType get type;
+  @override
   DateTime get createdAt;
   @override
   DateTime get updatedAt;
   @override
   String get createdBy;
+  @override
+  String? get assignedBy;
   @override
   String? get sessionId;
   @override

@@ -493,5 +493,8 @@
   "bookLesson": "Réserver un cours",
   "rentEquipment": "Louer du matériel",
   "lessonDescription": "Cours avec moniteur",
-  "equipmentDescription": "Location sans moniteur"
+  "equipmentDescription": "Location sans moniteur",
+  "allocateEquipment": "Allouer du matériel",
+  "assignedEquipment": "Matériel assigné",
+  "noEquipmentCategories": "Aucune catégorie d'équipement"
 }

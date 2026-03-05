@@ -7,8 +7,8 @@
 ///
 /// IMPORTANT : Ce script est idempotent - il peut être exécuté plusieurs fois
 /// sans danger car il skip les documents déjà migrés.
+library;
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../utils/migrate_equipment_data.dart';
 
 Future<void> runMigration() async {
