@@ -1,8 +1,8 @@
 # 🏗️ Reservation Kite — Guidelines & Contexte Projet
 
-**Version :** 2.1 (Lead Architect — Corrections agent)  
-**Date :** 5 mars 2026  
-**Statut :** ✅ Validé pour implémentation
+**Version :** 2.0 (Lead Architect)  
+**Date :** 1 mars 2026  
+**Statut :** En attente d'implémentation
 
 ---
 
@@ -134,18 +134,13 @@ class UserNotifier extends _$UserNotifier {
   }
 
   Future<String?> updateUser(User user) async {
-    // ✅ CORRECT : AsyncValue n'a pas de méthode .fold()
-    // Utiliser .whenOrNull() ou tester le type avec is AsyncError
     final result = await AsyncValue.guard(
       () => ref.read(userRepositoryProvider).updateUser(user),
     );
-    // Option A — concis (recommandé)
-    return result.whenOrNull(error: (e, _) => e.toString());
-
-    // Option B — explicite, utile si traitement différencié
-    // if (result is AsyncError) return result.error.toString();
-    // ref.invalidateSelf();
-    // return null;
+    return result.fold(
+      (data) => null,
+      (error) => error.toString(),
+    );
   }
 }
 
@@ -154,12 +149,6 @@ final primaryColor = ref.watch(themeNotifierProvider.select(
   (value) => value.value?.primary ?? AppThemeSettings.defaultPrimary,
 ));
 ```
-
-> **⚠️ ANTI-PATTERN À NE JAMAIS GÉNÉRER :**
-> ```dart
-> // ❌ result.fold() n'existe PAS sur AsyncValue — erreur de compilation
-> result.fold((data) => null, (error) => error.toString());
-> ```
 
 ---
 
@@ -220,14 +209,20 @@ await FirebaseFirestore.instance.runTransaction((transaction) async {
 
 | Règle | Description |
 |-------|-------------|
-| **Mise à jour post-validation uniquement** | `firestore_schema.md` est mis à jour **après** implémentation complète et validation explicite du responsable. **PAS pendant le développement.** |
+| **Mise à jour obligatoire** | Après CHAQUE modification validée de collections/documents Firestore |
 | **Fichier à mettre à jour** | `firestore_schema.md` — source de vérité du projet |
-| **Qui déclenche la mise à jour** | Le responsable projet après validation de chaque feature en production |
-| **Pourquoi ce délai** | Éviter que le schéma reflète du code non validé. Le schéma = ce qui est en prod, pas ce qui est en cours |
+| **Quand mettre à jour** | Dès qu'une nouvelle collection, un nouveau champ, ou un nouvel index est ajouté |
+| **Pourquoi** | Garder une documentation à jour pour toute l'équipe et éviter les oublis |
 
-> **⚠️ PENDANT LE DÉVELOPPEMENT :** Le schéma cible est décrit dans le document de specs
-> de la feature (ex : `EQUIPMENT_RENTAL_SPECIFICATIONS_v2.2_FINALE.md`), pas dans
-> `firestore_schema.md`. Ne pas modifier `firestore_schema.md` avant validation.
+**Exemple :**
+```dart
+// ✅ Après avoir ajouté la collection equipment_assignments
+// → Mise à jour IMMÉDIATE de firestore_schema.md :
+## COLLECTION: equipment_assignments
+- **Description**: Assignations d'équipements...
+- **Chemin**: `/equipment_assignments/{assignmentId}`
+- **Champs**: ...
+```
 
 ### Règles d'Écriture
 
@@ -263,15 +258,6 @@ final reservations = await FirebaseFirestore.instance
 | `google-services.json` | Credentials Android Firebase | Ne pas committer |
 | `GoogleService-Info.plist` | Credentials iOS Firebase | Ne pas committer |
 | `keystore.properties` | Clés de signature Android | Ne pas committer |
-
-> **Note sur `firebase_options.dart`** : Les clés qu'il contient (`apiKey`, `appId`) sont
-> des **identifiants publics** par conception Firebase — elles n'offrent pas d'accès aux données
-> sans les Security Rules et App Check. La vraie sécurité est dans les règles Firestore,
-> pas dans la confidentialité de ce fichier. Le mettre dans `.gitignore` est une précaution
-> acceptable sur un repo public, mais cela implique une étape de re-génération manuelle
-> (`flutterfire configure`) sur chaque nouveau poste. **Ne jamais confondre ce fichier avec
-> de vrais secrets serveur** (clés Stripe, tokens admin SDK, etc.) qui, eux, ne doivent
-> JAMAIS être côté client.
 
 ### ✅ Bonnes Pratiques
 
@@ -448,7 +434,7 @@ keystore.properties
 | Contrainte | Description |
 |------------|-------------|
 | **Zéro effet de bord** | Sans validation explicite (écriture, suppression, envoi) |
-| **Écriture Firestore directe** | Autorisée et recommandée via `runTransaction` pour toutes les opérations atomiques (réservations, wallet, matériel). Cloud Function **uniquement** si l'opération nécessite un secret serveur (ex : clé Stripe) ou un webhook externe — pas pour remplacer les transactions Firestore |
+| **Pas d'écriture directe Firestore** | Données critiques → Cloud Function |
 | **Pas de retry automatique** | Sur les écritures |
 | **Jamais d'initiative git** | Sans instruction explicite |
 | **🚫 Secrets JAMAIS dans Git** | `firebase_options.dart`, `.env`, clés API → `.gitignore` obligatoire |
@@ -533,8 +519,7 @@ git log --all --full-history -- <fichier>  # Historique fichier
 
 | Document | Description |
 |----------|-------------|
-| `firestore_schema.md` | Schéma Firestore (état production validé) |
-| `EQUIPMENT_RENTAL_SPECIFICATIONS_v2.2_FINALE.md` | **Module location matériel — schéma cible + implémentation complète** |
+| `firestore_schema.md` | Schéma Firestore (source de vérité) |
 | `FEATURE_THEME_SYSTEM.md` | Spécifications du système de thème |
 | `AUDIT_ACTION_PLAN.md` | Plan d'amélioration qualité |
 | `TODO_LATER.md` | TODO pour plus tard |
@@ -572,5 +557,5 @@ git log --all --full-history -- <fichier>  # Historique fichier
 
 ---
 
-**Dernière mise à jour :** 5 mars 2026 — v2.1 (corrections agent)  
-**Prochaine revue :** Après implémentation du module matériel
+**Dernière mise à jour :** 2 mars 2026
+**Prochaine revue :** Après implémentation des corrections d'audit

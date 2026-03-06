@@ -5,6 +5,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/repositories/availability_repository.dart';
 import '../../domain/repositories/credit_pack_repository.dart';
+import '../../domain/repositories/equipment_repository.dart';
+import '../../domain/repositories/equipment_rental_repository.dart';
 import '../../domain/repositories/notification_repository.dart';
 import '../../domain/repositories/reservation_repository.dart';
 import '../../domain/repositories/session_repository.dart';
@@ -15,6 +17,8 @@ import '../../domain/repositories/user_repository.dart';
 import '../repositories/firebase_auth_repository.dart';
 import '../repositories/firestore_availability_repository.dart';
 import '../repositories/firestore_credit_pack_repository.dart';
+import '../repositories/firestore_equipment_repository.dart';
+import '../repositories/firestore_equipment_rental_repository.dart';
 import '../repositories/firestore_notification_repository.dart';
 import '../repositories/firestore_reservation_repository.dart';
 import '../repositories/firestore_session_repository.dart';
@@ -76,4 +80,15 @@ AvailabilityRepository availabilityRepository(AvailabilityRepositoryRef ref) {
 @riverpod
 TransactionRepository transactionRepository(TransactionRepositoryRef ref) {
   return FirestoreTransactionRepository(FirebaseFirestore.instance);
+}
+
+@riverpod
+EquipmentRepository equipmentRepository(EquipmentRepositoryRef ref) {
+  return FirestoreEquipmentRepository(FirebaseFirestore.instance);
+}
+
+@riverpod
+EquipmentRentalRepository equipmentRentalRepository(
+    EquipmentRentalRepositoryRef ref) {
+  return FirestoreEquipmentRentalRepository(FirebaseFirestore.instance);
 }

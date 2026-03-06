@@ -6,17 +6,17 @@ service cloud.firestore {
     function isAuthenticated() {
       return request.auth != null;
     }
-    
+
     function isAdmin() {
-      return isAuthenticated() && 
+      return isAuthenticated() &&
              get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
-    
+
     function isInstructor() {
-      return isAuthenticated() && 
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'instructor'];
+      return isAuthenticated() &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'editor'];
     }
-    
+
     function isOwner(userId) {
       return isAuthenticated() && request.auth.uid == userId;
     }
@@ -69,6 +69,49 @@ service cloud.firestore {
     match /availabilities/{availabilityId} {
       allow read: if isAuthenticated();
       allow write: if isInstructor();
+    }
+
+    // Equipment items collection (parc matériel)
+    match /equipment_items/{itemId} {
+      allow read: if isAuthenticated();
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Equipment categories collection
+    match /equipment_categories/{categoryId} {
+      allow read: if isAuthenticated();
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Equipment rentals collection
+    match /equipment_rentals/{rentalId} {
+      // Lecture : proprio, staff ou admin
+      allow read: if isAuthenticated() && (
+        resource.data.student_id == request.auth.uid ||
+        isInstructor() ||
+        isAdmin()
+      );
+      // Création : élève pour lui-même, ou staff/admin
+      allow create: if isAuthenticated() && (
+        (request.resource.data.student_id == request.auth.uid &&
+         request.resource.data.assignment_type == 'student_rental') ||
+        isInstructor() ||
+        isAdmin()
+      );
+      // Mise à jour : élève peut seulement annuler, staff/admin tout faire
+      allow update: if isAuthenticated() && (
+        (resource.data.student_id == request.auth.uid &&
+         request.resource.data.status == 'cancelled' &&
+         request.resource.data.diff(resource.data)
+           .affectedKeys().hasOnly(['status', 'updated_at'])) ||
+        isInstructor() ||
+        isAdmin()
+      );
+      allow delete: if isAdmin();
     }
   }
 }

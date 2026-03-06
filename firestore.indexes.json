@@ -1,4 +1,56 @@
 {
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionGroup": "equipment_items",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "category", "order": "ASCENDING" },
+        { "fieldPath": "is_active", "order": "ASCENDING" },
+        { "fieldPath": "current_status", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "equipment_rentals",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "student_id", "order": "ASCENDING" },
+        { "fieldPath": "date_timestamp", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "equipment_rentals",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "equipment_id", "order": "ASCENDING" },
+        { "fieldPath": "date_string", "order": "ASCENDING" },
+        { "fieldPath": "slot", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "equipment_rentals",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "date_string", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "equipment_rentals",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "reservation_id", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "equipment_rentals",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "date_string", "order": "ASCENDING" },
+        { "fieldPath": "assignment_type", "order": "ASCENDING" }
+      ]
+    }
+  ],
   "fieldOverrides": []
 }

@@ -18,6 +18,8 @@ _$ReservationImpl _$$ReservationImplFromJson(Map<String, dynamic> json) =>
       status: $enumDecodeNullable(_$ReservationStatusEnumMap, json['status']) ??
           ReservationStatus.confirmed,
       notes: json['notes'] as String? ?? '',
+      equipmentAssignmentRequired:
+          json['equipment_assignment_required'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$ReservationImplToJson(_$ReservationImpl instance) =>
@@ -31,6 +33,7 @@ Map<String, dynamic> _$$ReservationImplToJson(_$ReservationImpl instance) =>
       'staff_id': instance.staffId,
       'status': _$ReservationStatusEnumMap[instance.status]!,
       'notes': instance.notes,
+      'equipment_assignment_required': instance.equipmentAssignmentRequired,
     };
 
 const _$TimeSlotEnumMap = {

@@ -5,6 +5,7 @@ import 'package:reservation_kite/presentation/screens/admin_dashboard_screen.dar
 import 'package:reservation_kite/presentation/screens/admin_settings_screen.dart';
 import 'package:reservation_kite/presentation/screens/booking_screen.dart';
 import 'package:reservation_kite/presentation/screens/create_admin_screen.dart';
+import 'package:reservation_kite/presentation/screens/equipment_admin_screen.dart';
 import 'package:reservation_kite/presentation/screens/firestore_debug_screen.dart';
 import 'package:reservation_kite/presentation/screens/staff_admin_screen.dart';
 import 'package:reservation_kite/presentation/screens/user_directory_screen.dart';
@@ -64,6 +65,12 @@ class AdminScreen extends ConsumerWidget {
         title: l10n.calendarBookings,
         icon: Icons.calendar_month,
         route: const BookingScreen(),
+      ),
+      _DashboardItem(
+        title: 'Gestion du matériel',
+        icon: Icons.sports_kabaddi,
+        route: const EquipmentAdminScreen(),
+        color: Colors.orange,
       ),
     ];
 

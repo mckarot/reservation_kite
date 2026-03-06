@@ -6,7 +6,7 @@ part of 'financial_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$financialStatsHash() => r'284ed9d1c1dea9badb23b04238a3efdb45981421';
+String _$financialStatsHash() => r'11d35fbc4dcc9d97638c0bcf2ddc3c62eaae449c';
 
 /// See also [FinancialStats].
 @ProviderFor(FinancialStats)

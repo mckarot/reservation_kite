@@ -9,6 +9,13 @@ String formatDateForQuery(DateTime date) {
   return DateFormat('yyyy-MM-dd').format(utcDate);
 }
 
+/// Convertit une date locale en DateTime UTC pour stockage Firestore.
+///
+/// À utiliser pour date_timestamp dans equipment_rentals.
+DateTime toUtcDate(DateTime date) {
+  return DateTime.utc(date.year, date.month, date.day);
+}
+
 /// Parse un string ISO-8601 en DateTime UTC.
 ///
 /// À utiliser pour convertir les dates stockées en Firestore.

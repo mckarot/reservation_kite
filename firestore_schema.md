@@ -1,180 +1,121 @@
-# SCHÉMA FIRESTORE — RESERVATION KITE (v3 - SANS MATÉRIEL)
+# SOURCE DE VÉRITÉ : SCHÉMA FIRESTORE
 
-> **Note:** Cette version ne inclut plus la gestion du matériel (location, assignment, etc.).
-> Toutes les collections liées au matériel ont été supprimées.
+> [!IMPORTANT]
+> Ce document est synchronisé avec le projet Firebase `reservation-kite`.
+> Les collections marquées comme "ACTIVE" sont présentes en base de données.
+> Les collections marquées comme "MAPPED" existent dans le code mais sont vides/absentes en base.
 
-## COLLECTION: settings
-- **Description**: Configuration globale de l'école et du thème.
-- **Chemin**: `/settings/{configDoc}`
+---
 
-### DOCUMENT: `school_config`
+## COLLECTIONS ACTIVES (Production)
+
+### COLLECTION: admins
+- **Description**: Utilisateurs disposant de droits d'administration globaux.
+- **Chemin**: `/admins/{uid}`
 - **Champs**:
-    - `opening_hours`: map `{ morning: { start: string, end: string }, afternoon: { start: string, end: string } }`
-    - `days_off`: list<string> (ex: ["Tuesday morning"])
-    - `max_students_per_instructor`: int (default: 4)
-    - `weather_latitude`: number? (Latitude du spot de kite, ex: 45.123456)
-    - `weather_longitude`: number? (Longitude du spot de kite, ex: -1.654321)
-    - `weather_location_name`: string? (Nom du spot pour affichage, ex: "Plage Principale")
-    - `updated_at`: serverTimestamp
+    - `uid`: string (required)
+    - `email`: string (required)
+    - `createdAt`: timestamp (required)
+    - `createdBy`: string (uid de l'admin créateur)
 
-### DOCUMENT: `theme_config`
-- **Description**: Configuration du thème dynamique (couleurs de la marque).
+### COLLECTION: users
+- **Description**: Profils utilisateurs synchronisés avec Firebase Auth.
+- **Chemin**: `/users/{uid}`
 - **Champs**:
-    - `primaryColor`: int (Hex color code, ex: 0xFF1976D2)
-    - `secondaryColor`: int
-    - `accentColor`: int
-    - `version`: int (Incrémenté à chaque changement pour la gestion du cache)
-    - `updatedBy`: string (UID de l'admin)
-    - `updatedAt`: serverTimestamp
+    - `display_name`: string (required)
+    - `email`: string (required, unique)
+    - `photo_url`: string? (optional)
+    - `wallet_balance`: int (en unités/crédits)
+    - `role`: string ['admin', 'user', 'editor'] (default: 'user')
+    - `progress`: map
+        - `level`: string
+        - `checklist`: array<string>
+    - `created_at`: serverTimestamp (immutable)
+    - `last_seen`: serverTimestamp
 
-## COLLECTION: credit_packs
-- **Description**: Catalogue des packs de crédits disponibles à la vente.
+### COLLECTION: reservations
+- **Description**: Réservations de cours (planning).
+- **Chemin**: `/reservations/{reservationId}`
+- **Champs**:
+    - `id`: string (Identifiant unique)
+    - `pupil_id`: string (FK -> users.uid)
+    - `client_name`: string (Nom affiché)
+    - `date`: string (ISO 8601 format: YYYY-MM-DDTHH:mm:ss.sss)
+    - `slot`: string ['morning', 'afternoon']
+    - `staff_id`: string? (FK -> staff.id, null si non assigné)
+    - `status`: string ['pending', 'confirmed', 'cancelled']
+    - `notes`: string
+    - `created_at`: string (ISO 8601 format)
+
+### COLLECTION: staff
+- **Description**: Effectif des moniteurs.
+- **Chemin**: `/staff/{staffId}`
+- **Champs**:
+    - `id`: string (Identifiant unique)
+    - `name`: string (Nom du moniteur)
+    - `bio`: string
+    - `photo_url`: string
+    - `is_active`: boolean
+    - `specialties`: array<string>
+    - `certificates`: array<string>
+    - `updated_at`: timestamp
+
+### COLLECTION: credit_packs
+- **Description**: Forfaits de crédits disponibles à l'achat.
 - **Chemin**: `/credit_packs/{packId}`
 - **Champs**:
     - `name`: string
     - `credits`: int
     - `price`: double
-    - `is_active`: boolean (default: true)
+    - `is_active`: boolean
 
-## COLLECTION: users
-- **Description**: Profils utilisateurs et élèves.
-- **Chemin**: `/users/{uid}`
-- **Champs**:
-    - `display_name`: string (required)
-    - `email`: string (required, unique)
-    - `photo_url`: string?
-    - `role`: string ['admin', 'instructor', 'student'] (default: 'student')
-    - `weight`: int? (in kg)
-    - `wallet_balance`: int (en centimes)
-    - `total_credits_purchased`: int
-    - `progress`: map { 
-        `iko_level`: string?,
-        `checklist`: list<string>,
-        `notes`: list<map> [{ date: timestamp, content: string, instructor_id: string }]
-      }
-    - `created_at`: serverTimestamp (immutable)
-    - `last_seen`: serverTimestamp
+### COLLECTION: settings
+- **Description**: Configurations globales de l'école et de l'application.
+- **Chemin**: `/settings/{docId}`
+- **Documents**:
+    - `school_config`:
+        - `openingTime`: string (ex: "08:00")
+        - `closingTime`: string (ex: "18:00")
+        - `closedDays`: array<int> (0=dimanche)
+        - `maxStudentsPerInstructor`: int
+        - `weather_latitude`: double
+        - `weather_longitude`: double
+    - `theme_config`:
+        - `primaryColor`: int (ARGB)
+        - `accentColor`: int (ARGB)
+        - `secondaryColor`: int (ARGB)
+        - `version`: int
+        - `updatedAt`: timestamp
+        - `updatedBy`: string
 
-## COLLECTION: reservations
-- **Description**: Réservations manuelles ou directes (historique/back-office).
-- **Chemin**: `/reservations/{reservationId}`
-- **Champs**:
-    - `clientName`: string
-    - `date`: timestamp
-    - `slot`: string ['morning', 'afternoon', 'fullDay']
-    - `status`: string ['pending', 'confirmed', 'cancelled']
-    - `pupilId`: string? (FK -> users.uid)
-    - `staffId`: string? (FK -> users.uid)
-    - `notes`: string
-    - `createdAt`: timestamp
-
-## COLLECTION: staff
-- **Description**: Fiches de présentation des moniteurs.
-- **Chemin**: `/staff/{uid}` (uid = users.uid)
-- **Champs**:
-    - `id`: string (UID)
-    - `name`: string
-    - `bio`: string
-    - `photo_url`: string
-    - `specialties`: list<string> (ex: ["Strapless", "Freestyle", "Foil"])
-    - `certificates`: list<string> (Diplômes)
-    - `isActive`: boolean
-    - `updated_at`: serverTimestamp
-
-## COLLECTION: availabilities
-- **Description**: Slots de travail et indisponibilités du staff.
-- **Chemin**: `/availabilities/{availabilityId}`
-- **Champs**:
-    - `instructor_id`: string (FK -> users.uid)
-    - `date`: timestamp (required)
-    - `slot`: string ['morning', 'afternoon', 'fullDay']
-    - `status`: string ['pending', 'approved', 'rejected'] (Pour les demandes d'indisponibilité)
-    - `reason`: string? (Motif de l'indisponibilité)
-    - `created_at`: serverTimestamp
-    - `updated_at`: serverTimestamp
-
-## COLLECTION: sessions
-- **Description**: Cours de Kite Surf (slots de temps réels).
-- **Chemin**: `/sessions/{sessionId}`
-- **Champs**:
-    - `date`: timestamp (required)
-    - `slot`: string ['morning', 'afternoon']
-    - `instructor_id`: string (FK -> users.uid)
-    - `studentIds`: list<string> (list of users.uid)
-    - `max_capacity`: int (Nb moniteurs * Quota)
-    - `status`: string ['scheduled', 'cancelled', 'completed']
-    - `created_at`: serverTimestamp
-
-## COLLECTION: notifications
-- **Description**: Centre de notifications pour les utilisateurs.
+### COLLECTION: notifications
+- **Description**: Notifications système pour les utilisateurs.
 - **Chemin**: `/notifications/{notificationId}`
 - **Champs**:
-    - `userId`: string (FK -> users.uid)
+    - `id`: string
+    - `user_id`: string (FK -> users.uid)
     - `title`: string
     - `message`: string
-    - `type`: string ['info', 'success', 'alert']
-    - `timestamp`: timestamp
-    - `isRead`: boolean
-
-## COLLECTION: products
-- **Description**: Inventaire boutique (neuf et occasion). **[NON IMPLÉMENTÉ dans le code v3]**
-- **Chemin**: `/products/{productId}`
-- **Champs**:
-    - `name`: string (required)
-    - `description`: string
-    - `price`: int (en centimes)
-    - `category`: string ['wing', 'kite', 'board', 'harness', 'accessories']
-    - `condition`: string ['new', 'used']
-    - `stock_quantity`: int
-    - `images`: list<string>
-    - `created_at`: serverTimestamp
-
-## COLLECTION: transactions
-- **Description**: Historique des paiements manuels et achats.
-- **Chemin**: `/transactions/{transactionId}`
-- **Champs**:
-    - `user_id`: string (FK -> users.uid)
-    - `amount`: int (en centimes)
-    - `type`: string ['credit_purchase', 'lesson_payment', 'boutique_purchase']
-    - `payment_method`: string ['cash', 'card', 'transfer']
-    - `metadata`: map
-    - `created_at`: serverTimestamp
+    - `type`: string ['success', 'error', 'info', 'warning']
+    - `is_read`: boolean
+    - `timestamp`: string (ISO 8601 format)
 
 ---
 
-## 🗑️ COLLECTIONS SUPPRIMÉES (v3)
+## COLLECTIONS MAPPÉES (Vides ou obsolètes en DB)
 
-Les collections suivantes ont été **supprimées** car la gestion du matériel a été retirée de l'application :
+> [!NOTE]
+> Les collections suivantes sont définies dans les repositories du code (`lib/data/repositories`) mais ne contiennent aucune donnée ou sont absentes de la racine Firestore.
 
-### ❌ `equipment` (SUPPRIMÉE)
-Anciennement : Gestion du parc matériel (ailes, planches, etc.)
-
-### ❌ `equipment_bookings` (SUPPRIMÉE)
-Anciennement : Réservations de matériel par les élèves
-
-### ❌ `equipment_assignments` (SUPPRIMÉE)
-Anciennement : Assignations de matériel par les moniteurs
-
-### ❌ `equipment_categories` (SUPPRIMÉE)
-Anciennement : Catégories d'équipement personnalisables
+- `sessions`: Ancienne gestion des créneaux (remplacée par `reservations`).
+- `availabilities`: Gestion des indisponibilités staff.
+- `transactions`: Historique financier (wallet).
+- `products`: Ancienne version des `credit_packs`.
 
 ---
 
-## 📋 RÉCAPITULATIF DES COLLECTIONS ACTUELLES
+## COLLECTIONS SUPPRIMÉES (Projets passés)
 
-| Collection | Statut | Description |
-|------------|--------|-------------|
-| `settings` | ✅ | Configuration école + thème |
-| `credit_packs` | ✅ | Packs de crédits |
-| `users` | ✅ | Utilisateurs (students, instructors, admins) |
-| `staff` | ✅ | Fiches moniteurs |
-| `availabilities` | ✅ | Disponibilités staff |
-| `sessions` | ✅ | Cours de Kite Surf |
-| `reservations` | ✅ | Réservations (back-office) |
-| `notifications` | ✅ | Centre de notifications |
-| `products` | ⚠️ | Boutique (Non implémenté) |
-| `transactions` | ✅ | Historique paiements |
-| `equipment*` | ❌ | **SUPPRIMÉ** |
-| `equipment_bookings` | ❌ | **SUPPRIMÉ** |
-| `equipment_assignments` | ❌ | **SUPPRIMÉ** |
-| `equipment_categories` | ❌ | **SUPPRIMÉ** |
+- `equipment`: Supprimé lors du refactoring du système de réservation (Unification).
+- `equipment_assignments`: Supprimé.
+- `equipment_bookings`: Supprimé.

@@ -173,5 +173,40 @@ final transactionRepositoryProvider =
 
 typedef TransactionRepositoryRef
     = AutoDisposeProviderRef<TransactionRepository>;
+String _$equipmentRepositoryHash() =>
+    r'0c4476c2065fcaafb5bc568216a339d4fc307c39';
+
+/// See also [equipmentRepository].
+@ProviderFor(equipmentRepository)
+final equipmentRepositoryProvider =
+    AutoDisposeProvider<EquipmentRepository>.internal(
+  equipmentRepository,
+  name: r'equipmentRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$equipmentRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef EquipmentRepositoryRef = AutoDisposeProviderRef<EquipmentRepository>;
+String _$equipmentRentalRepositoryHash() =>
+    r'a42d934dbd4c4125b2b05fbc4f0c614c68363468';
+
+/// See also [equipmentRentalRepository].
+@ProviderFor(equipmentRentalRepository)
+final equipmentRentalRepositoryProvider =
+    AutoDisposeProvider<EquipmentRentalRepository>.internal(
+  equipmentRentalRepository,
+  name: r'equipmentRentalRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$equipmentRentalRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef EquipmentRentalRepositoryRef
+    = AutoDisposeProviderRef<EquipmentRentalRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

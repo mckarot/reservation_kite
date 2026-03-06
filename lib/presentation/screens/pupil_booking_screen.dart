@@ -18,6 +18,7 @@ import '../providers/staff_notifier.dart';
 import '../providers/theme_notifier.dart';
 import '../providers/unavailability_notifier.dart';
 import '../providers/user_notifier.dart';
+import 'equipment_rental_screen.dart';
 
 final weatherProvider = StateProvider<AsyncValue<Weather>>(
   (ref) => const AsyncValue.loading(),
@@ -346,12 +347,44 @@ class _PupilBookingScreenState extends ConsumerState<PupilBookingScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: OutlinedButton.icon(
+                    onPressed: () => _navigateToEquipmentRental(context),
+                    icon: const Icon(Icons.sports_kabaddi),
+                    label: const Text(
+                      'Louer du matériel',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.orange.shade700,
+                      side: BorderSide(color: Colors.orange.shade700, width: 1.5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             );
           },
           loading: () => const LinearProgressIndicator(),
           error: (e, _) => const SizedBox(),
         ),
+      ),
+    );
+  }
+
+  void _navigateToEquipmentRental(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const EquipmentRentalScreen(),
       ),
     );
   }

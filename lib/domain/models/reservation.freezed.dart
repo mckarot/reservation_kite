@@ -29,9 +29,13 @@ mixin _$Reservation {
   DateTime get createdAt => throw _privateConstructorUsedError;
   String? get pupilId => throw _privateConstructorUsedError;
   String? get staffId => throw _privateConstructorUsedError;
-  ReservationStatus get status =>
-      throw _privateConstructorUsedError; // Default to confirmed for backward compatibility with manual entries
+  ReservationStatus get status => throw _privateConstructorUsedError;
   String get notes => throw _privateConstructorUsedError;
+
+  /// Indique si un matériel doit être assigné par le moniteur.
+  /// - true  = admin n'a pas assigné, moniteur DOIT assigner avant de démarrer
+  /// - false = matériel assigné ou pas de matériel requis
+  bool get equipmentAssignmentRequired => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -54,7 +58,8 @@ abstract class $ReservationCopyWith<$Res> {
       String? pupilId,
       String? staffId,
       ReservationStatus status,
-      String notes});
+      String notes,
+      bool equipmentAssignmentRequired});
 }
 
 /// @nodoc
@@ -79,6 +84,7 @@ class _$ReservationCopyWithImpl<$Res, $Val extends Reservation>
     Object? staffId = freezed,
     Object? status = null,
     Object? notes = null,
+    Object? equipmentAssignmentRequired = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -117,6 +123,10 @@ class _$ReservationCopyWithImpl<$Res, $Val extends Reservation>
           ? _value.notes
           : notes // ignore: cast_nullable_to_non_nullable
               as String,
+      equipmentAssignmentRequired: null == equipmentAssignmentRequired
+          ? _value.equipmentAssignmentRequired
+          : equipmentAssignmentRequired // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -138,7 +148,8 @@ abstract class _$$ReservationImplCopyWith<$Res>
       String? pupilId,
       String? staffId,
       ReservationStatus status,
-      String notes});
+      String notes,
+      bool equipmentAssignmentRequired});
 }
 
 /// @nodoc
@@ -161,6 +172,7 @@ class __$$ReservationImplCopyWithImpl<$Res>
     Object? staffId = freezed,
     Object? status = null,
     Object? notes = null,
+    Object? equipmentAssignmentRequired = null,
   }) {
     return _then(_$ReservationImpl(
       id: null == id
@@ -199,6 +211,10 @@ class __$$ReservationImplCopyWithImpl<$Res>
           ? _value.notes
           : notes // ignore: cast_nullable_to_non_nullable
               as String,
+      equipmentAssignmentRequired: null == equipmentAssignmentRequired
+          ? _value.equipmentAssignmentRequired
+          : equipmentAssignmentRequired // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -215,7 +231,8 @@ class _$ReservationImpl implements _Reservation {
       this.pupilId,
       this.staffId,
       this.status = ReservationStatus.confirmed,
-      this.notes = ''});
+      this.notes = '',
+      this.equipmentAssignmentRequired = false});
 
   factory _$ReservationImpl.fromJson(Map<String, dynamic> json) =>
       _$$ReservationImplFromJson(json);
@@ -239,14 +256,20 @@ class _$ReservationImpl implements _Reservation {
   @override
   @JsonKey()
   final ReservationStatus status;
-// Default to confirmed for backward compatibility with manual entries
   @override
   @JsonKey()
   final String notes;
 
+  /// Indique si un matériel doit être assigné par le moniteur.
+  /// - true  = admin n'a pas assigné, moniteur DOIT assigner avant de démarrer
+  /// - false = matériel assigné ou pas de matériel requis
+  @override
+  @JsonKey()
+  final bool equipmentAssignmentRequired;
+
   @override
   String toString() {
-    return 'Reservation(id: $id, clientName: $clientName, date: $date, slot: $slot, createdAt: $createdAt, pupilId: $pupilId, staffId: $staffId, status: $status, notes: $notes)';
+    return 'Reservation(id: $id, clientName: $clientName, date: $date, slot: $slot, createdAt: $createdAt, pupilId: $pupilId, staffId: $staffId, status: $status, notes: $notes, equipmentAssignmentRequired: $equipmentAssignmentRequired)';
   }
 
   @override
@@ -264,13 +287,17 @@ class _$ReservationImpl implements _Reservation {
             (identical(other.pupilId, pupilId) || other.pupilId == pupilId) &&
             (identical(other.staffId, staffId) || other.staffId == staffId) &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.notes, notes) || other.notes == notes));
+            (identical(other.notes, notes) || other.notes == notes) &&
+            (identical(other.equipmentAssignmentRequired,
+                    equipmentAssignmentRequired) ||
+                other.equipmentAssignmentRequired ==
+                    equipmentAssignmentRequired));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, clientName, date, slot,
-      createdAt, pupilId, staffId, status, notes);
+      createdAt, pupilId, staffId, status, notes, equipmentAssignmentRequired);
 
   @JsonKey(ignore: true)
   @override
@@ -296,7 +323,8 @@ abstract class _Reservation implements Reservation {
       final String? pupilId,
       final String? staffId,
       final ReservationStatus status,
-      final String notes}) = _$ReservationImpl;
+      final String notes,
+      final bool equipmentAssignmentRequired}) = _$ReservationImpl;
 
   factory _Reservation.fromJson(Map<String, dynamic> json) =
       _$ReservationImpl.fromJson;
@@ -319,8 +347,14 @@ abstract class _Reservation implements Reservation {
   String? get staffId;
   @override
   ReservationStatus get status;
-  @override // Default to confirmed for backward compatibility with manual entries
+  @override
   String get notes;
+  @override
+
+  /// Indique si un matériel doit être assigné par le moniteur.
+  /// - true  = admin n'a pas assigné, moniteur DOIT assigner avant de démarrer
+  /// - false = matériel assigné ou pas de matériel requis
+  bool get equipmentAssignmentRequired;
   @override
   @JsonKey(ignore: true)
   _$$ReservationImplCopyWith<_$ReservationImpl> get copyWith =>
