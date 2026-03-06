@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/providers/repository_providers.dart';
 import '../../domain/models/equipment_item.dart';
 import '../../services/equipment_initialization_service.dart';
 import '../providers/equipment_notifier.dart';
@@ -105,6 +104,7 @@ class EquipmentAdminScreen extends ConsumerWidget {
                         isAvailable: true,
                         showPrice: true,
                         onTap: () => _showEditEquipmentDialog(context, ref, e),
+                        onStatusTap: () => _showChangeStatusDialog(context, ref, e),
                       ),
                     )),
               ],
@@ -122,6 +122,7 @@ class EquipmentAdminScreen extends ConsumerWidget {
                         isAvailable: false,
                         showPrice: true,
                         onTap: () => _showEditEquipmentDialog(context, ref, e),
+                        onStatusTap: () => _showChangeStatusDialog(context, ref, e),
                       ),
                     )),
               ],
@@ -139,6 +140,7 @@ class EquipmentAdminScreen extends ConsumerWidget {
                         isAvailable: false,
                         showPrice: true,
                         onTap: () => _showEditEquipmentDialog(context, ref, e),
+                        onStatusTap: () => _showChangeStatusDialog(context, ref, e),
                       ),
                     )),
               ],
@@ -411,6 +413,94 @@ class EquipmentAdminScreen extends ConsumerWidget {
         },
       ),
     );
+  }
+
+  /// Affiche un dialog pour changer le statut de l'équipement
+  Future<void> _showChangeStatusDialog(
+      BuildContext context, WidgetRef ref, EquipmentItem equipment) async {
+    final newStatus = await showDialog<EquipmentCurrentStatus>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Changer le statut'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Statut actuel : ${_getStatusText(equipment.currentStatus)}'),
+            const SizedBox(height: 16),
+            const Text('Nouveau statut :'),
+            const SizedBox(height: 8),
+            ...EquipmentCurrentStatus.values.map((status) {
+              if (status == equipment.currentStatus) return const SizedBox();
+              return ListTile(
+                leading: Icon(
+                  _getStatusIcon(status),
+                  color: _getStatusColor(status, Theme.of(context).colorScheme),
+                ),
+                title: Text(_getStatusText(status)),
+                onTap: () => Navigator.pop(dialogContext, status),
+              );
+            }),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Annuler'),
+          ),
+        ],
+      ),
+    );
+
+    if (newStatus != null && newStatus != equipment.currentStatus) {
+      // Mettre à jour le statut via le provider (rafraîchit la liste)
+      await ref
+          .read(equipmentNotifierProvider.notifier)
+          .updateEquipmentStatus(equipment.id, newStatus);
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              '✅ Statut mis à jour : ${_getStatusText(newStatus)}',
+            ),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    }
+  }
+
+  IconData _getStatusIcon(EquipmentCurrentStatus status) {
+    switch (status) {
+      case EquipmentCurrentStatus.available:
+        return Icons.check_circle;
+      case EquipmentCurrentStatus.rented:
+        return Icons.inventory_2;
+      case EquipmentCurrentStatus.maintenance:
+        return Icons.build;
+    }
+  }
+
+  Color _getStatusColor(EquipmentCurrentStatus status, ColorScheme colorScheme) {
+    switch (status) {
+      case EquipmentCurrentStatus.available:
+        return colorScheme.primary;
+      case EquipmentCurrentStatus.rented:
+        return colorScheme.tertiary;
+      case EquipmentCurrentStatus.maintenance:
+        return colorScheme.error;
+    }
+  }
+
+  String _getStatusText(EquipmentCurrentStatus status) {
+    switch (status) {
+      case EquipmentCurrentStatus.available:
+        return 'Disponible';
+      case EquipmentCurrentStatus.rented:
+        return 'En location';
+      case EquipmentCurrentStatus.maintenance:
+        return 'En maintenance';
+    }
   }
 }
 

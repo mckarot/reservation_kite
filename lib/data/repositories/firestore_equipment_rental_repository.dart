@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../domain/models/equipment_rental.dart';
-import '../../domain/models/equipment_item.dart';
 import '../../domain/repositories/equipment_rental_repository.dart';
 import '../../domain/models/reservation.dart';
 import '../../utils/date_utils.dart';
@@ -156,10 +156,23 @@ class FirestoreEquipmentRentalRepository
       });
 
       // 5. Mettre à jour currentStatus de l'équipement
-      transaction.update(equipmentRef, {
-        'current_status': 'rented',
-        'updated_at': FieldValue.serverTimestamp(),
-      });
+      // Seulement si la location est pour aujourd'hui (check-out immédiat)
+      // Sinon, l'équipement reste disponible pour d'autres réservations futures
+      final rentalDate = DateTime.parse(rental.dateString);
+      final today = DateTime.now();
+      final isForToday = rentalDate.year == today.year &&
+          rentalDate.month == today.month &&
+          rentalDate.day == today.day;
+
+      if (isForToday) {
+        // Location pour aujourd'hui → équipement indisponible
+        transaction.update(equipmentRef, {
+          'current_status': 'rented',
+          'updated_at': FieldValue.serverTimestamp(),
+        });
+      }
+      // Sinon : on ne change pas current_status, l'équipement reste
+      // disponible pour d'autres réservations sur d'autres dates
     });
 
     return rentalRef.id;
@@ -198,10 +211,22 @@ class FirestoreEquipmentRentalRepository
       });
 
       // 4. Mettre à jour currentStatus de l'équipement
-      transaction.update(equipmentRef, {
-        'current_status': 'rented',
-        'updated_at': FieldValue.serverTimestamp(),
-      });
+      // Seulement si la location est pour aujourd'hui (check-out immédiat)
+      final rentalDate = DateTime.parse(rental.dateString);
+      final today = DateTime.now();
+      final isForToday = rentalDate.year == today.year &&
+          rentalDate.month == today.month &&
+          rentalDate.day == today.day;
+
+      if (isForToday) {
+        // Location pour aujourd'hui → équipement indisponible
+        transaction.update(equipmentRef, {
+          'current_status': 'rented',
+          'updated_at': FieldValue.serverTimestamp(),
+        });
+      }
+      // Sinon : on ne change pas current_status, l'équipement reste
+      // disponible pour d'autres réservations sur d'autres dates
     });
 
     return rentalRef.id;
@@ -240,10 +265,22 @@ class FirestoreEquipmentRentalRepository
       });
 
       // 4. Mettre à jour currentStatus de l'équipement
-      transaction.update(equipmentRef, {
-        'current_status': 'rented',
-        'updated_at': FieldValue.serverTimestamp(),
-      });
+      // Seulement si la location est pour aujourd'hui (check-out immédiat)
+      final rentalDate = DateTime.parse(rental.dateString);
+      final today = DateTime.now();
+      final isForToday = rentalDate.year == today.year &&
+          rentalDate.month == today.month &&
+          rentalDate.day == today.day;
+
+      if (isForToday) {
+        // Location pour aujourd'hui → équipement indisponible
+        transaction.update(equipmentRef, {
+          'current_status': 'rented',
+          'updated_at': FieldValue.serverTimestamp(),
+        });
+      }
+      // Sinon : on ne change pas current_status, l'équipement reste
+      // disponible pour d'autres réservations sur d'autres dates
     });
 
     return rentalRef.id;
@@ -263,14 +300,34 @@ class FirestoreEquipmentRentalRepository
       final equipmentId = rentalData['equipment_id'] as String;
       final equipmentRef = _equipmentCollection.doc(equipmentId);
 
-      // 1. Mettre à jour status = cancelled
+      // 1. Vérifier la règle des 24h pour student_rental
+      // Si annulation < 24h avant la session → pas de remboursement
+      final assignmentType = rentalData['assignment_type'] as String?;
+      final dateString = rentalData['date_string'] as String;
+      final slotName = rentalData['slot'] as String;
+      
+      if (assignmentType == 'student_rental') {
+        final slotTime = getSlotStartTime(dateString, slotName);
+        if (slotTime != null) {
+          final hoursUntilRental = slotTime.difference(DateTime.now()).inHours;
+          
+          if (hoursUntilRental < 24) {
+            throw Exception(
+              'Annulation impossible : moins de 24h avant la session. '
+              'Aucun remboursement ne sera effectué.'
+            );
+          }
+        }
+      }
+
+      // 2. Mettre à jour status = cancelled
       transaction.update(rentalRef, {
         'status': 'cancelled',
         'updated_at': FieldValue.serverTimestamp(),
       });
 
-      // 2. Rembourser wallet si student_rental et paid
-      final assignmentType = rentalData['assignment_type'] as String?;
+      // 3. Rembourser wallet si student_rental et paid
+      // (seulement si la règle des 24h est respectée)
       final paymentStatus = rentalData['payment_status'] as String?;
       final totalPrice = rentalData['total_price'] as int?;
 
@@ -285,7 +342,7 @@ class FirestoreEquipmentRentalRepository
         });
       }
 
-      // 3. Mettre à jour currentStatus de l'équipement
+      // 4. Mettre à jour currentStatus de l'équipement
       transaction.update(equipmentRef, {
         'current_status': 'available',
         'updated_at': FieldValue.serverTimestamp(),
@@ -347,7 +404,12 @@ class FirestoreEquipmentRentalRepository
       final equipmentId = rentalData['equipment_id'] as String;
       final equipmentRef = _equipmentCollection.doc(equipmentId);
 
-      // 1. Mettre à jour check-in
+      // 1. Déterminer si maintenance requise
+      // Maintenance si : condition = 'poor' OU damageNotes présentes
+      final needsMaintenance = 
+          condition == 'poor' || (damageNotes != null && damageNotes.isNotEmpty);
+
+      // 2. Mettre à jour check-in
       final updateData = <String, dynamic>{
         'checked_in_at': FieldValue.serverTimestamp(),
         'checked_in_by': staffId,
@@ -362,10 +424,12 @@ class FirestoreEquipmentRentalRepository
 
       transaction.update(rentalRef, updateData);
 
-      // 2. Incrémenter total_rentals et mettre à jour currentStatus
+      // 3. Incrémenter total_rentals et mettre à jour currentStatus
+      // Si maintenance requise → 'maintenance', sinon → 'available'
       transaction.update(equipmentRef, {
         'total_rentals': FieldValue.increment(1),
-        'current_status': 'available',
+        'current_status': needsMaintenance ? 'maintenance' : 'available',
+        'condition': condition,
         'updated_at': FieldValue.serverTimestamp(),
       });
     });

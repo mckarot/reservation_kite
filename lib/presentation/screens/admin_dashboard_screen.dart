@@ -14,6 +14,8 @@ import '../providers/staff_notifier.dart';
 import '../providers/theme_notifier.dart';
 import '../providers/unavailability_notifier.dart';
 import '../providers/user_notifier.dart';
+import 'admin_equipment_assignment_screen.dart';
+import 'admin_migration_screen.dart';
 import 'lesson_validation_screen.dart';
 import 'staff_admin_screen.dart';
 
@@ -76,6 +78,9 @@ class AdminDashboardScreen extends ConsumerWidget {
             _UpcomingSessionsCard(
               sessions: stats['upcomingSessions'] as List<Reservation>,
             ),
+            const SizedBox(height: 32),
+            // Section Equipment Tools
+            _EquipmentToolsSection(),
             const SizedBox(height: 32),
             Text(
               l10n.topClientsVolume,
@@ -464,9 +469,15 @@ class _UpcomingSessionsCard extends ConsumerWidget {
 
     return Column(
       children: sessions.map((s) {
-        final pupil = users.any((u) => u.id == s.pupilId)
-            ? users.firstWhere((u) => u.id == s.pupilId)
-            : null;
+        // Chercher l'élève par pupilId
+        User? pupil;
+        if (s.pupilId != null && s.pupilId!.isNotEmpty) {
+          try {
+            pupil = users.firstWhere((u) => u.id == s.pupilId);
+          } catch (_) {
+            pupil = null;
+          }
+        }
 
         return Card(
           elevation: 2,
@@ -486,6 +497,24 @@ class _UpcomingSessionsCard extends ConsumerWidget {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
+                // Bouton pour assigner du matériel
+                IconButton(
+                  icon: const Icon(Icons.sports_kabaddi, color: Colors.orange),
+                  tooltip: 'Assigner du matériel',
+                  onPressed: pupil != null
+                      ? () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => AdminEquipmentAssignmentScreen(
+                                reservation: s,
+                                student: pupil!,
+                              ),
+                            ),
+                          );
+                        }
+                      : null,
+                ),
                 // Bouton pour supprimer/annuler la séance
                 IconButton(
                   icon: const Icon(Icons.delete_outline, color: Colors.red),
@@ -501,15 +530,14 @@ class _UpcomingSessionsCard extends ConsumerWidget {
                         MaterialPageRoute(
                           builder: (_) => LessonValidationScreen(
                             reservation: s,
-                            pupil: pupil,
+                            pupil: pupil!,
                           ),
                         ),
                       );
                     },
                     child: Text(l10n.validate),
                   ),
-                if (pupil == null)
-                  const Icon(Icons.chevron_right, size: 16),
+                if (pupil == null) const Icon(Icons.chevron_right, size: 16),
               ],
             ),
           ),
@@ -542,10 +570,7 @@ class _UpcomingSessionsCard extends ConsumerWidget {
               // Annuler la séance
               await ref
                   .read(bookingNotifierProvider.notifier)
-                  .updateBookingStatus(
-                    session.id,
-                    ReservationStatus.cancelled,
-                  );
+                  .updateBookingStatus(session.id, ReservationStatus.cancelled);
               if (context.mounted) {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -620,6 +645,70 @@ class _TopClientsCard extends ConsumerWidget {
           );
         }).toList(),
       ),
+    );
+  }
+}
+
+/// Section des outils Equipment Rental
+class _EquipmentToolsSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          '🎯 Equipment Rental',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.1,
+            fontSize: 16,
+            color: Colors.orange,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Card(
+          elevation: 2,
+          shadowColor: Colors.orange,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: const BorderSide(color: Colors.orange, width: 1.5),
+          ),
+          child: ListTile(
+            leading: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.orange.shade100,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(Icons.build, color: Colors.orange, size: 24),
+            ),
+            title: const Text(
+              'Migrations & Données de test',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: const Text(
+              'Créer 4 équipements de test (kite, board, foil, harness)',
+              style: TextStyle(fontSize: 13),
+            ),
+            trailing: const Icon(Icons.chevron_right, color: Colors.orange),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const AdminMigrationScreen()),
+            ),
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.only(top: 8, left: 8),
+          child: Text(
+            '💡 Clique pour créer automatiquement 4 locations de test avec différents statuts',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

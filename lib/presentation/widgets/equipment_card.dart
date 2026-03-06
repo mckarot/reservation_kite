@@ -8,12 +8,14 @@ class EquipmentCard extends StatelessWidget {
     super.key,
     required this.equipment,
     this.onTap,
+    this.onStatusTap,
     this.isAvailable = true,
     this.showPrice = true,
   });
 
   final EquipmentItem equipment;
   final VoidCallback? onTap;
+  final VoidCallback? onStatusTap;
   final bool isAvailable;
   final bool showPrice;
 
@@ -76,24 +78,58 @@ class EquipmentCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // Statut
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: _getStatusColor(equipment.currentStatus, colorScheme),
+                  // Statut (cliquable pour admin)
+                  if (onStatusTap != null)
+                    InkWell(
+                      onTap: onStatusTap,
                       borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      _getStatusText(equipment.currentStatus),
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: _getStatusOnColor(equipment.currentStatus, colorScheme),
-                        fontWeight: FontWeight.bold,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: _getStatusColor(equipment.currentStatus, colorScheme),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: colorScheme.outline, width: 1),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              _getStatusText(equipment.currentStatus),
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: _getStatusOnColor(equipment.currentStatus, colorScheme),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            const Icon(
+                              Icons.refresh,
+                              size: 12,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  else
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: _getStatusColor(equipment.currentStatus, colorScheme),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        _getStatusText(equipment.currentStatus),
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: _getStatusOnColor(equipment.currentStatus, colorScheme),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
                 ],
               ),
               const SizedBox(height: 12),

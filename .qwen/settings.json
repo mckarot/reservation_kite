@@ -9,7 +9,11 @@
     },
     "firebase": {
       "command": "npx",
-      "args": ["-y", "firebase-tools@latest", "mcp"]
+      "args": ["-y", "firebase-tools@latest", "mcp"],
+      "env": {
+        "GOOGLE_CLOUD_PROJECT": "reservation-kite",
+        "FIREBASE_PROJECT": "reservation-kite"
+      }
     }
   },
   "$version": 3

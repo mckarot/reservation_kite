@@ -52,6 +52,14 @@ class EquipmentNotifier extends _$EquipmentNotifier {
     });
   }
 
+  /// Met à jour le statut d'un équipement.
+  Future<void> updateEquipmentStatus(String id, EquipmentCurrentStatus status) async {
+    state = await AsyncValue.guard(() async {
+      await ref.read(equipmentRepositoryProvider).updateEquipmentStatus(id, status);
+      return _fetchAllEquipment();
+    });
+  }
+
   /// Vérifie la disponibilité d'un équipement.
   Future<bool> isEquipmentAvailable({
     required String equipmentId,

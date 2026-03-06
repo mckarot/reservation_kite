@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../data/providers/repository_providers.dart';
-import '../../domain/models/equipment_item.dart';
 import '../../domain/models/equipment_rental.dart';
 import '../../domain/models/reservation.dart';
 import '../../utils/date_utils.dart';

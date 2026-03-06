@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/equipment_rental.dart';
 import '../providers/equipment_rental_notifier.dart';
 import '../widgets/equipment_rental_tile.dart';
+import 'equipment_checkout_screen.dart';
 
 /// Écran d'historique des locations de matériel pour les élèves.
 class EquipmentRentalHistoryScreen extends ConsumerStatefulWidget {
@@ -77,10 +78,10 @@ class _EquipmentRentalHistoryScreenState
                     ? () => _confirmCancel(ref, rental.id)
                     : null,
                 onCheckOut: rental.status == RentalStatus.confirmed
-                    ? () => _showCheckOutDialog(ref, rental)
+                    ? () => _navigateToCheckout(ref, rental)
                     : null,
                 onCheckIn: rental.status == RentalStatus.active
-                    ? () => _showCheckInDialog(ref, rental)
+                    ? () => _navigateToCheckout(ref, rental)
                     : null,
               );
             },
@@ -180,141 +181,15 @@ class _EquipmentRentalHistoryScreenState
     }
   }
 
-  void _showCheckOutDialog(WidgetRef ref, EquipmentRental rental) {
-    showDialog(
-      context: context,
-      builder: (dialogContext) {
-        final theme = Theme.of(dialogContext);
-        
-        return AlertDialog(
-          title: const Text('Check-out du matériel'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Vérifiez l\'état du matériel avant de le remettre à l\'élève.',
-                style: theme.textTheme.bodyMedium,
-              ),
-              const SizedBox(height: 16),
-              const Text('État du matériel :'),
-              const SizedBox(height: 8),
-              ...['Neuf', 'Bon état', 'État moyen', 'Usé'].map((condition) {
-                return ListTile(
-                  dense: true,
-                  title: Text(condition),
-                  onTap: () {
-                    Navigator.pop(dialogContext);
-                    _checkOut(ref, rental.id, condition.toLowerCase());
-                  },
-                );
-              }),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> _checkOut(WidgetRef ref, String rentalId, String condition) async {
-    final theme = Theme.of(context);
-    final primaryColor = theme.colorScheme.primary;
-    final errorColor = theme.colorScheme.error;
-    
-    try {
-      await ref.read(equipmentRentalNotifierProvider.notifier).checkOut(
-            rentalId: rentalId,
-            condition: condition,
-          );
-
-      if (!context.mounted) return;
-
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Check-out effectué'),
-          backgroundColor: primaryColor,
-        ),
-      );
-    } catch (e) {
-      if (!context.mounted) return;
-
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Erreur : ${e.toString()}'),
-          backgroundColor: errorColor,
-        ),
-      );
-    }
-  }
-
-  void _showCheckInDialog(WidgetRef ref, EquipmentRental rental) {
-    showDialog(
-      context: context,
-      builder: (dialogContext) {
-        final theme = Theme.of(dialogContext);
-        
-        return AlertDialog(
-          title: const Text('Check-in du matériel'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Vérifiez l\'état du matériel lors de la restitution.',
-                style: theme.textTheme.bodyMedium,
-              ),
-              const SizedBox(height: 16),
-              const Text('État du matériel :'),
-              const SizedBox(height: 8),
-              ...['Neuf', 'Bon état', 'État moyen', 'Usé'].map((condition) {
-                return ListTile(
-                  dense: true,
-                  title: Text(condition),
-                  onTap: () {
-                    Navigator.pop(dialogContext);
-                    _checkIn(ref, rental.id, condition.toLowerCase());
-                  },
-                );
-              }),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> _checkIn(WidgetRef ref, String rentalId, String condition) async {
-    final theme = Theme.of(context);
-    final primaryColor = theme.colorScheme.primary;
-    final errorColor = theme.colorScheme.error;
-    
-    try {
-      await ref.read(equipmentRentalNotifierProvider.notifier).checkIn(
-            rentalId: rentalId,
-            condition: condition,
-          );
-
-      if (!context.mounted) return;
-
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Check-in effectué'),
-          backgroundColor: primaryColor,
-        ),
-      );
-    } catch (e) {
-      if (!context.mounted) return;
-
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Erreur : ${e.toString()}'),
-          backgroundColor: errorColor,
-        ),
-      );
-    }
+  void _navigateToCheckout(WidgetRef ref, EquipmentRental rental) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => EquipmentCheckoutScreen(rental: rental),
+      ),
+    ).then((_) {
+      // Rafraîchir les données après retour
+      ref.invalidate(equipmentRentalNotifierProvider);
+    });
   }
 }

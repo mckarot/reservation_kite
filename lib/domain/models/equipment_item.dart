@@ -31,8 +31,7 @@ class EquipmentItem with _$EquipmentItem {
   const factory EquipmentItem({
     required String id,
     required String name,
-    @JsonKey(unknownEnumValue: EquipmentCategoryType.other)
-    required EquipmentCategoryType category,
+    @JsonKey(unknownEnumValue: EquipmentCategoryType.other) required EquipmentCategoryType category,
     required String brand,
     required String model,
     required double size,
@@ -44,12 +43,8 @@ class EquipmentItem with _$EquipmentItem {
     required int rentalPriceAfternoon,
     required int rentalPriceFullDay,
     @Default(true) bool isActive,
-    @JsonKey(unknownEnumValue: EquipmentCurrentStatus.available)
-    @Default(EquipmentCurrentStatus.available)
-    EquipmentCurrentStatus currentStatus,
-    @JsonKey(unknownEnumValue: EquipmentCondition.good)
-    @Default(EquipmentCondition.good)
-    EquipmentCondition condition,
+    @Default(EquipmentCurrentStatus.available) @JsonKey(unknownEnumValue: EquipmentCurrentStatus.available) EquipmentCurrentStatus currentStatus,
+    @Default(EquipmentCondition.good) @JsonKey(unknownEnumValue: EquipmentCondition.good) EquipmentCondition condition,
     @Default(0) int totalRentals,
     @TimestampConverter() DateTime? lastMaintenanceDate,
     @TimestampConverter() DateTime? nextMaintenanceDate,

@@ -27,7 +27,9 @@ mixin _$Reservation {
   TimeSlot get slot => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'pupil_id')
   String? get pupilId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'staff_id')
   String? get staffId => throw _privateConstructorUsedError;
   ReservationStatus get status => throw _privateConstructorUsedError;
   String get notes => throw _privateConstructorUsedError;
@@ -35,6 +37,7 @@ mixin _$Reservation {
   /// Indique si un matériel doit être assigné par le moniteur.
   /// - true  = admin n'a pas assigné, moniteur DOIT assigner avant de démarrer
   /// - false = matériel assigné ou pas de matériel requis
+  @JsonKey(name: 'equipment_assignment_required')
   bool get equipmentAssignmentRequired => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -55,10 +58,11 @@ abstract class $ReservationCopyWith<$Res> {
       @TimestampConverter() DateTime date,
       TimeSlot slot,
       @TimestampConverter() DateTime createdAt,
-      String? pupilId,
-      String? staffId,
+      @JsonKey(name: 'pupil_id') String? pupilId,
+      @JsonKey(name: 'staff_id') String? staffId,
       ReservationStatus status,
       String notes,
+      @JsonKey(name: 'equipment_assignment_required')
       bool equipmentAssignmentRequired});
 }
 
@@ -145,10 +149,11 @@ abstract class _$$ReservationImplCopyWith<$Res>
       @TimestampConverter() DateTime date,
       TimeSlot slot,
       @TimestampConverter() DateTime createdAt,
-      String? pupilId,
-      String? staffId,
+      @JsonKey(name: 'pupil_id') String? pupilId,
+      @JsonKey(name: 'staff_id') String? staffId,
       ReservationStatus status,
       String notes,
+      @JsonKey(name: 'equipment_assignment_required')
       bool equipmentAssignmentRequired});
 }
 
@@ -228,10 +233,11 @@ class _$ReservationImpl implements _Reservation {
       @TimestampConverter() required this.date,
       required this.slot,
       @TimestampConverter() required this.createdAt,
-      this.pupilId,
-      this.staffId,
+      @JsonKey(name: 'pupil_id') this.pupilId,
+      @JsonKey(name: 'staff_id') this.staffId,
       this.status = ReservationStatus.confirmed,
       this.notes = '',
+      @JsonKey(name: 'equipment_assignment_required')
       this.equipmentAssignmentRequired = false});
 
   factory _$ReservationImpl.fromJson(Map<String, dynamic> json) =>
@@ -250,8 +256,10 @@ class _$ReservationImpl implements _Reservation {
   @TimestampConverter()
   final DateTime createdAt;
   @override
+  @JsonKey(name: 'pupil_id')
   final String? pupilId;
   @override
+  @JsonKey(name: 'staff_id')
   final String? staffId;
   @override
   @JsonKey()
@@ -264,7 +272,7 @@ class _$ReservationImpl implements _Reservation {
   /// - true  = admin n'a pas assigné, moniteur DOIT assigner avant de démarrer
   /// - false = matériel assigné ou pas de matériel requis
   @override
-  @JsonKey()
+  @JsonKey(name: 'equipment_assignment_required')
   final bool equipmentAssignmentRequired;
 
   @override
@@ -320,10 +328,11 @@ abstract class _Reservation implements Reservation {
       @TimestampConverter() required final DateTime date,
       required final TimeSlot slot,
       @TimestampConverter() required final DateTime createdAt,
-      final String? pupilId,
-      final String? staffId,
+      @JsonKey(name: 'pupil_id') final String? pupilId,
+      @JsonKey(name: 'staff_id') final String? staffId,
       final ReservationStatus status,
       final String notes,
+      @JsonKey(name: 'equipment_assignment_required')
       final bool equipmentAssignmentRequired}) = _$ReservationImpl;
 
   factory _Reservation.fromJson(Map<String, dynamic> json) =
@@ -342,8 +351,10 @@ abstract class _Reservation implements Reservation {
   @TimestampConverter()
   DateTime get createdAt;
   @override
+  @JsonKey(name: 'pupil_id')
   String? get pupilId;
   @override
+  @JsonKey(name: 'staff_id')
   String? get staffId;
   @override
   ReservationStatus get status;
@@ -354,6 +365,7 @@ abstract class _Reservation implements Reservation {
   /// Indique si un matériel doit être assigné par le moniteur.
   /// - true  = admin n'a pas assigné, moniteur DOIT assigner avant de démarrer
   /// - false = matériel assigné ou pas de matériel requis
+  @JsonKey(name: 'equipment_assignment_required')
   bool get equipmentAssignmentRequired;
   @override
   @JsonKey(ignore: true)
