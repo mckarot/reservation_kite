@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/models/equipment_item.dart';
-import '../../services/equipment_initialization_service.dart';
 import '../providers/equipment_notifier.dart';
 import '../widgets/equipment_card.dart';
 
@@ -29,11 +27,6 @@ class EquipmentAdminScreen extends ConsumerWidget {
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.settings_suggest),
-            onPressed: () => _initializeCategories(context, ref),
-            tooltip: 'Initialiser les catégories',
-          ),
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () => _showAddEquipmentDialog(context, ref),
@@ -256,143 +249,6 @@ class EquipmentAdminScreen extends ConsumerWidget {
         },
       ),
     );
-  }
-
-  Future<void> _initializeCategories(BuildContext context, WidgetRef ref) async {
-    print('🔵 [EQUIPMENT] _initializeCategories appelé');
-    
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    print('🔧 [EQUIPMENT] Début initialisation des catégories...');
-
-    // Confirmation dialog
-    print('📋 [EQUIPMENT] Affichage du dialog de confirmation...');
-    final confirmed = await showDialog<bool>(
-      context: context,
-      barrierDismissible: true,
-      builder: (dialogContext) {
-        print('🔨 [EQUIPMENT] Builder du dialog appelé');
-        return AlertDialog(
-          title: const Text('Initialiser les catégories'),
-          content: const Text(
-            'Cette opération va créer les catégories d\'équipements par défaut '
-            '(Kites, Planches, Foils, Harnais, Wings, Autres).\n\n'
-            'Les catégories existantes ne seront pas modifiées.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                print('❌ [EQUIPMENT] Utilisateur a cliqué Annuler');
-                Navigator.pop(dialogContext, false);
-              },
-              child: const Text('Annuler'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                print('✅ [EQUIPMENT] Utilisateur a cliqué Initialiser');
-                Navigator.pop(dialogContext, true);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: colorScheme.primary,
-                foregroundColor: colorScheme.onPrimary,
-              ),
-              child: const Text('Initialiser'),
-            ),
-          ],
-        );
-      },
-    );
-
-    print('📊 [EQUIPMENT] Résultat du dialog: confirmed = $confirmed');
-
-    if (confirmed != true) {
-      print('⚠️ [EQUIPMENT] Initialisation annulée (confirmed = $confirmed)');
-      return;
-    }
-
-    if (!context.mounted) {
-      print('❌ [EQUIPMENT] Context not mounted, aborting');
-      return;
-    }
-
-    print('✅ [EQUIPMENT] Initialisation confirmée, création des catégories...');
-
-    // Show loading
-    print('⏳ [EQUIPMENT] Affichage du loading dialog...');
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (loadingContext) {
-        print('🔄 [EQUIPMENT] Loading dialog affiché');
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
-
-    try {
-      print('📦 [EQUIPMENT] Création du service...');
-      final service = EquipmentInitializationService(
-        FirebaseFirestore.instance,
-      );
-      
-      print('🚀 [EQUIPMENT] Appel de initializeCategories()...');
-      final result = await service.initializeCategories();
-      print('✅ [EQUIPMENT] initializeCategories() terminé');
-
-      print('📊 [EQUIPMENT] Résultat: ${result.message}');
-      print('   - Créées: ${result.createdCount}');
-      print('   - Existantes: ${result.skippedCount}');
-      print('   - Success: ${result.success}');
-
-      if (!context.mounted) {
-        print('⚠️ [EQUIPMENT] Context not mounted after completion');
-        return;
-      }
-      
-      // Fermer le loading dialog
-      print('🔴 [EQUIPMENT] Fermeture du loading dialog...');
-      Navigator.pop(context);
-
-      if (context.mounted) {
-        print('💬 [EQUIPMENT] Affichage du SnackBar...');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('✅ ${result.message}'),
-            backgroundColor: result.success
-                ? colorScheme.primary
-                : colorScheme.error,
-            behavior: SnackBarBehavior.floating,
-            duration: const Duration(seconds: 4),
-          ),
-        );
-      }
-    } catch (e, stackTrace) {
-      print('❌ [EQUIPMENT] ERREUR lors de l\'initialisation: $e');
-      print('📄 [EQUIPMENT] Stack trace: $stackTrace');
-      
-      if (!context.mounted) {
-        print('⚠️ [EQUIPMENT] Context not mounted in catch');
-        return;
-      }
-      
-      // Fermer le loading dialog
-      print('🔴 [EQUIPMENT] Fermeture du loading dialog (error)...');
-      Navigator.pop(context);
-
-      if (context.mounted) {
-        print('💬 [EQUIPMENT] Affichage du SnackBar d\'erreur...');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('❌ Erreur : ${e.toString()}'),
-            backgroundColor: colorScheme.error,
-            behavior: SnackBarBehavior.floating,
-            duration: const Duration(seconds: 5),
-          ),
-        );
-      }
-    }
   }
 
   void _showEditEquipmentDialog(

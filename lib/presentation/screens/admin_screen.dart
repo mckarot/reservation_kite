@@ -5,6 +5,7 @@ import 'package:reservation_kite/presentation/screens/admin_dashboard_screen.dar
 import 'package:reservation_kite/presentation/screens/admin_settings_screen.dart';
 import 'package:reservation_kite/presentation/screens/booking_screen.dart';
 import 'package:reservation_kite/presentation/screens/create_admin_screen.dart';
+import 'package:reservation_kite/presentation/screens/create_instructor_screen.dart';
 import 'package:reservation_kite/presentation/screens/equipment_admin_screen.dart';
 import 'package:reservation_kite/presentation/screens/firestore_debug_screen.dart';
 import 'package:reservation_kite/presentation/screens/staff_admin_screen.dart';
@@ -49,6 +50,11 @@ class AdminScreen extends ConsumerWidget {
         icon: Icons.admin_panel_settings,
         route: const CreateAdminScreen(),
         color: Colors.red,
+      ),
+      _DashboardItem(
+        title: 'Créer un Moniteur',
+        icon: Icons.sports_kabaddi,
+        route: const CreateInstructorScreen(),
       ),
       _DashboardItem(
         title: l10n.manageStaff,
